@@ -126,6 +126,9 @@
   <data name="AggregateReferenceMismatchExceptionMessage" xml:space="preserve">
     <value>Reference for aggregate {0:p} of type {1} cannot be converted type {2}.</value>
   </data>
+  <data name="DomainEventHandlerNotSupportedException" xml:space="preserve">
+    <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
+  </data>
   <data name="GenericContextRequired" xml:space="preserve">
     <value>The context for this request must be provided.</value>
   </data>

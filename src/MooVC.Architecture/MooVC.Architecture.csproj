@@ -7,10 +7,11 @@
     <Product>MooVC</Product>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>MooVC © 2019</Copyright>
-    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/MooVC/moovc.architecture.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/MooVC/moovc.architecture</PackageProjectUrl>
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

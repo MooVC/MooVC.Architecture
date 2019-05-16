@@ -88,6 +88,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Handler for event of type {0} is not supported by aggregate of type {1}..
+        /// </summary>
+        internal static string DomainEventHandlerNotSupportedException {
+            get {
+                return ResourceManager.GetString("DomainEventHandlerNotSupportedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The context for this request must be provided..
         /// </summary>
         internal static string GenericContextRequired {

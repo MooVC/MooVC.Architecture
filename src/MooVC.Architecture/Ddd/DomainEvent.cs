@@ -9,12 +9,7 @@
         : Message
     {
         public const int DefaultVersion = 1;
-
-        protected DomainEvent(Message context)
-            : base(context)
-        {
-        }
-
+        
         protected DomainEvent(Message context, IReference aggregate, int version = DomainEvent.DefaultVersion)
             : base(context)
         {

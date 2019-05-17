@@ -6,5 +6,7 @@
         where TAggregate : AggregateRoot
     {
         TAggregate Get(Guid id);
+
+        void Save(TAggregate aggregate);
     }
 }

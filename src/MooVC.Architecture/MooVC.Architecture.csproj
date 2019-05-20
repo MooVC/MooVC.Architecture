@@ -11,13 +11,13 @@
     <RepositoryUrl>https://github.com/MooVC/moovc.architecture.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/MooVC/moovc.architecture</PackageProjectUrl>
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
-    <Version>2.0.0-alpha</Version>
+    <Version>2.0.0-alpha20190520103000</Version>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="MooVC" Version="1.1.0-alpha2" />
+    <PackageReference Include="MooVC" Version="1.1.0-alpha20190520103000" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 

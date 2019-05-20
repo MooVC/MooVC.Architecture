@@ -3,10 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Runtime.Serialization;
+    using System.Security.Permissions;
     using Collections.Generic;
     using Ddd;
     using AggregateRootBase = Ddd.AggregateRoot;
 
+    [Serializable]
     public abstract class AggregateRoot
         : AggregateRootBase
     {
@@ -17,6 +20,22 @@
         protected AggregateRoot(Guid id)
             : base(id)
         {
+        }
+
+        protected AggregateRoot(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            var changes = (DomainEvent[])info.GetValue(nameof(this.changes), typeof(DomainEvent[]));
+
+            this.changes.AddRange(changes);
+        }
+
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(changes), changes.ToArray());
         }
 
         public IEnumerable<DomainEvent> GetUncommittedChanges()

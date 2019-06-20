@@ -6,7 +6,6 @@
 
     [Serializable]
     public abstract class Entity<T>
-        where T : struct
     {
         protected Entity(T id)
         {

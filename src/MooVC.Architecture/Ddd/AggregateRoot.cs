@@ -16,7 +16,7 @@
         }
 
         public ulong Version { get; private protected set; }
-
+        
         protected AggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

@@ -88,6 +88,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was expected, but version {3} has been previously committed..
+        /// </summary>
+        internal static string AggregteConflictDetectedExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregteConflictDetectedExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Handler for event of type {0} is not supported by aggregate of type {1}..
         /// </summary>
         internal static string DomainEventHandlerNotSupportedException {

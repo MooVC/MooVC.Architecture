@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
@@ -17,8 +18,8 @@
 
         private readonly List<DomainEvent> changes = new List<DomainEvent>();
 
-        protected AggregateRoot(Guid id)
-            : base(id)
+        protected AggregateRoot(Guid id, ulong version = DefaultVersion)
+            : base(id, version)
         {
         }
 
@@ -46,11 +47,18 @@
         public void LoadFromHistory(IEnumerable<DomainEvent> history)
         {
             history.ForEach(@event => ApplyChange(@event, isNew: false));
+
+            Version = history
+                .Select(@event => @event.Version)
+                .DefaultIfEmpty(DefaultVersion)
+                .Max();
         }
 
         public void MarkChangesAsCommitted()
         {
             changes.Clear();
+
+            Version++;
         }
 
         protected void ApplyChange(DomainEvent @event, bool isNew = true)

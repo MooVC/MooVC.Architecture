@@ -126,6 +126,9 @@
   <data name="AggregateReferenceMismatchExceptionMessage" xml:space="preserve">
     <value>Reference for aggregate {0:p} of type {1} cannot be converted type {2}.</value>
   </data>
+  <data name="AggregteConflictDetectedExceptionMessage" xml:space="preserve">
+    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was expected, but version {3} has been previously committed.</value>
+  </data>
   <data name="DomainEventHandlerNotSupportedException" xml:space="preserve">
     <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
   </data>

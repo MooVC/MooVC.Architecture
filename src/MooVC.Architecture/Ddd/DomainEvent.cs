@@ -8,9 +8,7 @@
     public abstract class DomainEvent
         : Message
     {
-        public const int DefaultVersion = 1;
-        
-        protected DomainEvent(Message context, IReference aggregate, int version = DomainEvent.DefaultVersion)
+        protected DomainEvent(Message context, IReference aggregate, ulong version)
             : base(context)
         {
             Aggregate = aggregate;
@@ -21,12 +19,12 @@
             : base(info, context)
         {
             Aggregate = (IReference)info.GetValue(nameof(Aggregate), typeof(IReference));
-            Version = info.GetInt32(nameof(Version));
+            Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
         }
 
         public IReference Aggregate { get; }
 
-        public int Version { get; } = DomainEvent.DefaultVersion;
+        public ulong Version { get; }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

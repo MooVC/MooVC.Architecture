@@ -74,7 +74,7 @@
         public void GivenAReferenceThatExistsThenTheAggregateIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId);
+            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
             var reference = new Reference<AggregateRoot>(aggregateId);
 
             _ = repository
@@ -99,7 +99,7 @@
 
             _ = repository
                 .Setup(repo => repo.Get(It.Is(predicate)))
-                .Returns<Guid>(id => new Mock<AggregateRoot>(id).Object);
+                .Returns<Guid>(id => new Mock<AggregateRoot>(id, AggregateRoot.DefaultVersion).Object);
             
             AggregateException exception = Assert.Throws<AggregateException>(
                 () => references.Keys.Retrieve(context.Object, repository.Object));

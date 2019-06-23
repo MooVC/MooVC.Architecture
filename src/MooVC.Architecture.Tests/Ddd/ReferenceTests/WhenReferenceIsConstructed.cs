@@ -10,7 +10,7 @@
         public void GivenAnAggregateThenTheIdAndTypeArePropagated()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId);
+            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
 
             var reference = new Reference<AggregateRoot>(aggregate.Object);
 

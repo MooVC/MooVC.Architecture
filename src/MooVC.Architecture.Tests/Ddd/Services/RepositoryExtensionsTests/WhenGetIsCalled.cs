@@ -37,7 +37,7 @@
         public void GivenAnIdThatExistsThenTheAggregateIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId);
+            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId)))
@@ -72,7 +72,7 @@
         public void GivenAReferenceThatExistsThenTheAggregateIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId);
+            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
             var reference = new Reference<AggregateRoot>(aggregateId);
 
             _ = repository

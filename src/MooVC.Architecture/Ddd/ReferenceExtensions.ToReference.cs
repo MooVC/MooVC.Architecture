@@ -10,7 +10,7 @@
                 throw new AggregateReferenceMismatchException<TAggregate>(reference);
             }
 
-            return new Reference<TAggregate>(reference.Id);
+            return new Reference<TAggregate>(reference.Id, version: reference.Version);
         }
     }
 }

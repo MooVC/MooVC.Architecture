@@ -19,6 +19,22 @@
             repository = new Mock<IRepository<AggregateRoot>>();
         }
 
+        public static IEnumerable<object[]> GivenAReferenceThatExistsThenTheAggregateIsReturnedData => new[]
+        {
+            new object[] { null },
+            new object[] { 1ul }
+        };
+
+        public static IEnumerable<object[]> GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData()
+        {
+            var reference1 = new Reference<AggregateRoot>(Guid.NewGuid());
+            var reference2 = new Reference<AggregateRoot>(Guid.NewGuid());
+
+            yield return new[] { new[] { reference1, reference2, Reference<AggregateRoot>.Empty } };
+            yield return new[] { new[] { reference1, Reference<AggregateRoot>.Empty, Reference<AggregateRoot>.Empty } };
+            yield return new[] { new[] { Reference<AggregateRoot>.Empty, Reference<AggregateRoot>.Empty, Reference<AggregateRoot>.Empty } };
+        }
+
         public static IEnumerable<object[]> GivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissingData()
         {
             var reference1 = new Reference<AggregateRoot>(Guid.NewGuid());
@@ -52,10 +68,23 @@
         }
 
         [Fact]
+        public void GivenAnEmptyReferenceThenAnAggregateDoesNotExistExceptionIsThrown()
+        {
+            Reference<AggregateRoot> reference = Reference<AggregateRoot>.Empty;
+
+            AggregateDoesNotExistException<AggregateRoot> exception = Assert.Throws<AggregateDoesNotExistException<AggregateRoot>>(
+                () => reference.Retrieve(context.Object, repository.Object));
+
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Never);
+
+            Assert.Equal(context.Object, exception.Context);
+        }
+
+        [Fact]
         public void GivenAReferenceThatDoesNotExistsThenAnAggregateNotFoundExceptionIsThrown()
         {
             _ = repository
-                .Setup(repo => repo.Get(It.IsAny<Guid>()))
+                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
                 .Returns(default(AggregateRoot));
 
             var aggregateId = Guid.NewGuid();
@@ -64,28 +93,72 @@
             AggregateNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateNotFoundException<AggregateRoot>>(
                 () => reference.Retrieve(context.Object, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>()), Times.Once);
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Once);
 
             Assert.Equal(aggregateId, exception.AggregateId);
             Assert.Equal(context.Object, exception.Context);
         }
-
-        [Fact]
-        public void GivenAReferenceThatExistsThenTheAggregateIsReturned()
+        
+        [Theory]
+        [MemberData(nameof(GivenAReferenceThatExistsThenTheAggregateIsReturnedData))]
+        public void GivenAReferenceThatExistsThenTheAggregateIsReturned(ulong? version)
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new Reference<AggregateRoot>(aggregateId);
+            var aggregate = new Mock<AggregateRoot>(aggregateId, version);
+            var reference = new Reference<AggregateRoot>(aggregateId, version: version);
 
             _ = repository
-               .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId)))
+               .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<ulong?>(v => v == version)))
                .Returns(aggregate.Object);
 
             AggregateRoot value = reference.Retrieve(context.Object, repository.Object);
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>()), Times.Once);
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Once);
 
             Assert.Equal(aggregate.Object, value);
+        }
+
+        [Theory]
+        [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
+        public void GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEach(IEnumerable<Reference<AggregateRoot>> references)
+        {
+            _ = repository
+                .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<ulong?>()))
+                .Returns<Guid, ulong?>((id, version) => new Mock<AggregateRoot>(id, AggregateRoot.DefaultVersion).Object);
+
+            AggregateException exception = Assert.Throws<AggregateException>(
+                () => references.Retrieve(context.Object, repository.Object));
+
+            int expected = references.Count(item => item == Reference<AggregateRoot>.Empty);
+
+            repository.Verify(
+                repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), 
+                Times.Exactly(references.Count() - expected));
+            
+            int actual = exception
+                .InnerExceptions
+                .Cast<AggregateDoesNotExistException<AggregateRoot>>()
+                .Count();
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
+        public void GivenOneOrMoreReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturned(IEnumerable<Reference<AggregateRoot>> references)
+        {
+            _ = repository
+                .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<ulong?>()))
+                .Returns<Guid, ulong?>((id, version) => new Mock<AggregateRoot>(id, AggregateRoot.DefaultVersion).Object);
+
+            IEnumerable<AggregateRoot> results = references.Retrieve(context.Object, repository.Object, ignoreEmpty: true);
+
+            int empties = references.Count(item => item == Reference<AggregateRoot>.Empty);
+            int expected = references.Count() - empties;
+
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Exactly(expected));
+            
+            Assert.Equal(expected, results.Count());
         }
 
         [Theory]
@@ -98,13 +171,13 @@
                 .Value;
 
             _ = repository
-                .Setup(repo => repo.Get(It.Is(predicate)))
-                .Returns<Guid>(id => new Mock<AggregateRoot>(id, AggregateRoot.DefaultVersion).Object);
+                .Setup(repo => repo.Get(It.Is(predicate), It.IsAny<ulong?>()))
+                .Returns<Guid, ulong?>((id, version) => new Mock<AggregateRoot>(id, AggregateRoot.DefaultVersion).Object);
             
             AggregateException exception = Assert.Throws<AggregateException>(
                 () => references.Keys.Retrieve(context.Object, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>()), Times.Exactly(references.Count));
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Exactly(references.Count));
 
             Guid[] expected = references
                 .Where(item => !item.Value)

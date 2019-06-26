@@ -14,18 +14,26 @@
             IRepository<TAggregate> repository)
             where TAggregate : AggregateRoot
         {
+            if (reference.IsEmpty)
+            {
+                throw new AggregateDoesNotExistException<TAggregate>(context);
+            }
+
             return repository.Get(context, reference);
         }
 
         public static IEnumerable<TAggregate> Retrieve<TAggregate>(
             this IEnumerable<Reference<TAggregate>> references,
             Message context,
-            IRepository<TAggregate> repository)
+            IRepository<TAggregate> repository,
+            bool ignoreEmpty = false)
             where TAggregate : AggregateRoot
         {
             var aggregates = new ConcurrentBag<TAggregate>();
 
-            references.ForAll(reference => aggregates.Add(reference.Retrieve(context, repository)));
+            references
+                .Where(reference => !(ignoreEmpty && reference.IsEmpty))
+                .ForAll(reference => aggregates.Add(reference.Retrieve(context, repository)));
 
             return aggregates.ToArray();
         }

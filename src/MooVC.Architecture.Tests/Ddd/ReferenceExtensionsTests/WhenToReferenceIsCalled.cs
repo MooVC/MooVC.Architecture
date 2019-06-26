@@ -1,16 +1,24 @@
 ﻿namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
 {
     using System;
+    using System.Collections.Generic;
     using Xunit;
-    using CqrsAggregateRoot = MooVC.Architecture.Cqrs.AggregateRoot;
+    using CqrsAggregateRoot = Cqrs.AggregateRoot;
 
     public sealed class WhenToReferenceIsCalled
     {
-        [Fact]
-        public void GivenAReferenceThatMatchesTheTypeSpecifiedThenAStronglyTypedReferenceIsReturned()
+        public static IEnumerable<object[]> GivenAReferenceThatMatchesTheTypeSpecifiedThenAStronglyTypedReferenceIsReturnedData => new[]
+        {
+            new object[] { null },
+            new object[] { 3ul }
+        };
+
+        [Theory]
+        [MemberData(nameof(GivenAReferenceThatMatchesTheTypeSpecifiedThenAStronglyTypedReferenceIsReturnedData))]
+        public void GivenAReferenceThatMatchesTheTypeSpecifiedThenAStronglyTypedReferenceIsReturned(ulong? version)
         {
             var aggregateId = Guid.NewGuid();
-            IReference reference = new Reference<AggregateRoot>(aggregateId);
+            IReference reference = new Reference<AggregateRoot>(aggregateId, version: version);
 
             var value = reference.ToReference<AggregateRoot>();
 

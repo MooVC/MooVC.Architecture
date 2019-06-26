@@ -61,6 +61,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An empty reference for aggregate type {0} cannot be retrieved..
+        /// </summary>
+        internal static string AggregateDoesNotExistExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateDoesNotExistExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Event {2:p} of type {3} does not apply to aggregate {1:p} of type {0}..
         /// </summary>
         internal static string AggregateEventMismatchExceptionMessage {
@@ -84,6 +93,15 @@ namespace MooVC.Architecture {
         internal static string AggregateReferenceMismatchExceptionMessage {
             get {
                 return ResourceManager.GetString("AggregateReferenceMismatchExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version {2} of aggregate type {1} with an ID of {0:p} could not be found..
+        /// </summary>
+        internal static string AggregateVersionNotFoundExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateVersionNotFoundExceptionMessage", resourceCulture);
             }
         }
         

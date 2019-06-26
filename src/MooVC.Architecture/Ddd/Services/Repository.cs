@@ -6,7 +6,7 @@
         : IRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public abstract TAggregate Get(Guid id);
+        public abstract TAggregate Get(Guid id, ulong? version = null);
 
         public void Save(TAggregate aggregate)
         {

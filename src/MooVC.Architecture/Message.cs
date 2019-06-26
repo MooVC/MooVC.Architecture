@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using static MooVC.Ensure;
 
     [Serializable]
     public abstract class Message
@@ -14,7 +15,7 @@
 
         protected Message(Message context)
         {
-            Ensure.ArgumentNotNull(context, nameof(context), Resources.GenericContextRequired);
+            ArgumentNotNull(context, nameof(context), Resources.GenericContextRequired);
 
             CorrelationId = context.CorrelationId;
             CausationId = context.Id;

@@ -1,6 +1,7 @@
-﻿namespace MooVC.Architecture.Ddd.EnsureTests
+﻿namespace MooVC.Architecture.EnsureTests
 {
     using System;
+    using MooVC.Architecture.Ddd;
     using Xunit;
 
     public sealed class WhenReferenceIsVersionSpecificIsCalled

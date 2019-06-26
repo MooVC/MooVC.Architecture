@@ -1,10 +1,12 @@
 ﻿namespace MooVC.Architecture
 {
+    using static MooVC.Ensure;
+
     public abstract class Request
     {
         protected Request(Message context)
         {
-            Ensure.ArgumentNotNull(context, nameof(context), Resources.GenericContextRequired);
+            ArgumentNotNull(context, nameof(context), Resources.GenericContextRequired);
 
             Context = context;
         }

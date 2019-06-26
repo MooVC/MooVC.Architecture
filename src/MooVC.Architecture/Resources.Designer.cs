@@ -140,5 +140,23 @@ namespace MooVC.Architecture {
                 return ResourceManager.GetString("HandlerFailureExceptionMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A non-version specific reference of aggregate type {0} is required..
+        /// </summary>
+        internal static string NonVersionSpecificReferenceRequired {
+            get {
+                return ResourceManager.GetString("NonVersionSpecificReferenceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A version specific reference of aggregate type {0} is required..
+        /// </summary>
+        internal static string VersionSpecificReferenceRequired {
+            get {
+                return ResourceManager.GetString("VersionSpecificReferenceRequired", resourceCulture);
+            }
+        }
     }
 }

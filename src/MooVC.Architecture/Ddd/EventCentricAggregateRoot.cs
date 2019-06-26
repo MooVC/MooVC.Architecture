@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Cqrs
+﻿namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Collections.Generic;
@@ -7,23 +7,21 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using Collections.Generic;
-    using Ddd;
-    using AggregateRootBase = Ddd.AggregateRoot;
 
     [Serializable]
-    public abstract class AggregateRoot
-        : AggregateRootBase
+    public abstract class EventCentricAggregateRoot
+        : AggregateRoot
     {
         public const string HandlerName = "Handle";
 
         private readonly List<DomainEvent> changes = new List<DomainEvent>();
 
-        protected AggregateRoot(Guid id, ulong version = DefaultVersion)
+        protected EventCentricAggregateRoot(Guid id, ulong version = DefaultVersion)
             : base(id, version)
         {
         }
 
-        protected AggregateRoot(SerializationInfo info, StreamingContext context)
+        protected EventCentricAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             var changes = (DomainEvent[])info.GetValue(nameof(this.changes), typeof(DomainEvent[]));

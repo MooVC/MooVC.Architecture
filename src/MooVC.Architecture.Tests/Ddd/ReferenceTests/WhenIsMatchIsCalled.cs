@@ -60,7 +60,7 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new Reference<DifferentAggregate>(aggregateId);
+            var reference = new Reference<EventCentricAggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(aggregate.Object));
         }
@@ -70,18 +70,9 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new Reference<DifferentAggregate>(aggregateId, version: AggregateRoot.DefaultVersion);
+            var reference = new Reference<EventCentricAggregateRoot>(aggregateId, version: AggregateRoot.DefaultVersion);
 
             Assert.False(condition: reference.IsMatch(aggregate.Object));
-        }
-
-        private abstract class DifferentAggregate
-            : AggregateRoot
-        {
-            protected DifferentAggregate(Guid id, ulong version = 1) 
-                : base(id, version)
-            {
-            }
         }
     }
 }

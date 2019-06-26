@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using Xunit;
-    using CqrsAggregateRoot = Cqrs.AggregateRoot;
 
     public sealed class WhenToReferenceIsCalled
     {
@@ -30,7 +29,7 @@
         public void GivenAReferenceThatDoesNotMatchTheTypeSpecifiedThenAnAggregateReferenceMismatchExceptionIsThrown()
         {
             var aggregateId = Guid.NewGuid();
-            IReference reference = new Reference<CqrsAggregateRoot>(aggregateId);
+            IReference reference = new Reference<EventCentricAggregateRoot>(aggregateId);
 
             AggregateReferenceMismatchException<AggregateRoot> exception = Assert.Throws<AggregateReferenceMismatchException<AggregateRoot>>(
                 () => reference.ToReference<AggregateRoot>());

@@ -142,6 +142,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A non-empty reference of aggregate type {0} is required..
+        /// </summary>
+        internal static string NonEmptyReferenceRequired {
+            get {
+                return ResourceManager.GetString("NonEmptyReferenceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A non-version specific reference of aggregate type {0} is required..
         /// </summary>
         internal static string NonVersionSpecificReferenceRequired {

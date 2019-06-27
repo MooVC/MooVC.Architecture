@@ -144,6 +144,9 @@
   <data name="HandlerFailureExceptionMessage" xml:space="preserve">
     <value>Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}.</value>
   </data>
+  <data name="NonEmptyReferenceRequired" xml:space="preserve">
+    <value>A non-empty reference of aggregate type {0} is required.</value>
+  </data>
   <data name="NonVersionSpecificReferenceRequired" xml:space="preserve">
     <value>A non-version specific reference of aggregate type {0} is required.</value>
   </data>

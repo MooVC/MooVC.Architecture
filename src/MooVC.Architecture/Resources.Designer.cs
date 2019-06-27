@@ -124,6 +124,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The maximum supported ID of {0} for entity of type {1} has been exceeded..
+        /// </summary>
+        internal static string EntityMaximumIdValueExceededExceptionMessage {
+            get {
+                return ResourceManager.GetString("EntityMaximumIdValueExceededExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The context for this request must be provided..
         /// </summary>
         internal static string GenericContextRequired {

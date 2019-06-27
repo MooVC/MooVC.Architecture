@@ -138,6 +138,9 @@
   <data name="DomainEventHandlerNotSupportedException" xml:space="preserve">
     <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
   </data>
+  <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
+    <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
+  </data>
   <data name="GenericContextRequired" xml:space="preserve">
     <value>The context for this request must be provided.</value>
   </data>

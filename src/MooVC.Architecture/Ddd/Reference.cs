@@ -10,7 +10,7 @@
         : Value, IReference
         where TAggregate : AggregateRoot
     {
-        public static readonly Lazy<Reference<TAggregate>> ActualEmpty = 
+        private static readonly Lazy<Reference<TAggregate>> ActualEmpty = 
             new Lazy<Reference<TAggregate>>(() => new Reference<TAggregate>(Guid.Empty));
 
         public Reference(Guid id, ulong? version = null)

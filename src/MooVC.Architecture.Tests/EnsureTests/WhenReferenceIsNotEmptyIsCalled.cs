@@ -17,6 +17,17 @@
         }
 
         [Fact]
+        public void GivenAnEmptyReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
+        {
+            Reference<AggregateRoot> reference = Reference<AggregateRoot>.Empty;
+            string message = "Some sessage";
+
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => Ensure.ReferenceIsNotEmpty(reference, nameof(reference), message));
+
+            Assert.StartsWith(message, exception.Message);
+        }
+
+        [Fact]
         public void GivenANonEmptyReferenceThenNoExceptionIsThrown()
         {
             var reference = new Reference<AggregateRoot>(Guid.NewGuid());

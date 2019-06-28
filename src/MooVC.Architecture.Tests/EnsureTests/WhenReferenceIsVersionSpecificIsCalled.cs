@@ -17,6 +17,18 @@
         }
 
         [Fact]
+        public void GivenAVersionSpecificReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessage()
+        {
+            var reference = new Reference<AggregateRoot>(Guid.NewGuid());
+            string message = "Some Message";
+
+            ArgumentException exception = Assert.Throws<ArgumentException>(
+                () => Ensure.ReferenceIsVersionSpecific(reference, nameof(reference), message));
+
+            Assert.Equal(nameof(reference), exception.ParamName);
+        }
+
+        [Fact]
         public void GivenAVersionSpecificReferenceThenNoExceptionIsThrown()
         {
             var reference = new Reference<AggregateRoot>(Guid.NewGuid(), 1);

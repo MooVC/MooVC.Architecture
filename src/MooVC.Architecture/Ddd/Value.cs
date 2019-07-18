@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture
+﻿namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Collections.Generic;
@@ -35,7 +35,7 @@
         {
             var value = other as Value;
 
-            if (other == null)
+            if (value == null)
             {
                 return false;
             }

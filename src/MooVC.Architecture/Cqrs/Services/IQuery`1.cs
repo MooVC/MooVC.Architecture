@@ -1,8 +1,8 @@
 ﻿namespace MooVC.Architecture.Cqrs.Services
 {
-    public interface IQuery<TResult>
-        where TResult : Message
+    public interface IQuery<TResponse>
+        where TResponse : Message
     {
-        TResult Execute();
+        TResponse Execute();
     }
 }

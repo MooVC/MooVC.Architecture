@@ -1,7 +1,6 @@
-﻿namespace MooVC.Architecture
+﻿namespace MooVC.Architecture.Ddd
 {
     using System;
-    using MooVC.Architecture.Ddd;
 
     public static partial class Ensure
     {

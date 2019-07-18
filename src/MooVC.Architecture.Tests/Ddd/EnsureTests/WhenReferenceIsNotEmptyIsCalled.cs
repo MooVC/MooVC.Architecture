@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.EnsureTests
+﻿namespace MooVC.Architecture.Ddd.EnsureTests
 {
     using System;
     using MooVC.Architecture.Ddd;

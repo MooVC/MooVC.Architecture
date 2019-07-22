@@ -38,7 +38,7 @@
             totalPages = new Lazy<ushort>(() => CalculateTotalPages());
         }
 
-        public PaginatedResult(SerializationInfo info, StreamingContext context)
+        protected PaginatedResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             Paging = (Paging)info.GetValue(nameof(Paging), typeof(Paging));

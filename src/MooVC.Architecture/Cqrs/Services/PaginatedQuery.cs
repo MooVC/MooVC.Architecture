@@ -25,7 +25,7 @@
             Paging = paging;
         }
 
-        public PaginatedQuery(SerializationInfo info, StreamingContext context) 
+        protected PaginatedQuery(SerializationInfo info, StreamingContext context) 
             : base(info, context)
         {
             Paging = (Paging)info.GetValue(nameof(Paging), typeof(Paging));

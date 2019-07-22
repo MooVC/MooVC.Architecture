@@ -156,9 +156,6 @@
   <data name="PaginatedQueryPagingRequired" xml:space="preserve">
     <value>You must provide the paging instructions for this query.</value>
   </data>
-  <data name="PaginatedResultPagingRequired" xml:space="preserve">
-    <value>You must provide the paging instructions used to generate the result.</value>
-  </data>
   <data name="VersionSpecificReferenceRequired" xml:space="preserve">
     <value>A version specific reference of aggregate type {0} is required.</value>
   </data>

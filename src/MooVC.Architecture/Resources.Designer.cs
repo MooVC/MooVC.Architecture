@@ -178,15 +178,6 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide the paging instructions used to generate the result..
-        /// </summary>
-        internal static string PaginatedResultPagingRequired {
-            get {
-                return ResourceManager.GetString("PaginatedResultPagingRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A version specific reference of aggregate type {0} is required..
         /// </summary>
         internal static string VersionSpecificReferenceRequired {

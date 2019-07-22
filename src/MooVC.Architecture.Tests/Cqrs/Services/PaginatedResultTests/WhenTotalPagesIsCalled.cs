@@ -13,7 +13,8 @@
         public void GivenPagingAndTotalResultsThenTheTotalPagesIsEnoughToCoverAllResults(ushort size, ulong totalResults, ushort expectedPages)
         {
             var paging = new Paging(size: size);
-            var result = new PaginatedResult<int>(paging, new int[0], totalResults);
+            var query = new PaginatedQuery(paging);
+            var result = new PaginatedResult<PaginatedQuery, int>(query, new int[0], totalResults);
 
             Assert.Equal(expectedPages, result.TotalPages);
         }

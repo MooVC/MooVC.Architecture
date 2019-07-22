@@ -2,11 +2,11 @@
 {
     public interface IQueryEngine
     {
-        TResponse Query<TResponse>()
-            where TResponse : Message;
+        TResult Query<TResult>()
+            where TResult : Message;
 
-        TResponse Query<TRequest, TResponse>(TRequest request)
-            where TRequest : Message
-            where TResponse : Message;
+        TResult Query<TQuery, TResult>(TQuery request)
+            where TQuery : Message
+            where TResult : Message;
     }
 }

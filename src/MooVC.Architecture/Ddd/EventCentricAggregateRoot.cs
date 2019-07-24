@@ -49,7 +49,7 @@
             Version = history
                 .Select(@event => @event.Version)
                 .DefaultIfEmpty(DefaultVersion)
-                .Max();
+                .Max() + 1;
         }
 
         public void MarkChangesAsCommitted()

@@ -4,6 +4,6 @@
         where TQuery : Message
         where TResult : Message
     {
-        TResult Execute(TQuery request);
+        TResult Execute(TQuery query);
     }
 }

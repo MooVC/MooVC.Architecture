@@ -61,6 +61,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was expected, but version {3} has been previously committed..
+        /// </summary>
+        internal static string AggregateConflictDetectedExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An empty reference for aggregate type {0} cannot be retrieved..
         /// </summary>
         internal static string AggregateDoesNotExistExceptionMessage {
@@ -102,15 +111,6 @@ namespace MooVC.Architecture {
         internal static string AggregateVersionNotFoundExceptionMessage {
             get {
                 return ResourceManager.GetString("AggregateVersionNotFoundExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was expected, but version {3} has been previously committed..
-        /// </summary>
-        internal static string AggregteConflictDetectedExceptionMessage {
-            get {
-                return ResourceManager.GetString("AggregteConflictDetectedExceptionMessage", resourceCulture);
             }
         }
         

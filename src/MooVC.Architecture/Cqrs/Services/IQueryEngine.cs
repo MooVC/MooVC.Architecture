@@ -5,7 +5,7 @@
         TResult Query<TResult>()
             where TResult : Message;
 
-        TResult Query<TQuery, TResult>(TQuery request)
+        TResult Query<TQuery, TResult>(TQuery query)
             where TQuery : Message
             where TResult : Message;
     }

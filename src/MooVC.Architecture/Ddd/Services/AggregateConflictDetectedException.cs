@@ -3,16 +3,16 @@
     using System;
 
     [Serializable]
-    public sealed class AggregteConflictDetectedException<TAggregate>
+    public sealed class AggregateConflictDetectedException<TAggregate>
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        internal AggregteConflictDetectedException(
+        internal AggregateConflictDetectedException(
             Guid aggregateId,
             ulong expectedVersion,
             ulong persistedVersion)
             : base(string.Format(
-                Resources.AggregteConflictDetectedExceptionMessage,
+                Resources.AggregateConflictDetectedExceptionMessage,
                 aggregateId,
                 typeof(TAggregate).Name,
                 expectedVersion,

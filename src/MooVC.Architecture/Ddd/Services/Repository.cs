@@ -14,7 +14,7 @@
 
             if (currentVersion > aggregate.Version)
             {
-                throw new AggregteConflictDetectedException<TAggregate>(aggregate.Id, aggregate.Version, currentVersion);
+                throw new AggregateConflictDetectedException<TAggregate>(aggregate.Id, aggregate.Version, currentVersion);
             }
 
             PerformSave(aggregate);

@@ -6,6 +6,7 @@
 
     [Serializable]
     public abstract class Entity<T>
+        : ISerializable
     {
         protected Entity(T id)
         {

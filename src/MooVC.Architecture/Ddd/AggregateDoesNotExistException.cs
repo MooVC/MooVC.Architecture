@@ -7,7 +7,7 @@
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        internal AggregateDoesNotExistException(Message context)
+        public AggregateDoesNotExistException(Message context)
             : base(string.Format(
                 Resources.AggregateDoesNotExistExceptionMessage,
                 typeof(TAggregate).Name))

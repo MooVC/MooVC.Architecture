@@ -6,7 +6,7 @@
     public sealed class EntityMaximumIdValueExceededException
         : InvalidOperationException
     {
-        internal EntityMaximumIdValueExceededException(ulong max, Type type)
+        public EntityMaximumIdValueExceededException(ulong max, Type type)
             : base(string.Format(
                 Resources.EntityMaximumIdValueExceededExceptionMessage,
                 max,
@@ -14,7 +14,7 @@
         {
         }
 
-        internal EntityMaximumIdValueExceededException(long max, Type type)
+        public EntityMaximumIdValueExceededException(long max, Type type)
             : base(string.Format(
                 Resources.EntityMaximumIdValueExceededExceptionMessage,
                 max,

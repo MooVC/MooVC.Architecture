@@ -7,7 +7,7 @@
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        internal AggregateReferenceMismatchException(IReference reference)
+        public AggregateReferenceMismatchException(IReference reference)
             : base(string.Format(
                 Resources.AggregateReferenceMismatchExceptionMessage,
                 reference.Id,

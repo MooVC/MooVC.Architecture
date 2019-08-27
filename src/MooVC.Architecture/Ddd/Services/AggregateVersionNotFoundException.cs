@@ -7,7 +7,7 @@
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        internal AggregateVersionNotFoundException(Message context, Guid aggregateId, ulong version)
+        public AggregateVersionNotFoundException(Message context, Guid aggregateId, ulong version)
             : base(string.Format(
                 Resources.AggregateVersionNotFoundExceptionMessage,
                 aggregateId,

@@ -7,7 +7,7 @@
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        internal AggregateNotFoundException(Message context, Guid aggregateId)
+        public AggregateNotFoundException(Message context, Guid aggregateId)
             : base(string.Format(
                 Resources.AggregateNotFoundExceptionMessage,
                 aggregateId,

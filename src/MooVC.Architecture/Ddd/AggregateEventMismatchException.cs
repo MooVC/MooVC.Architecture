@@ -6,7 +6,7 @@
     public sealed class AggregateEventMismatchException
         : ArgumentException
     {
-        internal AggregateEventMismatchException(string aggregateName, IReference aggregate, IReference eventAggregate)
+        public AggregateEventMismatchException(string aggregateName, IReference aggregate, IReference eventAggregate)
             : base(string.Format(
                 Resources.AggregateEventMismatchExceptionMessage,
                 aggregate.Id,

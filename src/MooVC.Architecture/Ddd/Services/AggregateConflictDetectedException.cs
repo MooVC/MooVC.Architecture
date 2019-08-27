@@ -7,7 +7,7 @@
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        internal AggregateConflictDetectedException(
+        public AggregateConflictDetectedException(
             Guid aggregateId,
             ulong expectedVersion,
             ulong persistedVersion)

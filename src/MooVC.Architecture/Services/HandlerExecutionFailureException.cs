@@ -7,7 +7,7 @@
         : InvalidOperationException
         where TMessage : Message
     {
-        internal HandlerExecutionFailureException(TMessage context, Type handler, Exception cause)
+        public HandlerExecutionFailureException(TMessage context, Type handler, Exception cause)
             : base(
                   string.Format(
                       Resources.HandlerFailureExceptionMessage,

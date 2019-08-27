@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static Resources;
 
     [Serializable]
     public sealed class AggregateDoesNotExistException<TAggregate>
@@ -9,7 +10,7 @@
     {
         public AggregateDoesNotExistException(Message context)
             : base(string.Format(
-                Resources.AggregateDoesNotExistExceptionMessage,
+                AggregateDoesNotExistExceptionMessage,
                 typeof(TAggregate).Name))
         {
             Context = context;

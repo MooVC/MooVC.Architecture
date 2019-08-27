@@ -61,11 +61,20 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was expected, but version {3} has been previously committed..
+        ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed..
         /// </summary>
-        internal static string AggregateConflictDetectedExceptionMessage {
+        internal static string AggregateConflictDetectedExceptionExistingEntryMessage {
             get {
-                return ResourceManager.GetString("AggregateConflictDetectedExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("AggregateConflictDetectedExceptionExistingEntryMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but the initial version was expected..
+        /// </summary>
+        internal static string AggregateConflictDetectedExceptionNoExistingEntryMessage {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedExceptionNoExistingEntryMessage", resourceCulture);
             }
         }
         
@@ -111,6 +120,15 @@ namespace MooVC.Architecture {
         internal static string AggregateVersionNotFoundExceptionMessage {
             get {
                 return ResourceManager.GetString("AggregateVersionNotFoundExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A reference to the aggregate from which the domain event was raised must be provided..
+        /// </summary>
+        internal static string DomainEventAggregateReferenceRequired {
+            get {
+                return ResourceManager.GetString("DomainEventAggregateReferenceRequired", resourceCulture);
             }
         }
         

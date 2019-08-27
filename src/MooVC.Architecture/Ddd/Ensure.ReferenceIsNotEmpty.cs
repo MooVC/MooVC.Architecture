@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static Resources;
 
     public static partial class Ensure
     {
@@ -10,7 +11,7 @@
             ReferenceIsNotEmpty(
                 reference, 
                 argumentName, 
-                string.Format(Resources.NonEmptyReferenceRequired, typeof(TAggregate).Name));
+                string.Format(NonEmptyReferenceRequired, typeof(TAggregate).Name));
         }
 
         public static void ReferenceIsNotEmpty<TAggregate>(Reference<TAggregate> reference, string argumentName, string message)

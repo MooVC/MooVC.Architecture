@@ -14,6 +14,7 @@
 
             Assert.Equal(query, deserialized);
             Assert.NotSame(query, deserialized);
+            Assert.Equal(query.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

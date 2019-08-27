@@ -7,6 +7,7 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using Collections.Generic;
+    using static Resources;
 
     [Serializable]
     public abstract class EventCentricAggregateRoot
@@ -52,11 +53,11 @@
                 .Max() + 1;
         }
 
-        public void MarkChangesAsCommitted()
+        public override void MarkChangesAsCommitted()
         {
-            changes.Clear();
+            base.MarkChangesAsCommitted();
 
-            Version++;
+            changes.Clear();
         }
 
         protected void ApplyChange(DomainEvent @event, bool isNew = true)
@@ -70,7 +71,7 @@
             if (handler == null)
             {
                 throw new NotSupportedException(string.Format(
-                    Resources.DomainEventHandlerNotSupportedException, eventType.Name, type.Name));
+                    DomainEventHandlerNotSupportedException, eventType.Name, type.Name));
             }
 
             _ = handler.Invoke(this, new object[] { @event });

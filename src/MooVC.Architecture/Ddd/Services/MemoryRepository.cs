@@ -1,6 +1,7 @@
 namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Serialization;
@@ -9,11 +10,30 @@ namespace MooVC.Architecture.Ddd.Services
         : Repository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        private readonly HashSet<TAggregate> aggregates = new HashSet<TAggregate>();
+        private readonly IEnumerable<TAggregate> store;
+        private readonly Action<TAggregate> insert;
+
+        public MemoryRepository(bool isThreadSafe = false)
+        {
+            if (isThreadSafe)
+            {
+                var actual = new ConcurrentBag<TAggregate>();
+
+                insert = value => actual.Add(value);
+                store = actual;
+            }
+            else
+            {
+                var actual = new List<TAggregate>();
+
+                insert = value => actual.Add(value);
+                store = actual;
+            }
+        }
 
         public override TAggregate Get(Guid id, ulong? version = null)
         {
-            return aggregates
+            return store
                 .Where(aggregate => aggregate.Id == id 
                     && aggregate.Version == version.GetValueOrDefault(aggregate.Version))
                 .OrderByDescending(aggregate => aggregate.Version)
@@ -22,7 +42,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         public override IEnumerable<TAggregate> GetAll()
         {
-            return aggregates
+            return store
                 .GroupBy(aggregate => aggregate.Id)
                 .Select(aggregate => aggregate.OrderByDescending(version => version.Version).First())
                 .ToArray();
@@ -30,21 +50,16 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected override ulong GetCurrentVersion(Guid id)
         {
-            return Get(id)?.Version ?? AggregateRoot.DefaultVersion;
+            return Get(id)?.Version ?? ulong.MinValue;
         }
 
         protected override void PerformSave(TAggregate aggregate)
         {
-            TAggregate existing = Get(aggregate.Id, version: aggregate.Version);
-
-            if (existing != null)
-            {
-                throw new AggregateConflictDetectedException<TAggregate>(aggregate.Id, aggregate.Version - 1, existing.Version);
-            }
-
             TAggregate copy = aggregate.Clone();
+            
+            aggregate.MarkChangesAsCommitted();
 
-            _ = aggregates.Add(copy);
+            insert(copy);
         }
     }
 }

@@ -3,6 +3,8 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using static MooVC.Ensure;
+    using static Resources;
 
     [Serializable]
     public abstract class DomainEvent
@@ -11,6 +13,8 @@
         protected DomainEvent(Message context, IReference aggregate, ulong version)
             : base(context)
         {
+            ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateReferenceRequired);
+
             Aggregate = aggregate;
             Version = version;
         }

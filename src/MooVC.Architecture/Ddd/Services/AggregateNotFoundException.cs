@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using static Resources;
 
     [Serializable]
     public sealed class AggregateNotFoundException<TAggregate>
@@ -9,7 +10,7 @@
     {
         public AggregateNotFoundException(Message context, Guid aggregateId)
             : base(string.Format(
-                Resources.AggregateNotFoundExceptionMessage,
+                AggregateNotFoundExceptionMessage,
                 aggregateId,
                 typeof(TAggregate).Name))
         {

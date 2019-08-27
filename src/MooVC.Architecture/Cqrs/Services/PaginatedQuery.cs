@@ -5,6 +5,7 @@
     using System.Security.Permissions;
     using MooVC.Linq;
     using static MooVC.Ensure;
+    using static Resources;
 
     [Serializable]
     public class PaginatedQuery
@@ -12,7 +13,7 @@
     {
         public PaginatedQuery(Paging paging)
         {
-            ArgumentNotNull(paging, nameof(Paging), Resources.PaginatedQueryPagingRequired);
+            ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);
 
             Paging = paging;
         }
@@ -20,7 +21,7 @@
         public PaginatedQuery(Message context, Paging paging) 
             : base(context)
         {
-            ArgumentNotNull(paging, nameof(Paging), Resources.PaginatedQueryPagingRequired);
+            ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);
 
             Paging = paging;
         }

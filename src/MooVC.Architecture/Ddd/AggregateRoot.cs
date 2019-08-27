@@ -43,5 +43,10 @@
 
             info.AddValue(nameof(Version), Version);
         }
+
+        public virtual void MarkChangesAsCommitted()
+        {
+            Version++;
+        }
     }
 }

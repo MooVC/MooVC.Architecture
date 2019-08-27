@@ -15,9 +15,14 @@
         {
             ulong currentVersion = GetCurrentVersion(aggregate.Id);
 
-            if (currentVersion > aggregate.Version)
+            if (aggregate.Version - currentVersion != 1)
             {
-                throw new AggregateConflictDetectedException<TAggregate>(aggregate.Id, aggregate.Version, currentVersion);
+                if (currentVersion == ulong.MinValue)
+                {
+                    throw new AggregateConflictDetectedException<TAggregate>(aggregate.Id, aggregate.Version);
+                }
+
+                throw new AggregateConflictDetectedException<TAggregate>(aggregate.Id, currentVersion, aggregate.Version);
             }
 
             PerformSave(aggregate);

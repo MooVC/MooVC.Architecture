@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using static Resources;
 
     [Serializable]
     public sealed class AggregateVersionNotFoundException<TAggregate>
@@ -9,7 +10,7 @@
     {
         public AggregateVersionNotFoundException(Message context, Guid aggregateId, ulong version)
             : base(string.Format(
-                Resources.AggregateVersionNotFoundExceptionMessage,
+                AggregateVersionNotFoundExceptionMessage,
                 aggregateId,
                 typeof(TAggregate).Name,
                 version))

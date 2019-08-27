@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static Resources;
 
     public static partial class Ensure
     {
@@ -13,7 +14,7 @@
             ReferenceIsNotVersionSpecific(
                 reference,
                 argumentName,
-                string.Format(Resources.NonVersionSpecificReferenceRequired, typeof(TAggregate).Name),
+                string.Format(NonVersionSpecificReferenceRequired, typeof(TAggregate).Name),
                 allowEmpty: allowEmpty);
         }
 

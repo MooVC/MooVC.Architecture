@@ -9,7 +9,7 @@
     {
         public void Execute(TMessage message)
         {
-            ProcessExecute<TMessage>(message, ProcessMessage);
+            ProcessExecute(message, ProcessMessage);
         }
 
         protected void ProcessExecute<TContextualMessage>(TContextualMessage message, Action<TContextualMessage> process)

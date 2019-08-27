@@ -19,6 +19,7 @@
 
         protected Value(SerializationInfo info, StreamingContext context)
         {
+            HashCode = new Lazy<int>(AggregateHashCode);
         }
 
         public static bool operator ==(Value first, Value second)

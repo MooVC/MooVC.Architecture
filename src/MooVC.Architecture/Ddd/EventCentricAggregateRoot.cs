@@ -7,6 +7,7 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using Collections.Generic;
+    using static System.String;
     using static Resources;
 
     [Serializable]
@@ -45,12 +46,23 @@
 
         public void LoadFromHistory(IEnumerable<DomainEvent> history)
         {
-            history.ForEach(@event => ApplyChange(@event, isNew: false));
+            if (!(Version == DefaultVersion && changes.Count == 0))
+            {
+                throw new InvalidOperationException(Format(
+                    EventCentricAggregateRootDomainEventHandlerNotSupportedException, 
+                    Id,
+                    Version,
+                    GetType().Name));
+            }
+
+            history.ForEach(@event => ApplyChange(() => @event, isNew: false));
 
             Version = history
-                .Select(@event => @event.Version)
+                .Select(@event => @event.Aggregate.Version.GetValueOrDefault())
                 .DefaultIfEmpty(DefaultVersion)
-                .Max() + 1;
+                .Max();
+
+            MarkChangesAsCommitted();
         }
 
         public override void MarkChangesAsCommitted()
@@ -63,30 +75,47 @@
             }
         }
         
-        protected void ApplyChange(DomainEvent @event, bool isNew = true)
+        protected void ApplyChange(Func<DomainEvent> change, bool isNew = true)
         {
-            Type type = GetType();
-            Type eventType = @event.GetType();
+            bool triggersVersionIncrement = isNew && HasUncommittedChanges;
 
-            MethodInfo handler = type
-                .GetMethod(HandlerName, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { eventType }, null);
-            
-            if (handler == null)
+            if (triggersVersionIncrement)
             {
-                throw new NotSupportedException(string.Format(
-                    DomainEventHandlerNotSupportedException, eventType.Name, type.Name));
+                MarkChangesAsUncommitted();
             }
 
-            _ = handler.Invoke(this, new object[] { @event });
-
-            if (isNew)
+            try
             {
-                if (!changes.Any())
+                DomainEvent @event = change();
+                Type type = GetType();
+                Type eventType = @event.GetType();
+
+                MethodInfo handler = type
+                    .GetMethod(HandlerName, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { eventType }, null);
+
+                if (handler == null)
                 {
-                    MarkChangesAsUncommitted();
+                    throw new NotSupportedException(Format(
+                        EventCentricAggregateRootDomainEventHandlerNotSupportedException, 
+                        eventType.Name, 
+                        type.Name));
                 }
 
-                changes.Add(@event);
+                _ = handler.Invoke(this, new object[] { @event });
+
+                if (isNew)
+                {
+                    changes.Add(@event);
+                }
+            }
+            catch
+            {
+                if (triggersVersionIncrement)
+                {
+                    RollbackUncommittedChanges();
+                }
+
+                throw;
             }
         }
     }

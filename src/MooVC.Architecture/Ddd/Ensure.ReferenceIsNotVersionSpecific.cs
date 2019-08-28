@@ -14,7 +14,7 @@
             ReferenceIsNotVersionSpecific(
                 reference,
                 argumentName,
-                string.Format(NonVersionSpecificReferenceRequired, typeof(TAggregate).Name),
+                string.Format(EnsureReferenceIsNotVersionSpecificMessage, typeof(TAggregate).Name),
                 allowEmpty: allowEmpty);
         }
 

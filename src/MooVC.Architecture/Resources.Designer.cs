@@ -133,11 +133,29 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handler for event of type {0} is not supported by aggregate of type {1}..
+        ///   Looks up a localized string similar to A non-empty reference of aggregate type {0} is required..
         /// </summary>
-        internal static string DomainEventHandlerNotSupportedException {
+        internal static string EnsureReferenceIsNotEmptyMessage {
             get {
-                return ResourceManager.GetString("DomainEventHandlerNotSupportedException", resourceCulture);
+                return ResourceManager.GetString("EnsureReferenceIsNotEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A non-version specific reference of aggregate type {0} is required..
+        /// </summary>
+        internal static string EnsureReferenceIsNotVersionSpecificMessage {
+            get {
+                return ResourceManager.GetString("EnsureReferenceIsNotVersionSpecificMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A version specific reference of aggregate type {0} is required..
+        /// </summary>
+        internal static string EnsureReferenceIsVersionSpecificMessage {
+            get {
+                return ResourceManager.GetString("EnsureReferenceIsVersionSpecificMessage", resourceCulture);
             }
         }
         
@@ -147,6 +165,24 @@ namespace MooVC.Architecture {
         internal static string EntityMaximumIdValueExceededExceptionMessage {
             get {
                 return ResourceManager.GetString("EntityMaximumIdValueExceededExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} is not in a suitable state for a load from history..
+        /// </summary>
+        internal static string EventCentricAggregateInvalidStateForLoadFromHistory {
+            get {
+                return ResourceManager.GetString("EventCentricAggregateInvalidStateForLoadFromHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Handler for event of type {0} is not supported by aggregate of type {1}..
+        /// </summary>
+        internal static string EventCentricAggregateRootDomainEventHandlerNotSupportedException {
+            get {
+                return ResourceManager.GetString("EventCentricAggregateRootDomainEventHandlerNotSupportedException", resourceCulture);
             }
         }
         
@@ -169,38 +205,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A non-empty reference of aggregate type {0} is required..
-        /// </summary>
-        internal static string NonEmptyReferenceRequired {
-            get {
-                return ResourceManager.GetString("NonEmptyReferenceRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A non-version specific reference of aggregate type {0} is required..
-        /// </summary>
-        internal static string NonVersionSpecificReferenceRequired {
-            get {
-                return ResourceManager.GetString("NonVersionSpecificReferenceRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You must provide the paging instructions for this query..
         /// </summary>
         internal static string PaginatedQueryPagingRequired {
             get {
                 return ResourceManager.GetString("PaginatedQueryPagingRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A version specific reference of aggregate type {0} is required..
-        /// </summary>
-        internal static string VersionSpecificReferenceRequired {
-            get {
-                return ResourceManager.GetString("VersionSpecificReferenceRequired", resourceCulture);
             }
         }
     }

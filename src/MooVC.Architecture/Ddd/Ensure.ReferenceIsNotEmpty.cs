@@ -11,7 +11,7 @@
             ReferenceIsNotEmpty(
                 reference, 
                 argumentName, 
-                string.Format(NonEmptyReferenceRequired, typeof(TAggregate).Name));
+                string.Format(EnsureReferenceIsNotEmptyMessage, typeof(TAggregate).Name));
         }
 
         public static void ReferenceIsNotEmpty<TAggregate>(Reference<TAggregate> reference, string argumentName, string message)

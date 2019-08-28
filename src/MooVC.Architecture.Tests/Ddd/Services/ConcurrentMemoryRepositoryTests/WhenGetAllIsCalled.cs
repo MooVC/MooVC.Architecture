@@ -20,27 +20,27 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         [Fact]
         public void GivenApopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned()
         {
-            const int ExpectedFirstVersion = 1, 
-                ExpectedSecondVersion = 2,
+            const int FirstVersion = 1, 
+                SecondVersion = 2,
                 ExpectedTotal = 2;
 
             var firstId = Guid.NewGuid();
             var secondId = Guid.NewGuid();
 
-            var firstVersionOne = new SerializableAggregateRoot(firstId, version: ExpectedFirstVersion);
-            var secondVersionOne = new SerializableAggregateRoot(secondId, version: ExpectedFirstVersion);
-            var secondVersionTwo = new SerializableAggregateRoot(secondId, version: ExpectedSecondVersion);
+            var firstAggregateVersionOne = new SerializableAggregateRoot(firstId, version: FirstVersion);
+            var secondAggregateVersionOne = new SerializableAggregateRoot(secondId, version: FirstVersion);
+            var secondAggregateVersionTwo = new SerializableAggregateRoot(secondId, version: SecondVersion);
             var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
-            repository.Save(firstVersionOne);
-            repository.Save(secondVersionOne);
-            repository.Save(secondVersionTwo);
+            repository.Save(firstAggregateVersionOne);
+            repository.Save(secondAggregateVersionOne);
+            repository.Save(secondAggregateVersionTwo);
 
             IEnumerable<SerializableAggregateRoot> results = repository.GetAll();
 
             Assert.Equal(ExpectedTotal, results.Count());
-            Assert.Contains(results, result => result.Id == firstId && result.Version == ExpectedFirstVersion);
-            Assert.Contains(results, result => result.Id == secondId && result.Version == ExpectedSecondVersion);
+            Assert.Contains(results, result => result == firstAggregateVersionOne);
+            Assert.Contains(results, result => result == secondAggregateVersionTwo);
         }
     }
 }

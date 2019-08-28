@@ -14,14 +14,15 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
             repository.Save(expected);
             SerializableAggregateRoot actual = repository.Get(expected.Id);
 
+            Assert.Equal(expected, actual);
             Assert.NotSame(expected, actual);
-            Assert.True(expected.Version - actual.Version == 1);
-            Assert.Equal(expected.Id, actual.Id);
         }
 
         [Fact]
         public void GivenANewAggregateWhenAnExistingMemberWithTheSameIdExistsThenAnAggregateConflictDetectedExceptionIsThrown()
         {
+            const ulong ExpectedVersion = 2;
+
             var saved = new SerializableAggregateRoot();
             var pending = new SerializableAggregateRoot(saved.Id);
 
@@ -32,8 +33,8 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
                 () => repository.Save(pending));
 
             Assert.Equal(saved.Id, exception.AggregateId);
-            Assert.Equal(saved.Version, exception.ExpectedVersion);
-            Assert.Equal(pending.Version, exception.PersistedVersion);
+            Assert.Equal(ExpectedVersion, exception.ExpectedVersion);
+            Assert.Equal(saved.Version, exception.PersistedVersion);
         }
     }
 }

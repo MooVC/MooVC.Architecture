@@ -19,6 +19,7 @@
         protected AggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+            HasUncommittedChanges = info.GetBoolean(nameof(HasUncommittedChanges));
             Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
         }
 
@@ -43,6 +44,7 @@
         {
             base.GetObjectData(info, context);
 
+            info.AddValue(nameof(HasUncommittedChanges), HasUncommittedChanges);
             info.AddValue(nameof(Version), Version);
         }
 
@@ -57,6 +59,15 @@
             {
                 Version++;
                 HasUncommittedChanges = true;
+            }
+        }
+
+        protected virtual void RollbackUncommittedChanges()
+        {
+            if (HasUncommittedChanges)
+            {
+                Version--;
+                HasUncommittedChanges = false;
             }
         }
     }

@@ -15,10 +15,10 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized(ulong expectedVersion)
         {
             var expectedId = Guid.NewGuid();
-            var expectedAggregate = new Reference<AggregateRoot>(expectedId);
+            var expectedAggregate = new Reference<AggregateRoot>(expectedId, version: expectedVersion);
             var expectedContext = new SerializableMessage();
 
-            var @event = new SerializableDomainEvent(expectedContext, expectedAggregate, expectedVersion);
+            var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);
             SerializableDomainEvent clone = @event.Clone();
 
             Assert.Equal(@event, clone);
@@ -29,7 +29,6 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
             Assert.Equal(@event.CorrelationId, @event.CorrelationId);
             Assert.Equal(@event.Id, @event.Id);
             Assert.Equal(@event.TimeStamp, @event.TimeStamp);
-            Assert.Equal(@event.Version, @event.Version);
             Assert.Equal(@event.GetHashCode(), clone.GetHashCode());
         }
     }

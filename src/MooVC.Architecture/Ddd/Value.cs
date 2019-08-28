@@ -72,7 +72,16 @@
         {
         }
 
-        protected static bool EqualOperator(Value left, Value right)
+        protected int AggregateHashCode()
+        {
+            return GetAtomicValues()
+                .Select(value => value?.GetHashCode() ?? 0)
+                .Aggregate((first, second) => first ^ second);
+        }
+
+        protected abstract IEnumerable<object> GetAtomicValues();
+
+        private static bool EqualOperator(Value left, Value right)
         {
             if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
             {
@@ -82,18 +91,9 @@
             return ReferenceEquals(left, null) || left.Equals(right);
         }
 
-        protected static bool NotEqualOperator(Value left, Value right)
+        private static bool NotEqualOperator(Value left, Value right)
         {
             return !EqualOperator(left, right);
         }
-
-        protected int AggregateHashCode()
-        {
-            return GetAtomicValues()
-                .Select(value => value?.GetHashCode() ?? 0)
-                .Aggregate((first, second) => first ^ second);
-        }
-
-        protected abstract IEnumerable<object> GetAtomicValues();
     }
 }

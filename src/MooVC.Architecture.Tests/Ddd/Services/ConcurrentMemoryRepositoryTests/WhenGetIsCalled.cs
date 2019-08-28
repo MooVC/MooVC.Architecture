@@ -1,4 +1,4 @@
-namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
+namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
 {
     using System;
     using MooVC.Architecture.Ddd.AggregateRootTests;
@@ -13,7 +13,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
 
             var expected = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(expected);
             repository.Save(other);
@@ -29,7 +29,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         public void GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturned()
         {
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(other);
 
@@ -48,7 +48,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             var aggregate = new SerializableAggregateRoot(id, version: FirstVersion);
             var expected = new SerializableAggregateRoot(id, version: ExpectedSecondVersion);
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(aggregate);
             repository.Save(expected);
@@ -71,7 +71,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             var expectedFirst = new SerializableAggregateRoot(id, version: ExpectedFirstVersion);
             var expectedSecond = new SerializableAggregateRoot(id, version: ExpectedSecondVersion);
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(expectedFirst);
             repository.Save(expectedSecond);
@@ -95,7 +95,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             var id = Guid.NewGuid();
             var aggregate = new SerializableAggregateRoot(id, version: 1);
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(aggregate);
             repository.Save(other);

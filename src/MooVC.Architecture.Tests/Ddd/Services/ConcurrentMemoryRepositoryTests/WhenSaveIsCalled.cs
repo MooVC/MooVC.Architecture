@@ -1,4 +1,4 @@
-namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
+namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
 {
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
@@ -9,7 +9,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         public void GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheAggregateIsAddedAndTheVersionIncremented()
         {
             var expected = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(expected);
             SerializableAggregateRoot actual = repository.Get(expected.Id);
@@ -25,7 +25,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             var saved = new SerializableAggregateRoot();
             var pending = new SerializableAggregateRoot(saved.Id);
 
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(saved);
             AggregateConflictDetectedException<SerializableAggregateRoot> exception = Assert.Throws<AggregateConflictDetectedException<SerializableAggregateRoot>>(

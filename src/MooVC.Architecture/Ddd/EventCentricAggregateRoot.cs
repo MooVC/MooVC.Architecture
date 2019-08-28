@@ -55,11 +55,14 @@
 
         public override void MarkChangesAsCommitted()
         {
-            base.MarkChangesAsCommitted();
+            if (HasUncommittedChanges)
+            {
+                changes.Clear();
 
-            changes.Clear();
+                base.MarkChangesAsCommitted();
+            }
         }
-
+        
         protected void ApplyChange(DomainEvent @event, bool isNew = true)
         {
             Type type = GetType();
@@ -78,6 +81,11 @@
 
             if (isNew)
             {
+                if (!changes.Any())
+                {
+                    MarkChangesAsUncommitted();
+                }
+
                 changes.Add(@event);
             }
         }

@@ -9,7 +9,7 @@
         : Entity<Guid>
     {
         public const ulong DefaultVersion = 1;
-
+        
         protected AggregateRoot(Guid id, ulong version = DefaultVersion)
             : base(id)
         {
@@ -23,6 +23,8 @@
         }
 
         public ulong Version { get; private protected set; }
+
+        protected bool HasUncommittedChanges { get; private set; } = true;
 
         public override bool Equals(object other)
         {
@@ -46,7 +48,16 @@
 
         public virtual void MarkChangesAsCommitted()
         {
-            Version++;
+            HasUncommittedChanges = false;
+        }
+
+        protected virtual void MarkChangesAsUncommitted()
+        {
+            if (!HasUncommittedChanges)
+            {
+                Version++;
+                HasUncommittedChanges = true;
+            }
         }
     }
 }

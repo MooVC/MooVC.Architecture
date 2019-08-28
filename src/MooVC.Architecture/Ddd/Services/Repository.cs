@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using static Ensure;
 
     public abstract class Repository<TAggregate>
         : IRepository<TAggregate>
@@ -13,22 +14,14 @@
 
         public void Save(TAggregate aggregate)
         {
-            ulong currentVersion = GetCurrentVersion(aggregate.Id);
+            ulong? currentVersion = GetCurrentVersion(aggregate.Id);
 
-            if (aggregate.Version - currentVersion != 1)
-            {
-                if (currentVersion == ulong.MinValue)
-                {
-                    throw new AggregateConflictDetectedException<TAggregate>(aggregate.Id, aggregate.Version);
-                }
-
-                throw new AggregateConflictDetectedException<TAggregate>(aggregate.Id, currentVersion, aggregate.Version);
-            }
+            AggregateDoesNotConflict<TAggregate>(aggregate, currentVersion: currentVersion);
 
             PerformSave(aggregate);
         }
 
-        protected abstract ulong GetCurrentVersion(Guid id);
+        protected abstract ulong? GetCurrentVersion(Guid id);
 
         protected abstract void PerformSave(TAggregate aggregate);
     }

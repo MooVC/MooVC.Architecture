@@ -1,4 +1,4 @@
-namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
+namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Fact]
         public void GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturned()
         {
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
             IEnumerable<SerializableAggregateRoot> results = repository.GetAll();
 
             Assert.Empty(results);
@@ -30,7 +30,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             var firstVersionOne = new SerializableAggregateRoot(firstId, version: ExpectedFirstVersion);
             var secondVersionOne = new SerializableAggregateRoot(secondId, version: ExpectedFirstVersion);
             var secondVersionTwo = new SerializableAggregateRoot(secondId, version: ExpectedSecondVersion);
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(firstVersionOne);
             repository.Save(secondVersionOne);

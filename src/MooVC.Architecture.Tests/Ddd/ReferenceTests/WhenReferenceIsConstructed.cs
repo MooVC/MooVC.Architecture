@@ -6,54 +6,33 @@
 
     public sealed class WhenReferenceIsConstructed
     {
-        [Fact]
-        public void GivenAnAggregateWhenEnforceVersionIsFalseThenTheIdAndTypeArePropagated()
+        [Theory]
+        [InlineData(1ul)]
+        [InlineData(18446744073709551615)]
+        public void GivenAnAggregateThenTheIdTypeAndVersionArePropagated(ulong expectedVersion)
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var expectedId = Guid.NewGuid();
+            var aggregate = new Mock<AggregateRoot>(expectedId, expectedVersion);
 
             var reference = new Reference<AggregateRoot>(aggregate.Object);
 
-            Assert.Equal(aggregateId, reference.Id);
+            Assert.Equal(expectedId, reference.Id);
             Assert.Equal(typeof(AggregateRoot), reference.Type);
-            Assert.False(reference.Version.HasValue);
+            Assert.Equal(expectedVersion, reference.Version);
         }
 
-        [Fact]
-        public void GivenAnAggregateWhenEnforceVersionIsTrueThenTheIdTypeAndVersionArePropagated()
+        [Theory]
+        [InlineData(1ul)]
+        [InlineData(18446744073709551615)]
+        public void GivenAnAggregateIdAndVersionThenTheIdTypeAndVersionArePropagated(ulong expectedVersion)
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var expectedId = Guid.NewGuid();
 
-            var reference = new Reference<AggregateRoot>(aggregate.Object, enforceVersion: true);
+            var reference = new Reference<AggregateRoot>(expectedId, expectedVersion);
 
-            Assert.Equal(aggregateId, reference.Id);
+            Assert.Equal(expectedId, reference.Id);
             Assert.Equal(typeof(AggregateRoot), reference.Type);
-            Assert.Equal(AggregateRoot.DefaultVersion, reference.Version);
-        }
-
-        [Fact]
-        public void GivenAnAggregateIdThenTheIdAndTypeArePropagated()
-        {
-            var aggregateId = Guid.NewGuid();
-
-            var reference = new Reference<AggregateRoot>(aggregateId);
-
-            Assert.Equal(aggregateId, reference.Id);
-            Assert.Equal(typeof(AggregateRoot), reference.Type);
-            Assert.False(reference.Version.HasValue);
-        }
-
-        [Fact]
-        public void GivenAnAggregateIdAndAVersionThenTheIdTypeAndVersionArePropagated()
-        {
-            var aggregateId = Guid.NewGuid();
-
-            var reference = new Reference<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-
-            Assert.Equal(aggregateId, reference.Id);
-            Assert.Equal(typeof(AggregateRoot), reference.Type);
-            Assert.Equal(AggregateRoot.DefaultVersion, reference.Version);
+            Assert.Equal(expectedVersion, reference.Version);
         }
     }
 }

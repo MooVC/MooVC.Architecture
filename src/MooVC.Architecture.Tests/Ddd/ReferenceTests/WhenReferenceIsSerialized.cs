@@ -7,9 +7,10 @@ namespace MooVC.Architecture.Ddd.ReferenceTests
     public sealed class WhenReferenceIsSerialized
     {
         [Theory]
-        [InlineData(null)]
+        [InlineData(0)]
+        [InlineData(1)]
         [InlineData(18446744073709551615)]
-        public void GivenAnInstanceThenAllPropertiesAreSerialized(ulong? expectedVersion)
+        public void GivenAnInstanceThenAllPropertiesAreSerialized(ulong expectedVersion)
         {
             var expectedId = Guid.NewGuid();
             var reference = new Reference<AggregateRoot>(expectedId, version: expectedVersion);

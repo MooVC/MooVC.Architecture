@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using static MooVC.Architecture.Ddd.Ensure;
 
     public static partial class RepositoryExtensions
     {
@@ -8,7 +9,7 @@
             this IRepository<TAggregate> repository, 
             Message context, 
             Guid id,
-            ulong? version = null)
+            ulong? version = default)
             where TAggregate : AggregateRoot
         {
             TAggregate aggregate = repository.Get(id, version: version);
@@ -29,10 +30,21 @@
         public static TAggregate Get<TAggregate>(
             this IRepository<TAggregate> repository, 
             Message context, 
-            Reference<TAggregate> reference)
+            IReference reference,
+            bool getLatest = false)
             where TAggregate : AggregateRoot
         {
-            return repository.Get(context, reference.Id, version: reference.Version);
+            if (reference.IsEmpty)
+            {
+                throw new AggregateDoesNotExistException<TAggregate>(context);
+            }
+
+            ReferenceIsOfType<TAggregate>(reference, nameof(reference));
+
+            return repository.Get(
+                context, 
+                reference.Id, 
+                version: getLatest ? default(ulong?) : reference.Version);
         }
     }
 }

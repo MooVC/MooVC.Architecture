@@ -22,17 +22,7 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
             Assert.Equal(expectedContext.Id, @event.CausationId);
             Assert.Equal(expectedContext.CorrelationId, @event.CorrelationId);
         }
-
-        [Fact]
-        public void GivenAContextAndANonVersionSpecificAggregateReferenceThenAnArgumentExceptionIsThrown()
-        {
-            var expectedId = Guid.NewGuid();
-            var expectedAggregate = new Reference<AggregateRoot>(expectedId);
-            var expectedContext = new SerializableMessage();
-
-            _ = Assert.Throws<ArgumentException>(() => new SerializableDomainEvent(expectedContext, expectedAggregate));
-        }
-
+        
         [Fact]
         public void GivenNoContextAndAnAggregateReferenceThenAnArgumentNullExceptionIsThrown()
         {

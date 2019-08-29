@@ -142,20 +142,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A non-version specific reference of aggregate type {0} is required..
+        ///   Looks up a localized string similar to The reference provided is for an aggregate of type {0}.  {1} is required..
         /// </summary>
-        internal static string EnsureReferenceIsNotVersionSpecificMessage {
+        internal static string EnsureReferenceIsOfTypeMessage {
             get {
-                return ResourceManager.GetString("EnsureReferenceIsNotVersionSpecificMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A version specific reference of aggregate type {0} is required..
-        /// </summary>
-        internal static string EnsureReferenceIsVersionSpecificMessage {
-            get {
-                return ResourceManager.GetString("EnsureReferenceIsVersionSpecificMessage", resourceCulture);
+                return ResourceManager.GetString("EnsureReferenceIsOfTypeMessage", resourceCulture);
             }
         }
         

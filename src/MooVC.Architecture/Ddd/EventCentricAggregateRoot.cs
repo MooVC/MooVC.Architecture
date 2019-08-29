@@ -16,19 +16,18 @@
     {
         public const string HandlerName = "Handle";
 
-        private readonly List<DomainEvent> changes = new List<DomainEvent>();
+        private readonly List<DomainEvent> changes;
 
         protected EventCentricAggregateRoot(Guid id, ulong version = DefaultVersion)
             : base(id, version)
         {
+            changes = new List<DomainEvent>();
         }
 
         protected EventCentricAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            var changes = (DomainEvent[])info.GetValue(nameof(this.changes), typeof(DomainEvent[]));
-
-            this.changes.AddRange(changes);
+            changes = (List<DomainEvent>)info.GetValue(nameof(changes), typeof(List<DomainEvent>));
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
@@ -36,12 +35,12 @@
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(changes), changes.ToArray());
+            info.AddValue(nameof(changes), changes);
         }
 
         public IEnumerable<DomainEvent> GetUncommittedChanges()
         {
-            return changes;
+            return changes.ToArray();
         }
 
         public void LoadFromHistory(IEnumerable<DomainEvent> history)
@@ -58,7 +57,7 @@
             history.ForEach(@event => ApplyChange(() => @event, isNew: false));
 
             Version = history
-                .Select(@event => @event.Aggregate.Version.GetValueOrDefault())
+                .Select(@event => @event.Aggregate.Version)
                 .DefaultIfEmpty(DefaultVersion)
                 .Max();
 
@@ -77,7 +76,7 @@
         
         protected void ApplyChange(Func<DomainEvent> change, bool isNew = true)
         {
-            bool triggersVersionIncrement = isNew && HasUncommittedChanges;
+            bool triggersVersionIncrement = isNew && !HasUncommittedChanges;
 
             if (triggersVersionIncrement)
             {

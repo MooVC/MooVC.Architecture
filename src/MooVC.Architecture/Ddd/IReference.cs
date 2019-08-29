@@ -4,17 +4,14 @@
 
     public interface IReference
     {
-        Guid Id { get; }
-
         bool IsEmpty { get; }
 
-        bool IsVersionSpecific { get; }
+        Guid Id { get; }
 
         Type Type { get; }
 
-        ulong? Version { get; }
+        ulong Version { get; }
 
-        bool IsMatch<TAggregate>(TAggregate aggregate)
-            where TAggregate : AggregateRoot;
+        bool IsMatch(AggregateRoot aggregate);
     }
 }

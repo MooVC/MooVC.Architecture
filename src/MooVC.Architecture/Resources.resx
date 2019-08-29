@@ -144,11 +144,8 @@
   <data name="EnsureReferenceIsNotEmptyMessage" xml:space="preserve">
     <value>A non-empty reference of aggregate type {0} is required.</value>
   </data>
-  <data name="EnsureReferenceIsNotVersionSpecificMessage" xml:space="preserve">
-    <value>A non-version specific reference of aggregate type {0} is required.</value>
-  </data>
-  <data name="EnsureReferenceIsVersionSpecificMessage" xml:space="preserve">
-    <value>A version specific reference of aggregate type {0} is required.</value>
+  <data name="EnsureReferenceIsOfTypeMessage" xml:space="preserve">
+    <value>The reference provided is for an aggregate of type {0}.  {1} is required.</value>
   </data>
   <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
     <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>

@@ -4,7 +4,7 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
     using System.Runtime.Serialization;
 
     [Serializable]
-    internal sealed class SerializableAggregateRoot
+    internal class SerializableAggregateRoot
         : AggregateRoot
     {
         public SerializableAggregateRoot()

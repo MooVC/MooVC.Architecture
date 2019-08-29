@@ -3,18 +3,17 @@
     using System;
 
     [Serializable]
-    public abstract class DomainException<TAggregate>
+    public abstract class DomainException
         : InvalidOperationException
-        where TAggregate : AggregateRoot
     {
-        protected DomainException(Message context, Reference<TAggregate> aggregate, string message)
+        protected DomainException(Message context, IReference aggregate, string message)
             : base(message)
         {
             Aggregate = aggregate;
             Context = context;
         }
 
-        public Reference<TAggregate> Aggregate { get; }
+        public IReference Aggregate { get; }
 
         public Message Context { get; }
 

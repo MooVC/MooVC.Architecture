@@ -9,21 +9,17 @@
     public static partial class ReferenceExtensions
     {
         public static TAggregate Retrieve<TAggregate>(
-            this Reference<TAggregate> reference, 
+            this IReference reference, 
             Message context, 
-            IRepository<TAggregate> repository)
+            IRepository<TAggregate> repository,
+            bool getLatest = false)
             where TAggregate : AggregateRoot
         {
-            if (reference.IsEmpty)
-            {
-                throw new AggregateDoesNotExistException<TAggregate>(context);
-            }
-
-            return repository.Get(context, reference);
+            return repository.Get(context, reference, getLatest: getLatest);
         }
 
         public static IEnumerable<TAggregate> Retrieve<TAggregate>(
-            this IEnumerable<Reference<TAggregate>> references,
+            this IEnumerable<IReference> references,
             Message context,
             IRepository<TAggregate> repository,
             bool ignoreEmpty = false)

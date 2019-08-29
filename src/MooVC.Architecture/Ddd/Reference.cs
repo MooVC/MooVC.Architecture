@@ -11,42 +11,36 @@
         where TAggregate : AggregateRoot
     {
         private static readonly Lazy<Reference<TAggregate>> ActualEmpty = 
-            new Lazy<Reference<TAggregate>>(() => new Reference<TAggregate>(Guid.Empty));
+            new Lazy<Reference<TAggregate>>(() => new Reference<TAggregate>(Guid.Empty, AggregateRoot.DefaultVersion));
 
-        public Reference(Guid id, ulong? version = null)
+        public Reference(Guid id, ulong version)
         {
             Id = id;
             Version = version;
         }
 
-        public Reference(TAggregate aggregate, bool enforceVersion = false)
+        public Reference(TAggregate aggregate)
         {
             Id = aggregate.Id;
-            
-            if (enforceVersion)
-            {
-                Version = aggregate.Version;
-            }
+            Version = aggregate.Version;
         }
 
         private Reference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
-            Version = (ulong?)info.GetValue(nameof(Version), typeof(ulong?));
+            Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
         }
 
-        public static Reference<TAggregate> Empty => ActualEmpty.Value;
+        public static IReference Empty => ActualEmpty.Value;
 
         public Guid Id { get; }
 
         public bool IsEmpty => Id == Guid.Empty;
 
-        public bool IsVersionSpecific => Version.HasValue;
-
         public Type Type => typeof(TAggregate);
 
-        public ulong? Version { get; }
+        public ulong Version { get; }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -57,11 +51,10 @@
             info.AddValue(nameof(Version), Version);
         }
 
-        public bool IsMatch<TProposedAggregate>(TProposedAggregate aggregate)
-            where TProposedAggregate : AggregateRoot
+        public bool IsMatch(AggregateRoot aggregate)
         {
-            return Type == typeof(TProposedAggregate) 
-                ? Id == aggregate.Id && (!IsVersionSpecific || Version.Value == aggregate.Version) 
+            return Type == aggregate?.GetType() 
+                ? Id == aggregate.Id && Version == aggregate.Version 
                 : false;
         }
 

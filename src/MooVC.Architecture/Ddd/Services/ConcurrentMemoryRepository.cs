@@ -2,14 +2,23 @@ namespace MooVC.Architecture.Ddd.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using System.Security.Permissions;
     using System.Threading;
 
+    [Serializable]
     public class ConcurrentMemoryRepository<TAggregate>
         : MemoryRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
         public ConcurrentMemoryRepository()
             : base()
+        {
+            StoreLock = new ReaderWriterLockSlim();
+        }
+
+        protected ConcurrentMemoryRepository(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
             StoreLock = new ReaderWriterLockSlim();
         }
@@ -21,12 +30,18 @@ namespace MooVC.Architecture.Ddd.Services
             return PerformRead(() => base.GetAll());
         }
 
-        protected override TAggregate Get(Reference<TAggregate> reference)
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            return PerformRead(() => base.Get(reference));
+            PerformRead(() => base.GetObjectData(info, context));
         }
 
-        protected override void PerformSave(TAggregate aggregate, Reference<TAggregate> nonVersioned, Reference<TAggregate> versioned)
+        protected override TAggregate Get(SearchKey key)
+        {
+            return PerformRead(() => base.Get(key));
+        }
+
+        protected override void PerformSave(TAggregate aggregate, SearchKey nonVersioned, SearchKey versioned)
         {
             try
             {
@@ -41,7 +56,17 @@ namespace MooVC.Architecture.Ddd.Services
                 StoreLock.ExitUpgradeableReadLock();
             }
         }
-        
+
+        protected virtual void PerformRead(Action read)
+        {
+            _ = PerformRead(() =>
+              {
+                  read();
+
+                  return 0;
+              });
+        }
+
         protected virtual T PerformRead<T>(Func<T> read)
         {
             try

@@ -3,18 +3,20 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using static MooVC.Architecture.Ddd.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class DomainEvent
         : Message
     {
+        protected DomainEvent(Message context, AggregateRoot aggregate)
+            : base(context)
+        {
+            Aggregate = aggregate.ToReference();
+        }
+
         protected DomainEvent(Message context, IReference aggregate)
             : base(context)
         {
-            ReferenceIsVersionSpecific(aggregate, nameof(aggregate), DomainEventAggregateReferenceRequired);
-
             Aggregate = aggregate;
         }
 

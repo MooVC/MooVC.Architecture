@@ -2,10 +2,10 @@
 {
     public static class AggregateRootExtensions
     {
-        public static Reference<TAggregate> ToReference<TAggregate>(this TAggregate aggregate, bool enforceVersion = false)
+        public static IReference ToReference<TAggregate>(this TAggregate aggregate)
             where TAggregate : AggregateRoot
         {
-            return new Reference<TAggregate>(aggregate, enforceVersion: enforceVersion);
+            return new Reference<TAggregate>(aggregate);
         }
     }
 }

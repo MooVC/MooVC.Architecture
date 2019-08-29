@@ -5,19 +5,17 @@
 
     public static partial class Ensure
     {
-        public static void ReferenceIsNotEmpty<TAggregate>(Reference<TAggregate> reference, string argumentName)
-            where TAggregate : AggregateRoot
+        public static void ReferenceIsNotEmpty(IReference reference, string argumentName)
         {
             ReferenceIsNotEmpty(
                 reference, 
                 argumentName, 
-                string.Format(EnsureReferenceIsNotEmptyMessage, typeof(TAggregate).Name));
+                string.Format(EnsureReferenceIsNotEmptyMessage, reference?.Type.Name));
         }
 
-        public static void ReferenceIsNotEmpty<TAggregate>(Reference<TAggregate> reference, string argumentName, string message)
-            where TAggregate : AggregateRoot
+        public static void ReferenceIsNotEmpty(IReference reference, string argumentName, string message)
         {
-            if (reference.IsEmpty)
+            if (reference == null || reference.IsEmpty)
             {
                 throw new ArgumentException(message, argumentName);
             }

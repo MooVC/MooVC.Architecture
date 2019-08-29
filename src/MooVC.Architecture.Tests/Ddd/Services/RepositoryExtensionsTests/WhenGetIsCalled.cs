@@ -31,7 +31,7 @@
             var aggregateId = Guid.NewGuid();
             var firstVersion = new Mock<AggregateRoot>(aggregateId, VersionOne);
             var secondVersion = new Mock<AggregateRoot>(aggregateId, VersionTwo);
-            var reference = new Reference<AggregateRoot>(aggregateId, VersionOne);
+            var reference = new Reference<AggregateRoot>(aggregateId, version: VersionOne);
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<ulong?>(v => v == default)))
@@ -67,7 +67,7 @@
         public void GivenAnIdAndVersionThatExistsThenTheAggregateIsReturned(ulong? version)
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, version);
+            var aggregate = new Mock<AggregateRoot>(aggregateId, version.GetValueOrDefault(AggregateRoot.DefaultVersion));
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<ulong?>(v => v == version)))
@@ -87,7 +87,7 @@
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
                 .Returns(default(AggregateRoot));
 
-            var reference = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            var reference = new Reference<AggregateRoot>(Guid.NewGuid());
 
             AggregateVersionNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateVersionNotFoundException<AggregateRoot>>(
                 () => repository.Object.Get(context.Object, reference));
@@ -105,7 +105,7 @@
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
                 .Returns(default(AggregateRoot));
 
-            var reference = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            var reference = new Reference<AggregateRoot>(Guid.NewGuid());
 
             AggregateNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateNotFoundException<AggregateRoot>>(
                 () => repository.Object.Get(context.Object, reference, getLatest: true));
@@ -123,7 +123,7 @@
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
                 .Returns(default(AggregateRoot));
 
-            var reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            var reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid());
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => repository.Object.Get(context.Object, reference));
@@ -136,7 +136,7 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new Reference<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var reference = new Reference<AggregateRoot>(aggregateId);
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<ulong?>(v => v == AggregateRoot.DefaultVersion)))

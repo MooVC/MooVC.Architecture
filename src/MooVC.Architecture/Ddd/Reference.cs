@@ -4,6 +4,8 @@ namespace MooVC.Architecture.Ddd
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using static MooVC.Ensure;
+    using static Resources;
 
     [Serializable]
     public abstract class Reference
@@ -11,6 +13,12 @@ namespace MooVC.Architecture.Ddd
     {
         private protected Reference(Guid id, ulong version)
         {
+            ArgumentIsAcceptable(
+                version, 
+                nameof(version), 
+                value => value >= AggregateRoot.DefaultVersion || id == Guid.Empty, 
+                string.Format(GenericVersionInvalid, AggregateRoot.DefaultVersion));
+            
             Id = id;
             Version = version;
         }

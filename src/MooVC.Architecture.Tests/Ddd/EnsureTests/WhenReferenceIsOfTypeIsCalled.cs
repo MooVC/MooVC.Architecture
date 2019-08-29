@@ -10,7 +10,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMatchingReferenceThenNoExceptionIsThrown()
         {
-            Reference reference = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            Reference reference = new Reference<AggregateRoot>(Guid.NewGuid());
 
             ReferenceIsOfType<AggregateRoot>(reference, nameof(reference));
         }
@@ -26,7 +26,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingReferenceThenAnArgumentExceptionIsThrown()
         {
-            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid());
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => ReferenceIsOfType<AggregateRoot>(reference, nameof(reference)));
@@ -48,7 +48,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
         {
-            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid());
             string message = "Some sessage";
 
             ArgumentException exception = Assert.Throws<ArgumentException>(

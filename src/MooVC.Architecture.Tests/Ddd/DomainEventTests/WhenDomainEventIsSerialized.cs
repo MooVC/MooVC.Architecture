@@ -9,7 +9,6 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
     public sealed class WhenDomainEventIsSerialized
     {
         [Theory]
-        [InlineData(0)]
         [InlineData(1)]
         [InlineData(18446744073709551615)]
         public void GivenAnInstanceThenAllPropertiesAreSerialized(ulong expectedVersion)

@@ -3,6 +3,8 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using static MooVC.Ensure;
+    using static Resources;
 
     [Serializable]
     public abstract class AggregateRoot 
@@ -13,6 +15,18 @@
         protected AggregateRoot(Guid id, ulong version = DefaultVersion)
             : base(id)
         {
+            ArgumentIsAcceptable(
+                id,
+                nameof(id),
+                value => value != Guid.Empty,
+                GenericIdInvalid);
+
+            ArgumentIsAcceptable(
+                version,
+                nameof(version),
+                value => value >= DefaultVersion,
+                string.Format(GenericVersionInvalid, DefaultVersion));
+
             Version = version;
         }
 

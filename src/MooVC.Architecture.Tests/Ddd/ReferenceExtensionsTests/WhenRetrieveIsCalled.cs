@@ -21,8 +21,8 @@
         
         public static IEnumerable<object[]> GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData()
         {
-            var reference1 = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
-            var reference2 = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            var reference1 = new Reference<AggregateRoot>(Guid.NewGuid());
+            var reference2 = new Reference<AggregateRoot>(Guid.NewGuid());
 
             yield return new[] { new[] { reference1, reference2, Reference<AggregateRoot>.Empty } };
             yield return new[] { new[] { reference1, Reference<AggregateRoot>.Empty, Reference<AggregateRoot>.Empty } };
@@ -31,9 +31,9 @@
 
         public static IEnumerable<object[]> GivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissingData()
         {
-            var reference1 = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
-            var reference2 = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
-            var reference3 = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            var reference1 = new Reference<AggregateRoot>(Guid.NewGuid());
+            var reference2 = new Reference<AggregateRoot>(Guid.NewGuid());
+            var reference3 = new Reference<AggregateRoot>(Guid.NewGuid());
 
             IEnumerable<IDictionary<Reference, bool>> singles = GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
                 reference1,
@@ -82,7 +82,7 @@
                 .Returns(default(AggregateRoot));
 
             var aggregateId = Guid.NewGuid();
-            var reference = new Reference<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var reference = new Reference<AggregateRoot>(aggregateId);
 
             AggregateVersionNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateVersionNotFoundException<AggregateRoot>>(
                 () => reference.Retrieve(context.Object, repository.Object));
@@ -101,7 +101,7 @@
                 .Returns(default(AggregateRoot));
 
             var aggregateId = Guid.NewGuid();
-            var reference = new Reference<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var reference = new Reference<AggregateRoot>(aggregateId);
 
             AggregateNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateNotFoundException<AggregateRoot>>(
                 () => reference.Retrieve(context.Object, repository.Object, getLatest: true));
@@ -120,7 +120,7 @@
                 .Returns(default(AggregateRoot));
 
             var aggregateId = Guid.NewGuid();
-            var reference = new Reference<EventCentricAggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var reference = new Reference<EventCentricAggregateRoot>(aggregateId);
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => reference.Retrieve(context.Object, repository.Object));

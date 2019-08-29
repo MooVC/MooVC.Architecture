@@ -7,7 +7,6 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
     public sealed class WhenDomainEventIsConstructed
     {
         [Theory]
-        [InlineData(0)]
         [InlineData(1)]
         [InlineData(18446744073709551615)]
         public void GivenAContextAndAnAggregateReferenceThenTheContextAndAggregateReferenceArePropagated(ulong expectedVersion)
@@ -27,7 +26,7 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
         public void GivenNoContextAndAnAggregateReferenceThenAnArgumentNullExceptionIsThrown()
         {
             var id = Guid.NewGuid();
-            var aggregate = new Reference<AggregateRoot>(id, version: AggregateRoot.DefaultVersion);
+            var aggregate = new Reference<AggregateRoot>(id);
 
             _ = Assert.Throws<ArgumentNullException>(
                 () => new SerializableDomainEvent(null, aggregate));

@@ -6,6 +6,11 @@
     public abstract class DomainException
         : InvalidOperationException
     {
+        protected DomainException(Message context, AggregateRoot aggregate, string message)
+            : this(context, aggregate.ToReference(), message)
+        {
+        }
+
         protected DomainException(Message context, Reference aggregate, string message)
             : base(message)
         {

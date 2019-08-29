@@ -5,8 +5,13 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
 
     public sealed class WhenAggregateRootIsConstructed
     {
+        [Fact]
+        public void GivenAnEmptyIdThenAnArgumentExceptionIsThrown()
+        {
+            _ = Assert.Throws<ArgumentException>(() => new SerializableAggregateRoot(Guid.Empty));
+        }
+
         [Theory]
-        [InlineData(0)]
         [InlineData(1)]
         [InlineData(18446744073709551615)]
         public void GivenAnIdAndAVersionThenTheIdAndVersionArePropagated(ulong expectedVersion)
@@ -16,6 +21,12 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
 
             Assert.Equal(expectedId, aggregate.Id);
             Assert.Equal(expectedVersion, aggregate.Version);
+        }
+
+        [Fact]
+        public void GivenAnIdAndAnInvalidVersionThenAnArgumentExceptionIsThrown()
+        {
+            _ = Assert.Throws<ArgumentException>(() => new SerializableAggregateRoot(Guid.NewGuid(), version: 0));
         }
 
         [Fact]

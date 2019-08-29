@@ -14,7 +14,7 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new SerializableAggregateRoot(aggregateId, version);
-            var reference = new Reference<SerializableAggregateRoot>(aggregateId, version);
+            var reference = new Reference<SerializableAggregateRoot>(aggregateId, version: version);
 
             Assert.True(condition: reference.IsMatch(aggregate));
         }
@@ -23,7 +23,7 @@
         public void GivenANullAggregateThenFalseIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var reference = new Reference<SerializableAggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(null));
         }
@@ -32,8 +32,8 @@
         public void GivenAReferenceForABaseTypeThenFalseIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new Reference<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var aggregate = new SerializableAggregateRoot(aggregateId);
+            var reference = new Reference<AggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(aggregate));
         }
@@ -42,8 +42,8 @@
         public void GivenAReferenceForADerivedTypeThenFalseIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new Reference<DerivedAggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var aggregate = new SerializableAggregateRoot(aggregateId);
+            var reference = new Reference<DerivedAggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(aggregate));
         }
@@ -64,7 +64,7 @@
             var aggregateId = Guid.NewGuid();
             var referenceId = Guid.NewGuid();
             var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new Reference<AggregateRoot>(referenceId, AggregateRoot.DefaultVersion);
+            var reference = new Reference<AggregateRoot>(referenceId);
 
             Assert.False(condition: reference.IsMatch(aggregate.Object));
         }
@@ -74,7 +74,7 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new Reference<EventCentricAggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var reference = new Reference<EventCentricAggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(aggregate.Object));
         }

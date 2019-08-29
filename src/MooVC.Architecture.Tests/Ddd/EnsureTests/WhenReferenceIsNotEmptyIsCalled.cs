@@ -31,7 +31,7 @@
         [Fact]
         public void GivenANonEmptyReferenceThenNoExceptionIsThrown()
         {
-            var reference = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            var reference = new Reference<AggregateRoot>(Guid.NewGuid());
 
             ReferenceIsNotEmpty(reference, nameof(reference));
         }

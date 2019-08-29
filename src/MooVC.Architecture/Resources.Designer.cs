@@ -187,6 +187,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A non-empty ID must be provided..
+        /// </summary>
+        internal static string GenericIdInvalid {
+            get {
+                return ResourceManager.GetString("GenericIdInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version number cannot be less than {0}..
+        /// </summary>
+        internal static string GenericVersionInvalid {
+            get {
+                return ResourceManager.GetString("GenericVersionInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}..
         /// </summary>
         internal static string HandlerFailureExceptionMessage {

@@ -14,7 +14,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
             Value = value;
         }
 
-        public SerializableSetDomainEvent(Message context, Reference aggregate, Guid value)
+        public SerializableSetDomainEvent(Message context, VersionedReference aggregate, Guid value)
             : base(context, aggregate)
         {
             Value = value;

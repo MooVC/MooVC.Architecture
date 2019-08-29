@@ -127,7 +127,7 @@
     <value>An empty reference for aggregate type {0} cannot be retrieved.</value>
   </data>
   <data name="AggregateEventMismatchExceptionMessage" xml:space="preserve">
-    <value>Event {2:p} of type {3} does not apply to aggregate {1:p} of type {0}.</value>
+    <value>Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}.</value>
   </data>
   <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
     <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>

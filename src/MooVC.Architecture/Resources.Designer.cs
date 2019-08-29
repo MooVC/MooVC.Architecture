@@ -88,7 +88,7 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event {2:p} of type {3} does not apply to aggregate {1:p} of type {0}..
+        ///   Looks up a localized string similar to Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}..
         /// </summary>
         internal static string AggregateEventMismatchExceptionMessage {
             get {

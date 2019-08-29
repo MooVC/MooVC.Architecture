@@ -6,20 +6,17 @@ namespace MooVC.Architecture.Ddd.ReferenceTests
 
     public sealed class WhenReferenceIsSerialized
     {
-        [Theory]
-        [InlineData(1)]
-        [InlineData(18446744073709551615)]
-        public void GivenAnInstanceThenAllPropertiesAreSerialized(ulong expectedVersion)
+        [Fact]
+        public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var expectedId = Guid.NewGuid();
-            var reference = new Reference<AggregateRoot>(expectedId, version: expectedVersion);
+            var reference = new Reference<AggregateRoot>(expectedId);
             Reference<AggregateRoot> clone = reference.Clone();
 
             Assert.Equal(reference, clone);
             Assert.NotSame(reference, clone);
 
             Assert.Equal(expectedId, clone.Id);
-            Assert.Equal(expectedVersion, clone.Version);
             Assert.Equal(reference.GetHashCode(), clone.GetHashCode());
         }
     }

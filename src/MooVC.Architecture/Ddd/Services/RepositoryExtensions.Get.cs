@@ -30,8 +30,7 @@
         public static TAggregate Get<TAggregate>(
             this IRepository<TAggregate> repository, 
             Message context, 
-            Reference reference,
-            bool getLatest = false)
+            Reference reference)
             where TAggregate : AggregateRoot
         {
             if (reference.IsEmpty)
@@ -41,10 +40,23 @@
 
             ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
-            return repository.Get(
-                context, 
-                reference.Id, 
-                version: getLatest ? default(ulong?) : reference.Version);
+            return repository.Get(context, reference.Id);
+        }
+
+        public static TAggregate Get<TAggregate>(
+            this IRepository<TAggregate> repository,
+            Message context,
+            VersionedReference reference)
+            where TAggregate : AggregateRoot
+        {
+            if (reference.IsEmpty)
+            {
+                throw new AggregateDoesNotExistException<TAggregate>(context);
+            }
+
+            ReferenceIsOfType<TAggregate>(reference, nameof(reference));
+
+            return repository.Get(context, reference.Id, version: reference.Version);
         }
     }
 }

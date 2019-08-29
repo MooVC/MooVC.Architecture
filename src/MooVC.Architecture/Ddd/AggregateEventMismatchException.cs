@@ -7,23 +7,25 @@
     public sealed class AggregateEventMismatchException
         : ArgumentException
     {
-        public AggregateEventMismatchException(string aggregateName, Reference aggregate, Reference eventAggregate)
+        public AggregateEventMismatchException(string aggregateName, VersionedReference aggregate, VersionedReference eventAggregate)
             : base(string.Format(
                 AggregateEventMismatchExceptionMessage,
                 aggregate.Id,
                 aggregate.Type.Name,
+                aggregate.Version,
                 eventAggregate.Id,
-                eventAggregate.Type.Name))
+                eventAggregate.Type.Name,
+                eventAggregate.Version))
         {
             Aggregate = aggregate;
             AggregateName = aggregateName;
             EventAggregate = eventAggregate;
         }
 
-        public Reference Aggregate { get; }
+        public VersionedReference Aggregate { get; }
 
         public string AggregateName { get; }
 
-        public Reference EventAggregate { get; }
+        public VersionedReference EventAggregate { get; }
     }
 }

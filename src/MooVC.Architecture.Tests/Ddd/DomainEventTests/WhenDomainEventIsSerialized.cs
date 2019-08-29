@@ -14,7 +14,7 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized(ulong expectedVersion)
         {
             var expectedId = Guid.NewGuid();
-            var expectedAggregate = new Reference<AggregateRoot>(expectedId, version: expectedVersion);
+            var expectedAggregate = new VersionedReference<AggregateRoot>(expectedId, version: expectedVersion);
             var expectedContext = new SerializableMessage();
 
             var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);

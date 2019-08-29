@@ -29,18 +29,18 @@
             yield return new[] { new[] { Reference<AggregateRoot>.Empty, Reference<AggregateRoot>.Empty, Reference<AggregateRoot>.Empty } };
         }
 
-        public static IEnumerable<object[]> GivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissingData()
+        public static IEnumerable<object[]> GivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissingData()
         {
             var reference1 = new Reference<AggregateRoot>(Guid.NewGuid());
             var reference2 = new Reference<AggregateRoot>(Guid.NewGuid());
             var reference3 = new Reference<AggregateRoot>(Guid.NewGuid());
 
-            IEnumerable<IDictionary<Reference, bool>> singles = GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
+            IEnumerable<IDictionary<Reference, bool>> singles = GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
                 reference1,
                 reference2,
                 reference3);
 
-            IEnumerable<IDictionary<Reference, bool>> multiples = GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
+            IEnumerable<IDictionary<Reference, bool>> multiples = GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
                 reference1,
                 reference2,
                 reference3);
@@ -75,26 +75,20 @@
         }
 
         [Fact]
-        public void GivenAReferenceThatDoesNotExistsThenAnAggregateVersionNotFoundExceptionIsThrown()
+        public void GivenAnEmptyVersionedReferenceThenAnAggregateDoesNotExistExceptionIsThrown()
         {
-            _ = repository
-                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
-                .Returns(default(AggregateRoot));
+            VersionedReference reference = VersionedReference<AggregateRoot>.Empty;
 
-            var aggregateId = Guid.NewGuid();
-            var reference = new Reference<AggregateRoot>(aggregateId);
-
-            AggregateVersionNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateVersionNotFoundException<AggregateRoot>>(
+            AggregateDoesNotExistException<AggregateRoot> exception = Assert.Throws<AggregateDoesNotExistException<AggregateRoot>>(
                 () => reference.Retrieve(context.Object, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Once);
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Never);
 
-            Assert.Equal(aggregateId, exception.AggregateId);
             Assert.Equal(context.Object, exception.Context);
         }
 
         [Fact]
-        public void GivenAReferenceThatDoesNotExistsWhenGetLatestIsTrueThenAnAggregateNotFoundExceptionIsThrown()
+        public void GivenAReferenceThatDoesNotExistsThenAnAggregateNotFoundExceptionIsThrown()
         {
             _ = repository
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
@@ -104,7 +98,26 @@
             var reference = new Reference<AggregateRoot>(aggregateId);
 
             AggregateNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateNotFoundException<AggregateRoot>>(
-                () => reference.Retrieve(context.Object, repository.Object, getLatest: true));
+                () => reference.Retrieve(context.Object, repository.Object));
+
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Once);
+
+            Assert.Equal(aggregateId, exception.AggregateId);
+            Assert.Equal(context.Object, exception.Context);
+        }
+
+        [Fact]
+        public void GivenAVersionedReferenceThatDoesNotExistsThenAnAggregateVersionNotFoundExceptionIsThrown()
+        {
+            _ = repository
+                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
+                .Returns(default(AggregateRoot));
+
+            var aggregateId = Guid.NewGuid();
+            var reference = new VersionedReference<AggregateRoot>(aggregateId);
+
+            AggregateVersionNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateVersionNotFoundException<AggregateRoot>>(
+                () => reference.Retrieve(context.Object, repository.Object));
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Once);
 
@@ -128,14 +141,30 @@
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Never);
         }
 
+        [Fact]
+        public void GivenAVersionedReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnArgumentExceptionIsThrown()
+        {
+            _ = repository
+                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
+                .Returns(default(AggregateRoot));
+
+            var aggregateId = Guid.NewGuid();
+            var reference = new VersionedReference<EventCentricAggregateRoot>(aggregateId);
+
+            ArgumentException exception = Assert.Throws<ArgumentException>(
+                () => reference.Retrieve(context.Object, repository.Object));
+
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Never);
+        }
+
         [Theory]
         [InlineData(1)]
         [InlineData(18446744073709551615)]
-        public void GivenAReferenceThatExistsThenTheAggregateIsReturned(ulong version)
+        public void GivenAVersionedReferenceThatExistsThenTheAggregateIsReturned(ulong version)
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new Mock<AggregateRoot>(aggregateId, version);
-            var reference = new Reference<AggregateRoot>(aggregateId, version: version);
+            var reference = new VersionedReference<AggregateRoot>(aggregateId, version: version);
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<ulong?>(v => v == version)))
@@ -149,7 +178,7 @@
         }
 
         [Fact]
-        public void GivenAReferenceThatExistsWhenGetLatestIsTrueThenTheLatestAggregateIsReturned()
+        public void GivenAReferenceThatExistsThenTheLatestAggregateIsReturned()
         {
             const ulong FirstVersion = 1, 
                 SecondVersion = 2;
@@ -157,13 +186,13 @@
             var aggregateId = Guid.NewGuid();
             var firstAggregate = new Mock<AggregateRoot>(aggregateId, FirstVersion);
             var secondAggregate = new Mock<AggregateRoot>(aggregateId, SecondVersion);
-            var reference = new Reference<AggregateRoot>(aggregateId, version: FirstVersion);
+            var reference = new Reference<AggregateRoot>(aggregateId);
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<ulong?>(v => v == default)))
                .Returns(secondAggregate.Object);
 
-            AggregateRoot value = reference.Retrieve(context.Object, repository.Object, getLatest: true);
+            AggregateRoot value = reference.Retrieve(context.Object, repository.Object);
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Once);
 
@@ -194,7 +223,7 @@
 
             Assert.Equal(expected, actual);
         }
-
+        
         [Theory]
         [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
         public void GivenOneOrMoreReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturned(IEnumerable<Reference> references)
@@ -214,8 +243,8 @@
         }
 
         [Theory]
-        [MemberData(nameof(GivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissingData))]
-        public void GivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(IDictionary<Reference, bool> references)
+        [MemberData(nameof(GivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissingData))]
+        public void GivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(IDictionary<Reference, bool> references)
         {
             Expression<Func<Guid, bool>> predicate = id => references
                 .Where(item => item.Key.Id == id)
@@ -239,7 +268,7 @@
 
             Guid[] actual = exception
                 .InnerExceptions
-                .Cast<AggregateVersionNotFoundException<AggregateRoot>>()
+                .Cast<AggregateNotFoundException<AggregateRoot>>()
                 .Select(aggregate => aggregate.AggregateId)
                 .OrderBy(item => item)
                 .ToArray();
@@ -247,7 +276,7 @@
             Assert.Equal(expected, actual);
         }
 
-        private static IEnumerable<IDictionary<Reference, bool>> GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
+        private static IEnumerable<IDictionary<Reference, bool>> GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
             Reference reference1,
             Reference reference2,
             Reference reference3)
@@ -274,7 +303,7 @@
             };
         }
 
-        private static IEnumerable<IDictionary<Reference, bool>> GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
+        private static IEnumerable<IDictionary<Reference, bool>> GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
             Reference reference1,
             Reference reference2,
             Reference reference3)

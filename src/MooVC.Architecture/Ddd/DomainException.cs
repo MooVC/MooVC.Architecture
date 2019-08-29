@@ -7,18 +7,18 @@
         : InvalidOperationException
     {
         protected DomainException(Message context, AggregateRoot aggregate, string message)
-            : this(context, aggregate.ToReference(), message)
+            : this(context, aggregate.ToVersionedReference(), message)
         {
         }
 
-        protected DomainException(Message context, Reference aggregate, string message)
+        protected DomainException(Message context, VersionedReference aggregate, string message)
             : base(message)
         {
             Aggregate = aggregate;
             Context = context;
         }
 
-        public Reference Aggregate { get; }
+        public VersionedReference Aggregate { get; }
 
         public Message Context { get; }
 

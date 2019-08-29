@@ -13,8 +13,8 @@
         private static readonly Lazy<Reference<TAggregate>> ActualEmpty = 
             new Lazy<Reference<TAggregate>>(() => new Reference<TAggregate>());
         
-        public Reference(Guid id, ulong version = AggregateRoot.DefaultVersion)
-            : base(id, version)
+        public Reference(Guid id)
+            : base(id)
         {
             ArgumentIsAcceptable(
                 id,
@@ -29,7 +29,7 @@
         }
 
         private Reference()
-            : base(Guid.Empty, 0)
+            : base(Guid.Empty)
         {
         }
 

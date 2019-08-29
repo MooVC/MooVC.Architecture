@@ -12,7 +12,7 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
         public void GivenAContextAndAnAggregateReferenceThenTheContextAndAggregateReferenceArePropagated(ulong expectedVersion)
         {
             var expectedId = Guid.NewGuid();
-            var expectedAggregate = new Reference<AggregateRoot>(expectedId, version: expectedVersion);
+            var expectedAggregate = new VersionedReference<AggregateRoot>(expectedId, version: expectedVersion);
             var expectedContext = new SerializableMessage();
 
             var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);
@@ -26,7 +26,7 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
         public void GivenNoContextAndAnAggregateReferenceThenAnArgumentNullExceptionIsThrown()
         {
             var id = Guid.NewGuid();
-            var aggregate = new Reference<AggregateRoot>(id);
+            var aggregate = new VersionedReference<AggregateRoot>(id);
 
             _ = Assert.Throws<ArgumentNullException>(
                 () => new SerializableDomainEvent(null, aggregate));

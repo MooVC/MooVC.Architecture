@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Ddd
+namespace MooVC.Architecture.Ddd
 {
     using System.Collections.Concurrent;
     using System.Collections.Generic;
@@ -6,11 +6,11 @@
     using MooVC.Architecture.Ddd.Services;
     using MooVC.Collections.Generic;
 
-    public static partial class ReferenceExtensions
+    public static partial class VersionedReferenceExtensions
     {
         public static TAggregate Retrieve<TAggregate>(
-            this Reference reference, 
-            Message context, 
+            this VersionedReference reference,
+            Message context,
             IRepository<TAggregate> repository)
             where TAggregate : AggregateRoot
         {
@@ -18,7 +18,7 @@
         }
 
         public static IEnumerable<TAggregate> Retrieve<TAggregate>(
-            this IEnumerable<Reference> references,
+            this IEnumerable<VersionedReference> references,
             Message context,
             IRepository<TAggregate> repository,
             bool ignoreEmpty = false)

@@ -6,26 +6,34 @@
     public class WhenReferenceEqualityIsChecked
     {
         [Fact]
-        public void GivenTwoSeparateInstancesWithTheSameIdAndTypeAndVersionThenBothAreConsideredEqual()
+        public void GivenTwoSeparateInstancesWithTheSameIdAndTypeThenBothAreConsideredEqual()
         {
             var aggregateId = Guid.NewGuid();
-            ulong version = 1;
 
-            var first = new Reference<AggregateRoot>(aggregateId, version: version);
-            var second = new Reference<AggregateRoot>(aggregateId, version: version);
+            var first = new Reference<AggregateRoot>(aggregateId);
+            var second = new Reference<AggregateRoot>(aggregateId);
 
             Assert.True(first == second);
         }
+        
+        [Fact]
+        public void GivenTwoSeparateInstancesWithTheDifferentIdButSameTypeThenBothAreNotConsideredEqual()
+        {
+            var first = new Reference<AggregateRoot>(Guid.NewGuid());
+            var second = new Reference<AggregateRoot>(Guid.NewGuid());
+
+            Assert.False(first == second);
+        }
 
         [Fact]
-        public void GivenTwoSeparateInstancesWithTheSameIdTypeAndDifferentVersionThenBothAreNotConsideredEqual()
+        public void GivenTwoSeparateInstancesWithTheSameIdButDifferentTypeThenBothAreNotConsideredEqual()
         {
             var aggregateId = Guid.NewGuid();
             
-            var first = new Reference<AggregateRoot>(aggregateId, version: 1);
-            var second = new Reference<AggregateRoot>(aggregateId, version: 2);
+            var first = new Reference<AggregateRoot>(aggregateId);
+            var second = new Reference<EventCentricAggregateRoot>(aggregateId);
 
-            Assert.True(first != second);
+            Assert.False(first == second);
         }
     }
 }

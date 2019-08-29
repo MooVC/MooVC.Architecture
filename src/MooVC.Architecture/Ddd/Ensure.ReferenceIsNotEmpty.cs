@@ -5,7 +5,7 @@
 
     public static partial class Ensure
     {
-        public static void ReferenceIsNotEmpty(IReference reference, string argumentName)
+        public static void ReferenceIsNotEmpty(Reference reference, string argumentName)
         {
             ReferenceIsNotEmpty(
                 reference, 
@@ -13,7 +13,7 @@
                 string.Format(EnsureReferenceIsNotEmptyMessage, reference?.Type.Name));
         }
 
-        public static void ReferenceIsNotEmpty(IReference reference, string argumentName, string message)
+        public static void ReferenceIsNotEmpty(Reference reference, string argumentName, string message)
         {
             if (reference == null || reference.IsEmpty)
             {

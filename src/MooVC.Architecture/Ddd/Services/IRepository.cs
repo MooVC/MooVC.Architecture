@@ -6,7 +6,7 @@
     public interface IRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        TAggregate Get(Guid id, ulong? version = null);
+        TAggregate Get(Guid id, ulong? version = default);
 
         IEnumerable<TAggregate> GetAll();
 

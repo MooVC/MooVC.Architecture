@@ -8,7 +8,7 @@
         : IRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public abstract TAggregate Get(Guid id, ulong? version = null);
+        public abstract TAggregate Get(Guid id, ulong? version = default);
 
         public abstract IEnumerable<TAggregate> GetAll();
 

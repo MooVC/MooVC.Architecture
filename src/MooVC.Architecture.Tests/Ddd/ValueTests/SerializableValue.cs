@@ -9,7 +9,7 @@ namespace MooVC.Architecture.Ddd.ValueTests
     internal sealed class SerializableValue
         : Value
     {
-        public SerializableValue(int first = 0, string second = null, Value third = null)
+        public SerializableValue(int first = 0, string second = default, Value third = default)
         {
             First = first;
             Second = second;

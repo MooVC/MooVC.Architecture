@@ -9,7 +9,7 @@
     public static partial class ReferenceExtensions
     {
         public static TAggregate Retrieve<TAggregate>(
-            this IReference reference, 
+            this Reference reference, 
             Message context, 
             IRepository<TAggregate> repository,
             bool getLatest = false)
@@ -19,7 +19,7 @@
         }
 
         public static IEnumerable<TAggregate> Retrieve<TAggregate>(
-            this IEnumerable<IReference> references,
+            this IEnumerable<Reference> references,
             Message context,
             IRepository<TAggregate> repository,
             bool ignoreEmpty = false)

@@ -10,7 +10,7 @@
         [Fact]
         public void GivenAnEmptyReferenceThenAnArgumentExceptionIsThrown()
         {
-            IReference reference = Reference<AggregateRoot>.Empty;
+            Reference reference = Reference<AggregateRoot>.Empty;
 
             ArgumentException exception = Assert.Throws<ArgumentException>(() => ReferenceIsNotEmpty(reference, nameof(reference)));
 
@@ -20,7 +20,7 @@
         [Fact]
         public void GivenAnEmptyReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
         {
-            IReference reference = Reference<AggregateRoot>.Empty;
+            Reference reference = Reference<AggregateRoot>.Empty;
             string message = "Some sessage";
 
             ArgumentException exception = Assert.Throws<ArgumentException>(() => ReferenceIsNotEmpty(reference, nameof(reference), message));

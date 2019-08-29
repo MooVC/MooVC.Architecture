@@ -6,14 +6,14 @@
     public abstract class DomainException
         : InvalidOperationException
     {
-        protected DomainException(Message context, IReference aggregate, string message)
+        protected DomainException(Message context, Reference aggregate, string message)
             : base(message)
         {
             Aggregate = aggregate;
             Context = context;
         }
 
-        public IReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         public Message Context { get; }
 

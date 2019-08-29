@@ -14,7 +14,7 @@
             Aggregate = aggregate.ToReference();
         }
 
-        protected DomainEvent(Message context, IReference aggregate)
+        protected DomainEvent(Message context, Reference aggregate)
             : base(context)
         {
             Aggregate = aggregate;
@@ -23,10 +23,10 @@
         protected DomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = (IReference)info.GetValue(nameof(Aggregate), typeof(IReference));
+            Aggregate = (Reference)info.GetValue(nameof(Aggregate), typeof(Reference));
         }
 
-        public IReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

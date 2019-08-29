@@ -12,7 +12,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         {
         }
 
-        public SerializableCreatedDomainEvent(Message context, IReference aggregate)
+        public SerializableCreatedDomainEvent(Message context, Reference aggregate)
             : base(context, aggregate)
         {
         }

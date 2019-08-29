@@ -8,7 +8,7 @@
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        public AggregateReferenceMismatchException(IReference reference)
+        public AggregateReferenceMismatchException(Reference reference)
             : base(string.Format(
                 AggregateReferenceMismatchExceptionMessage,
                 reference.Id,
@@ -18,6 +18,6 @@
             Reference = reference;
         }
 
-        public IReference Reference { get; }
+        public Reference Reference { get; }
     }
 }

@@ -5,7 +5,7 @@ namespace MooVC.Architecture.Ddd
 
     public static partial class Ensure
     {
-        public static void ReferenceIsOfType<TAggregate>(IReference reference, string argumentName)
+        public static void ReferenceIsOfType<TAggregate>(Reference reference, string argumentName)
             where TAggregate : AggregateRoot
         {
             ReferenceIsOfType<TAggregate>(
@@ -14,7 +14,7 @@ namespace MooVC.Architecture.Ddd
                 string.Format(EnsureReferenceIsOfTypeMessage, reference?.Type.Name, typeof(TAggregate).Name));
         }
 
-        public static void ReferenceIsOfType<TAggregate>(IReference reference, string argumentName, string message)
+        public static void ReferenceIsOfType<TAggregate>(Reference reference, string argumentName, string message)
             where TAggregate : AggregateRoot
         {
             if (reference == null || reference.Type != typeof(TAggregate))

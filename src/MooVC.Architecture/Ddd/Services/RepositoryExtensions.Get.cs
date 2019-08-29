@@ -30,7 +30,7 @@
         public static TAggregate Get<TAggregate>(
             this IRepository<TAggregate> repository, 
             Message context, 
-            IReference reference,
+            Reference reference,
             bool getLatest = false)
             where TAggregate : AggregateRoot
         {

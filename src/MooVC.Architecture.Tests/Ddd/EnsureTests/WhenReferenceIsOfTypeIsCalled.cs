@@ -10,7 +10,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMatchingReferenceThenNoExceptionIsThrown()
         {
-            IReference reference = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            Reference reference = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
 
             ReferenceIsOfType<AggregateRoot>(reference, nameof(reference));
         }
@@ -18,7 +18,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMatchingEmptyReferenceThenNoExceptionIsThrown()
         {
-            IReference reference = Reference<AggregateRoot>.Empty;
+            Reference reference = Reference<AggregateRoot>.Empty;
 
             ReferenceIsOfType<AggregateRoot>(reference, nameof(reference));
         }
@@ -26,7 +26,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingReferenceThenAnArgumentExceptionIsThrown()
         {
-            IReference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => ReferenceIsOfType<AggregateRoot>(reference, nameof(reference)));
@@ -37,7 +37,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingEmptyReferenceThenAnArgumentExceptionIsThrown()
         {
-            IReference reference = Reference<EventCentricAggregateRoot>.Empty;
+            Reference reference = Reference<EventCentricAggregateRoot>.Empty;
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => ReferenceIsOfType<AggregateRoot>(reference, nameof(reference)));
@@ -48,7 +48,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
         {
-            IReference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
+            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
             string message = "Some sessage";
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
@@ -60,7 +60,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingEmptyReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
         {
-            IReference reference = Reference<EventCentricAggregateRoot>.Empty;
+            Reference reference = Reference<EventCentricAggregateRoot>.Empty;
             string message = "Some sessage";
 
             ArgumentException exception = Assert.Throws<ArgumentException>(

@@ -7,7 +7,7 @@
     public sealed class AggregateEventMismatchException
         : ArgumentException
     {
-        public AggregateEventMismatchException(string aggregateName, IReference aggregate, IReference eventAggregate)
+        public AggregateEventMismatchException(string aggregateName, Reference aggregate, Reference eventAggregate)
             : base(string.Format(
                 AggregateEventMismatchExceptionMessage,
                 aggregate.Id,
@@ -20,10 +20,10 @@
             EventAggregate = eventAggregate;
         }
 
-        public IReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         public string AggregateName { get; }
 
-        public IReference EventAggregate { get; }
+        public Reference EventAggregate { get; }
     }
 }

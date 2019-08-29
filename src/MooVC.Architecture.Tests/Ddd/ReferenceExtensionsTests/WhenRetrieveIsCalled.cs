@@ -35,19 +35,19 @@
             var reference2 = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
             var reference3 = new Reference<AggregateRoot>(Guid.NewGuid(), AggregateRoot.DefaultVersion);
 
-            IEnumerable<IDictionary<IReference, bool>> singles = GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
+            IEnumerable<IDictionary<Reference, bool>> singles = GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
                 reference1,
                 reference2,
                 reference3);
 
-            IEnumerable<IDictionary<IReference, bool>> multiples = GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
+            IEnumerable<IDictionary<Reference, bool>> multiples = GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
                 reference1,
                 reference2,
                 reference3);
 
-            IEnumerable<IDictionary<IReference, bool>> all = new[]
+            IEnumerable<IDictionary<Reference, bool>> all = new[]
             {
-                new Dictionary<IReference, bool>
+                new Dictionary<Reference, bool>
                 {
                     { reference1, false },
                     { reference2, false },
@@ -64,7 +64,7 @@
         [Fact]
         public void GivenAnEmptyReferenceThenAnAggregateDoesNotExistExceptionIsThrown()
         {
-            IReference reference = Reference<AggregateRoot>.Empty;
+            Reference reference = Reference<AggregateRoot>.Empty;
 
             AggregateDoesNotExistException<AggregateRoot> exception = Assert.Throws<AggregateDoesNotExistException<AggregateRoot>>(
                 () => reference.Retrieve(context.Object, repository.Object));
@@ -172,7 +172,7 @@
 
         [Theory]
         [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
-        public void GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEach(IEnumerable<IReference> references)
+        public void GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEach(IEnumerable<Reference> references)
         {
             _ = repository
                 .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<ulong?>()))
@@ -197,7 +197,7 @@
 
         [Theory]
         [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
-        public void GivenOneOrMoreReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturned(IEnumerable<IReference> references)
+        public void GivenOneOrMoreReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturned(IEnumerable<Reference> references)
         {
             _ = repository
                 .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<ulong?>()))
@@ -215,7 +215,7 @@
 
         [Theory]
         [MemberData(nameof(GivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissingData))]
-        public void GivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(IDictionary<IReference, bool> references)
+        public void GivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(IDictionary<Reference, bool> references)
         {
             Expression<Func<Guid, bool>> predicate = id => references
                 .Where(item => item.Key.Id == id)
@@ -247,26 +247,26 @@
             Assert.Equal(expected, actual);
         }
 
-        private static IEnumerable<IDictionary<IReference, bool>> GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
-            IReference reference1,
-            IReference reference2,
-            IReference reference3)
+        private static IEnumerable<IDictionary<Reference, bool>> GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
+            Reference reference1,
+            Reference reference2,
+            Reference reference3)
         {
-            yield return new Dictionary<IReference, bool>
+            yield return new Dictionary<Reference, bool>
             {
                 { reference1, false },
                 { reference2, true },
                 { reference3, true },
             };
 
-            yield return new Dictionary<IReference, bool>
+            yield return new Dictionary<Reference, bool>
             {
                 { reference1, true },
                 { reference2, false },
                 { reference3, true },
             };
 
-            yield return new Dictionary<IReference, bool>
+            yield return new Dictionary<Reference, bool>
             {
                 { reference1, true },
                 { reference2, true },
@@ -274,26 +274,26 @@
             };
         }
 
-        private static IEnumerable<IDictionary<IReference, bool>> GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
-            IReference reference1,
-            IReference reference2,
-            IReference reference3)
+        private static IEnumerable<IDictionary<Reference, bool>> GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(
+            Reference reference1,
+            Reference reference2,
+            Reference reference3)
         {
-            yield return new Dictionary<IReference, bool>
+            yield return new Dictionary<Reference, bool>
             {
                 { reference1, true },
                 { reference2, false },
                 { reference3, false },
             };
 
-            yield return new Dictionary<IReference, bool>
+            yield return new Dictionary<Reference, bool>
             {
                 { reference1, false },
                 { reference2, true },
                 { reference3, false },
             };
 
-            yield return new Dictionary<IReference, bool>
+            yield return new Dictionary<Reference, bool>
             {
                 { reference1, false },
                 { reference2, false },

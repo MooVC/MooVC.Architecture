@@ -27,7 +27,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected virtual IDictionary<SearchKey, TAggregate> Store { get; }
 
-        public virtual TAggregate Get(Guid id, ulong? version = null)
+        public virtual TAggregate Get(Guid id, ulong? version = default)
         {
             var key = new SearchKey(id, version);
 

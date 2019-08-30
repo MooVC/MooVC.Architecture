@@ -38,7 +38,7 @@ namespace MooVC.Architecture.Ddd
         {
         }
 
-        public static VersionedReference Empty => ActualEmpty.Value;
+        public static VersionedReference<TAggregate> Empty => ActualEmpty.Value;
 
         public override Type Type => typeof(TAggregate);
     }

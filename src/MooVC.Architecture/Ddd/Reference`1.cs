@@ -38,7 +38,7 @@
         {
         }
 
-        public static Reference Empty => ActualEmpty.Value;
+        public static Reference<TAggregate> Empty => ActualEmpty.Value;
 
         public override Type Type => typeof(TAggregate);
     }

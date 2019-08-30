@@ -1,15 +1,11 @@
 namespace MooVC.Architecture.Ddd
 {
-    using static Ensure;
-
     public static partial class VersionedReferenceExtensions
     {
-        public static VersionedReference<TAggregate> ToReference<TAggregate>(this VersionedReference reference)
+        public static Reference<TAggregate> ToReference<TAggregate>(this VersionedReference<TAggregate> reference)
             where TAggregate : AggregateRoot
         {
-            ReferenceIsOfType<TAggregate>(reference, nameof(reference));
-
-            return (VersionedReference<TAggregate>)reference;
+            return new Reference<TAggregate>(reference.Id);
         }
     }
 }

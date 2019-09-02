@@ -16,23 +16,25 @@ namespace MooVC.Architecture.Ddd.Services
     {
         public MemoryRepository()
         {
-            Store = new Dictionary<SearchKey, TAggregate>();
+            Store = new Dictionary<Reference, TAggregate>();
         }
 
         protected MemoryRepository(SerializationInfo info, StreamingContext context)
         {
-            Store = (Dictionary<SearchKey, TAggregate>)info.GetValue(nameof(Store), typeof(Dictionary<SearchKey, TAggregate>));
+            Store = (Dictionary<Reference, TAggregate>)info.GetValue(nameof(Store), typeof(Dictionary<Reference, TAggregate>));
         }
 
         public event AggregateSavedEventHandler<TAggregate> AggregateSaved;
 
         public event AggregateSavingEventHandler<TAggregate> AggregateSaving;
 
-        protected virtual IDictionary<SearchKey, TAggregate> Store { get; }
+        protected virtual IDictionary<Reference, TAggregate> Store { get; }
 
         public virtual TAggregate Get(Guid id, ulong? version = default)
         {
-            var key = new SearchKey(id, version);
+            Reference key = version.HasValue 
+                ? new VersionedReference<TAggregate>(id, version.Value) 
+                : (Reference)new Reference<TAggregate>(id);
 
             return Get(key);
         }
@@ -40,7 +42,7 @@ namespace MooVC.Architecture.Ddd.Services
         public virtual IEnumerable<TAggregate> GetAll()
         {
             return Store
-                .Where(entry => entry.Key.IsLatest)
+                .Where(entry => entry.Key is Reference<TAggregate>)
                 .Select(entry => entry.Value)
                 .ToArray();
         }
@@ -57,7 +59,7 @@ namespace MooVC.Architecture.Ddd.Services
 
             copy.MarkChangesAsCommitted();
 
-            (SearchKey NonVersioned, SearchKey Versioned) = GenerateReferences(copy);
+            (Reference NonVersioned, Reference Versioned) = GenerateReferences(copy);
 
             OnAggregateSaving(aggregate);
 
@@ -68,19 +70,19 @@ namespace MooVC.Architecture.Ddd.Services
             aggregate.MarkChangesAsCommitted();
         }
 
-        protected virtual TAggregate Get(SearchKey key)
+        protected virtual TAggregate Get(Reference key)
         {
             _ = Store.TryGetValue(key, out TAggregate aggregate);
 
             return aggregate;
         }
 
-        protected virtual (SearchKey NonVersioned, SearchKey Versioned) GenerateReferences(TAggregate aggregate)
+        protected virtual (Reference NonVersioned, Reference Versioned) GenerateReferences(TAggregate aggregate)
         {
-            return (new SearchKey(aggregate.Id), new SearchKey(aggregate.Id, aggregate.Version));
+            return (new Reference<TAggregate>(aggregate.Id), new VersionedReference<TAggregate>(aggregate.Id, aggregate.Version));
         }
 
-        protected virtual void CheckForConflicts(TAggregate aggregate, SearchKey nonVersioned)
+        protected virtual void CheckForConflicts(TAggregate aggregate, Reference nonVersioned)
         {
             if (Store.TryGetValue(nonVersioned, out TAggregate existing))
             {
@@ -88,13 +90,13 @@ namespace MooVC.Architecture.Ddd.Services
             }
         }
 
-        protected virtual void PerformSave(TAggregate aggregate, SearchKey nonVersioned, SearchKey versioned)
+        protected virtual void PerformSave(TAggregate aggregate, Reference nonVersioned, Reference versioned)
         {
             CheckForConflicts(aggregate, nonVersioned);
             UpdateStore(aggregate, nonVersioned, versioned);
         }
 
-        protected virtual void UpdateStore(TAggregate aggregate, SearchKey nonVersioned, SearchKey versioned)
+        protected virtual void UpdateStore(TAggregate aggregate, Reference nonVersioned, Reference versioned)
         {
             _ = Store[nonVersioned] = aggregate;
             _ = Store[versioned] = aggregate;
@@ -108,50 +110,6 @@ namespace MooVC.Architecture.Ddd.Services
         protected void OnAggregateSaving(TAggregate aggregate)
         {
             AggregateSaving?.Invoke(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
-        }
-
-        [Serializable]
-        protected class SearchKey
-            : Value
-        {
-            public SearchKey(Guid id)
-            {
-                Id = id;
-            }
-
-            public SearchKey(Guid id, ulong? version)
-            {
-                Id = id;
-                Version = version.GetValueOrDefault();
-            }
-
-            private SearchKey(SerializationInfo info, StreamingContext context) 
-                : base(info, context)
-            {
-                Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
-                Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
-            }
-
-            public Guid Id { get; }
-
-            public ulong Version { get; }
-
-            public bool IsLatest => Version == default;
-
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-            public override void GetObjectData(SerializationInfo info, StreamingContext context)
-            {
-                base.GetObjectData(info, context);
-
-                info.AddValue(nameof(Id), Id);
-                info.AddValue(nameof(Version), Version);
-            }
-
-            protected override IEnumerable<object> GetAtomicValues()
-            {
-                yield return Id;
-                yield return Version;
-            }
         }
     }
 }

@@ -36,12 +36,12 @@ namespace MooVC.Architecture.Ddd.Services
             PerformRead(() => base.GetObjectData(info, context));
         }
 
-        protected override TAggregate Get(SearchKey key)
+        protected override TAggregate Get(Reference key)
         {
             return PerformRead(() => base.Get(key));
         }
 
-        protected override void PerformSave(TAggregate aggregate, SearchKey nonVersioned, SearchKey versioned)
+        protected override void PerformSave(TAggregate aggregate, Reference nonVersioned, Reference versioned)
         {
             try
             {

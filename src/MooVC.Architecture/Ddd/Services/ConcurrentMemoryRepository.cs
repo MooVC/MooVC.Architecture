@@ -41,15 +41,14 @@ namespace MooVC.Architecture.Ddd.Services
             return PerformRead(() => base.Get(key));
         }
 
-        protected override void PerformSave(TAggregate aggregate, Reference nonVersioned, Reference versioned)
+        protected override void PerformSave(TAggregate aggregate)
         {
             try
             {
                 StoreLock.EnterUpgradeableReadLock();
 
-                CheckForConflicts(aggregate, nonVersioned);
-
-                PerformWrite(() => UpdateStore(aggregate, nonVersioned, versioned));
+                CheckForConflicts(aggregate);
+                PerformWrite(() => UpdateStore(aggregate));
             }
             finally
             {

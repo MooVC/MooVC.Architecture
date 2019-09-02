@@ -6,11 +6,10 @@ namespace MooVC.Architecture.Ddd.Services
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Serialization;
-    using static Ensure;
 
     [Serializable]
     public class MemoryRepository<TAggregate>
-        : IRepository<TAggregate>, 
+        : Repository<TAggregate>,
           ISerializable
         where TAggregate : AggregateRoot
     {
@@ -24,22 +23,18 @@ namespace MooVC.Architecture.Ddd.Services
             Store = (Dictionary<Reference, TAggregate>)info.GetValue(nameof(Store), typeof(Dictionary<Reference, TAggregate>));
         }
 
-        public event AggregateSavedEventHandler<TAggregate> AggregateSaved;
-
-        public event AggregateSavingEventHandler<TAggregate> AggregateSaving;
-
         protected virtual IDictionary<Reference, TAggregate> Store { get; }
 
-        public virtual TAggregate Get(Guid id, ulong? version = default)
+        public override TAggregate Get(Guid id, ulong? version = default)
         {
-            Reference key = version.HasValue 
-                ? new VersionedReference<TAggregate>(id, version.Value) 
-                : (Reference)new Reference<TAggregate>(id);
+            Reference key = version.HasValue
+                ? (Reference)new VersionedReference<TAggregate>(id, version.Value)
+                : new Reference<TAggregate>(id);
 
             return Get(key);
         }
 
-        public virtual IEnumerable<TAggregate> GetAll()
+        public override IEnumerable<TAggregate> GetAll()
         {
             return Store
                 .Where(entry => entry.Key is Reference<TAggregate>)
@@ -53,23 +48,6 @@ namespace MooVC.Architecture.Ddd.Services
             info.AddValue(nameof(Store), Store);
         }
 
-        public virtual void Save(TAggregate aggregate)
-        {
-            TAggregate copy = aggregate.Clone();
-
-            copy.MarkChangesAsCommitted();
-
-            (Reference NonVersioned, Reference Versioned) = GenerateReferences(copy);
-
-            OnAggregateSaving(aggregate);
-
-            PerformSave(copy, NonVersioned, Versioned);
-
-            OnAggregateSaved(aggregate);
-
-            aggregate.MarkChangesAsCommitted();
-        }
-
         protected virtual TAggregate Get(Reference key)
         {
             _ = Store.TryGetValue(key, out TAggregate aggregate);
@@ -77,39 +55,30 @@ namespace MooVC.Architecture.Ddd.Services
             return aggregate;
         }
 
+        protected override VersionedReference GetCurrentVersion(TAggregate aggregate)
+        {
+            Reference nonVersioned = aggregate.ToReference();
+
+            _ = Store.TryGetValue(nonVersioned, out TAggregate existing);
+
+            return existing?.ToVersionedReference();
+        }
+
         protected virtual (Reference NonVersioned, Reference Versioned) GenerateReferences(TAggregate aggregate)
         {
             return (new Reference<TAggregate>(aggregate.Id), new VersionedReference<TAggregate>(aggregate.Id, aggregate.Version));
         }
 
-        protected virtual void CheckForConflicts(TAggregate aggregate, Reference nonVersioned)
+        protected override void UpdateStore(TAggregate aggregate)
         {
-            if (Store.TryGetValue(nonVersioned, out TAggregate existing))
-            {
-                AggregateDoesNotConflict<TAggregate>(aggregate, existing.Version);
-            }
-        }
+            TAggregate copy = aggregate.Clone();
 
-        protected virtual void PerformSave(TAggregate aggregate, Reference nonVersioned, Reference versioned)
-        {
-            CheckForConflicts(aggregate, nonVersioned);
-            UpdateStore(aggregate, nonVersioned, versioned);
-        }
+            copy.MarkChangesAsCommitted();
 
-        protected virtual void UpdateStore(TAggregate aggregate, Reference nonVersioned, Reference versioned)
-        {
-            _ = Store[nonVersioned] = aggregate;
-            _ = Store[versioned] = aggregate;
-        }
+            (Reference NonVersioned, Reference Versioned) = GenerateReferences(copy);
 
-        protected void OnAggregateSaved(TAggregate aggregate)
-        {
-            AggregateSaved?.Invoke(this, new AggregateSavedEventArgs<TAggregate>(aggregate));
-        }
-
-        protected void OnAggregateSaving(TAggregate aggregate)
-        {
-            AggregateSaving?.Invoke(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
+            _ = Store[NonVersioned] = copy;
+            _ = Store[Versioned] = copy;
         }
     }
 }

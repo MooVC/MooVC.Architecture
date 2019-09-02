@@ -16,18 +16,23 @@
 
         public abstract IEnumerable<TAggregate> GetAll();
 
-        public void Save(TAggregate aggregate)
+        public virtual void Save(TAggregate aggregate)
         {
-            ulong? currentVersion = GetCurrentVersion(aggregate.Id);
-
-            AggregateDoesNotConflict<TAggregate>(aggregate, currentVersion: currentVersion);
-
+            OnAggregateSaving(aggregate);
             PerformSave(aggregate);
+            OnAggregateSaved(aggregate);
+
+            aggregate.MarkChangesAsCommitted();
         }
 
-        protected abstract ulong? GetCurrentVersion(Guid id);
+        protected virtual void CheckForConflicts(TAggregate aggregate)
+        {
+            VersionedReference currentVersion = GetCurrentVersion(aggregate);
 
-        protected abstract void PerformSave(TAggregate aggregate);
+            AggregateDoesNotConflict<TAggregate>(aggregate, currentVersion: currentVersion?.Version);
+        }
+
+        protected abstract VersionedReference GetCurrentVersion(TAggregate aggregate);
 
         protected void OnAggregateSaved(TAggregate aggregate)
         {
@@ -38,5 +43,13 @@
         {
             AggregateSaving?.Invoke(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
         }
+
+        protected virtual void PerformSave(TAggregate aggregate)
+        {
+            CheckForConflicts(aggregate);
+            UpdateStore(aggregate);
+        }
+
+        protected abstract void UpdateStore(TAggregate aggregate);
     }
 }

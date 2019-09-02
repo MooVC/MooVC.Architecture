@@ -8,6 +8,10 @@
         : IRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
+        public event AggregateSavedEventHandler<TAggregate> AggregateSaved;
+
+        public event AggregateSavingEventHandler<TAggregate> AggregateSaving;
+
         public abstract TAggregate Get(Guid id, ulong? version = default);
 
         public abstract IEnumerable<TAggregate> GetAll();
@@ -24,5 +28,15 @@
         protected abstract ulong? GetCurrentVersion(Guid id);
 
         protected abstract void PerformSave(TAggregate aggregate);
+
+        protected void OnAggregateSaved(TAggregate aggregate)
+        {
+            AggregateSaved?.Invoke(this, new AggregateSavedEventArgs<TAggregate>(aggregate));
+        }
+
+        protected void OnAggregateSaving(TAggregate aggregate)
+        {
+            AggregateSaving?.Invoke(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
+        }
     }
 }

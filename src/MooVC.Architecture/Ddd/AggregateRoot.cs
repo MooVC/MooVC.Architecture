@@ -37,9 +37,15 @@
             Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
         }
 
+        public event EventHandler ChangesMarkedAsCommitted;
+
+        public event EventHandler ChangesMarkedAsUncommitted;
+
+        public event EventHandler ChangesRolledBack;
+
         public ulong Version { get; private protected set; }
 
-        protected bool HasUncommittedChanges { get; private set; } = true;
+        protected virtual bool HasUncommittedChanges { get; protected private set; } = true;
 
         public override bool Equals(object other)
         {
@@ -64,24 +70,48 @@
 
         public virtual void MarkChangesAsCommitted()
         {
-            HasUncommittedChanges = false;
+            if (HasUncommittedChanges)
+            {
+                HasUncommittedChanges = false;
+
+                OnChangesMarkedAsCommitted();
+            }
         }
 
-        protected virtual void MarkChangesAsUncommitted()
+        protected virtual void OnChangesMarkedAsCommitted(EventArgs e = null)
+        {
+            ChangesMarkedAsCommitted?.Invoke(this, e ?? EventArgs.Empty);
+        }
+
+        protected virtual void OnChangesMarkedAsUncommitted(EventArgs e = null)
+        {
+            ChangesMarkedAsUncommitted?.Invoke(this, e ?? EventArgs.Empty);
+        }
+
+        protected virtual void OnChangesRolledBack(EventArgs e = null)
+        {
+            ChangesRolledBack?.Invoke(this, e ?? EventArgs.Empty);
+        }
+
+        private protected virtual void MarkChangesAsUncommitted()
         {
             if (!HasUncommittedChanges)
             {
                 Version++;
                 HasUncommittedChanges = true;
+
+                OnChangesMarkedAsUncommitted();
             }
         }
 
-        protected virtual void RollbackUncommittedChanges()
+        private protected virtual void RollbackUncommittedChanges()
         {
             if (HasUncommittedChanges)
             {
                 Version--;
                 HasUncommittedChanges = false;
+
+                OnChangesRolledBack();
             }
         }
     }

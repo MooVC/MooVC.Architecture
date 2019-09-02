@@ -6,6 +6,10 @@
     public interface IRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
+        event AggregateSavedEventHandler<TAggregate> AggregateSaved;
+
+        event AggregateSavingEventHandler<TAggregate> AggregateSaving;
+
         TAggregate Get(Guid id, ulong? version = default);
 
         IEnumerable<TAggregate> GetAll();

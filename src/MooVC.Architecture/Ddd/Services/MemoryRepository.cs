@@ -5,7 +5,6 @@ namespace MooVC.Architecture.Ddd.Services
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using MooVC.Collections.Generic;
     using MooVC.Serialization;
     using static Ensure;
 
@@ -24,6 +23,10 @@ namespace MooVC.Architecture.Ddd.Services
         {
             Store = (Dictionary<SearchKey, TAggregate>)info.GetValue(nameof(Store), typeof(Dictionary<SearchKey, TAggregate>));
         }
+
+        public event AggregateSavedEventHandler<TAggregate> AggregateSaved;
+
+        public event AggregateSavingEventHandler<TAggregate> AggregateSaving;
 
         protected virtual IDictionary<SearchKey, TAggregate> Store { get; }
 
@@ -56,7 +59,11 @@ namespace MooVC.Architecture.Ddd.Services
 
             (SearchKey NonVersioned, SearchKey Versioned) = GenerateReferences(copy);
 
+            OnAggregateSaving(aggregate);
+
             PerformSave(copy, NonVersioned, Versioned);
+
+            OnAggregateSaved(aggregate);
 
             aggregate.MarkChangesAsCommitted();
         }
@@ -91,6 +98,16 @@ namespace MooVC.Architecture.Ddd.Services
         {
             _ = Store[nonVersioned] = aggregate;
             _ = Store[versioned] = aggregate;
+        }
+
+        protected void OnAggregateSaved(TAggregate aggregate)
+        {
+            AggregateSaved?.Invoke(this, new AggregateSavedEventArgs<TAggregate>(aggregate));
+        }
+
+        protected void OnAggregateSaving(TAggregate aggregate)
+        {
+            AggregateSaving?.Invoke(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
         }
 
         [Serializable]

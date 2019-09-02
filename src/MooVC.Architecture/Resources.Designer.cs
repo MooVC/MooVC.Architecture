@@ -178,6 +178,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The aggregate must be provided..
+        /// </summary>
+        internal static string GenericAggregateRequired {
+            get {
+                return ResourceManager.GetString("GenericAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The context for this request must be provided..
         /// </summary>
         internal static string GenericContextRequired {

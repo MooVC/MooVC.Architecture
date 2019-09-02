@@ -156,6 +156,9 @@
   <data name="EventCentricAggregateRootDomainEventHandlerNotSupportedException" xml:space="preserve">
     <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
   </data>
+  <data name="GenericAggregateRequired" xml:space="preserve">
+    <value>The aggregate must be provided.</value>
+  </data>
   <data name="GenericContextRequired" xml:space="preserve">
     <value>The context for this request must be provided.</value>
   </data>

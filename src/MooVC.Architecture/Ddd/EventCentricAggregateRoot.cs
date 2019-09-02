@@ -29,13 +29,19 @@
         {
             changes = (List<DomainEvent>)info.GetValue(nameof(changes), typeof(List<DomainEvent>));
         }
-
+        
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
             info.AddValue(nameof(changes), changes);
+        }
+
+        protected override bool HasUncommittedChanges
+        {
+            get => changes.Any();
+            private protected set => base.HasUncommittedChanges = value;
         }
 
         public IEnumerable<DomainEvent> GetUncommittedChanges()
@@ -45,7 +51,7 @@
 
         public void LoadFromHistory(IEnumerable<DomainEvent> history)
         {
-            if (!(Version == DefaultVersion && changes.Count == 0))
+            if (HasUncommittedChanges || Version != DefaultVersion)
             {
                 throw new InvalidOperationException(Format(
                     EventCentricAggregateRootDomainEventHandlerNotSupportedException, 
@@ -60,23 +66,21 @@
                 .Select(@event => @event.Aggregate.Version)
                 .DefaultIfEmpty(DefaultVersion)
                 .Max();
-
-            MarkChangesAsCommitted();
         }
 
         public override void MarkChangesAsCommitted()
         {
             if (HasUncommittedChanges)
             {
-                changes.Clear();
-
                 base.MarkChangesAsCommitted();
+
+                changes.Clear();
             }
         }
         
         protected void ApplyChange(Func<DomainEvent> change, bool isNew = true)
         {
-            bool triggersVersionIncrement = isNew && !HasUncommittedChanges;
+            bool triggersVersionIncrement = isNew && !base.HasUncommittedChanges;
 
             if (triggersVersionIncrement)
             {
@@ -116,6 +120,11 @@
 
                 throw;
             }
+        }
+
+        protected override void OnChangesMarkedAsCommitted(EventArgs e = null)
+        {
+            base.OnChangesMarkedAsCommitted(new ChangesMarkedAsCommittedEventArgs(changes));
         }
     }
 }

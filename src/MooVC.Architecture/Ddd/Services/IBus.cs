@@ -2,7 +2,6 @@
 {
     public interface IBus
     {
-        void Publish<T>(T @event)
-            where T : DomainEvent;
+        void Publish(params DomainEvent[] events);
     }
 }

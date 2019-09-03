@@ -141,6 +141,12 @@
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
   </data>
+  <data name="DomainEventPropagatorBusRequired" xml:space="preserve">
+    <value>You must provide the bus to which the events are to be propagated.</value>
+  </data>
+  <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
+    <value>You must provide the repository from which the events are to be propagated.</value>
+  </data>
   <data name="EnsureReferenceIsNotEmptyMessage" xml:space="preserve">
     <value>A non-empty reference of aggregate type {0} is required.</value>
   </data>

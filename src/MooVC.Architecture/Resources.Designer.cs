@@ -133,6 +133,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must provide the bus to which the events are to be propagated..
+        /// </summary>
+        internal static string DomainEventPropagatorBusRequired {
+            get {
+                return ResourceManager.GetString("DomainEventPropagatorBusRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must provide the repository from which the events are to be propagated..
+        /// </summary>
+        internal static string DomainEventPropagatorRepositoryRequired {
+            get {
+                return ResourceManager.GetString("DomainEventPropagatorRepositoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A non-empty reference of aggregate type {0} is required..
         /// </summary>
         internal static string EnsureReferenceIsNotEmptyMessage {

@@ -38,7 +38,7 @@ namespace MooVC.Architecture.Ddd.Services
         {
             return Store
                 .Where(entry => entry.Key is Reference<TAggregate>)
-                .Select(entry => entry.Value)
+                .Select(entry => entry.Value.Clone())
                 .ToArray();
         }
 
@@ -52,7 +52,7 @@ namespace MooVC.Architecture.Ddd.Services
         {
             _ = Store.TryGetValue(key, out TAggregate aggregate);
 
-            return aggregate;
+            return aggregate?.Clone();
         }
 
         protected override VersionedReference GetCurrentVersion(TAggregate aggregate)

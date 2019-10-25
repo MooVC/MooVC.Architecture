@@ -1,15 +1,16 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static Resources;
 
     [Serializable]
     public sealed class AggregateReferenceMismatchException<TAggregate>
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        internal AggregateReferenceMismatchException(IReference reference)
+        public AggregateReferenceMismatchException(Reference reference)
             : base(string.Format(
-                Resources.AggregateReferenceMismatchExceptionMessage,
+                AggregateReferenceMismatchExceptionMessage,
                 reference.Id,
                 reference.Type.Name,
                 typeof(TAggregate).Name))
@@ -17,6 +18,6 @@
             Reference = reference;
         }
 
-        public IReference Reference { get; }
+        public Reference Reference { get; }
     }
 }

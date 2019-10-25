@@ -1,28 +1,31 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static Resources;
 
     [Serializable]
     public sealed class AggregateEventMismatchException
         : ArgumentException
     {
-        internal AggregateEventMismatchException(string aggregateName, IReference aggregate, IReference eventAggregate)
+        public AggregateEventMismatchException(string aggregateName, VersionedReference aggregate, VersionedReference eventAggregate)
             : base(string.Format(
-                Resources.AggregateEventMismatchExceptionMessage,
+                AggregateEventMismatchExceptionMessage,
                 aggregate.Id,
                 aggregate.Type.Name,
+                aggregate.Version,
                 eventAggregate.Id,
-                eventAggregate.Type.Name))
+                eventAggregate.Type.Name,
+                eventAggregate.Version))
         {
             Aggregate = aggregate;
             AggregateName = aggregateName;
             EventAggregate = eventAggregate;
         }
 
-        public IReference Aggregate { get; }
+        public VersionedReference Aggregate { get; }
 
         public string AggregateName { get; }
 
-        public IReference EventAggregate { get; }
+        public VersionedReference EventAggregate { get; }
     }
 }

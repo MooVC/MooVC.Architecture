@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AggregateConflictDetectedExceptionExistingEntryMessage" xml:space="preserve">
+    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed.</value>
+  </data>
+  <data name="AggregateConflictDetectedExceptionNoExistingEntryMessage" xml:space="preserve">
+    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but the initial version was expected.</value>
+  </data>
+  <data name="AggregateDoesNotExistExceptionMessage" xml:space="preserve">
+    <value>An empty reference for aggregate type {0} cannot be retrieved.</value>
+  </data>
   <data name="AggregateEventMismatchExceptionMessage" xml:space="preserve">
-    <value>Event {2:p} of type {3} does not apply to aggregate {1:p} of type {0}.</value>
+    <value>Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}.</value>
   </data>
   <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
     <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
@@ -126,10 +135,49 @@
   <data name="AggregateReferenceMismatchExceptionMessage" xml:space="preserve">
     <value>Reference for aggregate {0:p} of type {1} cannot be converted type {2}.</value>
   </data>
+  <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
+    <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>
+  </data>
+  <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
+    <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
+  </data>
+  <data name="DomainEventPropagatorBusRequired" xml:space="preserve">
+    <value>You must provide the bus to which the events are to be propagated.</value>
+  </data>
+  <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
+    <value>You must provide the repository from which the events are to be propagated.</value>
+  </data>
+  <data name="EnsureReferenceIsNotEmptyMessage" xml:space="preserve">
+    <value>A non-empty reference of aggregate type {0} is required.</value>
+  </data>
+  <data name="EnsureReferenceIsOfTypeMessage" xml:space="preserve">
+    <value>The reference provided is for an aggregate of type {0}.  {1} is required.</value>
+  </data>
+  <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
+    <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
+  </data>
+  <data name="EventCentricAggregateInvalidStateForLoadFromHistory" xml:space="preserve">
+    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} is not in a suitable state for a load from history.</value>
+  </data>
+  <data name="EventCentricAggregateRootDomainEventHandlerNotSupportedException" xml:space="preserve">
+    <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
+  </data>
+  <data name="GenericAggregateRequired" xml:space="preserve">
+    <value>The aggregate must be provided.</value>
+  </data>
   <data name="GenericContextRequired" xml:space="preserve">
     <value>The context for this request must be provided.</value>
   </data>
+  <data name="GenericIdInvalid" xml:space="preserve">
+    <value>A non-empty ID must be provided.</value>
+  </data>
+  <data name="GenericVersionInvalid" xml:space="preserve">
+    <value>The version number cannot be less than {0}.</value>
+  </data>
   <data name="HandlerFailureExceptionMessage" xml:space="preserve">
     <value>Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}.</value>
+  </data>
+  <data name="PaginatedQueryPagingRequired" xml:space="preserve">
+    <value>You must provide the paging instructions for this query.</value>
   </data>
 </root>

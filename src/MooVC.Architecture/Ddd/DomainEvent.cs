@@ -8,30 +8,25 @@
     public abstract class DomainEvent
         : Message
     {
-        public const int DefaultVersion = 1;
-
-        protected DomainEvent(Message context)
+        protected DomainEvent(Message context, AggregateRoot aggregate)
             : base(context)
         {
+            Aggregate = aggregate.ToVersionedReference();
         }
 
-        protected DomainEvent(Message context, IReference aggregate, int version = DomainEvent.DefaultVersion)
+        protected DomainEvent(Message context, VersionedReference aggregate)
             : base(context)
         {
             Aggregate = aggregate;
-            Version = version;
         }
 
         protected DomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = (IReference)info.GetValue(nameof(Aggregate), typeof(IReference));
-            Version = info.GetInt32(nameof(Version));
+            Aggregate = (VersionedReference)info.GetValue(nameof(Aggregate), typeof(VersionedReference));
         }
 
-        public IReference Aggregate { get; }
-
-        public int Version { get; } = DomainEvent.DefaultVersion;
+        public VersionedReference Aggregate { get; }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -39,7 +34,6 @@
             base.GetObjectData(info, context);
 
             info.AddValue(nameof(Aggregate), Aggregate);
-            info.AddValue(nameof(Version), Version);
         }
     }
 }

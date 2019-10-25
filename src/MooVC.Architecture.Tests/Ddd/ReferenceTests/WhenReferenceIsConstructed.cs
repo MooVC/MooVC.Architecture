@@ -9,24 +9,30 @@
         [Fact]
         public void GivenAnAggregateThenTheIdAndTypeArePropagated()
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId);
+            var expectedId = Guid.NewGuid();
+            var aggregate = new Mock<AggregateRoot>(expectedId, AggregateRoot.DefaultVersion);
 
             var reference = new Reference<AggregateRoot>(aggregate.Object);
 
-            Assert.Equal(aggregateId, reference.Id);
+            Assert.Equal(expectedId, reference.Id);
             Assert.Equal(typeof(AggregateRoot), reference.Type);
         }
 
         [Fact]
         public void GivenAnAggregateIdThenTheIdAndTypeArePropagated()
         {
-            var aggregateId = Guid.NewGuid();
+            var expectedId = Guid.NewGuid();
 
-            var reference = new Reference<AggregateRoot>(aggregateId);
+            var reference = new Reference<AggregateRoot>(expectedId);
 
-            Assert.Equal(aggregateId, reference.Id);
+            Assert.Equal(expectedId, reference.Id);
             Assert.Equal(typeof(AggregateRoot), reference.Type);
+        }
+
+        [Fact]
+        public void GivenAnEmptyIdThenAnArgumentExceptionIsThrown()
+        {
+            _ = Assert.Throws<ArgumentException>(() => new Reference<AggregateRoot>(Guid.Empty));
         }
     }
 }

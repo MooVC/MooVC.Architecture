@@ -3,6 +3,8 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using static MooVC.Ensure;
+    using static Resources;
 
     [Serializable]
     public abstract class Message
@@ -14,16 +16,16 @@
 
         protected Message(Message context)
         {
-            Ensure.ArgumentNotNull(context, nameof(context), Resources.GenericContextRequired);
+            ArgumentNotNull(context, nameof(context), GenericContextRequired);
 
-            CorrelationId = context.CorrelationId;
             CausationId = context.Id;
+            CorrelationId = context.CorrelationId;
         }
 
         protected Message(SerializationInfo info, StreamingContext context)
         {
-            CorrelationId = (Guid)info.GetValue(nameof(CorrelationId), typeof(Guid));
             CausationId = (Guid)info.GetValue(nameof(CausationId), typeof(Guid));
+            CorrelationId = (Guid)info.GetValue(nameof(CorrelationId), typeof(Guid));
             Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
             TimeStamp = info.GetDateTime(nameof(TimeStamp));
         }
@@ -50,8 +52,8 @@
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(nameof(CorrelationId), CorrelationId);
             info.AddValue(nameof(CausationId), CausationId);
+            info.AddValue(nameof(CorrelationId), CorrelationId);
             info.AddValue(nameof(Id), Id);
             info.AddValue(nameof(TimeStamp), TimeStamp);
         }

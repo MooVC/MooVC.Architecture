@@ -1,16 +1,17 @@
 ﻿namespace MooVC.Architecture.Services
 {
     using System;
+    using static Resources;
 
     [Serializable]
     public sealed class HandlerExecutionFailureException<TMessage>
         : InvalidOperationException
         where TMessage : Message
     {
-        internal HandlerExecutionFailureException(TMessage context, Type handler, Exception cause)
+        public HandlerExecutionFailureException(TMessage context, Type handler, Exception cause)
             : base(
                   string.Format(
-                      Resources.HandlerFailureExceptionMessage,
+                      HandlerFailureExceptionMessage,
                       handler.Name,
                       context.Id,
                       context.CorrelationId,

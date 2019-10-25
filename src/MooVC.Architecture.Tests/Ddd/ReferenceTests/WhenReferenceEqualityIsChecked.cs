@@ -15,14 +15,25 @@
 
             Assert.True(first == second);
         }
-
+        
         [Fact]
-        public void GivenTwoSeparateInstancesWithDifferentIdsAndSameTypeThenBothAreConsideredNotEqual()
+        public void GivenTwoSeparateInstancesWithTheDifferentIdButSameTypeThenBothAreNotConsideredEqual()
         {
             var first = new Reference<AggregateRoot>(Guid.NewGuid());
             var second = new Reference<AggregateRoot>(Guid.NewGuid());
 
-            Assert.True(first != second);
+            Assert.False(first == second);
+        }
+
+        [Fact]
+        public void GivenTwoSeparateInstancesWithTheSameIdButDifferentTypeThenBothAreNotConsideredEqual()
+        {
+            var aggregateId = Guid.NewGuid();
+            
+            var first = new Reference<AggregateRoot>(aggregateId);
+            var second = new Reference<EventCentricAggregateRoot>(aggregateId);
+
+            Assert.False(first == second);
         }
     }
 }

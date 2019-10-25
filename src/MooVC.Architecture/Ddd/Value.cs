@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture
+﻿namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +19,7 @@
 
         protected Value(SerializationInfo info, StreamingContext context)
         {
+            HashCode = new Lazy<int>(AggregateHashCode);
         }
 
         public static bool operator ==(Value first, Value second)
@@ -35,7 +36,7 @@
         {
             var value = other as Value;
 
-            if (other == null)
+            if (value == null)
             {
                 return false;
             }
@@ -71,7 +72,16 @@
         {
         }
 
-        protected static bool EqualOperator(Value left, Value right)
+        protected int AggregateHashCode()
+        {
+            return GetAtomicValues()
+                .Select(value => value?.GetHashCode() ?? 0)
+                .Aggregate((first, second) => first ^ second);
+        }
+
+        protected abstract IEnumerable<object> GetAtomicValues();
+
+        private static bool EqualOperator(Value left, Value right)
         {
             if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
             {
@@ -81,18 +91,9 @@
             return ReferenceEquals(left, null) || left.Equals(right);
         }
 
-        protected static bool NotEqualOperator(Value left, Value right)
+        private static bool NotEqualOperator(Value left, Value right)
         {
             return !EqualOperator(left, right);
         }
-
-        protected int AggregateHashCode()
-        {
-            return GetAtomicValues()
-                .Select(value => value?.GetHashCode() ?? 0)
-                .Aggregate((first, second) => first ^ second);
-        }
-
-        protected abstract IEnumerable<object> GetAtomicValues();
     }
 }

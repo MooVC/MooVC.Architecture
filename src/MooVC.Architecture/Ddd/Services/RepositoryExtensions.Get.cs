@@ -1,19 +1,26 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using static MooVC.Architecture.Ddd.Ensure;
 
     public static partial class RepositoryExtensions
     {
         public static TAggregate Get<TAggregate>(
             this IRepository<TAggregate> repository, 
             Message context, 
-            Guid id)
+            Guid id,
+            ulong? version = default)
             where TAggregate : AggregateRoot
         {
-            TAggregate aggregate = repository.Get(id);
+            TAggregate aggregate = repository.Get(id, version: version);
 
             if (aggregate == null)
             {
+                if (version.HasValue)
+                {
+                    throw new AggregateVersionNotFoundException<TAggregate>(context, id, version.Value);
+                }
+
                 throw new AggregateNotFoundException<TAggregate>(context, id);
             }
 
@@ -23,10 +30,33 @@
         public static TAggregate Get<TAggregate>(
             this IRepository<TAggregate> repository, 
             Message context, 
-            Reference<TAggregate> reference)
+            Reference reference)
             where TAggregate : AggregateRoot
         {
+            if (reference.IsEmpty)
+            {
+                throw new AggregateDoesNotExistException<TAggregate>(context);
+            }
+
+            ReferenceIsOfType<TAggregate>(reference, nameof(reference));
+
             return repository.Get(context, reference.Id);
+        }
+
+        public static TAggregate Get<TAggregate>(
+            this IRepository<TAggregate> repository,
+            Message context,
+            VersionedReference reference)
+            where TAggregate : AggregateRoot
+        {
+            if (reference.IsEmpty)
+            {
+                throw new AggregateDoesNotExistException<TAggregate>(context);
+            }
+
+            ReferenceIsOfType<TAggregate>(reference, nameof(reference));
+
+            return repository.Get(context, reference.Id, version: reference.Version);
         }
     }
 }

@@ -1,5 +1,6 @@
 trigger:
 - master
+- develop
 
 pool:
   vmImage: 'windows-latest'
@@ -28,7 +29,7 @@ steps:
     showOutput: False
     sourcefolder: '$(build.SourcesDirectory)'
     summaryFileName: 'stylecopsummary.md'
-    treatStyleCopViolationsErrorsAsWarnings: False
+    treatStyleCopViolationsErrorsAsWarnings: True
     
 - task: DotNetCoreCLI@2
   displayName: 'Restore Nuget Packages for Solution'

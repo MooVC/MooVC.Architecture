@@ -9,7 +9,7 @@
     public static partial class ReferenceExtensions
     {
         public static TAggregate Retrieve<TAggregate>(
-            this Reference<TAggregate> reference, 
+            this Reference reference, 
             Message context, 
             IRepository<TAggregate> repository)
             where TAggregate : AggregateRoot
@@ -18,14 +18,17 @@
         }
 
         public static IEnumerable<TAggregate> Retrieve<TAggregate>(
-            this IEnumerable<Reference<TAggregate>> references,
+            this IEnumerable<Reference> references,
             Message context,
-            IRepository<TAggregate> repository)
+            IRepository<TAggregate> repository,
+            bool ignoreEmpty = false)
             where TAggregate : AggregateRoot
         {
             var aggregates = new ConcurrentBag<TAggregate>();
 
-            references.ForAll(reference => aggregates.Add(reference.Retrieve(context, repository)));
+            references
+                .Where(reference => !(ignoreEmpty && reference.IsEmpty))
+                .ForAll(reference => aggregates.Add(reference.Retrieve(context, repository)));
 
             return aggregates.ToArray();
         }

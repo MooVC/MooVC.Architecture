@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+    using MooVC;
 
     internal sealed class OrSpecification<T> : Specification<T>
     {

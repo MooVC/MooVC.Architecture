@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/MooVC/moovc.architecture.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/MooVC/moovc.architecture</PackageProjectUrl>
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>

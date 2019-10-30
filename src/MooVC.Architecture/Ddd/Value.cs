@@ -34,32 +34,9 @@
 
         public override bool Equals(object other)
         {
-            var value = other as Value;
-
-            if (value == null)
-            {
-                return false;
-            }
-
-            IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
-            IEnumerator<object> otherValues = value.GetAtomicValues().GetEnumerator();
-
-            while (thisValues.MoveNext() && otherValues.MoveNext())
-            {
-                if (ReferenceEquals(thisValues.Current, null) ^
-                    ReferenceEquals(otherValues.Current, null))
-                {
-                    return false;
-                }
-
-                if (!(thisValues.Current == null || 
-                      thisValues.Current.Equals(otherValues.Current)))
-                {
-                    return false;
-                }
-            }
-
-            return !(thisValues.MoveNext() || otherValues.MoveNext());
+            return other is Value value 
+                ? GetHashCode() == value.GetHashCode()
+                : false;
         }
 
         public override int GetHashCode()
@@ -74,26 +51,37 @@
 
         protected int AggregateHashCode()
         {
-            return GetAtomicValues()
-                .Select(value => value?.GetHashCode() ?? 0)
-                .Aggregate((first, second) => first ^ second);
+            return AggregateHashCode(GetAtomicValues());
+        }
+
+        protected int AggregateHashCode(IEnumerable<object> values)
+        {
+            return values.Count() < 2
+                ? values.Select(CalculateHashCode).FirstOrDefault()
+                : values.Select(CalculateHashCode).Aggregate((first, second) => first ^ second);
         }
 
         protected abstract IEnumerable<object> GetAtomicValues();
 
         private static bool EqualOperator(Value left, Value right)
         {
-            if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
-            {
-                return false;
-            }
-
-            return ReferenceEquals(left, null) || left.Equals(right);
+            return left is null ^ right is null 
+                ? false 
+                : left is null || left.Equals(right);
         }
 
         private static bool NotEqualOperator(Value left, Value right)
         {
             return !EqualOperator(left, right);
+        }
+
+        private int CalculateHashCode(object value)
+        {
+            return value is Array array
+                ? AggregateHashCode((IEnumerable<object>)array)
+                : value is null
+                    ? 0
+                    : value.GetHashCode();
         }
     }
 }

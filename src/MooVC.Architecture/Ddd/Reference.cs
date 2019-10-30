@@ -25,6 +25,40 @@ namespace MooVC.Architecture.Ddd
             Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
         }
 
+        public static bool operator ==(Reference first, Reference second)
+        {
+            return EqualOperator(first, second);
+        }
+
+        public static bool operator !=(Reference first, Reference second)
+        {
+            return NotEqualOperator(first, second);
+        }
+        
+        private static bool EqualOperator(Reference left, Reference right)
+        {
+            return left is null ^ right is null 
+                ? false 
+                : left is null || left.Equals(right);
+        }
+
+        private static bool NotEqualOperator(Reference left, Reference right)
+        {
+            return !EqualOperator(left, right);
+        }
+
+        public override bool Equals(object other)
+        {
+            return other is Reference value 
+                ? Id == value.Id && Type == value.Type 
+                : false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public Guid Id { get; }
 
         public bool IsEmpty => Id == Guid.Empty;

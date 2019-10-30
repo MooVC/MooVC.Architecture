@@ -11,7 +11,7 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
             var versioned = new VersionedReference<AggregateRoot>(Guid.NewGuid());
             var nonVersioned = versioned.ToReference();
 
-            Assert.True(versioned == nonVersioned);
+            Assert.True(nonVersioned == versioned);
             Assert.NotSame(versioned, nonVersioned);
         }
     }

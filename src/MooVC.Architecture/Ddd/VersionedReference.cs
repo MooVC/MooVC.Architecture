@@ -36,7 +36,24 @@ namespace MooVC.Architecture.Ddd
             Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
         }
 
+        public static bool operator ==(VersionedReference first, VersionedReference second)
+        {
+            return EqualOperator(first, second);
+        }
+
+        public static bool operator !=(VersionedReference first, VersionedReference second)
+        {
+            return NotEqualOperator(first, second);
+        }
+
         public ulong Version { get; }
+
+        public override bool Equals(object other)
+        {
+            return other is VersionedReference value
+                ? Id == value.Id && Type == value.Type && Version == value.Version
+                : false;
+        }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -57,6 +74,23 @@ namespace MooVC.Architecture.Ddd
             return base
                 .GetAtomicValues()
                 .Union(new object[] { Version });
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        private static bool EqualOperator(VersionedReference left, VersionedReference right)
+        {
+            return left is null ^ right is null
+                ? false
+                : left is null || left.Equals(right);
+        }
+
+        private static bool NotEqualOperator(VersionedReference left, VersionedReference right)
+        {
+            return !EqualOperator(left, right);
         }
     }
 }

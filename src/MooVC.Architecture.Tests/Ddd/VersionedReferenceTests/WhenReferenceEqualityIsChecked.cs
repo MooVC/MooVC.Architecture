@@ -6,6 +6,17 @@
     public class WhenReferenceEqualityIsChecked
     {
         [Fact]
+        public void GivenAVersionedReferencedAndANonVersionedReferenceThatHaveToTheSameIdAndTypeThenBothAreConsideredEqual()
+        {
+            var aggregateId = Guid.NewGuid();
+
+            var first = new VersionedReference<AggregateRoot>(aggregateId);
+            var second = new Reference<AggregateRoot>(aggregateId);
+
+            Assert.True(first == second);
+        }
+
+        [Fact]
         public void GivenTwoSeparateInstancesWithTheSameIdAndTypeAndVersionThenBothAreConsideredEqual()
         {
             var aggregateId = Guid.NewGuid();
@@ -33,8 +44,8 @@
         {
             var aggregateId = Guid.NewGuid();
 
-            var first = new Reference<AggregateRoot>(aggregateId);
-            var second = new Reference<EventCentricAggregateRoot>(aggregateId);
+            var first = new VersionedReference<AggregateRoot>(aggregateId);
+            var second = new VersionedReference<EventCentricAggregateRoot>(aggregateId);
 
             Assert.False(first == second);
         }

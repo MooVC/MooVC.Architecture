@@ -11,7 +11,7 @@ variables:
   solution: '**/*.sln'
   majorVersion: '2'
   minorVersion: '0'
-  patchVersion: '1'
+  patchVersion: '2'
   version: '$(majorVersion).$(minorVersion).$(patchVersion)'
 
 steps:

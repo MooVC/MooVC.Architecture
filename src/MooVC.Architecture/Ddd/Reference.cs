@@ -34,12 +34,14 @@ namespace MooVC.Architecture.Ddd
         {
             return NotEqualOperator(first, second);
         }
-        
+
         private static bool EqualOperator(Reference left, Reference right)
         {
             return left is null ^ right is null 
                 ? false 
-                : left is null || left.Equals(right);
+                : left is null 
+                    ? true 
+                    : left.Id == right.Id && left.Type == right.Type;
         }
 
         private static bool NotEqualOperator(Reference left, Reference right)
@@ -49,9 +51,7 @@ namespace MooVC.Architecture.Ddd
 
         public override bool Equals(object other)
         {
-            return other is Reference value 
-                ? Id == value.Id && Type == value.Type 
-                : false;
+            return EqualOperator(this, other as Reference);
         }
 
         public override int GetHashCode()

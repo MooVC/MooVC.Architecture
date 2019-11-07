@@ -9,15 +9,16 @@
 
     [Serializable]
     public class PaginatedResult<TQuery, T>
-        : Message
+        : Message, 
+          IPaginatedResult<T> 
         where TQuery : PaginatedQuery
     {
         private readonly Lazy<ushort> totalPages;
-        
+
         public PaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)
             : base(query)
         {
-            Query = query; 
+            Query = query;
             Results = results.Snapshot();
             TotalResults = totalResults;
 
@@ -41,7 +42,7 @@
         public ushort TotalPages => totalPages.Value;
 
         public ulong TotalResults { get; }
-        
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

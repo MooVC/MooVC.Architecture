@@ -10,8 +10,8 @@ variables:
   buildPlatform: 'Any CPU'
   solution: '**/*.sln'
   majorVersion: '2'
-  minorVersion: '0'
-  patchVersion: '2'
+  minorVersion: '1'
+  patchVersion: '0'
   version: '$(majorVersion).$(minorVersion).$(patchVersion)'
 
 steps:

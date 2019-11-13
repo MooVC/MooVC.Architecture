@@ -133,7 +133,7 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide the bus to which the events are to be propagated..
+        ///   Looks up a localized string similar to The bus to which the events are to be propagated must be provided..
         /// </summary>
         internal static string DomainEventPropagatorBusRequired {
             get {
@@ -142,7 +142,7 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide the repository from which the events are to be propagated..
+        ///   Looks up a localized string similar to The repository from which the events are to be propagated must be provided..
         /// </summary>
         internal static string DomainEventPropagatorRepositoryRequired {
             get {
@@ -241,11 +241,20 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide the paging instructions for this query..
+        ///   Looks up a localized string similar to The paging instructions for this query must be provided..
         /// </summary>
         internal static string PaginatedQueryPagingRequired {
             get {
                 return ResourceManager.GetString("PaginatedQueryPagingRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The paging instructions that generated the results must be provided..
+        /// </summary>
+        internal static string PaginatedResultPagingRequired {
+            get {
+                return ResourceManager.GetString("PaginatedResultPagingRequired", resourceCulture);
             }
         }
     }

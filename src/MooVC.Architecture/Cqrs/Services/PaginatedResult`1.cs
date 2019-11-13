@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Cqrs.Services
+namespace MooVC.Architecture.Cqrs.Services
 {
     using System;
     using System.Collections.Generic;
@@ -6,40 +6,34 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
+    using MooVC.Linq;
+    using static MooVC.Ensure;
+    using static Resources;
 
     [Serializable]
-    public class PaginatedResult<TQuery, T>
-        : Message, 
-          IPaginatedResult<T> 
-        where TQuery : PaginatedQuery
+    public class PaginatedResult<T>
+        : Message,
+          IPaginatedResult<T>
     {
-        private readonly Lazy<ushort> totalPages;
-
-        public PaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)
-            : base(query)
+        public PaginatedResult(Message context, Paging paging, IEnumerable<T> results, ulong totalResults)
+            : base(context)
         {
-            Query = query;
             Results = results.Snapshot();
+            TotalPages = CalculateTotalPages(paging, totalResults);
             TotalResults = totalResults;
-
-            totalPages = new Lazy<ushort>(() => CalculateTotalPages());
         }
 
         protected PaginatedResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Query = (TQuery)info.GetValue(nameof(Query), typeof(TQuery));
             Results = (T[])info.GetValue(nameof(Results), typeof(T[]));
+            TotalPages = (ushort)info.GetValue(nameof(TotalPages), typeof(ushort));
             TotalResults = (ulong)info.GetValue(nameof(TotalResults), typeof(ulong));
-
-            totalPages = new Lazy<ushort>(() => CalculateTotalPages());
         }
-
-        public TQuery Query { get; }
 
         public IEnumerable<T> Results { get; }
 
-        public ushort TotalPages => totalPages.Value;
+        public ushort TotalPages { get; }
 
         public ulong TotalResults { get; }
 
@@ -48,16 +42,19 @@
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Query), Query);
             info.AddValue(nameof(Results), Results.ToArray());
+            info.AddValue(nameof(TotalPages), TotalPages);
             info.AddValue(nameof(TotalResults), TotalResults);
         }
 
-        private ushort CalculateTotalPages()
+        internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)
         {
-            decimal pages = (decimal)TotalResults / Query.Paging.Size;
+            ArgumentNotNull(paging, nameof(Paging), PaginatedResultPagingRequired);
 
-            return (ushort)Math.Ceiling(pages);
+            decimal requiredPages = (decimal)totalResults / paging.Size;
+            ulong totalPages = (ulong)Math.Ceiling(requiredPages);
+
+            return (ushort)Math.Min(totalPages, ushort.MaxValue);
         }
     }
 }

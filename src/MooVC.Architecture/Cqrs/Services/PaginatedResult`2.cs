@@ -7,7 +7,8 @@
     
     [Serializable]
     public class PaginatedResult<TQuery, T>
-        : PaginatedResult<T> 
+        : PaginatedResult<T>,
+          IPaginatedResult<T>
         where TQuery : PaginatedQuery
     {        
         public PaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)

@@ -12,8 +12,7 @@ namespace MooVC.Architecture.Cqrs.Services
 
     [Serializable]
     public class PaginatedResult<T>
-        : Message,
-          IPaginatedResult<T>
+        : Message
     {
         public PaginatedResult(Message context, Paging paging, IEnumerable<T> results, ulong totalResults)
             : base(context)
@@ -49,7 +48,7 @@ namespace MooVC.Architecture.Cqrs.Services
 
         internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)
         {
-            ArgumentNotNull(paging, nameof(Paging), PaginatedResultPagingRequired);
+            ArgumentNotNull(paging, nameof(paging), PaginatedResultPagingRequired);
 
             decimal requiredPages = (decimal)totalResults / paging.Size;
             ulong totalPages = (ulong)Math.Ceiling(requiredPages);

@@ -4,7 +4,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
-    public sealed class WhenMemoryRepositoryIsConstructed
+    public sealed class WhenGetIsCalled
     {
         [Fact]
         public void GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturned()

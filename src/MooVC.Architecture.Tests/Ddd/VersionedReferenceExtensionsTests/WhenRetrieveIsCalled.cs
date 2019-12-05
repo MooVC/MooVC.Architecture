@@ -52,7 +52,7 @@
                     { reference1, false },
                     { reference2, false },
                     { reference3, false },
-                }
+                },
             };
 
             return singles
@@ -60,7 +60,7 @@
                 .Union(all)
                 .Select(item => new object[] { item });
         }
-        
+
         [Fact]
         public void GivenAnEmptyVersionedReferenceThenAnAggregateDoesNotExistExceptionIsThrown()
         {
@@ -73,7 +73,7 @@
 
             Assert.Equal(context.Object, exception.Context);
         }
-        
+
         [Fact]
         public void GivenAVersionedReferenceThatDoesNotExistsThenAnAggregateVersionNotFoundExceptionIsThrown()
         {
@@ -128,7 +128,7 @@
 
             Assert.Equal(aggregate.Object, value);
         }
-        
+
         [Theory]
         [MemberData(nameof(GivenOneOrMoreVersionedReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
         public void GivenOneOrMoreVersionedReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEach(IEnumerable<VersionedReference> references)

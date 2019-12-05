@@ -32,7 +32,7 @@
         public void GivenTwoSeparateInstancesWithTheSameIdTypeAndDifferentVersionThenBothAreNotConsideredEqual()
         {
             var aggregateId = Guid.NewGuid();
-            
+
             var first = new VersionedReference<AggregateRoot>(aggregateId, version: 1);
             var second = new VersionedReference<AggregateRoot>(aggregateId, version: 2);
 

@@ -75,10 +75,10 @@ namespace MooVC.Architecture.Ddd.Services
 
             copy.MarkChangesAsCommitted();
 
-            (Reference NonVersioned, Reference Versioned) = GenerateReferences(copy);
+            (Reference nonVersioned, Reference versioned) = GenerateReferences(copy);
 
-            _ = Store[NonVersioned] = copy;
-            _ = Store[Versioned] = copy;
+            _ = Store[nonVersioned] = copy;
+            _ = Store[versioned] = copy;
         }
     }
 }

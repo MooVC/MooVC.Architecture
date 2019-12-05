@@ -32,7 +32,7 @@ namespace MooVC.Architecture
 
         public static void Satisfies<T>(
             this T request,
-            Func<IEnumerable<string>, DomainException> factory, 
+            Func<IEnumerable<string>, DomainException> factory,
             params (Func<T, bool> IsSatisfied, string Explaination)[] invariants)
             where T : Request
         {

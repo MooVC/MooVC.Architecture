@@ -13,7 +13,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
         public void GivenAnAggregateWithChangesWhenAggregateSavedIsRaisedThenTheChangesArePropagatedToTheBus()
         {
             const int ExpectedTotalChanges = 2;
-            
+
             var context = new SerializableMessage();
             var aggregate = new SerializableEventCentricAggregateRoot(context);
             var request = new SetRequest(context, Guid.NewGuid());

@@ -7,11 +7,11 @@
     using static Resources;
 
     [Serializable]
-    public abstract class AggregateRoot 
+    public abstract class AggregateRoot
         : Entity<Guid>
     {
         public const ulong DefaultVersion = 1;
-        
+
         protected AggregateRoot(Guid id, ulong version = DefaultVersion)
             : base(id)
         {

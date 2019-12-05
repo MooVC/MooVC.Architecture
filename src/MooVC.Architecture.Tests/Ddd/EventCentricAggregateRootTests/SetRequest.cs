@@ -5,7 +5,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
     internal sealed class SetRequest
         : Request
     {
-        public SetRequest(Message context, Guid value) 
+        public SetRequest(Message context, Guid value)
             : base(context)
         {
             Value = value;

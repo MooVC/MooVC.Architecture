@@ -12,13 +12,13 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         {
             ApplyChange(() => new SerializableCreatedDomainEvent(context, this));
         }
-        
-        public SerializableEventCentricAggregateRoot(Guid id) 
+
+        public SerializableEventCentricAggregateRoot(Guid id)
             : base(id, DefaultVersion)
         {
         }
 
-        private SerializableEventCentricAggregateRoot(SerializationInfo info, StreamingContext context) 
+        private SerializableEventCentricAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

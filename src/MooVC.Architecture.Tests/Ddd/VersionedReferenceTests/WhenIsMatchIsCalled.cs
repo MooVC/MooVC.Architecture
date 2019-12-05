@@ -69,7 +69,7 @@
 
             Assert.False(condition: reference.IsMatch(aggregate.Object));
         }
-        
+
         [Fact]
         public void GivenAReferenceWithTheSameIdAndVersionButADifferentTypeThenFalseIsReturned()
         {

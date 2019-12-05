@@ -22,7 +22,7 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
             bool wasInvoked = false;
             var aggregate = new SerializableAggregateRoot();
 
-            aggregate.MarkChangesAsCommitted(); 
+            aggregate.MarkChangesAsCommitted();
             aggregate.ChangesMarkedAsCommitted += (sender, e) => wasInvoked = true;
             aggregate.MarkChangesAsCommitted();
 

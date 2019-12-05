@@ -16,12 +16,12 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
             var expectedContext = new SerializableMessage();
 
             var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);
-            
+
             Assert.Equal(expectedAggregate, @event.Aggregate);
             Assert.Equal(expectedContext.Id, @event.CausationId);
             Assert.Equal(expectedContext.CorrelationId, @event.CorrelationId);
         }
-        
+
         [Fact]
         public void GivenNoContextAndAnAggregateReferenceThenAnArgumentNullExceptionIsThrown()
         {

@@ -10,7 +10,7 @@ namespace MooVC.Architecture.Ddd
         : DomainException
     {
         private const string Separator = "\r\n";
-        
+
         public AggregateInvariantsNotSatisfiedDomainException(
             Request request,
             AggregateRoot aggregate,
@@ -20,16 +20,16 @@ namespace MooVC.Architecture.Ddd
         }
 
         public AggregateInvariantsNotSatisfiedDomainException(
-            Request request, 
-            VersionedReference aggregate, 
+            Request request,
+            VersionedReference aggregate,
             IEnumerable<string> explainations)
             : base(
-                  request.Context, 
-                  aggregate, 
+                  request.Context,
+                  aggregate,
                   Format(
-                      AggregateInvariantsNotSatisfiedDomainExceptionMessage, 
-                      request.GetType().Name, 
-                      aggregate.Type.Name, 
+                      AggregateInvariantsNotSatisfiedDomainExceptionMessage,
+                      request.GetType().Name,
+                      aggregate.Type.Name,
                       Join(Separator, explainations)))
         {
         }

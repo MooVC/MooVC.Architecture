@@ -18,7 +18,7 @@
             Paging = paging;
         }
 
-        public PaginatedQuery(Message context, Paging paging) 
+        public PaginatedQuery(Message context, Paging paging)
             : base(context)
         {
             ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);
@@ -26,7 +26,7 @@
             Paging = paging;
         }
 
-        protected PaginatedQuery(SerializationInfo info, StreamingContext context) 
+        protected PaginatedQuery(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             Paging = (Paging)info.GetValue(nameof(Paging), typeof(Paging));

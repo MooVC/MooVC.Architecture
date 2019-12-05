@@ -17,7 +17,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         {
         }
 
-        private SerializableCreatedDomainEvent(SerializationInfo info, StreamingContext context) 
+        private SerializableCreatedDomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

@@ -4,13 +4,13 @@
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    
+
     [Serializable]
     public class PaginatedResult<TQuery, T>
         : PaginatedResult<T>,
           IPaginatedResult<T>
         where TQuery : PaginatedQuery
-    {        
+    {
         public PaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)
             : base(query, query?.Paging, results, totalResults)
         {

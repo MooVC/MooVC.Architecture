@@ -6,7 +6,7 @@
     using System.Reflection;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using Collections.Generic;
+    using MooVC.Collections.Generic;
     using static System.String;
     using static Resources;
 
@@ -29,19 +29,19 @@
         {
             changes = (List<DomainEvent>)info.GetValue(nameof(changes), typeof(List<DomainEvent>));
         }
-        
+
+        protected override bool HasUncommittedChanges
+        {
+            get => changes.Any();
+            private protected set => base.HasUncommittedChanges = value;
+        }
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
             info.AddValue(nameof(changes), changes);
-        }
-
-        protected override bool HasUncommittedChanges
-        {
-            get => changes.Any();
-            private protected set => base.HasUncommittedChanges = value;
         }
 
         public IEnumerable<DomainEvent> GetUncommittedChanges()
@@ -54,7 +54,7 @@
             if (HasUncommittedChanges || Version != DefaultVersion)
             {
                 throw new InvalidOperationException(Format(
-                    EventCentricAggregateRootDomainEventHandlerNotSupportedException, 
+                    EventCentricAggregateRootDomainEventHandlerNotSupportedException,
                     Id,
                     Version,
                     GetType().Name));
@@ -77,7 +77,7 @@
                 changes.Clear();
             }
         }
-        
+
         protected void ApplyChange(Func<DomainEvent> change, bool isNew = true)
         {
             bool triggersVersionIncrement = isNew && !base.HasUncommittedChanges;
@@ -99,8 +99,8 @@
                 if (handler == null)
                 {
                     throw new NotSupportedException(Format(
-                        EventCentricAggregateRootDomainEventHandlerNotSupportedException, 
-                        eventType.Name, 
+                        EventCentricAggregateRootDomainEventHandlerNotSupportedException,
+                        eventType.Name,
                         type.Name));
                 }
 

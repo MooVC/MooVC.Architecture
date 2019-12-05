@@ -12,6 +12,12 @@ namespace MooVC.Architecture.Ddd
     public abstract class VersionedReference
         : Reference
     {
+        protected VersionedReference(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
+        }
+
         private protected VersionedReference(Guid id, ulong version)
             : base(id)
         {
@@ -30,11 +36,7 @@ namespace MooVC.Architecture.Ddd
             Version = aggregate.Version;
         }
 
-        protected VersionedReference(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
-        }
+        public ulong Version { get; }
 
         public static bool operator ==(VersionedReference first, VersionedReference second)
         {
@@ -46,13 +48,16 @@ namespace MooVC.Architecture.Ddd
             return NotEqualOperator(first, second);
         }
 
-        public ulong Version { get; }
-
         public override bool Equals(object other)
         {
             return other is VersionedReference value
                 ? Id == value.Id && Type == value.Type && Version == value.Version
                 : false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
@@ -65,7 +70,7 @@ namespace MooVC.Architecture.Ddd
 
         public override bool IsMatch(AggregateRoot aggregate)
         {
-            return base.IsMatch(aggregate) 
+            return base.IsMatch(aggregate)
                 && Version == aggregate.Version;
         }
 
@@ -74,11 +79,6 @@ namespace MooVC.Architecture.Ddd
             return base
                 .GetAtomicValues()
                 .Union(new object[] { Version });
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
 
         private static bool EqualOperator(VersionedReference left, VersionedReference right)

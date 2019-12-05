@@ -9,6 +9,12 @@ namespace MooVC.Architecture.Ddd
     public abstract class Reference
         : Value
     {
+        protected Reference(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
+        }
+
         private protected Reference(Guid id)
         {
             Id = id;
@@ -19,11 +25,11 @@ namespace MooVC.Architecture.Ddd
             Id = aggregate.Id;
         }
 
-        protected Reference(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
-        }
+        public Guid Id { get; }
+
+        public bool IsEmpty => Id == Guid.Empty;
+
+        public abstract Type Type { get; }
 
         public static bool operator ==(Reference first, Reference second)
         {
@@ -35,20 +41,6 @@ namespace MooVC.Architecture.Ddd
             return NotEqualOperator(first, second);
         }
 
-        private static bool EqualOperator(Reference left, Reference right)
-        {
-            return left is null ^ right is null 
-                ? false 
-                : left is null 
-                    ? true 
-                    : left.Id == right.Id && left.Type == right.Type;
-        }
-
-        private static bool NotEqualOperator(Reference left, Reference right)
-        {
-            return !EqualOperator(left, right);
-        }
-
         public override bool Equals(object other)
         {
             return EqualOperator(this, other as Reference);
@@ -58,12 +50,6 @@ namespace MooVC.Architecture.Ddd
         {
             return base.GetHashCode();
         }
-
-        public Guid Id { get; }
-
-        public bool IsEmpty => Id == Guid.Empty;
-
-        public abstract Type Type { get; }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -84,6 +70,20 @@ namespace MooVC.Architecture.Ddd
         {
             yield return Id;
             yield return Type;
+        }
+
+        private static bool EqualOperator(Reference left, Reference right)
+        {
+            return left is null ^ right is null
+                ? false
+                : left is null
+                    ? true
+                    : left.Id == right.Id && left.Type == right.Type;
+        }
+
+        private static bool NotEqualOperator(Reference left, Reference right)
+        {
+            return !EqualOperator(left, right);
         }
     }
 }

@@ -12,12 +12,12 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         {
         }
 
-        public SerializableAggregateRoot(Guid id, ulong version = DefaultVersion) 
+        public SerializableAggregateRoot(Guid id, ulong version = DefaultVersion)
             : base(id, version)
         {
         }
 
-        private SerializableAggregateRoot(SerializationInfo info, StreamingContext context) 
+        private SerializableAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

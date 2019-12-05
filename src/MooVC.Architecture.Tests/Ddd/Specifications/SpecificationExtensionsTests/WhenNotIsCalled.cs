@@ -18,7 +18,7 @@
             return new[]
             {
                 new object[] { negative.Object, true },
-                new object[] { positive.Object, false }
+                new object[] { positive.Object, false },
             };
         }
 

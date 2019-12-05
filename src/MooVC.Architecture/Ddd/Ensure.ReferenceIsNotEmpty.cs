@@ -8,8 +8,8 @@
         public static void ReferenceIsNotEmpty(Reference reference, string argumentName)
         {
             ReferenceIsNotEmpty(
-                reference, 
-                argumentName, 
+                reference,
+                argumentName,
                 string.Format(EnsureReferenceIsNotEmptyMessage, reference?.Type.Name));
         }
 

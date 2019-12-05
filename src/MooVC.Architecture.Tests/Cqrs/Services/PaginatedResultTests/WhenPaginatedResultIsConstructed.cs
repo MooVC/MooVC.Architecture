@@ -57,7 +57,7 @@
         [InlineData(new[] { 4 }, 10, 5, 50)]
         [InlineData(new[] { -100, -200 }, 100, 3, 202)]
         public void GivenQueryResultsAndTotalResultsThenTheQueryResultsAndTotalResultsPropertiesAreSetToMatch(
-            int[] results, 
+            int[] results,
             ushort size,
             ushort totalPages,
             ulong totalResults)

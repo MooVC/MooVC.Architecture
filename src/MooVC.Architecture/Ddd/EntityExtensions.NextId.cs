@@ -72,7 +72,7 @@
         public static ulong UnsignedNextId<T>(IEnumerable<T> entities, ulong max, bool reassign, Func<T, ulong> selector, ulong start)
         {
             ulong value = entities.Select(selector).DefaultIfEmpty().Max();
-            
+
             if (reassign)
             {
                 if ((ulong)entities.LongCount() + start > max)

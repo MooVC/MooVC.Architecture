@@ -26,7 +26,7 @@
 
             Assert.True(first == second);
         }
-        
+
         [Fact]
         public void GivenTwoSeparateInstancesWithTheDifferentIdButSameTypeThenBothAreNotConsideredEqual()
         {
@@ -40,7 +40,7 @@
         public void GivenTwoSeparateInstancesWithTheSameIdButDifferentTypeThenBothAreNotConsideredEqual()
         {
             var aggregateId = Guid.NewGuid();
-            
+
             var first = new Reference<AggregateRoot>(aggregateId);
             var second = new Reference<EventCentricAggregateRoot>(aggregateId);
 

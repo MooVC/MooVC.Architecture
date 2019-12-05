@@ -6,8 +6,8 @@
     public static partial class RepositoryExtensions
     {
         public static TAggregate Get<TAggregate>(
-            this IRepository<TAggregate> repository, 
-            Message context, 
+            this IRepository<TAggregate> repository,
+            Message context,
             Guid id,
             ulong? version = default)
             where TAggregate : AggregateRoot
@@ -28,8 +28,8 @@
         }
 
         public static TAggregate Get<TAggregate>(
-            this IRepository<TAggregate> repository, 
-            Message context, 
+            this IRepository<TAggregate> repository,
+            Message context,
             Reference reference)
             where TAggregate : AggregateRoot
         {

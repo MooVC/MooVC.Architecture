@@ -45,7 +45,7 @@
 
             Assert.False(condition: reference.IsMatch(aggregate));
         }
-        
+
         [Fact]
         public void GivenAReferenceWithADifferentIdButTheSameTypeThenFalseIsReturned()
         {
@@ -56,7 +56,7 @@
 
             Assert.False(condition: reference.IsMatch(aggregate.Object));
         }
-        
+
         [Fact]
         public void GivenAReferenceWithTheSameIdButADifferentTypeThenFalseIsReturned()
         {

@@ -15,21 +15,6 @@ variables:
   version: '$(majorVersion).$(minorVersion).$(patchVersion)'
 
 steps:
-
-- task: StyleCop@3
-  displayName: 'StyleCOP'
-  inputs:
-    allowableViolationCount: '0'
-    cacheResults: False
-    detailedSummary: False
-    forceFullAnalysis: True
-    loggingfolder: '$(build.ArtifactStagingDirectory)'
-    maximumViolationCount: '1000'
-    settingsFile: 'Settings.StyleCop'
-    showOutput: False
-    sourcefolder: '$(build.SourcesDirectory)'
-    summaryFileName: 'stylecopsummary.md'
-    treatStyleCopViolationsErrorsAsWarnings: True
     
 - task: DotNetCoreCLI@2
   displayName: 'Restore Nuget Packages for Solution'

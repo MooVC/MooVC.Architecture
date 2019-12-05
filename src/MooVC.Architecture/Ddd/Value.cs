@@ -7,19 +7,19 @@
     using System.Security.Permissions;
 
     [Serializable]
-    public abstract class Value 
+    public abstract class Value
         : ISerializable
     {
-        protected readonly Lazy<int> HashCode;
+        private readonly Lazy<int> hashCode;
 
         protected Value()
         {
-            HashCode = new Lazy<int>(AggregateHashCode);
+            hashCode = new Lazy<int>(AggregateHashCode);
         }
 
         protected Value(SerializationInfo info, StreamingContext context)
         {
-            HashCode = new Lazy<int>(AggregateHashCode);
+            hashCode = new Lazy<int>(AggregateHashCode);
         }
 
         public static bool operator ==(Value first, Value second)
@@ -34,14 +34,14 @@
 
         public override bool Equals(object other)
         {
-            return other is Value value 
+            return other is Value value
                 ? GetHashCode() == value.GetHashCode()
                 : false;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Value;
+            return hashCode.Value;
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
@@ -65,8 +65,8 @@
 
         private static bool EqualOperator(Value left, Value right)
         {
-            return left is null ^ right is null 
-                ? false 
+            return left is null ^ right is null
+                ? false
                 : left is null || left.Equals(right);
         }
 

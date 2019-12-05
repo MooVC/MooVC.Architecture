@@ -20,7 +20,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Fact]
         public void GivenApopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned()
         {
-            const int ExpectedFirstVersion = 1, 
+            const int ExpectedFirstVersion = 1,
                 ExpectedSecondVersion = 2,
                 ExpectedTotal = 2;
 

@@ -19,7 +19,7 @@
         public static IEnumerable<object[]> VersionData => new[]
         {
             new object[] { null },
-            new object[] { 7ul }
+            new object[] { 7ul },
         };
 
         [Fact]
@@ -119,7 +119,7 @@
             Assert.Equal(reference.Id, exception.AggregateId);
             Assert.Equal(context.Object, exception.Context);
         }
-        
+
         [Fact]
         public void GivenAVersionedReferenceThatDoesNotExistsThenAnAggregateVersionNotFoundExceptionIsThrown()
         {

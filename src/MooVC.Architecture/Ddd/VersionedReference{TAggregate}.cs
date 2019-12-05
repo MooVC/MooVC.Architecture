@@ -10,7 +10,7 @@ namespace MooVC.Architecture.Ddd
         : VersionedReference
         where TAggregate : AggregateRoot
     {
-        private static readonly Lazy<VersionedReference<TAggregate>> ActualEmpty =
+        private static readonly Lazy<VersionedReference<TAggregate>> empty =
             new Lazy<VersionedReference<TAggregate>>(() => new VersionedReference<TAggregate>());
 
         private readonly Lazy<Reference<TAggregate>> actualReference;
@@ -45,7 +45,7 @@ namespace MooVC.Architecture.Ddd
             actualReference = new Lazy<Reference<TAggregate>>(() => this.ToReference());
         }
 
-        public static VersionedReference<TAggregate> Empty => ActualEmpty.Value;
+        public static VersionedReference<TAggregate> Empty => empty.Value;
 
         public Reference<TAggregate> Reference => actualReference.Value;
 

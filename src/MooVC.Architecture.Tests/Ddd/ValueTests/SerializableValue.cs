@@ -19,7 +19,7 @@ namespace MooVC.Architecture.Ddd.ValueTests
             Fourth = fourth.Snapshot();
         }
 
-        public SerializableValue(SerializationInfo info, StreamingContext context) 
+        public SerializableValue(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             First = info.GetInt32(nameof(First));

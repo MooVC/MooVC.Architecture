@@ -293,7 +293,7 @@
 
             _ = Assert.Throws<EntityMaximumIdValueExceededException>(() => entities.NextId());
         }
-                     
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]

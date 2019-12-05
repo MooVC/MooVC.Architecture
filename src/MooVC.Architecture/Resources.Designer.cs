@@ -97,6 +97,17 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Request {0} could not be fulfilled due to a failure to satisfy the following invariants as defined by aggregate {1}:
+        ///
+        ///{2}.
+        /// </summary>
+        internal static string AggregateInvariantsNotSatisfiedDomainExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateInvariantsNotSatisfiedDomainExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is currently no aggregate of type {1} with an ID of {0:p}..
         /// </summary>
         internal static string AggregateNotFoundExceptionMessage {

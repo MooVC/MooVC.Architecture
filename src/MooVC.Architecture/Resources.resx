@@ -129,6 +129,11 @@
   <data name="AggregateEventMismatchExceptionMessage" xml:space="preserve">
     <value>Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}.</value>
   </data>
+  <data name="AggregateInvariantsNotSatisfiedDomainExceptionMessage" xml:space="preserve">
+    <value>Request {0} could not be fulfilled due to a failure to satisfy the following invariants as defined by aggregate {1}:
+
+{2}</value>
+  </data>
   <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
     <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
   </data>

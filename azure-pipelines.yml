@@ -9,8 +9,8 @@ variables:
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'
   solution: '**/*.sln'
-  majorVersion: '2'
-  minorVersion: '2'
+  majorVersion: '3'
+  minorVersion: '0'
   patchVersion: '0'
   version: '$(majorVersion).$(minorVersion).$(patchVersion)'
 

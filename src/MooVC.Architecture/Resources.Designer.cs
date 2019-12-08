@@ -135,6 +135,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The message to be invoked must be provided..
+        /// </summary>
+        internal static string BusMessageRequired {
+            get {
+                return ResourceManager.GetString("BusMessageRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A reference to the aggregate from which the domain event was raised must be provided..
         /// </summary>
         internal static string DomainEventAggregateReferenceRequired {

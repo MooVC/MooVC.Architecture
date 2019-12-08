@@ -143,6 +143,9 @@
   <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
     <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>
   </data>
+  <data name="BusMessageRequired" xml:space="preserve">
+    <value>The message to be invoked must be provided.</value>
+  </data>
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
   </data>

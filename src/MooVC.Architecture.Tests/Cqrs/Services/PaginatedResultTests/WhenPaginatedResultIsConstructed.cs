@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Cqrs.Services.PaginatedResultTests
 {
     using System;
+    using MooVC.Architecture.Cqrs.Services.PaginatedQueryTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Linq;
     using Xunit;
@@ -10,19 +11,19 @@
         [Fact]
         public void GivenANullContextThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new PaginatedResult<int>(null, new Paging(), new int[0], 0));
+            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedResult<int>(null, new Paging(), new int[0], 0));
         }
 
         [Fact]
         public void GivenANullQueryThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new PaginatedResult<PaginatedQuery, int>(null, new int[0], 0));
+            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedResult<PaginatedQuery, int>(null, new int[0], 0));
         }
 
         [Fact]
         public void GivenNullPagingThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new PaginatedResult<int>(new SerializableMessage(), null, new int[0], 0));
+            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedResult<int>(new SerializableMessage(), null, new int[0], 0));
         }
 
         [Theory]
@@ -39,7 +40,7 @@
         {
             var context = new SerializableMessage();
             var paging = new Paging(size: size);
-            var result = new PaginatedResult<int>(context, paging, results, totalResults);
+            var result = new SerializablePaginatedResult<int>(context, paging, results, totalResults);
 
             int[] expectedResults = results ?? new int[0];
 
@@ -63,8 +64,8 @@
             ulong totalResults)
         {
             var paging = new Paging(size: size);
-            var query = new PaginatedQuery(paging);
-            var result = new PaginatedResult<PaginatedQuery, int>(query, results, totalResults);
+            var query = new SerializablePaginatedQuery(paging);
+            var result = new SerializablePaginatedResult<SerializablePaginatedQuery, int>(query, results, totalResults);
 
             int[] expectedResults = results ?? new int[0];
 

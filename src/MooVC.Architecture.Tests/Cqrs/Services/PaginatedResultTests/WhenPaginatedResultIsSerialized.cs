@@ -1,5 +1,6 @@
 ﻿namespace MooVC.Architecture.Cqrs.Services.PaginatedResultTests
 {
+    using MooVC.Architecture.Cqrs.Services.PaginatedQueryTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Linq;
     using MooVC.Serialization;
@@ -11,8 +12,8 @@
         public void GivenANonQueryTypedInstanceThenAllPropertiesAreSerialized()
         {
             var context = new SerializableMessage();
-            var result = new PaginatedResult<int>(context, new Paging(), new[] { 1, 2, 3 }, 100);
-            PaginatedResult<int> deserialized = result.Clone();
+            var result = new SerializablePaginatedResult<int>(context, new Paging(), new[] { 1, 2, 3 }, 100);
+            SerializablePaginatedResult<int> deserialized = result.Clone();
 
             Assert.Equal(result, deserialized);
             Assert.NotSame(result, deserialized);
@@ -22,8 +23,9 @@
         [Fact]
         public void GivenAQueryTypedInstanceThenAllPropertiesAreSerialized()
         {
-            var result = new PaginatedResult<PaginatedQuery, int>(new PaginatedQuery(new Paging()), new[] { 1, 2, 3 }, 100);
-            PaginatedResult<PaginatedQuery, int> deserialized = result.Clone();
+            var result = new SerializablePaginatedResult<SerializablePaginatedQuery, int>(
+                new SerializablePaginatedQuery(new Paging()), new[] { 1, 2, 3 }, 100);
+            SerializablePaginatedResult<SerializablePaginatedQuery, int> deserialized = result.Clone();
 
             Assert.Equal(result, deserialized);
             Assert.NotSame(result, deserialized);

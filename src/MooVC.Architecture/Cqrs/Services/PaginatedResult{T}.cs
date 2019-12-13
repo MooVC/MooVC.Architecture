@@ -11,10 +11,10 @@ namespace MooVC.Architecture.Cqrs.Services
     using static Resources;
 
     [Serializable]
-    public class PaginatedResult<T>
+    public abstract class PaginatedResult<T>
         : Message
     {
-        public PaginatedResult(Message context, Paging paging, IEnumerable<T> results, ulong totalResults)
+        protected PaginatedResult(Message context, Paging paging, IEnumerable<T> results, ulong totalResults)
             : base(context)
         {
             Results = results.Snapshot();

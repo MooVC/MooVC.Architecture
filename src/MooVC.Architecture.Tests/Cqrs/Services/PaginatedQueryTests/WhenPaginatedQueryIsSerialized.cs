@@ -9,8 +9,8 @@
         [Fact]
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
-            var query = new PaginatedQuery(new Paging());
-            PaginatedQuery deserialized = query.Clone();
+            var query = new SerializablePaginatedQuery(new Paging());
+            SerializablePaginatedQuery deserialized = query.Clone();
 
             Assert.Equal(query, deserialized);
             Assert.NotSame(query, deserialized);

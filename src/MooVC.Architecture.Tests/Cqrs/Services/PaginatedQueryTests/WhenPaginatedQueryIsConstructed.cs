@@ -10,7 +10,7 @@
         public void GivenPagingThenThePagingPropertyIsSetToMatch()
         {
             var expected = new Paging();
-            var query = new PaginatedQuery(expected);
+            var query = new SerializablePaginatedQuery(expected);
 
             Assert.Equal(expected, query.Paging);
         }
@@ -18,7 +18,7 @@
         [Fact]
         public void GivenNullPagingThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new PaginatedQuery(null));
+            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedQuery(null));
         }
     }
 }

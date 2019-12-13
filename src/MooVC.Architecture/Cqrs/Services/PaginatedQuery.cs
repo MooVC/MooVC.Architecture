@@ -8,17 +8,17 @@
     using static Resources;
 
     [Serializable]
-    public class PaginatedQuery
+    public abstract class PaginatedQuery
         : Message
     {
-        public PaginatedQuery(Paging paging)
+        protected PaginatedQuery(Paging paging)
         {
             ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);
 
             Paging = paging;
         }
 
-        public PaginatedQuery(Message context, Paging paging)
+        protected PaginatedQuery(Message context, Paging paging)
             : base(context)
         {
             ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);

@@ -6,11 +6,11 @@
     using System.Security.Permissions;
 
     [Serializable]
-    public class PaginatedResult<TQuery, T>
+    public abstract class PaginatedResult<TQuery, T>
         : PaginatedResult<T>
         where TQuery : PaginatedQuery
     {
-        public PaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)
+        protected PaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)
             : base(query, query?.Paging, results, totalResults)
         {
             Query = query;

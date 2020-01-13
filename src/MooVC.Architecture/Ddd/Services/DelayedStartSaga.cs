@@ -82,7 +82,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         private void TimerInvoked(object state)
         {
-            IList<T> pending = new List<T>();
+            var pending = new List<T>();
 
             try
             {

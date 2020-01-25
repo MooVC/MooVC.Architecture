@@ -83,10 +83,10 @@
             info.AddValue(nameof(Number), Number);
         }
 
-        public bool IsNext(SignedVersion other)
+        public bool IsNext(SignedVersion previous)
         {
-            return other is { }
-                ? (other.Number - Number) == 1 && other.Header.SequenceEqual(Footer)
+            return previous is { }
+                ? !IsNew && (Number - previous.Number) == 1 && Header.SequenceEqual(previous.Footer)
                 : false;
         }
 

@@ -7,7 +7,7 @@ namespace MooVC.Architecture.Ddd.Services
         {
             if (currentVersion is { })
             {
-                if (!currentVersion.IsNext(proposed.Version))
+                if (!proposed.Version.IsNext(currentVersion))
                 {
                     throw new AggregateConflictDetectedException<TAggregate>(proposed.Id, currentVersion, proposed.Version);
                 }

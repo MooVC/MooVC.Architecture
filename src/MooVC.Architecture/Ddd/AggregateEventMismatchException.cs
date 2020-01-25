@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static System.String;
     using static Resources;
 
     [Serializable]
@@ -8,7 +9,7 @@
         : ArgumentException
     {
         public AggregateEventMismatchException(VersionedReference aggregate, VersionedReference eventAggregate)
-            : base(string.Format(
+            : base(Format(
                 AggregateEventMismatchExceptionMessage,
                 aggregate.Id,
                 aggregate.Type.Name,

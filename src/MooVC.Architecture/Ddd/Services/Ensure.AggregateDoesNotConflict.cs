@@ -5,7 +5,7 @@ namespace MooVC.Architecture.Ddd.Services
         public static void AggregateDoesNotConflict<TAggregate>(AggregateRoot proposed, SignedVersion currentVersion = default)
             where TAggregate : AggregateRoot
         {
-            if (currentVersion is { })
+            if (currentVersion is { } && !currentVersion.IsEmpty)
             {
                 if (!proposed.Version.IsNext(currentVersion))
                 {

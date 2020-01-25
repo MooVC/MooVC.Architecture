@@ -60,6 +60,8 @@
 
         public IEnumerable<byte> Header { get; }
 
+        public bool IsEmpty => this == Empty;
+
         public bool IsNew => Number == DefaultNumber;
 
         public ulong Number { get; }

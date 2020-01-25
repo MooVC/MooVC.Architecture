@@ -170,6 +170,9 @@
   <data name="EventCentricAggregateRootDomainEventHandlerNotSupportedException" xml:space="preserve">
     <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
   </data>
+  <data name="EventCentricAggregateRootHistorySequenceUnordered" xml:space="preserve">
+    <value>The history cannot be applied to aggregate {0:p} version {1} of type {2} because the sequence is unordered.</value>
+  </data>
   <data name="GenericAggregateRequired" xml:space="preserve">
     <value>The aggregate must be provided.</value>
   </data>
@@ -179,9 +182,6 @@
   <data name="GenericIdInvalid" xml:space="preserve">
     <value>A non-empty ID must be provided.</value>
   </data>
-  <data name="GenericVersionInvalid" xml:space="preserve">
-    <value>The version number cannot be less than {0}.</value>
-  </data>
   <data name="HandlerFailureExceptionMessage" xml:space="preserve">
     <value>Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}.</value>
   </data>
@@ -190,5 +190,11 @@
   </data>
   <data name="PaginatedResultPagingRequired" xml:space="preserve">
     <value>The paging instructions that generated the results must be provided.</value>
+  </data>
+  <data name="SignedVersionPreviousRequired" xml:space="preserve">
+    <value>The previous version must be provided.</value>
+  </data>
+  <data name="VersionedReferenceVersionRequired" xml:space="preserve">
+    <value>The version of the aggregate must be provided.</value>
   </data>
 </root>

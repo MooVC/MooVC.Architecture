@@ -25,10 +25,10 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected virtual IDictionary<Reference, TAggregate> Store { get; }
 
-        public override TAggregate Get(Guid id, ulong? version = default)
+        public override TAggregate Get(Guid id, SignedVersion version = default)
         {
-            Reference key = version.HasValue
-                ? (Reference)new VersionedReference<TAggregate>(id, version.Value)
+            Reference key = version is { }
+                ? (Reference)new VersionedReference<TAggregate>(id, version)
                 : new Reference<TAggregate>(id);
 
             return Get(key);

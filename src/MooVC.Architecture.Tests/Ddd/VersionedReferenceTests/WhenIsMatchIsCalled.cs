@@ -8,76 +8,69 @@
 
     public sealed class WhenIsMatchIsCalled
     {
-        [Theory]
-        [InlineData(1ul)]
-        [InlineData(18446744073709551615)]
-        public void GivenAMatchingReferenceThenTrueIsReturned(ulong version)
+        [Fact]
+        public void GivenAMatchingReferenceThenTrueIsReturned()
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(aggregateId, version);
-            var reference = new VersionedReference<SerializableAggregateRoot>(aggregateId, version: version);
+            var aggregate = new SerializableAggregateRoot();
+            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
-            Assert.True(condition: reference.IsMatch(aggregate));
+            Assert.True(reference.IsMatch(aggregate));
         }
 
         [Fact]
         public void GivenANullAggregateThenFalseIsReturned()
         {
-            var aggregateId = Guid.NewGuid();
-            var reference = new VersionedReference<SerializableAggregateRoot>(aggregateId);
+            var aggregate = new SerializableAggregateRoot();
+            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
-            Assert.False(condition: reference.IsMatch(null));
+            Assert.False(reference.IsMatch(null));
         }
 
         [Fact]
         public void GivenAReferenceForABaseTypeThenFalseIsReturned()
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(aggregateId);
-            var reference = new VersionedReference<AggregateRoot>(aggregateId);
+            var aggregate = new SerializableAggregateRoot();
+            var reference = new VersionedReference<AggregateRoot>(aggregate);
 
-            Assert.False(condition: reference.IsMatch(aggregate));
+            Assert.False(reference.IsMatch(aggregate));
         }
 
         [Fact]
         public void GivenAReferenceForADerivedTypeThenFalseIsReturned()
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(aggregateId);
-            var reference = new Reference<DerivedAggregateRoot>(aggregateId);
+            var aggregate = new SerializableAggregateRoot();
+            var reference = new Reference<DerivedAggregateRoot>(aggregate.Id);
 
-            Assert.False(condition: reference.IsMatch(aggregate));
+            Assert.False(reference.IsMatch(aggregate));
         }
 
         [Fact]
         public void GivenAReferenceWithTheSameIdAndTypeButDifferentVersionThenFalseIsReturned()
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, 5ul);
-            var reference = new VersionedReference<AggregateRoot>(aggregateId, 2ul);
+            var firstAggregate = new SerializableAggregateRoot();
+            var secondAggregate = new SerializableAggregateRoot(firstAggregate.Id);
+            var reference = new VersionedReference<AggregateRoot>(firstAggregate);
 
-            Assert.False(condition: reference.IsMatch(aggregate.Object));
+            Assert.False(reference.IsMatch(secondAggregate));
         }
 
         [Fact]
         public void GivenAReferenceWithADifferentIdButTheSameTypeThenFalseIsReturned()
         {
-            var aggregateId = Guid.NewGuid();
-            var referenceId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new VersionedReference<AggregateRoot>(referenceId);
+            var firstAggregate = new SerializableAggregateRoot();
+            var secondAggregate = new SerializableAggregateRoot();
+            var reference = new VersionedReference<AggregateRoot>(firstAggregate);
 
-            Assert.False(condition: reference.IsMatch(aggregate.Object));
+            Assert.False(reference.IsMatch(secondAggregate));
         }
 
         [Fact]
         public void GivenAReferenceWithTheSameIdAndVersionButADifferentTypeThenFalseIsReturned()
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
-            var reference = new VersionedReference<EventCentricAggregateRoot>(aggregateId);
+            var aggregate = new SerializableAggregateRoot();
+            var reference = new VersionedReference<EventCentricAggregateRoot>(aggregate.Id, aggregate.Version);
 
-            Assert.False(condition: reference.IsMatch(aggregate.Object));
+            Assert.False(reference.IsMatch(aggregate));
         }
     }
 }

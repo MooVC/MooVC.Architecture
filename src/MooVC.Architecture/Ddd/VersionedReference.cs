@@ -15,17 +15,16 @@ namespace MooVC.Architecture.Ddd
         protected VersionedReference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
+            Version = (SignedVersion)info.GetValue(nameof(Version), typeof(SignedVersion));
         }
 
-        private protected VersionedReference(Guid id, ulong version)
+        private protected VersionedReference(Guid id, SignedVersion version)
             : base(id)
         {
-            ArgumentIsAcceptable(
+            ArgumentNotNull(
                 version,
                 nameof(version),
-                value => value >= AggregateRoot.DefaultVersion || id == Guid.Empty,
-                string.Format(GenericVersionInvalid, AggregateRoot.DefaultVersion));
+                VersionedReferenceVersionRequired);
 
             Version = version;
         }
@@ -36,7 +35,7 @@ namespace MooVC.Architecture.Ddd
             Version = aggregate.Version;
         }
 
-        public ulong Version { get; }
+        public SignedVersion Version { get; }
 
         public static bool operator ==(VersionedReference first, VersionedReference second)
         {

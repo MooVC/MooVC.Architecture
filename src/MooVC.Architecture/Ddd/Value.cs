@@ -78,7 +78,7 @@
         private int CalculateHashCode(object value)
         {
             return value is Array array
-                ? AggregateHashCode((IEnumerable<object>)array)
+                ? AggregateHashCode(array.Cast<object>().ToArray())
                 : value is null
                     ? 0
                     : value.GetHashCode();

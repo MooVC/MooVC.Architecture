@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.Services;
     using Moq;
     using Xunit;
@@ -21,8 +22,8 @@
 
         public static IEnumerable<object[]> GivenOneOrMoreVersionedReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData()
         {
-            var reference1 = new VersionedReference<AggregateRoot>(Guid.NewGuid());
-            var reference2 = new VersionedReference<AggregateRoot>(Guid.NewGuid());
+            var reference1 = new VersionedReference<AggregateRoot>(new SerializableAggregateRoot());
+            var reference2 = new VersionedReference<AggregateRoot>(new SerializableAggregateRoot());
 
             yield return new[] { new[] { reference1, reference2, VersionedReference<AggregateRoot>.Empty } };
             yield return new[] { new[] { reference1, VersionedReference<AggregateRoot>.Empty, VersionedReference<AggregateRoot>.Empty } };
@@ -31,9 +32,9 @@
 
         public static IEnumerable<object[]> GivenOneOrMoreVersionedReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissingData()
         {
-            var reference1 = new VersionedReference<AggregateRoot>(Guid.NewGuid());
-            var reference2 = new VersionedReference<AggregateRoot>(Guid.NewGuid());
-            var reference3 = new VersionedReference<AggregateRoot>(Guid.NewGuid());
+            var reference1 = new VersionedReference<AggregateRoot>(new SerializableAggregateRoot());
+            var reference2 = new VersionedReference<AggregateRoot>(new SerializableAggregateRoot());
+            var reference3 = new VersionedReference<AggregateRoot>(new SerializableAggregateRoot());
 
             IEnumerable<IDictionary<VersionedReference, bool>> singles = GenerateSinglesForGivenOneOrMoreVersionedReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
                 reference1,
@@ -69,7 +70,7 @@
             AggregateDoesNotExistException<AggregateRoot> exception = Assert.Throws<AggregateDoesNotExistException<AggregateRoot>>(
                 () => reference.Retrieve(context.Object, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Never);
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Never);
 
             Assert.Equal(context.Object, exception.Context);
         }
@@ -78,18 +79,18 @@
         public void GivenAVersionedReferenceThatDoesNotExistsThenAnAggregateVersionNotFoundExceptionIsThrown()
         {
             _ = repository
-                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
+                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
                 .Returns(default(AggregateRoot));
 
-            var aggregateId = Guid.NewGuid();
-            var reference = new VersionedReference<AggregateRoot>(aggregateId);
+            var aggregate = new SerializableAggregateRoot();
+            var reference = new VersionedReference<AggregateRoot>(aggregate);
 
             AggregateVersionNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateVersionNotFoundException<AggregateRoot>>(
                 () => reference.Retrieve(context.Object, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Once);
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
-            Assert.Equal(aggregateId, exception.AggregateId);
+            Assert.Equal(reference, exception.Aggregate);
             Assert.Equal(context.Object, exception.Context);
         }
 
@@ -97,36 +98,33 @@
         public void GivenAVersionedReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnArgumentExceptionIsThrown()
         {
             _ = repository
-                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()))
+                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
                 .Returns(default(AggregateRoot));
 
-            var aggregateId = Guid.NewGuid();
-            var reference = new VersionedReference<EventCentricAggregateRoot>(aggregateId);
+            var aggregate = new SerializableAggregateRoot();
+            var reference = new VersionedReference<EventCentricAggregateRoot>(aggregate.Id, aggregate.Version);
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => reference.Retrieve(context.Object, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Never);
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Never);
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(18446744073709551615)]
-        public void GivenAVersionedReferenceThatExistsThenTheAggregateIsReturned(ulong version)
+        [Fact]
+        public void GivenAVersionedReferenceThatExistsThenTheAggregateIsReturned()
         {
-            var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, version);
-            var reference = new VersionedReference<AggregateRoot>(aggregateId, version: version);
+            var aggregate = new SerializableAggregateRoot();
+            var reference = new VersionedReference<AggregateRoot>(aggregate);
 
             _ = repository
-               .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<ulong?>(v => v == version)))
-               .Returns(aggregate.Object);
+               .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregate.Id), It.Is<SignedVersion>(v => v == aggregate.Version)))
+               .Returns(aggregate);
 
             AggregateRoot value = reference.Retrieve(context.Object, repository.Object);
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Once);
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
-            Assert.Equal(aggregate.Object, value);
+            Assert.Equal(aggregate, value);
         }
 
         [Theory]
@@ -134,8 +132,8 @@
         public void GivenOneOrMoreVersionedReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEach(IEnumerable<VersionedReference> references)
         {
             _ = repository
-                .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<ulong?>()))
-                .Returns<Guid, ulong?>((id, version) => new Mock<AggregateRoot>(id, AggregateRoot.DefaultVersion).Object);
+                .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<SignedVersion>()))
+                .Returns<Guid, SignedVersion>((id, version) => new Mock<AggregateRoot>(id).Object);
 
             AggregateException exception = Assert.Throws<AggregateException>(
                 () => references.Retrieve(context.Object, repository.Object));
@@ -143,7 +141,7 @@
             int expected = references.Count(item => item == VersionedReference<AggregateRoot>.Empty);
 
             repository.Verify(
-                repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()),
+                repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()),
                 Times.Exactly(references.Count() - expected));
 
             int actual = exception
@@ -159,15 +157,15 @@
         public void GivenOneOrMoreVersionedReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturned(IEnumerable<VersionedReference> references)
         {
             _ = repository
-                .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<ulong?>()))
-                .Returns<Guid, ulong?>((id, version) => new Mock<AggregateRoot>(id, AggregateRoot.DefaultVersion).Object);
+                .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<SignedVersion>()))
+                .Returns<Guid, SignedVersion>((id, version) => new Mock<AggregateRoot>(id).Object);
 
             IEnumerable<AggregateRoot> results = references.Retrieve(context.Object, repository.Object, ignoreEmpty: true);
 
             int empties = references.Count(item => item == VersionedReference<AggregateRoot>.Empty);
             int expected = references.Count() - empties;
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Exactly(expected));
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Exactly(expected));
 
             Assert.Equal(expected, results.Count());
         }
@@ -182,13 +180,13 @@
                 .Value;
 
             _ = repository
-                .Setup(repo => repo.Get(It.Is(predicate), It.IsAny<ulong?>()))
-                .Returns<Guid, ulong?>((id, version) => new Mock<AggregateRoot>(id, AggregateRoot.DefaultVersion).Object);
+                .Setup(repo => repo.Get(It.Is(predicate), It.IsAny<SignedVersion>()))
+                .Returns<Guid, SignedVersion>((id, version) => new Mock<AggregateRoot>(id).Object);
 
             AggregateException exception = Assert.Throws<AggregateException>(
                 () => references.Keys.Retrieve(context.Object, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<ulong?>()), Times.Exactly(references.Count));
+            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Exactly(references.Count));
 
             Guid[] expected = references
                 .Where(item => !item.Value)
@@ -199,7 +197,7 @@
             Guid[] actual = exception
                 .InnerExceptions
                 .Cast<AggregateVersionNotFoundException<AggregateRoot>>()
-                .Select(aggregate => aggregate.AggregateId)
+                .Select(exception => exception.Aggregate.Id)
                 .OrderBy(item => item)
                 .ToArray();
 

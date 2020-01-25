@@ -28,19 +28,18 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
             var context = new SerializableMessage();
             var request = new SetRequest(context, value);
             var aggregate = new SerializableEventCentricAggregateRoot(context);
+            SignedVersion version = aggregate.Version;
 
-            Assert.Equal(AggregateRoot.DefaultVersion, aggregate.Version);
+            Assert.True(version.IsNew);
 
             aggregate.Set(request);
 
-            Assert.Equal(AggregateRoot.DefaultVersion, aggregate.Version);
+            Assert.Equal(version, aggregate.Version);
         }
 
         [Fact]
         public void GivenAValueWhenTheAggregateIsNotNewThenTheVersionIsIncremented()
         {
-            const ulong ExpectedVersion = 2;
-
             var value = Guid.NewGuid();
             var context = new SerializableMessage();
             var request = new SetRequest(context, value);
@@ -48,11 +47,13 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
 
             aggregate.MarkChangesAsCommitted();
 
-            Assert.Equal(AggregateRoot.DefaultVersion, aggregate.Version);
+            SignedVersion version = aggregate.Version;
+
+            Assert.True(version.IsNew);
 
             aggregate.Set(request);
 
-            Assert.Equal(ExpectedVersion, aggregate.Version);
+            Assert.NotEqual(version, aggregate.Version);
         }
     }
 }

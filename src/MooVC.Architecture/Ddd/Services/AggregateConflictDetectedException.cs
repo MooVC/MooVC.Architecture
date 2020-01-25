@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using static System.String;
     using static Resources;
 
     [Serializable]
@@ -10,22 +11,23 @@
     {
         public AggregateConflictDetectedException(
                Guid aggregateId,
-               ulong receivedVersion)
-               : base(string.Format(
+               SignedVersion receivedVersion)
+               : base(Format(
                    AggregateConflictDetectedExceptionNoExistingEntryMessage,
                    aggregateId,
                    typeof(TAggregate).Name,
                    receivedVersion))
         {
             AggregateId = aggregateId;
+            PersistedVersion = SignedVersion.Empty;
             ReceivedVersion = receivedVersion;
         }
 
         public AggregateConflictDetectedException(
             Guid aggregateId,
-            ulong persistedVersion,
-            ulong receivedVersion)
-            : base(string.Format(
+            SignedVersion persistedVersion,
+            SignedVersion receivedVersion)
+            : base(Format(
                 AggregateConflictDetectedExceptionExistingEntryMessage,
                 aggregateId,
                 typeof(TAggregate).Name,
@@ -39,10 +41,8 @@
 
         public Guid AggregateId { get; }
 
-        public ulong ExpectedVersion => PersistedVersion + 1;
+        public SignedVersion PersistedVersion { get; }
 
-        public ulong PersistedVersion { get; }
-
-        public ulong ReceivedVersion { get; }
+        public SignedVersion ReceivedVersion { get; }
     }
 }

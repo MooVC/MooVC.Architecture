@@ -4,6 +4,8 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
+    using MooVC.Architecture.MessageTests;
     using Xunit;
 
     public sealed class WhenGetAllIsCalled
@@ -20,27 +22,26 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Fact]
         public void GivenApopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned()
         {
-            const int ExpectedFirstVersion = 1,
-                ExpectedSecondVersion = 2,
-                ExpectedTotal = 2;
+            const int ExpectedTotal = 2;
 
-            var firstId = Guid.NewGuid();
-            var secondId = Guid.NewGuid();
+            var first = new SerializableEventCentricAggregateRoot();
+            var second = new SerializableEventCentricAggregateRoot();
+            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>();
 
-            var firstVersionOne = new SerializableAggregateRoot(firstId, version: ExpectedFirstVersion);
-            var secondVersionOne = new SerializableAggregateRoot(secondId, version: ExpectedFirstVersion);
-            var secondVersionTwo = new SerializableAggregateRoot(secondId, version: ExpectedSecondVersion);
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            repository.Save(first);
+            repository.Save(second);
 
-            repository.Save(firstVersionOne);
-            repository.Save(secondVersionOne);
-            repository.Save(secondVersionTwo);
+            var context = new SerializableMessage();
 
-            IEnumerable<SerializableAggregateRoot> results = repository.GetAll();
+            second.Set(new SetRequest(context, Guid.NewGuid()));
+
+            repository.Save(second);
+
+            IEnumerable<SerializableEventCentricAggregateRoot> results = repository.GetAll();
 
             Assert.Equal(ExpectedTotal, results.Count());
-            Assert.Contains(results, result => result.Id == firstId && result.Version == ExpectedFirstVersion);
-            Assert.Contains(results, result => result.Id == secondId && result.Version == ExpectedSecondVersion);
+            Assert.Contains(results, result => result.Id == first.Id && result.Version == first.Version);
+            Assert.Contains(results, result => result.Id == second.Id && result.Version == second.Version);
         }
     }
 }

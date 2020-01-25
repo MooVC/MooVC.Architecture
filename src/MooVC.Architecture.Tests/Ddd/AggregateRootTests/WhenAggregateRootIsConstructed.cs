@@ -11,32 +11,22 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
             _ = Assert.Throws<ArgumentException>(() => new SerializableAggregateRoot(Guid.Empty));
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(18446744073709551615)]
-        public void GivenAnIdAndAVersionThenTheIdAndVersionArePropagated(ulong expectedVersion)
+        [Fact]
+        public void GivenNoIdThenAnInstanceIsCreated()
         {
-            var expectedId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(expectedId, version: expectedVersion);
+            var aggregate = new SerializableAggregateRoot();
 
-            Assert.Equal(expectedId, aggregate.Id);
-            Assert.Equal(expectedVersion, aggregate.Version);
+            Assert.True(aggregate.HasUncommittedChanges);
         }
 
         [Fact]
-        public void GivenAnIdAndAnInvalidVersionThenAnArgumentExceptionIsThrown()
-        {
-            _ = Assert.Throws<ArgumentException>(() => new SerializableAggregateRoot(Guid.NewGuid(), version: 0));
-        }
-
-        [Fact]
-        public void GivenAnIdAndNoVersionThenTheIdIsPropagatedAndTheVersionDefaulted()
+        public void GivenAnIdThenTheIdIsPropagated()
         {
             var expectedId = Guid.NewGuid();
             var aggregate = new SerializableAggregateRoot(expectedId);
 
             Assert.Equal(expectedId, aggregate.Id);
-            Assert.Equal(AggregateRoot.DefaultVersion, aggregate.Version);
+            Assert.True(aggregate.HasUncommittedChanges);
         }
     }
 }

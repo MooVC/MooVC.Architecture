@@ -35,7 +35,7 @@ namespace MooVC.Architecture.Ddd.Services
             remove { repository.AggregateSaving -= value; }
         }
 
-        public TAggregate Get(Guid id, ulong? version = null)
+        public TAggregate Get(Guid id, SignedVersion version = default)
         {
             return repository.Get(id, version: version);
         }

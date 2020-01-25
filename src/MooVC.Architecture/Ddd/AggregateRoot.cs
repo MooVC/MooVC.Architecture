@@ -10,9 +10,7 @@
     public abstract class AggregateRoot
         : Entity<Guid>
     {
-        public const ulong DefaultVersion = 1;
-
-        protected AggregateRoot(Guid id, ulong version = DefaultVersion)
+        protected AggregateRoot(Guid id)
             : base(id)
         {
             ArgumentIsAcceptable(
@@ -21,20 +19,13 @@
                 value => value != Guid.Empty,
                 GenericIdInvalid);
 
-            ArgumentIsAcceptable(
-                version,
-                nameof(version),
-                value => value >= DefaultVersion,
-                string.Format(GenericVersionInvalid, DefaultVersion));
-
-            Version = version;
+            State = new AggregateState(new SignedVersion(), null);
         }
 
         protected AggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            HasUncommittedChanges = info.GetBoolean(nameof(HasUncommittedChanges));
-            Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
+            State = (AggregateState)info.GetValue(nameof(State), typeof(AggregateState));
         }
 
         public event EventHandler ChangesMarkedAsCommitted;
@@ -43,9 +34,11 @@
 
         public event EventHandler ChangesRolledBack;
 
-        public ulong Version { get; private protected set; }
+        public SignedVersion Version => State.Current;
 
-        protected virtual bool HasUncommittedChanges { get; protected private set; } = true;
+        public bool HasUncommittedChanges => State.HasUncommittedChanges;
+
+        private protected AggregateState State { get; set; }
 
         public override bool Equals(object other)
         {
@@ -64,15 +57,14 @@
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(HasUncommittedChanges), HasUncommittedChanges);
-            info.AddValue(nameof(Version), Version);
+            info.AddValue(nameof(State), State);
         }
 
         public virtual void MarkChangesAsCommitted()
         {
             if (HasUncommittedChanges)
             {
-                HasUncommittedChanges = false;
+                State = State.Commit();
 
                 OnChangesMarkedAsCommitted();
             }
@@ -97,8 +89,7 @@
         {
             if (!HasUncommittedChanges)
             {
-                Version++;
-                HasUncommittedChanges = true;
+                State = State.Increment();
 
                 OnChangesMarkedAsUncommitted();
             }
@@ -108,10 +99,61 @@
         {
             if (HasUncommittedChanges)
             {
-                Version--;
-                HasUncommittedChanges = false;
+                State = State.Rollback();
 
                 OnChangesRolledBack();
+            }
+        }
+
+        [Serializable]
+        private protected readonly struct AggregateState
+            : ISerializable
+        {
+            public AggregateState(SignedVersion current)
+                : this(current, current)
+            {
+            }
+
+            public AggregateState(SignedVersion current, SignedVersion persisted)
+            {
+                Current = current ?? new SignedVersion();
+                Persisted = persisted;
+            }
+
+            private AggregateState(SerializationInfo info, StreamingContext context)
+            {
+                Current = (SignedVersion)info.GetValue(nameof(Current), typeof(SignedVersion));
+                Persisted = (SignedVersion)info.GetValue(nameof(Persisted), typeof(SignedVersion));
+            }
+
+            public SignedVersion Current { get; }
+
+            public bool HasUncommittedChanges => !(IsPersisted && Current == Persisted);
+
+            public bool IsPersisted => Persisted is { };
+
+            public SignedVersion Persisted { get; }
+
+            public AggregateState Commit()
+            {
+                return new AggregateState(Current, Current);
+            }
+
+            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                info.AddValue(nameof(Current), Current);
+                info.AddValue(nameof(Persisted), Persisted);
+            }
+
+            public AggregateState Increment()
+            {
+                return new AggregateState(new SignedVersion(Persisted), Persisted);
+            }
+
+            public AggregateState Rollback()
+            {
+                return new AggregateState(Persisted, Persisted);
             }
         }
     }

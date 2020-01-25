@@ -12,7 +12,7 @@
 
         public event AggregateSavingEventHandler<TAggregate> AggregateSaving;
 
-        public abstract TAggregate Get(Guid id, ulong? version = default);
+        public abstract TAggregate Get(Guid id, SignedVersion version = default);
 
         public abstract IEnumerable<TAggregate> GetAll();
 
@@ -25,11 +25,18 @@
             aggregate.MarkChangesAsCommitted();
         }
 
-        protected virtual void CheckForConflicts(TAggregate aggregate)
+        protected virtual bool CheckForConflicts(TAggregate aggregate)
         {
             VersionedReference currentVersion = GetCurrentVersion(aggregate);
 
+            if (aggregate.Version == currentVersion?.Version)
+            {
+                return false;
+            }
+
             AggregateDoesNotConflict<TAggregate>(aggregate, currentVersion: currentVersion?.Version);
+
+            return true;
         }
 
         protected abstract VersionedReference GetCurrentVersion(TAggregate aggregate);
@@ -46,8 +53,10 @@
 
         protected virtual void PerformSave(TAggregate aggregate)
         {
-            CheckForConflicts(aggregate);
-            UpdateStore(aggregate);
+            if (CheckForConflicts(aggregate))
+            {
+                UpdateStore(aggregate);
+            }
         }
 
         protected abstract void UpdateStore(TAggregate aggregate);

@@ -2,17 +2,17 @@ namespace MooVC.Architecture.Ddd.Services
 {
     public static class Ensure
     {
-        public static void AggregateDoesNotConflict<TAggregate>(AggregateRoot proposed, ulong? currentVersion = default)
+        public static void AggregateDoesNotConflict<TAggregate>(AggregateRoot proposed, SignedVersion currentVersion = default)
             where TAggregate : AggregateRoot
         {
-            if (currentVersion.HasValue)
+            if (currentVersion is { })
             {
-                if (proposed.Version - currentVersion != 1)
+                if (!currentVersion.IsNext(proposed.Version))
                 {
-                    throw new AggregateConflictDetectedException<TAggregate>(proposed.Id, currentVersion.Value, proposed.Version);
+                    throw new AggregateConflictDetectedException<TAggregate>(proposed.Id, currentVersion, proposed.Version);
                 }
             }
-            else if (proposed.Version != AggregateRoot.DefaultVersion)
+            else if (!proposed.Version.IsNew)
             {
                 throw new AggregateConflictDetectedException<TAggregate>(proposed.Id, proposed.Version);
             }

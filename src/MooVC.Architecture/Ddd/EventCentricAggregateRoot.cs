@@ -18,8 +18,8 @@
 
         private readonly List<DomainEvent> changes;
 
-        protected EventCentricAggregateRoot(Guid id, ulong version = DefaultVersion)
-            : base(id, version)
+        protected EventCentricAggregateRoot(Guid id)
+            : base(id)
         {
             changes = new List<DomainEvent>();
         }
@@ -28,12 +28,6 @@
             : base(info, context)
         {
             changes = (List<DomainEvent>)info.GetValue(nameof(changes), typeof(List<DomainEvent>));
-        }
-
-        protected override bool HasUncommittedChanges
-        {
-            get => changes.Any();
-            private protected set => base.HasUncommittedChanges = value;
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
@@ -51,10 +45,33 @@
 
         public void LoadFromHistory(IEnumerable<DomainEvent> history)
         {
-            if (HasUncommittedChanges || Version != DefaultVersion)
+            IEnumerable<DomainEvent> sequence = history
+                .OrderBy(@event => @event.Aggregate.Version)
+                .ToArray();
+
+            if (!sequence.SequenceEqual(history))
             {
                 throw new InvalidOperationException(Format(
-                    EventCentricAggregateRootDomainEventHandlerNotSupportedException,
+                    EventCentricAggregateRootHistorySequenceUnordered,
+                    Id,
+                    Version,
+                    GetType().Name));
+            }
+
+            VersionedReference mismatch = sequence
+                .Where(@event => !@event.Aggregate.IsMatch(this))
+                .Select(@event => @event.Aggregate)
+                .FirstOrDefault();
+
+            if (mismatch is { })
+            {
+                throw new AggregateEventMismatchException(this.ToVersionedReference(), mismatch);
+            }
+
+            if (HasUncommittedChanges)
+            {
+                throw new InvalidOperationException(Format(
+                    EventCentricAggregateInvalidStateForLoadFromHistory,
                     Id,
                     Version,
                     GetType().Name));
@@ -62,10 +79,7 @@
 
             history.ForEach(@event => ApplyChange(() => @event, isNew: false));
 
-            Version = history
-                .Select(@event => @event.Aggregate.Version)
-                .DefaultIfEmpty(DefaultVersion)
-                .Max();
+            State = new AggregateState(sequence.Last().Aggregate.Version);
         }
 
         public override void MarkChangesAsCommitted()
@@ -80,7 +94,7 @@
 
         protected void ApplyChange(Func<DomainEvent> change, bool isNew = true)
         {
-            bool triggersVersionIncrement = isNew && !base.HasUncommittedChanges;
+            bool triggersVersionIncrement = isNew && !HasUncommittedChanges;
 
             if (triggersVersionIncrement)
             {

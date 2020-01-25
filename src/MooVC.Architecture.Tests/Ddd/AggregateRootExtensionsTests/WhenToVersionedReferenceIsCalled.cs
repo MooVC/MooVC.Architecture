@@ -1,24 +1,22 @@
 namespace MooVC.Architecture.Ddd.AggregateRootExtensionsTests
 {
     using System;
-    using Moq;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenToVersionedReferenceIsCalled
     {
-        [Theory]
-        [InlineData(1ul)]
-        [InlineData(18446744073709551615)]
-        public void GivenAnAggregateThenAReferenceWithTheSameIdTypeAndVersionIsReturned(ulong expectedVersion)
+        [Fact]
+        public void GivenAnAggregateThenAReferenceWithTheSameIdTypeAndVersionIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, expectedVersion);
+            var aggregate = new SerializableAggregateRoot(aggregateId);
 
-            var reference = aggregate.Object.ToVersionedReference();
+            var reference = aggregate.ToVersionedReference();
 
             Assert.Equal(aggregateId, reference.Id);
-            Assert.Equal(typeof(AggregateRoot), reference.Type);
-            Assert.Equal(expectedVersion, reference.Version);
+            Assert.Equal(typeof(SerializableAggregateRoot), reference.Type);
+            Assert.Equal(aggregate.Version, reference.Version);
         }
     }
 }

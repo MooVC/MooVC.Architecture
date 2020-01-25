@@ -8,12 +8,12 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         : AggregateRoot
     {
         public SerializableAggregateRoot()
-            : this(Guid.NewGuid(), version: DefaultVersion)
+            : this(Guid.NewGuid())
         {
         }
 
-        public SerializableAggregateRoot(Guid id, ulong version = DefaultVersion)
-            : base(id, version)
+        public SerializableAggregateRoot(Guid id)
+            : base(id)
         {
         }
 

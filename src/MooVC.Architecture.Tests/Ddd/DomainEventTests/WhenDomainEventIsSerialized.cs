@@ -8,13 +8,11 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
 
     public sealed class WhenDomainEventIsSerialized
     {
-        [Theory]
-        [InlineData(1)]
-        [InlineData(18446744073709551615)]
-        public void GivenAnInstanceThenAllPropertiesAreSerialized(ulong expectedVersion)
+        [Fact]
+        public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
-            var expectedId = Guid.NewGuid();
-            var expectedAggregate = new VersionedReference<AggregateRoot>(expectedId, version: expectedVersion);
+            var aggregate = new SerializableAggregateRoot();
+            var expectedAggregate = new VersionedReference<AggregateRoot>(aggregate);
             var expectedContext = new SerializableMessage();
 
             var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);

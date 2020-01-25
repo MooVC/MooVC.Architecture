@@ -7,6 +7,11 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
     internal sealed class SerializableEventCentricAggregateRoot
         : EventCentricAggregateRoot
     {
+        public SerializableEventCentricAggregateRoot()
+            : base(Guid.NewGuid())
+        {
+        }
+
         public SerializableEventCentricAggregateRoot(Message context)
             : this(Guid.NewGuid())
         {
@@ -14,7 +19,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         }
 
         public SerializableEventCentricAggregateRoot(Guid id)
-            : base(id, DefaultVersion)
+            : base(id)
         {
         }
 

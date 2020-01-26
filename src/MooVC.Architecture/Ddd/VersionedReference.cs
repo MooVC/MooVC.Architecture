@@ -5,6 +5,7 @@ namespace MooVC.Architecture.Ddd
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -15,7 +16,7 @@ namespace MooVC.Architecture.Ddd
         protected VersionedReference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Version = (SignedVersion)info.GetValue(nameof(Version), typeof(SignedVersion));
+            Version = info.GetValue<SignedVersion>(nameof(Version));
         }
 
         private protected VersionedReference(Guid id, SignedVersion version)

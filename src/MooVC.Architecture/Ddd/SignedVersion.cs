@@ -6,6 +6,7 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -48,9 +49,9 @@
         private SignedVersion(SerializationInfo info, StreamingContext context)
                : base(info, context)
         {
-            Footer = (byte[])info.GetValue(nameof(Footer), typeof(byte[]));
-            Header = (byte[])info.GetValue(nameof(Header), typeof(byte[]));
-            Number = (ulong)info.GetValue(nameof(Number), typeof(ulong));
+            Footer = info.GetValue<byte[]>(nameof(Footer));
+            Header = info.GetValue<byte[]>(nameof(Header));
+            Number = info.GetUInt64(nameof(Number));
             signature = Combine();
         }
 

@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -24,9 +25,9 @@
 
         protected Message(SerializationInfo info, StreamingContext context)
         {
-            CausationId = (Guid)info.GetValue(nameof(CausationId), typeof(Guid));
-            CorrelationId = (Guid)info.GetValue(nameof(CorrelationId), typeof(Guid));
-            Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
+            CausationId = info.GetValue<Guid>(nameof(CausationId));
+            CorrelationId = info.GetValue<Guid>(nameof(CorrelationId));
+            Id = info.GetValue<Guid>(nameof(Id));
             TimeStamp = info.GetDateTime(nameof(TimeStamp));
         }
 

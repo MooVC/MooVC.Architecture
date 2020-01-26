@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -25,7 +26,7 @@
         protected AggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            State = (AggregateState)info.GetValue(nameof(State), typeof(AggregateState));
+            State = info.GetInternalValue<AggregateState>(nameof(State));
         }
 
         public event EventHandler ChangesMarkedAsCommitted;
@@ -57,7 +58,7 @@
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(State), State);
+            info.AddInternalValue(nameof(State), State);
         }
 
         public virtual void MarkChangesAsCommitted()
@@ -122,8 +123,8 @@
 
             private AggregateState(SerializationInfo info, StreamingContext context)
             {
-                Current = (SignedVersion)info.GetValue(nameof(Current), typeof(SignedVersion));
-                Persisted = (SignedVersion)info.GetValue(nameof(Persisted), typeof(SignedVersion));
+                Current = info.GetValue<SignedVersion>(nameof(Current));
+                Persisted = info.GetValue<SignedVersion>(nameof(Persisted));
             }
 
             public SignedVersion Current { get; }

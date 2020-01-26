@@ -20,7 +20,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected MemoryRepository(SerializationInfo info, StreamingContext context)
         {
-            Store = (Dictionary<Reference, TAggregate>)info.GetValue(nameof(Store), typeof(Dictionary<Reference, TAggregate>));
+            Store = info.GetValue<Dictionary<Reference, TAggregate>>(nameof(Store));
         }
 
         protected virtual IDictionary<Reference, TAggregate> Store { get; }

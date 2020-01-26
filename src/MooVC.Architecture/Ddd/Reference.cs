@@ -4,6 +4,7 @@ namespace MooVC.Architecture.Ddd
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
 
     [Serializable]
     public abstract class Reference
@@ -12,7 +13,7 @@ namespace MooVC.Architecture.Ddd
         protected Reference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
+            Id = info.GetValue<Guid>(nameof(Id));
         }
 
         private protected Reference(Guid id)

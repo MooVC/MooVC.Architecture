@@ -4,6 +4,7 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Linq;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -29,7 +30,7 @@
         protected PaginatedQuery(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Paging = (Paging)info.GetValue(nameof(Paging), typeof(Paging));
+            Paging = info.GetValue<Paging>(nameof(Paging));
         }
 
         public Paging Paging { get; }

@@ -7,6 +7,7 @@ namespace MooVC.Architecture.Cqrs.Services
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Linq;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -25,9 +26,9 @@ namespace MooVC.Architecture.Cqrs.Services
         protected PaginatedResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Results = (T[])info.GetValue(nameof(Results), typeof(T[]));
-            TotalPages = (ushort)info.GetValue(nameof(TotalPages), typeof(ushort));
-            TotalResults = (ulong)info.GetValue(nameof(TotalResults), typeof(ulong));
+            Results = info.GetValue<T[]>(nameof(Results));
+            TotalPages = info.GetUInt16(nameof(TotalPages));
+            TotalResults = info.GetUInt64(nameof(TotalResults));
         }
 
         public IEnumerable<T> Results { get; }

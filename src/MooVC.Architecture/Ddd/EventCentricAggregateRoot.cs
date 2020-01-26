@@ -7,6 +7,7 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
+    using MooVC.Serialization;
     using static System.String;
     using static Resources;
 
@@ -27,7 +28,7 @@
         protected EventCentricAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            changes = (List<DomainEvent>)info.GetValue(nameof(changes), typeof(List<DomainEvent>));
+            changes = info.GetInternalValue<List<DomainEvent>>(nameof(changes));
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
@@ -35,7 +36,7 @@
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(changes), changes);
+            info.AddInternalValue(nameof(changes), changes);
         }
 
         public IEnumerable<DomainEvent> GetUncommittedChanges()

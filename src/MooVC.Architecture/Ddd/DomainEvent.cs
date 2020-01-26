@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
 
     [Serializable]
     public abstract class DomainEvent
@@ -23,7 +24,7 @@
         protected DomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = (VersionedReference)info.GetValue(nameof(Aggregate), typeof(VersionedReference));
+            Aggregate = info.GetValue<VersionedReference>(nameof(Aggregate));
         }
 
         public VersionedReference Aggregate { get; }

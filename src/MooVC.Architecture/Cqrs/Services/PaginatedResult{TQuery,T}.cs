@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
 
     [Serializable]
     public abstract class PaginatedResult<TQuery, T>
@@ -19,7 +20,7 @@
         protected PaginatedResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Query = (TQuery)info.GetValue(nameof(Query), typeof(TQuery));
+            Query = info.GetValue<TQuery>(nameof(Query));
         }
 
         public TQuery Query { get; }

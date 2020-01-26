@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
 
     [Serializable]
     public abstract class Entity<T>
@@ -15,7 +16,7 @@
 
         protected Entity(SerializationInfo info, StreamingContext context)
         {
-            Id = (T)info.GetValue(nameof(Id), typeof(T));
+            Id = info.GetValue<T>(nameof(Id));
         }
 
         public T Id { get; }

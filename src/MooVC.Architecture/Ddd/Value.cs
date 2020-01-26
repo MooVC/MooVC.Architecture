@@ -56,9 +56,17 @@
 
         protected int AggregateHashCode(IEnumerable<object> values)
         {
-            return values.Count() < 2
-                ? values.Select(CalculateHashCode).FirstOrDefault()
-                : values.Select(CalculateHashCode).Aggregate((first, second) => first ^ second);
+            object[] snapshot = values.ToArray();
+
+            if (snapshot.Count() < 2)
+            {
+                return snapshot.Select(CalculateHashCode).FirstOrDefault();
+            }
+
+            unchecked
+            {
+                return snapshot.Select(CalculateHashCode).Aggregate((first, second) => first + second);
+            }
         }
 
         protected abstract IEnumerable<object> GetAtomicValues();
@@ -77,11 +85,16 @@
 
         private int CalculateHashCode(object value)
         {
-            return value is Array array
-                ? AggregateHashCode(array.Cast<object>().ToArray())
-                : value is null
-                    ? 0
-                    : value.GetHashCode();
+            if (value is Array array)
+            {
+                IEnumerable<object> elements = array.Cast<object>();
+
+                return AggregateHashCode(elements);
+            }
+
+            return value is null
+                ? 0
+                : value.GetHashCode();
         }
     }
 }

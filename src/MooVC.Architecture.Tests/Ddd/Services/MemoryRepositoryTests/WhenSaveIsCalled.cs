@@ -32,7 +32,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             AggregateConflictDetectedException<SerializableAggregateRoot> exception = Assert.Throws<AggregateConflictDetectedException<SerializableAggregateRoot>>(
                 () => repository.Save(pending));
 
-            Assert.Equal(saved.Id, exception.AggregateId);
+            Assert.Equal(saved.Id, exception.Aggregate.Id);
             Assert.Equal(saved.Version, exception.PersistedVersion);
         }
 

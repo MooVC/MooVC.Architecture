@@ -5,41 +5,40 @@
     using static Resources;
 
     [Serializable]
-    public sealed class AggregateConflictDetectedException<TAggregate>
+    public abstract class AggregateConflictDetectedException
         : ArgumentException
-        where TAggregate : AggregateRoot
     {
-        public AggregateConflictDetectedException(
-               Guid aggregateId,
-               SignedVersion receivedVersion)
+        private protected AggregateConflictDetectedException(
+               Reference aggregate,
+               SignedVersion received)
                : base(Format(
                    AggregateConflictDetectedExceptionNoExistingEntryMessage,
-                   aggregateId,
-                   typeof(TAggregate).Name,
-                   receivedVersion))
+                   aggregate.Id,
+                   aggregate.Type.Name,
+                   received))
         {
-            AggregateId = aggregateId;
+            Aggregate = aggregate;
             PersistedVersion = SignedVersion.Empty;
-            ReceivedVersion = receivedVersion;
+            ReceivedVersion = received;
         }
 
-        public AggregateConflictDetectedException(
-            Guid aggregateId,
+        private protected AggregateConflictDetectedException(
+            Reference aggregate,
             SignedVersion persistedVersion,
             SignedVersion receivedVersion)
             : base(Format(
                 AggregateConflictDetectedExceptionExistingEntryMessage,
-                aggregateId,
-                typeof(TAggregate).Name,
+                aggregate.Id,
+                aggregate.Type.Name,
                 receivedVersion,
                 persistedVersion))
         {
-            AggregateId = aggregateId;
+            Aggregate = aggregate;
             PersistedVersion = persistedVersion;
             ReceivedVersion = receivedVersion;
         }
 
-        public Guid AggregateId { get; }
+        public Reference Aggregate { get; }
 
         public SignedVersion PersistedVersion { get; }
 

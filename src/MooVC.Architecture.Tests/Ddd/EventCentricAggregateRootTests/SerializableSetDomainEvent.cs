@@ -9,7 +9,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         : DomainEvent
     {
         public SerializableSetDomainEvent(Message context, SerializableEventCentricAggregateRoot aggregate, Guid value)
-            : base(context, aggregate)
+            : base(context, aggregate.ToVersionedReference())
         {
             Value = value;
         }

@@ -8,7 +8,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         : DomainEvent
     {
         public SerializableCreatedDomainEvent(Message context, SerializableEventCentricAggregateRoot aggregate)
-            : base(context, aggregate)
+            : base(context, aggregate.ToVersionedReference())
         {
         }
 

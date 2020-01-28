@@ -9,12 +9,6 @@
     public abstract class DomainEvent
         : Message
     {
-        protected DomainEvent(Message context, AggregateRoot aggregate)
-            : base(context)
-        {
-            Aggregate = aggregate.ToVersionedReference();
-        }
-
         protected DomainEvent(Message context, VersionedReference aggregate)
             : base(context)
         {

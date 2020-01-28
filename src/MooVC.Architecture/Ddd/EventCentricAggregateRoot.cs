@@ -46,41 +46,56 @@
 
         public void LoadFromHistory(IEnumerable<DomainEvent> history)
         {
-            IEnumerable<DomainEvent> sequence = history
-                .OrderBy(@event => @event.Aggregate.Version)
-                .ToArray();
-
-            if (!sequence.SequenceEqual(history))
+            if (history.Any())
             {
-                throw new InvalidOperationException(Format(
-                    EventCentricAggregateRootHistorySequenceUnordered,
-                    Id,
-                    Version,
-                    GetType().Name));
+                IEnumerable<DomainEvent> sequence = history
+                    .OrderBy(@event => @event.Aggregate.Version)
+                    .ToArray();
+
+                if (!sequence.SequenceEqual(history))
+                {
+                    throw new InvalidOperationException(Format(
+                        EventCentricAggregateRootHistorySequenceUnordered,
+                        Id,
+                        Version,
+                        GetType().Name));
+                }
+
+                VersionedReference mismatch = sequence
+                    .Where(@event => !@event.Aggregate.IsMatch(this))
+                    .Select(@event => @event.Aggregate)
+                    .FirstOrDefault();
+
+                if (mismatch is { })
+                {
+                    throw new AggregateEventMismatchException(this.ToVersionedReference(), mismatch);
+                }
+
+                if (changes.Any())
+                {
+                    throw new InvalidOperationException(Format(
+                        EventCentricAggregateInvalidStateForLoadFromHistory,
+                        Id,
+                        Version,
+                        GetType().Name));
+                }
+
+                SignedVersion startingVersion = sequence.First().Aggregate.Version;
+
+                if (!(Version.IsNew || startingVersion.IsNext(Version)))
+                {
+                    throw new InvalidOperationException(Format(
+                        EventCentricAggregateInvalidSequenceForState,
+                        Id,
+                        Version,
+                        GetType().Name,
+                        startingVersion));
+                }
+
+                sequence.ForEach(@event => ApplyChange(() => @event, isNew: false));
+
+                State = new AggregateState(sequence.Last().Aggregate.Version);
             }
-
-            VersionedReference mismatch = sequence
-                .Where(@event => !@event.Aggregate.IsMatch(this))
-                .Select(@event => @event.Aggregate)
-                .FirstOrDefault();
-
-            if (mismatch is { })
-            {
-                throw new AggregateEventMismatchException(this.ToVersionedReference(), mismatch);
-            }
-
-            if (HasUncommittedChanges)
-            {
-                throw new InvalidOperationException(Format(
-                    EventCentricAggregateInvalidStateForLoadFromHistory,
-                    Id,
-                    Version,
-                    GetType().Name));
-            }
-
-            history.ForEach(@event => ApplyChange(() => @event, isNew: false));
-
-            State = new AggregateState(sequence.Last().Aggregate.Version);
         }
 
         public override void MarkChangesAsCommitted()

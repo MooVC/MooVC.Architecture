@@ -16,6 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Ddd\Reconciliation\**" />
+    <EmbeddedResource Remove="Ddd\Reconciliation\**" />
+    <None Remove="Ddd\Reconciliation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="5.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

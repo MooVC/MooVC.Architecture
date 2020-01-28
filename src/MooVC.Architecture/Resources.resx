@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AggregateConflictDetectedEventArgsAggregateRequired" xml:space="preserve">
+    <value>A reference to the aggregate from which conflicts were detected must be provided.</value>
+  </data>
+  <data name="AggregateConflictDetectedEventArgsEventsRequired" xml:space="preserve">
+    <value>The events within which conflicts were detected must be provided.</value>
+  </data>
+  <data name="AggregateConflictDetectedEventArgsNextRequired" xml:space="preserve">
+    <value>The version at which conflicts were detected must be provided.</value>
+  </data>
+  <data name="AggregateConflictDetectedEventArgsPreviousRequired" xml:space="preserve">
+    <value>The version from which conflicts were detected must be provided.</value>
+  </data>
   <data name="AggregateConflictDetectedExceptionExistingEntryMessage" xml:space="preserve">
     <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed.</value>
   </data>
@@ -136,6 +148,9 @@
   </data>
   <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
     <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
+  </data>
+  <data name="AggregateReconcilerFactoryRequired" xml:space="preserve">
+    <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
   </data>
   <data name="AggregateReferenceMismatchExceptionMessage" xml:space="preserve">
     <value>Reference for aggregate {0:p} of type {1} cannot be converted type {2}.</value>
@@ -163,6 +178,9 @@
   </data>
   <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
     <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
+  </data>
+  <data name="EventCentricAggregateInvalidSequenceForState" xml:space="preserve">
+    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed sequence as it starts from version {3}.</value>
   </data>
   <data name="EventCentricAggregateInvalidStateForLoadFromHistory" xml:space="preserve">
     <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} is not in a suitable state for a load from history.</value>
@@ -193,6 +211,12 @@
   </data>
   <data name="SignedVersionPreviousRequired" xml:space="preserve">
     <value>The previous version must be provided.</value>
+  </data>
+  <data name="UnsupportedAggregateDetectedEventArgsAggregateRequired" xml:space="preserve">
+    <value>A reference to the aggregate for which reconciliation is not supported must be provided.</value>
+  </data>
+  <data name="UnsupportedAggregateDetectedEventArgsEventsRequired" xml:space="preserve">
+    <value>The events requiring reconciliation by an unsupported aggregate type must be provided.</value>
   </data>
   <data name="VersionedReferenceVersionRequired" xml:space="preserve">
     <value>The version of the aggregate must be provided.</value>

@@ -48,21 +48,22 @@
         {
             if (history.Any())
             {
+                if (changes.Any())
+                {
+                    throw new AggregateHasUncommittedChangesException(this.ToVersionedReference());
+                }
+
                 IEnumerable<DomainEvent> sequence = history
                     .OrderBy(@event => @event.Aggregate.Version)
                     .ToArray();
 
                 if (!sequence.SequenceEqual(history))
                 {
-                    throw new InvalidOperationException(Format(
-                        EventCentricAggregateRootHistorySequenceUnordered,
-                        Id,
-                        Version,
-                        GetType().Name));
+                    throw new AggregateEventSequenceUnorderedException(this.ToVersionedReference(), history);
                 }
 
                 VersionedReference mismatch = sequence
-                    .Where(@event => !@event.Aggregate.IsMatch(this))
+                    .Where(@event => @event.Aggregate.Id != Id)
                     .Select(@event => @event.Aggregate)
                     .FirstOrDefault();
 
@@ -71,25 +72,11 @@
                     throw new AggregateEventMismatchException(this.ToVersionedReference(), mismatch);
                 }
 
-                if (changes.Any())
-                {
-                    throw new InvalidOperationException(Format(
-                        EventCentricAggregateInvalidStateForLoadFromHistory,
-                        Id,
-                        Version,
-                        GetType().Name));
-                }
-
                 SignedVersion startingVersion = sequence.First().Aggregate.Version;
 
                 if (!(Version.IsNew || startingVersion.IsNext(Version)))
                 {
-                    throw new InvalidOperationException(Format(
-                        EventCentricAggregateInvalidSequenceForState,
-                        Id,
-                        Version,
-                        GetType().Name,
-                        startingVersion));
+                    throw new AggregateHistoryInvalidForStateException(this.ToVersionedReference(), sequence, startingVersion);
                 }
 
                 sequence.ForEach(@event => ApplyChange(() => @event, isNew: false));

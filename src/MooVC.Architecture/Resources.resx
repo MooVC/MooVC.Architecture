@@ -141,6 +141,15 @@
   <data name="AggregateEventMismatchExceptionMessage" xml:space="preserve">
     <value>Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}.</value>
   </data>
+  <data name="AggregateEventSequenceUnorderedExceptionMessage" xml:space="preserve">
+    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed state from history as the sequence is unordered.</value>
+  </data>
+  <data name="AggregateHasUncommittedChangesExceptionMessage" xml:space="preserve">
+    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept its state from history as it current possesses uncommitted changes.</value>
+  </data>
+  <data name="AggregateHistoryInvalidForStateExceptionMessage" xml:space="preserve">
+    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed sequence as it starts from version {3}.</value>
+  </data>
   <data name="AggregateInvariantsNotSatisfiedDomainExceptionMessage" xml:space="preserve">
     <value>Request {0} could not be fulfilled due to a failure to satisfy the following invariants as defined by aggregate {1}:
 
@@ -179,17 +188,8 @@
   <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
     <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
   </data>
-  <data name="EventCentricAggregateInvalidSequenceForState" xml:space="preserve">
-    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed sequence as it starts from version {3}.</value>
-  </data>
-  <data name="EventCentricAggregateInvalidStateForLoadFromHistory" xml:space="preserve">
-    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} is not in a suitable state for a load from history.</value>
-  </data>
   <data name="EventCentricAggregateRootDomainEventHandlerNotSupportedException" xml:space="preserve">
     <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
-  </data>
-  <data name="EventCentricAggregateRootHistorySequenceUnordered" xml:space="preserve">
-    <value>The history cannot be applied to aggregate {0:p} version {1} of type {2} because the sequence is unordered.</value>
   </data>
   <data name="GenericAggregateRequired" xml:space="preserve">
     <value>The aggregate must be provided.</value>

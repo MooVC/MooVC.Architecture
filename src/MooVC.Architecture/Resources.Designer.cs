@@ -133,6 +133,33 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed state from history as the sequence is unordered..
+        /// </summary>
+        internal static string AggregateEventSequenceUnorderedExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateEventSequenceUnorderedExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept its state from history as it current possesses uncommitted changes..
+        /// </summary>
+        internal static string AggregateHasUncommittedChangesExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateHasUncommittedChangesExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed sequence as it starts from version {3}..
+        /// </summary>
+        internal static string AggregateHistoryInvalidForStateExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateHistoryInvalidForStateExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Request {0} could not be fulfilled due to a failure to satisfy the following invariants as defined by aggregate {1}:
         ///
         ///{2}.
@@ -243,38 +270,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed sequence as it starts from version {3}..
-        /// </summary>
-        internal static string EventCentricAggregateInvalidSequenceForState {
-            get {
-                return ResourceManager.GetString("EventCentricAggregateInvalidSequenceForState", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} is not in a suitable state for a load from history..
-        /// </summary>
-        internal static string EventCentricAggregateInvalidStateForLoadFromHistory {
-            get {
-                return ResourceManager.GetString("EventCentricAggregateInvalidStateForLoadFromHistory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Handler for event of type {0} is not supported by aggregate of type {1}..
         /// </summary>
         internal static string EventCentricAggregateRootDomainEventHandlerNotSupportedException {
             get {
                 return ResourceManager.GetString("EventCentricAggregateRootDomainEventHandlerNotSupportedException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The history cannot be applied to aggregate {0:p} version {1} of type {2} because the sequence is unordered..
-        /// </summary>
-        internal static string EventCentricAggregateRootHistorySequenceUnordered {
-            get {
-                return ResourceManager.GetString("EventCentricAggregateRootHistorySequenceUnordered", resourceCulture);
             }
         }
         

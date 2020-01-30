@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Collections.Generic;
 
     [Serializable]
     public abstract class Value
@@ -51,22 +52,34 @@
 
         protected int AggregateHashCode()
         {
-            return AggregateHashCode(GetAtomicValues());
+            int value = 0;
+            bool shouldInvert = false;
+
+            AggregateHashCode(GetAtomicValues()).ForEach(code =>
+            {
+                if (shouldInvert)
+                {
+                    byte[] bytes = BitConverter.GetBytes(code);
+
+                    bytes = bytes.Reverse().ToArray();
+
+                    code = BitConverter.ToInt32(bytes, 0);
+                }
+
+                unchecked
+                {
+                    value += code;
+                }
+
+                shouldInvert = !shouldInvert;
+            });
+
+            return value;
         }
 
-        protected int AggregateHashCode(IEnumerable<object> values)
+        protected IEnumerable<int> AggregateHashCode(IEnumerable<object> values)
         {
-            object[] snapshot = values.ToArray();
-
-            if (snapshot.Count() < 2)
-            {
-                return snapshot.Select(CalculateHashCode).FirstOrDefault();
-            }
-
-            unchecked
-            {
-                return snapshot.Select(CalculateHashCode).Aggregate((first, second) => first + second);
-            }
+            return values.SelectMany(CalculateHashCode);
         }
 
         protected abstract IEnumerable<object> GetAtomicValues();
@@ -83,18 +96,14 @@
             return !EqualOperator(left, right);
         }
 
-        private int CalculateHashCode(object value)
+        private IEnumerable<int> CalculateHashCode(object value)
         {
             if (value is Array array)
             {
-                IEnumerable<object> elements = array.Cast<object>();
-
-                return AggregateHashCode(elements);
+                return AggregateHashCode(array.Cast<object>());
             }
 
-            return value is null
-                ? 0
-                : value.GetHashCode();
+            return new[] { value?.GetHashCode() ?? 0 };
         }
     }
 }

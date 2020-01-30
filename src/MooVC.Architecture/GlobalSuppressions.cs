@@ -3,6 +3,6 @@
 [assembly: SuppressMessage(
     "Style",
     "IDE0046:Convert to conditional expression",
-    Justification = "Suggested modification is less readable.",
+    Justification = "The suggested layout is less readable.",
     Scope = "member",
-    Target = "~M:MooVC.Architecture.Ddd.Value.AggregateHashCode(System.Collections.Generic.IEnumerable{System.Object})~System.Int32")]
+    Target = "~M:MooVC.Architecture.Ddd.Value.CalculateHashCode(System.Object)~System.Collections.Generic.IEnumerable{System.Int32}")]

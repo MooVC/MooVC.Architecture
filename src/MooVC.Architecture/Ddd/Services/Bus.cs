@@ -2,7 +2,7 @@ namespace MooVC.Architecture.Ddd.Services
 {
     using System;
     using System.Linq;
-    using MooVC.Logging;
+    using System.Threading.Tasks;
 
     public abstract class Bus
         : IBus
@@ -27,9 +27,9 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected abstract void PerformPublish(DomainEvent[] events);
 
-        protected virtual void OnUnhandled(DomainEvent @event, Action handler)
+        protected virtual void OnUnhandled(Func<Task> handler, params DomainEvent[] @events)
         {
-            Unhandled?.Invoke(this, new DomainEventsUnhandledEventArgs(@event, handler));
+            Unhandled?.Invoke(this, new DomainEventsUnhandledEventArgs(@events, handler));
         }
     }
 }

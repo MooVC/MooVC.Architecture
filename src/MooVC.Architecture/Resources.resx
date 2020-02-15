@@ -179,6 +179,12 @@
   <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
     <value>The repository from which the events are to be propagated must be provided.</value>
   </data>
+  <data name="DomainEventUnhandledEventArgsEventRequired" xml:space="preserve">
+    <value>The unhandled event must be provided.</value>
+  </data>
+  <data name="DomainEventUnhandledEventArgsHandlerRequired" xml:space="preserve">
+    <value>The handler for the unhandled event must be provided.</value>
+  </data>
   <data name="EnsureReferenceIsNotEmptyMessage" xml:space="preserve">
     <value>A non-empty reference of aggregate type {0} is required.</value>
   </data>

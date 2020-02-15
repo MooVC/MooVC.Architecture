@@ -243,6 +243,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The unhandled event must be provided..
+        /// </summary>
+        internal static string DomainEventUnhandledEventArgsEventRequired {
+            get {
+                return ResourceManager.GetString("DomainEventUnhandledEventArgsEventRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The handler for the unhandled event must be provided..
+        /// </summary>
+        internal static string DomainEventUnhandledEventArgsHandlerRequired {
+            get {
+                return ResourceManager.GetString("DomainEventUnhandledEventArgsHandlerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A non-empty reference of aggregate type {0} is required..
         /// </summary>
         internal static string EnsureReferenceIsNotEmptyMessage {

@@ -8,7 +8,7 @@
     using MooVC.Processing;
 
     public sealed class UnhandledDomainEventManager
-        : TimedJobQueue<DomainEventUnhandledEventArgs>,
+        : TimedJobQueue<DomainEventsUnhandledEventArgs>,
           IEmitFailures
     {
         private readonly IBus bus;
@@ -38,15 +38,18 @@
             FailureEmitted?.Invoke(this, new PassiveExceptionEventArgs(failure));
         }
 
-        protected override IEnumerable<DomainEventUnhandledEventArgs> Process(IEnumerable<DomainEventUnhandledEventArgs> jobs)
+        protected override IEnumerable<DomainEventsUnhandledEventArgs> Process(IEnumerable<DomainEventsUnhandledEventArgs> jobs)
         {
-            var failures = new ConcurrentBag<DomainEventUnhandledEventArgs>();
+            var failures = new ConcurrentBag<DomainEventsUnhandledEventArgs>();
 
             jobs.ForAll(job =>
             {
                 try
                 {
-                    job.Handler();
+                    job.Handler()
+                       .ConfigureAwait(false)
+                       .GetAwaiter()
+                       .GetResult();
                 }
                 catch (Exception ex)
                 {
@@ -59,7 +62,7 @@
             return failures;
         }
 
-        private void Bus_Unhandled(IBus sender, DomainEventUnhandledEventArgs e)
+        private void Bus_Unhandled(IBus sender, DomainEventsUnhandledEventArgs e)
         {
             Enqueue(e);
         }

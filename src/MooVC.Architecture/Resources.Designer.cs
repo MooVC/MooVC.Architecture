@@ -243,20 +243,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The unhandled event must be provided..
+        ///   Looks up a localized string similar to The handler for the unhandled events must be provided..
         /// </summary>
-        internal static string DomainEventUnhandledEventArgsEventRequired {
+        internal static string DomainEventsUnhandledEventArgsHandlerRequired {
             get {
-                return ResourceManager.GetString("DomainEventUnhandledEventArgsEventRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The handler for the unhandled event must be provided..
-        /// </summary>
-        internal static string DomainEventUnhandledEventArgsHandlerRequired {
-            get {
-                return ResourceManager.GetString("DomainEventUnhandledEventArgsHandlerRequired", resourceCulture);
+                return ResourceManager.GetString("DomainEventsUnhandledEventArgsHandlerRequired", resourceCulture);
             }
         }
         

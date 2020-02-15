@@ -8,7 +8,7 @@
 
         event DomainEventsPublishingEventHandler Publishing;
 
-        event DomainEventUnhandledEventHandler Unhandled;
+        event DomainEventsUnhandledEventHandler Unhandled;
 
         void Publish(params DomainEvent[] events);
     }

@@ -11,7 +11,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         public event DomainEventsPublishingEventHandler Publishing;
 
-        public event DomainEventUnhandledEventHandler Unhandled;
+        public event DomainEventsUnhandledEventHandler Unhandled;
 
         public void Publish(params DomainEvent[] events)
         {
@@ -29,7 +29,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected virtual void OnUnhandled(DomainEvent @event, Action handler)
         {
-            Unhandled?.Invoke(this, new DomainEventUnhandledEventArgs(@event, handler));
+            Unhandled?.Invoke(this, new DomainEventsUnhandledEventArgs(@event, handler));
         }
     }
 }

@@ -3,6 +3,7 @@ namespace MooVC.Architecture.Ddd.Services
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using MooVC.Linq;
 
     public abstract class Bus
         : IBus
@@ -15,17 +16,27 @@ namespace MooVC.Architecture.Ddd.Services
 
         public void Publish(params DomainEvent[] events)
         {
-            if (events.Any())
+            if (events.SafeAny())
             {
-                Publishing?.Invoke(this, new DomainEventsPublishingEventArgs(events));
+                OnPublishing(events);
 
                 PerformPublish(events);
 
-                Published?.Invoke(this, new DomainEventsPublishedEventArgs(events));
+                OnPublished(events);
             }
         }
 
         protected abstract void PerformPublish(DomainEvent[] events);
+
+        protected virtual void OnPublishing(params DomainEvent[] @events)
+        {
+            Publishing?.Invoke(this, new DomainEventsPublishingEventArgs(@events));
+        }
+
+        protected virtual void OnPublished(params DomainEvent[] @events)
+        {
+            Published?.Invoke(this, new DomainEventsPublishedEventArgs(@events));
+        }
 
         protected virtual void OnUnhandled(Func<Task> handler, params DomainEvent[] @events)
         {

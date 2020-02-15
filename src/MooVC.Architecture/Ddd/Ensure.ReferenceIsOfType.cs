@@ -17,7 +17,7 @@ namespace MooVC.Architecture.Ddd
         public static void ReferenceIsOfType<TAggregate>(Reference reference, string argumentName, string message)
             where TAggregate : AggregateRoot
         {
-            if (reference == null || reference.Type != typeof(TAggregate))
+            if (reference is null || reference.Type != typeof(TAggregate))
             {
                 throw new ArgumentException(message, argumentName);
             }

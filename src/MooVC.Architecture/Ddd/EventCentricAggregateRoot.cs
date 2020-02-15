@@ -113,7 +113,7 @@
                 MethodInfo handler = type
                     .GetMethod(HandlerName, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { eventType }, null);
 
-                if (handler == null)
+                if (handler is null)
                 {
                     throw new NotSupportedException(Format(
                         EventCentricAggregateRootDomainEventHandlerNotSupportedException,
@@ -139,7 +139,7 @@
             }
         }
 
-        protected override void OnChangesMarkedAsCommitted(EventArgs e = null)
+        protected override void OnChangesMarkedAsCommitted(EventArgs args = default)
         {
             base.OnChangesMarkedAsCommitted(new ChangesMarkedAsCommittedEventArgs(changes));
         }

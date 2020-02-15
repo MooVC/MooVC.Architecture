@@ -71,19 +71,19 @@
             }
         }
 
-        protected virtual void OnChangesMarkedAsCommitted(EventArgs e = null)
+        protected virtual void OnChangesMarkedAsCommitted(EventArgs args = default)
         {
-            ChangesMarkedAsCommitted?.Invoke(this, e ?? EventArgs.Empty);
+            ChangesMarkedAsCommitted?.Invoke(this, args ?? EventArgs.Empty);
         }
 
-        protected virtual void OnChangesMarkedAsUncommitted(EventArgs e = null)
+        protected virtual void OnChangesMarkedAsUncommitted(EventArgs args = default)
         {
-            ChangesMarkedAsUncommitted?.Invoke(this, e ?? EventArgs.Empty);
+            ChangesMarkedAsUncommitted?.Invoke(this, args ?? EventArgs.Empty);
         }
 
-        protected virtual void OnChangesRolledBack(EventArgs e = null)
+        protected virtual void OnChangesRolledBack(EventArgs args = default)
         {
-            ChangesRolledBack?.Invoke(this, e ?? EventArgs.Empty);
+            ChangesRolledBack?.Invoke(this, args ?? EventArgs.Empty);
         }
 
         private protected virtual void MarkChangesAsUncommitted()

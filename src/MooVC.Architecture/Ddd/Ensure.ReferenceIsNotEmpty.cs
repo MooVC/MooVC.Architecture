@@ -15,7 +15,7 @@
 
         public static void ReferenceIsNotEmpty(Reference reference, string argumentName, string message)
         {
-            if (reference == null || reference.IsEmpty)
+            if (reference is null || reference.IsEmpty)
             {
                 throw new ArgumentException(message, argumentName);
             }

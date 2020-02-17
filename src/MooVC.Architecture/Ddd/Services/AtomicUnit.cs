@@ -8,6 +8,7 @@
     using MooVC.Architecture.Ddd;
     using MooVC.Collections.Generic;
     using MooVC.Linq;
+    using static MooVC.Ensure;
     using static Resources;
 
     [Serializable]
@@ -16,15 +17,13 @@
     {
         public AtomicUnit(params DomainEvent[] events)
         {
-            if (!events.SafeAny())
-            {
-                throw new ArgumentNullException(AtomicUnitEventsRequired);
-            }
+            ArgumentIsAcceptable(events, nameof(events), value => value.SafeAny(), AtomicUnitEventsRequired);
 
-            if (events.Select(@event => @event.Aggregate).Distinct().Count() > 1)
-            {
-                throw new ArgumentNullException(AtomicUnitDistinctAggregateVersionRequired);
-            }
+            ArgumentIsAcceptable(
+                events,
+                nameof(events),
+                value => value.Select(@event => @event.Aggregate).Distinct().Count() == 1,
+                AtomicUnitDistinctAggregateVersionRequired);
 
             Events = events.Snapshot();
         }

@@ -22,6 +22,15 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
         }
 
         [Fact]
+        public void GivenAContextAndNoAggregateReferenceThenAnArgumentNullExceptionIsThrown()
+        {
+            var context = new SerializableMessage();
+
+            _ = Assert.Throws<ArgumentNullException>(
+                () => new SerializableDomainEvent(context, null));
+        }
+
+        [Fact]
         public void GivenNoContextAndAnAggregateReferenceThenAnArgumentNullExceptionIsThrown()
         {
             var aggregate = new SerializableAggregateRoot();

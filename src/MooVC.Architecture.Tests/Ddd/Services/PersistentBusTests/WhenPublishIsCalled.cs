@@ -1,9 +1,11 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.PersistentBusTests
 {
     using System;
+    using MooVC.Architecture.Ddd;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.Ddd.Services;
+    using MooVC.Architecture.MessageTests;
     using MooVC.Persistence;
     using Moq;
     using Xunit;
@@ -11,13 +13,17 @@
     public sealed class WhenPublishIsCalled
     {
         private readonly Mock<IStore<AtomicUnit, Guid>> store;
+        private readonly VersionedReference<SerializableAggregateRoot> version;
         private readonly PersistentBus bus;
+        private readonly SerializableMessage context;
         private int invocationCounter = 0;
 
         public WhenPublishIsCalled()
         {
+            context = new SerializableMessage();
             store = new Mock<IStore<AtomicUnit, Guid>>();
             bus = new PersistentBus(store.Object);
+            version = new SerializableAggregateRoot().ToVersionedReference();
         }
 
         [Fact]
@@ -35,11 +41,9 @@
         [Fact]
         public void GivenMultipleEventsThenCreateIsCalledOnce()
         {
-            var aggregate = new SerializableAggregateRoot();
-
             GivenOneOrMoreEventsThenCreateIsCalledOnce(
-                new SerializableDomainEvent(aggregate: aggregate.ToVersionedReference()),
-                new SerializableDomainEvent(aggregate: aggregate.ToVersionedReference()));
+                new SerializableDomainEvent(context, version),
+                new SerializableDomainEvent(context, version));
         }
 
         [Fact]
@@ -76,7 +80,7 @@
         [Fact]
         public void GivenOneEventThenCreateIsCalledOnce()
         {
-            GivenOneOrMoreEventsThenCreateIsCalledOnce(new SerializableDomainEvent());
+            GivenOneOrMoreEventsThenCreateIsCalledOnce(new SerializableDomainEvent(context, version));
         }
 
         [Fact]
@@ -99,7 +103,7 @@
 
             _ = store.Setup(store => store.Create(It.IsAny<AtomicUnit>())).Throws<InvalidOperationException>();
 
-            bus.Publish(new SerializableDomainEvent());
+            bus.Publish(new SerializableDomainEvent(context, version));
 
             Assert.Equal(ExpectedInvocationCount, invocationCounter);
         }
@@ -107,13 +111,12 @@
         private void GivenMultipleEventsThenEventIsRaisedOnce(Action @event)
         {
             const int ExpectedInvocationCount = 1;
-            var aggregate = new SerializableAggregateRoot();
 
             @event();
 
             bus.Publish(
-                new SerializableDomainEvent(aggregate: aggregate.ToVersionedReference()),
-                new SerializableDomainEvent(aggregate: aggregate.ToVersionedReference()));
+                new SerializableDomainEvent(context, version),
+                new SerializableDomainEvent(context, version));
 
             Assert.Equal(ExpectedInvocationCount, invocationCounter);
         }
@@ -124,7 +127,7 @@
 
             @event();
 
-            bus.Publish(new SerializableDomainEvent());
+            bus.Publish(new SerializableDomainEvent(context, version));
 
             Assert.Equal(ExpectedInvocationCount, invocationCounter);
         }

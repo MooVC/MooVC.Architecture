@@ -179,6 +179,9 @@
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
   </data>
+  <data name="DomainEventAggregateRequired" xml:space="preserve">
+    <value>A versioned reference for the aggregate must be provided.</value>
+  </data>
   <data name="DomainEventPropagatorBusRequired" xml:space="preserve">
     <value>The bus to which the events are to be propagated must be provided.</value>
   </data>

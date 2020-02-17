@@ -4,6 +4,8 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Serialization;
+    using static MooVC.Ensure;
+    using static Resources;
 
     [Serializable]
     public abstract class DomainEvent
@@ -12,6 +14,8 @@
         protected DomainEvent(Message context, VersionedReference aggregate)
             : base(context)
         {
+            ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);
+
             Aggregate = aggregate;
         }
 

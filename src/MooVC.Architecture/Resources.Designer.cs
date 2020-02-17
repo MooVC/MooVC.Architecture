@@ -243,6 +243,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A versioned reference for the aggregate must be provided..
+        /// </summary>
+        internal static string DomainEventAggregateRequired {
+            get {
+                return ResourceManager.GetString("DomainEventAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The bus to which the events are to be propagated must be provided..
         /// </summary>
         internal static string DomainEventPropagatorBusRequired {

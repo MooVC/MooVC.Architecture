@@ -15,7 +15,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         public SerializableEventCentricAggregateRoot(Message context)
             : this(Guid.NewGuid())
         {
-            ApplyChange(() => new SerializableCreatedDomainEvent(context, this));
+            ApplyChange(() => new SerializableCreatedDomainEvent(context, this), Handle);
         }
 
         public SerializableEventCentricAggregateRoot(Guid id)
@@ -32,7 +32,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
 
         public void Set(SetRequest request)
         {
-            ApplyChange(() => new SerializableSetDomainEvent(request.Context, this, request.Value));
+            ApplyChange(() => new SerializableSetDomainEvent(request.Context, this, request.Value), Handle);
         }
 
         private void Handle(SerializableCreatedDomainEvent @event)

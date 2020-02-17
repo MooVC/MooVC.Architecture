@@ -95,7 +95,8 @@
             }
         }
 
-        protected void ApplyChange(Func<DomainEvent> change, bool isNew = true)
+        protected void ApplyChange<TEvent>(Func<TEvent> change, Action<TEvent> handler = default, bool isNew = true)
+            where TEvent : DomainEvent
         {
             bool triggersVersionIncrement = isNew && !HasUncommittedChanges;
 
@@ -106,22 +107,11 @@
 
             try
             {
-                DomainEvent @event = change();
-                Type type = GetType();
-                Type eventType = @event.GetType();
+                TEvent @event = change();
 
-                MethodInfo handler = type
-                    .GetMethod(HandlerName, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { eventType }, null);
+                handler ??= CreateHandler<TEvent>(@event.GetType());
 
-                if (handler is null)
-                {
-                    throw new NotSupportedException(Format(
-                        EventCentricAggregateRootDomainEventHandlerNotSupportedException,
-                        eventType.Name,
-                        type.Name));
-                }
-
-                _ = handler.Invoke(this, new object[] { @event });
+                handler(@event);
 
                 if (isNew)
                 {
@@ -142,6 +132,25 @@
         protected override void OnChangesMarkedAsCommitted(EventArgs args = default)
         {
             base.OnChangesMarkedAsCommitted(new ChangesMarkedAsCommittedEventArgs(changes));
+        }
+
+        private Action<TEvent> CreateHandler<TEvent>(Type eventType)
+            where TEvent : DomainEvent
+        {
+            Type type = GetType();
+
+            MethodInfo handler = type
+                .GetMethod(HandlerName, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { eventType }, null);
+
+            if (handler is null)
+            {
+                throw new NotSupportedException(Format(
+                    EventCentricAggregateRootDomainEventHandlerNotSupportedException,
+                    eventType.Name,
+                    type.Name));
+            }
+
+            return @event => _ = handler.Invoke(this, new object[] { @event });
         }
     }
 }

@@ -139,8 +139,12 @@
         {
             Type type = GetType();
 
-            MethodInfo handler = type
-                .GetMethod(HandlerName, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { eventType }, null);
+            MethodInfo handler = type.GetMethod(
+                HandlerName,
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                null,
+                new[] { eventType },
+                null);
 
             if (handler is null)
             {

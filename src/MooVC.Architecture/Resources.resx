@@ -167,6 +167,12 @@
   <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
     <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>
   </data>
+  <data name="AtomicUnitDistinctAggregateVersionRequired" xml:space="preserve">
+    <value>The atomic unit must only contain changes relating to a single version increment of a single aggregate.</value>
+  </data>
+  <data name="AtomicUnitEventsRequired" xml:space="preserve">
+    <value>The atomic unit must contain one or more domain events.</value>
+  </data>
   <data name="BusMessageRequired" xml:space="preserve">
     <value>The message to be invoked must be provided.</value>
   </data>
@@ -211,6 +217,12 @@
   </data>
   <data name="PaginatedResultPagingRequired" xml:space="preserve">
     <value>The paging instructions that generated the results must be provided.</value>
+  </data>
+  <data name="PersistentBusPublishFailure" xml:space="preserve">
+    <value>An attempt to publish atomic unit {0:p} has failed.</value>
+  </data>
+  <data name="PersistentBusStoreRequired" xml:space="preserve">
+    <value>The storage that support persistence of domain events published via the bus must be provided.</value>
   </data>
   <data name="SignedVersionPreviousRequired" xml:space="preserve">
     <value>The previous version must be provided.</value>

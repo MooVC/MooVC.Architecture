@@ -207,6 +207,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The atomic unit must only contain changes relating to a single version increment of a single aggregate..
+        /// </summary>
+        internal static string AtomicUnitDistinctAggregateVersionRequired {
+            get {
+                return ResourceManager.GetString("AtomicUnitDistinctAggregateVersionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The atomic unit must contain one or more domain events..
+        /// </summary>
+        internal static string AtomicUnitEventsRequired {
+            get {
+                return ResourceManager.GetString("AtomicUnitEventsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The message to be invoked must be provided..
         /// </summary>
         internal static string BusMessageRequired {
@@ -338,6 +356,24 @@ namespace MooVC.Architecture {
         internal static string PaginatedResultPagingRequired {
             get {
                 return ResourceManager.GetString("PaginatedResultPagingRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An attempt to publish atomic unit {0:p} has failed..
+        /// </summary>
+        internal static string PersistentBusPublishFailure {
+            get {
+                return ResourceManager.GetString("PersistentBusPublishFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The storage that support persistence of domain events published via the bus must be provided..
+        /// </summary>
+        internal static string PersistentBusStoreRequired {
+            get {
+                return ResourceManager.GetString("PersistentBusStoreRequired", resourceCulture);
             }
         }
         

@@ -14,8 +14,8 @@
             : base(Format(
                 AggregateEventSequenceUnorderedExceptionMessage,
                 aggregate.Id,
-                aggregate.Type.Name,
-                aggregate.Version))
+                aggregate.Version,
+                aggregate.Type.Name))
         {
             Aggregate = aggregate;
             Events = events.Snapshot();

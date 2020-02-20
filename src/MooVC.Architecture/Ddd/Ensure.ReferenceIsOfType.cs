@@ -1,6 +1,7 @@
 namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static System.String;
     using static Resources;
 
     public static partial class Ensure
@@ -11,7 +12,7 @@ namespace MooVC.Architecture.Ddd
             ReferenceIsOfType<TAggregate>(
                 reference,
                 argumentName,
-                string.Format(EnsureReferenceIsOfTypeMessage, reference?.Type.Name, typeof(TAggregate).Name));
+                Format(EnsureReferenceIsOfTypeMessage, reference?.Type.Name, typeof(TAggregate).Name));
         }
 
         public static void ReferenceIsOfType<TAggregate>(Reference reference, string argumentName, string message)

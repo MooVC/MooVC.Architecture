@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static System.String;
     using static Resources;
 
     public static partial class Ensure
@@ -10,7 +11,7 @@
             ReferenceIsNotEmpty(
                 reference,
                 argumentName,
-                string.Format(EnsureReferenceIsNotEmptyMessage, reference?.Type.Name));
+                Format(EnsureReferenceIsNotEmptyMessage, reference?.Type.Name));
         }
 
         public static void ReferenceIsNotEmpty(Reference reference, string argumentName, string message)

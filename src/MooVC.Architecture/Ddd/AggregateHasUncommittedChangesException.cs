@@ -12,8 +12,8 @@
             : base(Format(
                 AggregateHasUncommittedChangesExceptionMessage,
                 aggregate.Id,
-                aggregate.Type.Name,
-                aggregate.Version))
+                aggregate.Version,
+                aggregate.Type.Name))
         {
             Aggregate = aggregate;
         }

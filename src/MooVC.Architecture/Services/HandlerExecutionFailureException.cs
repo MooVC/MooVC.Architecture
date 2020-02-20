@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Services
 {
     using System;
+    using static System.String;
     using static Resources;
 
     [Serializable]
@@ -10,7 +11,7 @@
     {
         public HandlerExecutionFailureException(TMessage context, Type handler, Exception cause)
             : base(
-                  string.Format(
+                  Format(
                       HandlerFailureExceptionMessage,
                       handler.Name,
                       context.Id,

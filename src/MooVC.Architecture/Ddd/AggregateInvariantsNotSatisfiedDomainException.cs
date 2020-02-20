@@ -13,14 +13,6 @@ namespace MooVC.Architecture.Ddd
 
         public AggregateInvariantsNotSatisfiedDomainException(
             Request request,
-            AggregateRoot aggregate,
-            IEnumerable<string> explainations)
-            : this(request, aggregate.ToVersionedReference(), explainations)
-        {
-        }
-
-        public AggregateInvariantsNotSatisfiedDomainException(
-            Request request,
             VersionedReference aggregate,
             IEnumerable<string> explainations)
             : base(

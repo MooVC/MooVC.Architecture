@@ -17,8 +17,8 @@
             : base(Format(
                 AggregateHistoryInvalidForStateExceptionMessage,
                 aggregate.Id,
-                aggregate.Type.Name,
                 aggregate.Version,
+                aggregate.Type.Name,
                 startingVersion))
         {
             Aggregate = aggregate;

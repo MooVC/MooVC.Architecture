@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static System.String;
     using static Resources;
 
     [Serializable]
@@ -8,7 +9,7 @@
         : InvalidOperationException
     {
         public EntityMaximumIdValueExceededException(ulong max, Type type)
-            : base(string.Format(
+            : base(Format(
                 EntityMaximumIdValueExceededExceptionMessage,
                 max,
                 type.Name))
@@ -16,7 +17,7 @@
         }
 
         public EntityMaximumIdValueExceededException(long max, Type type)
-            : base(string.Format(
+            : base(Format(
                 EntityMaximumIdValueExceededExceptionMessage,
                 max,
                 type.Name))

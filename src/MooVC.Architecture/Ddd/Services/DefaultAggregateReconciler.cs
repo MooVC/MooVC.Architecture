@@ -57,9 +57,12 @@
                 events = RemovePreviousVersions(events, existing.Version);
             }
 
-            existing.LoadFromHistory(events);
+            if (events.Any())
+            {
+                existing.LoadFromHistory(events);
 
-            proxy.Save(existing);
+                proxy.Save(existing);
+            }
         }
     }
 }

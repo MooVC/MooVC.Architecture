@@ -22,11 +22,6 @@
             AggregateConflictDetected?.Invoke(this, new AggregateConflictDetectedEventArgs(aggregate, events, next, previous));
         }
 
-        protected void OnUnsupportedAggregateDetected(Reference aggregate, IEnumerable<DomainEvent> events)
-        {
-            UnsupportedAggregateDetected?.Invoke(this, new UnsupportedAggregateDetectedEventArgs(aggregate, events));
-        }
-
         protected virtual bool EventsAreNonConflicting(VersionedReference aggregate, IEnumerable<DomainEvent> events, out bool isNew)
         {
             IEnumerable<SignedVersion> versions = events.Select(@event => @event.Aggregate.Version).Distinct();
@@ -45,6 +40,11 @@
             }
 
             return true;
+        }
+
+        protected void OnUnsupportedAggregateDetected(Reference aggregate, IEnumerable<DomainEvent> events)
+        {
+            UnsupportedAggregateDetected?.Invoke(this, new UnsupportedAggregateDetectedEventArgs(aggregate, events));
         }
 
         protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(IEnumerable<DomainEvent> events, SignedVersion version)

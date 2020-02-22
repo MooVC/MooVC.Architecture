@@ -32,9 +32,9 @@
                     {
                         OnUnsupportedAggregateDetected(aggregateEvents.Key, aggregateEvents);
                     }
-                    else if (EventsAreNonConflicting(aggregateEvents.Key, aggregateEvents, out bool isNew))
+                    else if (EventsAreNonConflicting(aggregateEvents.Key, aggregateEvents, out _))
                     {
-                        Reconcile(aggregateEvents.Key, aggregateEvents, proxy, isNew);
+                        Reconcile(aggregateEvents.Key, aggregateEvents, proxy);
                     }
                 }
             }
@@ -43,12 +43,11 @@
         private void Reconcile(
             Reference aggregate,
             IEnumerable<DomainEvent> events,
-            IAggregateReconciliationProxy proxy,
-            bool isNew)
+            IAggregateReconciliationProxy proxy)
         {
-            EventCentricAggregateRoot existing;
+            EventCentricAggregateRoot existing = proxy.Get(aggregate);
 
-            if (isNew || (existing = proxy.Get(aggregate)) is null)
+            if (existing is null)
             {
                 existing = proxy.Create(aggregate);
             }

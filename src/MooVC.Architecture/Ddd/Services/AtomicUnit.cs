@@ -33,7 +33,7 @@
         private AtomicUnit(SerializationInfo info, StreamingContext context)
         {
             Events = info.GetEnumerable<DomainEvent>(nameof(Events));
-            Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
+            Id = info.GetValue<Guid>(nameof(Id));
         }
 
         public IEnumerable<DomainEvent> Events { get; }

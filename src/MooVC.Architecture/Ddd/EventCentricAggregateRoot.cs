@@ -36,10 +36,7 @@
         {
             base.GetObjectData(info, context);
 
-            if (changes.Any())
-            {
-                info.AddInternalValue(nameof(changes), changes);
-            }
+            _ = info.TryAddInternalValue(nameof(changes), changes, predicate: _ => changes.Any());
         }
 
         public IEnumerable<DomainEvent> GetUncommittedChanges()

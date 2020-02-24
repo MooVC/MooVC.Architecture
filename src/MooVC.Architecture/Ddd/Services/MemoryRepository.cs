@@ -45,10 +45,7 @@ namespace MooVC.Architecture.Ddd.Services
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (Store.Any())
-            {
-                info.AddInternalValue(nameof(Store), Store);
-            }
+            _ = info.TryAddInternalValue(nameof(Store), Store, predicate: _ => Store.Any());
         }
 
         protected virtual TAggregate Get(Reference key)

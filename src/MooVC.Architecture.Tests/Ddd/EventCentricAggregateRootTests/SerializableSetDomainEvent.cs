@@ -24,7 +24,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         private SerializableSetDomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Value = info.TryGetValue(nameof(Value), Guid.Empty);
+            Value = info.TryGetValue<Guid>(nameof(Value));
         }
 
         public Guid Value { get; }
@@ -34,7 +34,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddValue(nameof(Value), Value, defaultValue: Guid.Empty);
+            _ = info.TryAddValue(nameof(Value), Value);
         }
     }
 }

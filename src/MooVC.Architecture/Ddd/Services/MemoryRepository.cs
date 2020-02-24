@@ -20,7 +20,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected MemoryRepository(SerializationInfo info, StreamingContext context)
         {
-            Store = info.GetValue<Dictionary<Reference, TAggregate>>(nameof(Store));
+            Store = info.TryGetInternalValue(nameof(Store), defaultValue: new Dictionary<Reference, TAggregate>());
         }
 
         protected virtual IDictionary<Reference, TAggregate> Store { get; }
@@ -45,7 +45,10 @@ namespace MooVC.Architecture.Ddd.Services
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(nameof(Store), Store);
+            if (Store.Any())
+            {
+                info.AddInternalValue(nameof(Store), Store);
+            }
         }
 
         protected virtual TAggregate Get(Reference key)

@@ -6,6 +6,7 @@ namespace MooVC.Architecture.Ddd.ValueTests
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
+    using MooVC.Serialization;
 
     [Serializable]
     internal sealed class SerializableValue
@@ -22,10 +23,10 @@ namespace MooVC.Architecture.Ddd.ValueTests
         public SerializableValue(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            First = info.GetInt32(nameof(First));
-            Second = info.GetString(nameof(Second));
-            Third = (Value)info.GetValue(nameof(Third), typeof(Value));
-            Fourth = (string[])info.GetValue(nameof(Fourth), typeof(string[]));
+            First = info.TryGetValue<int>(nameof(First));
+            Second = info.TryGetValue<string>(nameof(Second));
+            Third = info.TryGetValue<Value>(nameof(Third));
+            Fourth = info.TryGetEnumerable<string>(nameof(Fourth));
         }
 
         public int First { get; }
@@ -41,10 +42,10 @@ namespace MooVC.Architecture.Ddd.ValueTests
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(First), First);
-            info.AddValue(nameof(Second), Second);
-            info.AddValue(nameof(Third), Third);
-            info.AddValue(nameof(Fourth), Fourth.ToArray());
+            _ = info.TryAddValue(nameof(First), First);
+            _ = info.TryAddValue(nameof(Second), Second);
+            _ = info.TryAddValue(nameof(Third), Third);
+            _ = info.TryAddEnumerable(nameof(Fourth), Fourth);
         }
 
         protected override IEnumerable<object> GetAtomicValues()

@@ -28,7 +28,7 @@
         protected EventCentricAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            changes = info.GetInternalValue<List<DomainEvent>>(nameof(changes));
+            changes = info.TryGetInternalValue(nameof(changes), defaultValue: new List<DomainEvent>());
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
@@ -36,7 +36,10 @@
         {
             base.GetObjectData(info, context);
 
-            info.AddInternalValue(nameof(changes), changes);
+            if (changes.Any())
+            {
+                info.AddInternalValue(nameof(changes), changes);
+            }
         }
 
         public IEnumerable<DomainEvent> GetUncommittedChanges()

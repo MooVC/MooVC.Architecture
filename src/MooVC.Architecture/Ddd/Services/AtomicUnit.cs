@@ -8,6 +8,7 @@
     using MooVC.Architecture.Ddd;
     using MooVC.Collections.Generic;
     using MooVC.Linq;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -26,11 +27,12 @@
                 AtomicUnitDistinctAggregateVersionRequired);
 
             Events = events.Snapshot();
+            Id = Guid.NewGuid();
         }
 
         private AtomicUnit(SerializationInfo info, StreamingContext context)
         {
-            Events = (DomainEvent[])info.GetValue(nameof(Events), typeof(DomainEvent[]));
+            Events = info.GetEnumerable<DomainEvent>(nameof(Events));
             Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
         }
 
@@ -41,7 +43,7 @@
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(nameof(Events), Events.ToArray());
+            info.AddEnumerable(nameof(Events), Events);
             info.AddValue(nameof(Id), Id);
         }
     }

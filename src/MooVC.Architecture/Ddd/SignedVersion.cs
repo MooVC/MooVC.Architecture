@@ -18,8 +18,9 @@
         private const ulong DefaultNumber = 1;
         private const int SplicePortion = 8;
 
+        private static readonly byte[] emptySegment = new byte[SplicePortion];
         private static readonly Lazy<SignedVersion> empty = new Lazy<SignedVersion>(
-            () => new SignedVersion(new byte[SplicePortion], new byte[SplicePortion], 0));
+            () => new SignedVersion(emptySegment, emptySegment, 0));
 
         private readonly Lazy<Guid> signature;
 
@@ -49,9 +50,9 @@
         private SignedVersion(SerializationInfo info, StreamingContext context)
                : base(info, context)
         {
-            Footer = info.GetValue<byte[]>(nameof(Footer));
-            Header = info.GetValue<byte[]>(nameof(Header));
-            Number = info.GetUInt64(nameof(Number));
+            Footer = info.TryGetValue(nameof(Footer), defaultValue: emptySegment);
+            Header = info.TryGetValue(nameof(Header), defaultValue: emptySegment);
+            Number = info.TryGetValue<ulong>(nameof(Number));
             signature = Combine();
         }
 
@@ -81,9 +82,9 @@
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Footer), Footer.ToArray());
-            info.AddValue(nameof(Header), Header.ToArray());
-            info.AddValue(nameof(Number), Number);
+            _ = info.TryAddValue(nameof(Footer), Footer, defaultValue: emptySegment);
+            _ = info.TryAddValue(nameof(Header), Header, defaultValue: emptySegment);
+            _ = info.TryAddValue(nameof(Number), Number);
         }
 
         public bool IsNext(SignedVersion previous)

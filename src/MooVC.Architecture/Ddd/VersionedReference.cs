@@ -16,7 +16,7 @@ namespace MooVC.Architecture.Ddd
         protected VersionedReference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Version = info.GetValue<SignedVersion>(nameof(Version));
+            Version = info.TryGetValue(nameof(Version), defaultValue: SignedVersion.Empty);
         }
 
         private protected VersionedReference(Guid id, SignedVersion version)
@@ -65,7 +65,7 @@ namespace MooVC.Architecture.Ddd
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Version), Version);
+            _ = info.TryAddValue(nameof(Version), Version, defaultValue: SignedVersion.Empty);
         }
 
         public override bool IsMatch(AggregateRoot aggregate)

@@ -25,7 +25,7 @@
             private AggregateState(SerializationInfo info, StreamingContext context)
             {
                 Persisted = info.GetValue<SignedVersion>(nameof(Persisted));
-                Current = info.GetValue<SignedVersion>(nameof(Current)) ?? Persisted;
+                Current = info.TryGetValue(nameof(Current), defaultValue: Persisted);
             }
 
             public SignedVersion Current { get; }
@@ -44,11 +44,7 @@
             [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
             public void GetObjectData(SerializationInfo info, StreamingContext context)
             {
-                SignedVersion current = Current == Persisted
-                    ? default
-                    : Current;
-
-                info.AddValue(nameof(Current), current);
+                _ = info.TryAddValue(nameof(Current), Current, defaultValue: Persisted);
                 info.AddValue(nameof(Persisted), Persisted);
             }
 

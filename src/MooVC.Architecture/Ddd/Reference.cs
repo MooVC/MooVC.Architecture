@@ -13,7 +13,7 @@ namespace MooVC.Architecture.Ddd
         protected Reference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Id = info.GetValue<Guid>(nameof(Id));
+            Id = info.TryGetValue(nameof(Id), defaultValue: Guid.Empty);
         }
 
         private protected Reference(Guid id)
@@ -57,7 +57,7 @@ namespace MooVC.Architecture.Ddd
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Id), Id);
+            _ = info.TryAddValue(nameof(Id), Id, defaultValue: Guid.Empty);
         }
 
         public virtual bool IsMatch(AggregateRoot aggregate)

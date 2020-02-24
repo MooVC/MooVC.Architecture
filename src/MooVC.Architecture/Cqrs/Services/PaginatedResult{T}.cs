@@ -26,9 +26,9 @@ namespace MooVC.Architecture.Cqrs.Services
         protected PaginatedResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Results = info.GetValue<T[]>(nameof(Results));
-            TotalPages = info.GetUInt16(nameof(TotalPages));
-            TotalResults = info.GetUInt64(nameof(TotalResults));
+            Results = info.TryGetEnumerable<T>(nameof(Results));
+            TotalPages = info.TryGetValue<ushort>(nameof(TotalPages));
+            TotalResults = info.TryGetValue<ulong>(nameof(TotalResults));
         }
 
         public IEnumerable<T> Results { get; }
@@ -42,9 +42,9 @@ namespace MooVC.Architecture.Cqrs.Services
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Results), Results.ToArray());
-            info.AddValue(nameof(TotalPages), TotalPages);
-            info.AddValue(nameof(TotalResults), TotalResults);
+            _ = info.TryAddEnumerable(nameof(Results), Results);
+            _ = info.TryAddValue(nameof(TotalPages), TotalPages);
+            _ = info.TryAddValue(nameof(TotalResults), TotalResults);
         }
 
         internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)

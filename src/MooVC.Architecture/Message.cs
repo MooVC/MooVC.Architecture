@@ -25,7 +25,7 @@
 
         protected Message(SerializationInfo info, StreamingContext context)
         {
-            CausationId = info.GetValue<Guid>(nameof(CausationId));
+            CausationId = info.TryGetValue(nameof(CausationId), defaultValue: Guid.Empty);
             CorrelationId = info.GetValue<Guid>(nameof(CorrelationId));
             Id = info.GetValue<Guid>(nameof(Id));
             TimeStamp = info.GetDateTime(nameof(TimeStamp));
@@ -53,7 +53,7 @@
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(nameof(CausationId), CausationId);
+            _ = info.TryAddValue(nameof(CausationId), CausationId, defaultValue: Guid.Empty);
             info.AddValue(nameof(CorrelationId), CorrelationId);
             info.AddValue(nameof(Id), Id);
             info.AddValue(nameof(TimeStamp), TimeStamp);

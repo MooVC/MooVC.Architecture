@@ -3,6 +3,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
 
     [Serializable]
     internal sealed class SerializableSetDomainEvent
@@ -23,7 +24,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         private SerializableSetDomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Value = (Guid)info.GetValue(nameof(Value), typeof(Guid));
+            Value = info.TryGetValue(nameof(Value), Guid.Empty);
         }
 
         public Guid Value { get; }
@@ -33,7 +34,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Value), Value);
+            _ = info.TryAddValue(nameof(Value), Value, defaultValue: Guid.Empty);
         }
     }
 }

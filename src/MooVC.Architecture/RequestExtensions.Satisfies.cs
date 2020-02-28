@@ -8,11 +8,12 @@ namespace MooVC.Architecture
 
     public static partial class RequestExtensions
     {
-        public static void Satisfies<T>(
-            this T request,
-            AggregateRoot aggregate,
-            params (Func<T, bool> IsSatisfied, string Explaination)[] invariants)
-            where T : Request
+        public static void Satisfies<TRequest, TAggregate>(
+            this TRequest request,
+            TAggregate aggregate,
+            params (Func<TRequest, bool> IsSatisfied, string Explaination)[] invariants)
+            where TRequest : Request
+            where TAggregate : AggregateRoot
         {
             request.Satisfies(
                 aggregate.ToVersionedReference(),

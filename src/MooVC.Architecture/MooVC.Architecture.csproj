@@ -27,7 +27,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.*" />
-    <PackageReference Include="MooVC" Version="2.0.0-alpha*" />
+    <PackageReference Include="MooVC" Version="2.*" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

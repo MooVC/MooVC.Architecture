@@ -10,9 +10,9 @@
         : Reference
         where TAggregate : AggregateRoot
     {
-        private static readonly Lazy<Reference<TAggregate>> ActualEmpty = 
+        private static readonly Lazy<Reference<TAggregate>> empty =
             new Lazy<Reference<TAggregate>>(() => new Reference<TAggregate>());
-        
+
         public Reference(Guid id)
             : base(id)
         {
@@ -38,7 +38,7 @@
         {
         }
 
-        public static Reference<TAggregate> Empty => ActualEmpty.Value;
+        public static Reference<TAggregate> Empty => empty.Value;
 
         public override Type Type => typeof(TAggregate);
     }

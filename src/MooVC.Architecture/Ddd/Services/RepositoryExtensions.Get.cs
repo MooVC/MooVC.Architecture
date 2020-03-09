@@ -6,19 +6,19 @@
     public static partial class RepositoryExtensions
     {
         public static TAggregate Get<TAggregate>(
-            this IRepository<TAggregate> repository, 
-            Message context, 
+            this IRepository<TAggregate> repository,
+            Message context,
             Guid id,
-            ulong? version = default)
+            SignedVersion version = default)
             where TAggregate : AggregateRoot
         {
             TAggregate aggregate = repository.Get(id, version: version);
 
-            if (aggregate == null)
+            if (aggregate is null)
             {
-                if (version.HasValue)
+                if (version is { })
                 {
-                    throw new AggregateVersionNotFoundException<TAggregate>(context, id, version.Value);
+                    throw new AggregateVersionNotFoundException<TAggregate>(context, id, version);
                 }
 
                 throw new AggregateNotFoundException<TAggregate>(context, id);
@@ -28,8 +28,8 @@
         }
 
         public static TAggregate Get<TAggregate>(
-            this IRepository<TAggregate> repository, 
-            Message context, 
+            this IRepository<TAggregate> repository,
+            Message context,
             Reference reference)
             where TAggregate : AggregateRoot
         {

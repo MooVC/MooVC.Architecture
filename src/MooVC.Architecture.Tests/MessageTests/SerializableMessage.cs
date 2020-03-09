@@ -11,12 +11,12 @@ namespace MooVC.Architecture.MessageTests
         {
         }
 
-        public SerializableMessage(Message context) 
+        public SerializableMessage(Message context)
             : base(context)
         {
         }
 
-        private SerializableMessage(SerializationInfo info, StreamingContext context) 
+        private SerializableMessage(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

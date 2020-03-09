@@ -1,25 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Paul Martins</Authors>
+    <CodeAnalysisRuleSet>../../stylecop.analyzers.ruleset</CodeAnalysisRuleSet>
     <Company>MooVC</Company>
-    <Product>MooVC</Product>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>MooVC © 2019</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/MooVC/moovc.architecture.git</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/MooVC/moovc.architecture</PackageProjectUrl>
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
-    <Version>2.1.0</Version>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <LangVersion>latest</LangVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/MooVC/moovc.architecture</PackageProjectUrl>
+    <Product>MooVC</Product>
+    <RepositoryUrl>https://github.com/MooVC/moovc.architecture.git</RepositoryUrl>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="MooVC" Version="1.*" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <Compile Remove="Ddd\Reconciliation\**" />
+    <EmbeddedResource Remove="Ddd\Reconciliation\**" />
+    <None Remove="Ddd\Reconciliation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="5.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
+    <PackageReference Include="MooVC" Version="2.*" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.*" />
   </ItemGroup>
 
   <ItemGroup>

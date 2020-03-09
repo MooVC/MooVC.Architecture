@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
 
     [Serializable]
     public abstract class Entity<T>
@@ -15,7 +16,7 @@
 
         protected Entity(SerializationInfo info, StreamingContext context)
         {
-            Id = (T)info.GetValue(nameof(Id), typeof(T));
+            Id = info.GetValue<T>(nameof(Id));
         }
 
         public T Id { get; }
@@ -49,12 +50,9 @@
 
         private static bool EqualOperator(Entity<T> left, Entity<T> right)
         {
-            if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
-            {
-                return false;
-            }
-
-            return ReferenceEquals(left, null) || left.Equals(right);
+            return left is null ^ right is null
+                ? false
+                : left is null || left.Equals(right);
         }
 
         private static bool NotEqualOperator(Entity<T> left, Entity<T> right)

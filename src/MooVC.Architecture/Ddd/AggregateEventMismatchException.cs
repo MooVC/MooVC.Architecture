@@ -1,14 +1,15 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using static System.String;
     using static Resources;
 
     [Serializable]
     public sealed class AggregateEventMismatchException
         : ArgumentException
     {
-        public AggregateEventMismatchException(string aggregateName, VersionedReference aggregate, VersionedReference eventAggregate)
-            : base(string.Format(
+        public AggregateEventMismatchException(VersionedReference aggregate, VersionedReference eventAggregate)
+            : base(Format(
                 AggregateEventMismatchExceptionMessage,
                 aggregate.Id,
                 aggregate.Type.Name,
@@ -18,13 +19,10 @@
                 eventAggregate.Version))
         {
             Aggregate = aggregate;
-            AggregateName = aggregateName;
             EventAggregate = eventAggregate;
         }
 
         public VersionedReference Aggregate { get; }
-
-        public string AggregateName { get; }
 
         public VersionedReference EventAggregate { get; }
     }

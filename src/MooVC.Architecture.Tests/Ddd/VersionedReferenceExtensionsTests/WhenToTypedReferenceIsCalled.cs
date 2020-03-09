@@ -1,6 +1,8 @@
 namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
 {
     using System;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
 
     public sealed class WhenToTypedReferenceIsCalled
@@ -8,7 +10,8 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
         [Fact]
         public void GivenAMatchingVersionedReferenceThenNoExceptionIsThrown()
         {
-            VersionedReference generic = new VersionedReference<AggregateRoot>(Guid.NewGuid());
+            var aggregate = new SerializableAggregateRoot();
+            VersionedReference generic = new VersionedReference<AggregateRoot>(aggregate);
             VersionedReference<AggregateRoot> typed = generic.ToTypedReference<AggregateRoot>();
 
             Assert.Same(generic, typed);
@@ -26,7 +29,8 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
         [Fact]
         public void GivenAMismatchingVersionedReferenceThenAnArgumentExceptionIsThrown()
         {
-            VersionedReference reference = new VersionedReference<EventCentricAggregateRoot>(Guid.NewGuid());
+            var aggregate = new SerializableEventCentricAggregateRoot();
+            VersionedReference reference = new VersionedReference<EventCentricAggregateRoot>(aggregate);
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => reference.ToTypedReference<AggregateRoot>());

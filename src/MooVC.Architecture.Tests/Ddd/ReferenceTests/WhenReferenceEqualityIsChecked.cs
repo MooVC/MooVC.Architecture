@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.ReferenceTests
 {
     using System;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public class WhenReferenceEqualityIsChecked
@@ -8,10 +9,10 @@
         [Fact]
         public void GivenAVersionedReferencedAndANonVersionedReferenceThatHaveToTheSameIdAndTypeThenBothAreConsideredEqual()
         {
-            var aggregateId = Guid.NewGuid();
+            var aggregate = new SerializableAggregateRoot();
 
-            var first = new Reference<AggregateRoot>(aggregateId);
-            var second = new VersionedReference<AggregateRoot>(aggregateId);
+            var first = new Reference<AggregateRoot>(aggregate);
+            var second = new VersionedReference<AggregateRoot>(aggregate);
 
             Assert.True(first == second);
         }
@@ -26,7 +27,7 @@
 
             Assert.True(first == second);
         }
-        
+
         [Fact]
         public void GivenTwoSeparateInstancesWithTheDifferentIdButSameTypeThenBothAreNotConsideredEqual()
         {
@@ -40,7 +41,7 @@
         public void GivenTwoSeparateInstancesWithTheSameIdButDifferentTypeThenBothAreNotConsideredEqual()
         {
             var aggregateId = Guid.NewGuid();
-            
+
             var first = new Reference<AggregateRoot>(aggregateId);
             var second = new Reference<EventCentricAggregateRoot>(aggregateId);
 

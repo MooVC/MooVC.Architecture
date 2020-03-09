@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using static System.String;
     using static Resources;
 
     [Serializable]
@@ -8,22 +9,19 @@
         : ArgumentException
         where TAggregate : AggregateRoot
     {
-        public AggregateVersionNotFoundException(Message context, Guid aggregateId, ulong version)
-            : base(string.Format(
+        public AggregateVersionNotFoundException(Message context, Guid aggregateId, SignedVersion version)
+            : base(Format(
                 AggregateVersionNotFoundExceptionMessage,
                 aggregateId,
                 typeof(TAggregate).Name,
                 version))
         {
-            AggregateId = aggregateId;
+            Aggregate = new VersionedReference<TAggregate>(aggregateId, version);
             Context = context;
-            Version = version;
         }
 
-        public Guid AggregateId { get; }
+        public VersionedReference Aggregate { get; }
 
         public Message Context { get; }
-
-        public ulong Version { get; }
     }
 }

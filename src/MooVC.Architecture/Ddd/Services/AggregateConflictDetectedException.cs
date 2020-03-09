@@ -1,48 +1,47 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using static System.String;
     using static Resources;
 
     [Serializable]
-    public sealed class AggregateConflictDetectedException<TAggregate>
+    public abstract class AggregateConflictDetectedException
         : ArgumentException
-        where TAggregate : AggregateRoot
     {
-        public AggregateConflictDetectedException(
-               Guid aggregateId,
-               ulong receivedVersion)
-               : base(string.Format(
+        private protected AggregateConflictDetectedException(
+               Reference aggregate,
+               SignedVersion received)
+               : base(Format(
                    AggregateConflictDetectedExceptionNoExistingEntryMessage,
-                   aggregateId,
-                   typeof(TAggregate).Name,
-                   receivedVersion))
+                   aggregate.Id,
+                   aggregate.Type.Name,
+                   received))
         {
-            AggregateId = aggregateId;
-            ReceivedVersion = receivedVersion;
+            Aggregate = aggregate;
+            PersistedVersion = SignedVersion.Empty;
+            ReceivedVersion = received;
         }
 
-        public AggregateConflictDetectedException(
-            Guid aggregateId,
-            ulong persistedVersion,
-            ulong receivedVersion)
-            : base(string.Format(
+        private protected AggregateConflictDetectedException(
+            Reference aggregate,
+            SignedVersion persistedVersion,
+            SignedVersion receivedVersion)
+            : base(Format(
                 AggregateConflictDetectedExceptionExistingEntryMessage,
-                aggregateId,
-                typeof(TAggregate).Name,
+                aggregate.Id,
+                aggregate.Type.Name,
                 receivedVersion,
                 persistedVersion))
         {
-            AggregateId = aggregateId;
+            Aggregate = aggregate;
             PersistedVersion = persistedVersion;
             ReceivedVersion = receivedVersion;
         }
 
-        public Guid AggregateId { get; }
+        public Reference Aggregate { get; }
 
-        public ulong ExpectedVersion => PersistedVersion + 1;
+        public SignedVersion PersistedVersion { get; }
 
-        public ulong PersistedVersion { get; }
-
-        public ulong ReceivedVersion { get; }
+        public SignedVersion ReceivedVersion { get; }
     }
 }

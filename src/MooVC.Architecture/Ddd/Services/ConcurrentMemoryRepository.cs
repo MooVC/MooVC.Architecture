@@ -47,8 +47,10 @@ namespace MooVC.Architecture.Ddd.Services
             {
                 StoreLock.EnterUpgradeableReadLock();
 
-                CheckForConflicts(aggregate);
-                PerformWrite(() => UpdateStore(aggregate));
+                if (CheckForConflicts(aggregate))
+                {
+                    PerformWrite(() => UpdateStore(aggregate));
+                }
             }
             finally
             {

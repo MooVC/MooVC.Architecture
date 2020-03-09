@@ -7,12 +7,12 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
     internal sealed class SerializableDomainEvent
         : DomainEvent
     {
-        public SerializableDomainEvent(Message context, VersionedReference aggregate) 
+        public SerializableDomainEvent(Message context, VersionedReference aggregate)
             : base(context, aggregate)
         {
         }
 
-        private SerializableDomainEvent(SerializationInfo info, StreamingContext context) 
+        private SerializableDomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

@@ -6,8 +6,8 @@ namespace MooVC.Architecture.Ddd.ReferenceTests
     internal sealed class DerivedAggregateRoot
         : SerializableAggregateRoot
     {
-        public DerivedAggregateRoot(Guid id, ulong version = 1) 
-            : base(id, version)
+        public DerivedAggregateRoot(Guid id)
+            : base(id)
         {
         }
     }

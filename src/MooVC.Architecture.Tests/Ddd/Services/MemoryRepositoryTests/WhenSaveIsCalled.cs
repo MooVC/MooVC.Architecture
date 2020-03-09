@@ -12,6 +12,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             var repository = new MemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(expected);
+
             SerializableAggregateRoot actual = repository.Get(expected.Id);
 
             Assert.Equal(expected, actual);
@@ -21,27 +22,23 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Fact]
         public void GivenANewAggregateWhenAnExistingMemberWithTheSameIdExistsThenAnAggregateConflictDetectedExceptionIsThrown()
         {
-            const ulong ExpectedVersion = 2;
-
             var saved = new SerializableAggregateRoot();
             var pending = new SerializableAggregateRoot(saved.Id);
 
             var repository = new MemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(saved);
+
             AggregateConflictDetectedException<SerializableAggregateRoot> exception = Assert.Throws<AggregateConflictDetectedException<SerializableAggregateRoot>>(
                 () => repository.Save(pending));
 
-            Assert.Equal(saved.Id, exception.AggregateId);
-            Assert.Equal(ExpectedVersion, exception.ExpectedVersion);
+            Assert.Equal(saved.Id, exception.Aggregate.Id);
             Assert.Equal(saved.Version, exception.PersistedVersion);
         }
 
         [Fact]
         public void GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavedEventIsRaisedPriorToTheVersionIncrement()
         {
-            const ulong ExpectedVersion = AggregateRoot.DefaultVersion;
-
             var expectedAggregate = new SerializableAggregateRoot();
             var expectedRepository = new MemoryRepository<SerializableAggregateRoot>();
             bool wasInvoked = false;
@@ -51,7 +48,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
                 Assert.Equal(expectedRepository, actualRepository);
                 Assert.Equal(expectedAggregate, e.Aggregate);
                 Assert.Same(expectedAggregate, e.Aggregate);
-                Assert.Equal(ExpectedVersion, e.Aggregate.Version);
+                Assert.True(e.Aggregate.Version.IsNew);
 
                 wasInvoked = true;
             }
@@ -65,8 +62,6 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Fact]
         public void GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavingEventIsRaisedPriorToTheVersionIncrement()
         {
-            const ulong ExpectedVersion = AggregateRoot.DefaultVersion;
-
             var expectedAggregate = new SerializableAggregateRoot();
             var expectedRepository = new MemoryRepository<SerializableAggregateRoot>();
             bool wasInvoked = false;
@@ -76,7 +71,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
                 Assert.Equal(expectedRepository, actualRepository);
                 Assert.Equal(expectedAggregate, e.Aggregate);
                 Assert.Same(expectedAggregate, e.Aggregate);
-                Assert.Equal(ExpectedVersion, e.Aggregate.Version);
+                Assert.True(e.Aggregate.Version.IsNew);
 
                 wasInvoked = true;
             }

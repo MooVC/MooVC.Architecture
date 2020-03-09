@@ -5,7 +5,8 @@
     using System.Linq.Expressions;
     using MooVC;
 
-    internal sealed class NotSpecification<T> : Specification<T>
+    internal sealed class NotSpecification<T>
+        : Specification<T>
     {
         private readonly Specification<T> specification;
 

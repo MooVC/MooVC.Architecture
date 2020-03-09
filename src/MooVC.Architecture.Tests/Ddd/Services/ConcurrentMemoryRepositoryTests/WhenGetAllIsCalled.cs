@@ -4,6 +4,8 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
+    using MooVC.Architecture.MessageTests;
     using Xunit;
 
     public sealed class WhenGetAllIsCalled
@@ -20,27 +22,26 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         [Fact]
         public void GivenAPopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned()
         {
-            const int FirstVersion = 1, 
-                SecondVersion = 2,
-                ExpectedTotal = 2;
+            const int ExpectedTotal = 2;
 
-            var firstId = Guid.NewGuid();
-            var secondId = Guid.NewGuid();
+            var first = new SerializableEventCentricAggregateRoot();
+            var second = new SerializableEventCentricAggregateRoot();
+            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>();
 
-            var firstAggregateVersionOne = new SerializableAggregateRoot(firstId, version: FirstVersion);
-            var secondAggregateVersionOne = new SerializableAggregateRoot(secondId, version: FirstVersion);
-            var secondAggregateVersionTwo = new SerializableAggregateRoot(secondId, version: SecondVersion);
-            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
+            repository.Save(first);
+            repository.Save(second);
 
-            repository.Save(firstAggregateVersionOne);
-            repository.Save(secondAggregateVersionOne);
-            repository.Save(secondAggregateVersionTwo);
+            var context = new SerializableMessage();
 
-            IEnumerable<SerializableAggregateRoot> results = repository.GetAll();
+            second.Set(new SetRequest(context, Guid.NewGuid()));
+
+            repository.Save(second);
+
+            IEnumerable<SerializableEventCentricAggregateRoot> results = repository.GetAll();
 
             Assert.Equal(ExpectedTotal, results.Count());
-            Assert.Contains(results, result => result == firstAggregateVersionOne);
-            Assert.Contains(results, result => result == secondAggregateVersionTwo);
+            Assert.Contains(results, result => result.Id == first.Id && result.Version == first.Version);
+            Assert.Contains(results, result => result.Id == second.Id && result.Version == second.Version);
         }
     }
 }

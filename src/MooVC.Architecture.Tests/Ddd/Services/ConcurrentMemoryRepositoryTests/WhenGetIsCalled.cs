@@ -2,15 +2,15 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
 {
     using System;
     using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
+    using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenMemoryRepositoryIsConstructed
+    public sealed class WhenGetIsCalled
     {
         [Fact]
         public void GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturned()
         {
-            const ulong ExpectedVersion = 1;
-
             var expected = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
             var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
@@ -21,7 +21,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
             SerializableAggregateRoot actual = repository.Get(expected.Id);
 
             Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(ExpectedVersion, actual.Version);
+            Assert.Equal(expected.Version, actual.Version);
             Assert.NotSame(expected, actual);
         }
 
@@ -41,66 +41,70 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         [Fact]
         public void GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturned()
         {
-            const ulong ExpectedSecondVersion = 2,
-                FirstVersion = 1;
-
-            var id = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(id, version: FirstVersion);
-            var expected = new SerializableAggregateRoot(id, version: ExpectedSecondVersion);
-            var other = new SerializableAggregateRoot();
-            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
+            var aggregate = new SerializableEventCentricAggregateRoot();
+            var other = new SerializableEventCentricAggregateRoot();
+            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>();
 
             repository.Save(aggregate);
-            repository.Save(expected);
+
+            var context = new SerializableMessage();
+
+            aggregate.Set(new SetRequest(context, Guid.NewGuid()));
+
+            repository.Save(aggregate);
             repository.Save(other);
 
-            SerializableAggregateRoot actual = repository.Get(id);
+            SerializableEventCentricAggregateRoot actual = repository.Get(aggregate.Id);
 
-            Assert.NotSame(expected, actual);
-            Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(ExpectedSecondVersion, actual.Version);
+            Assert.NotSame(aggregate, actual);
+            Assert.Equal(aggregate.Id, actual.Id);
+            Assert.Equal(aggregate.Version, actual.Version);
         }
 
         [Fact]
         public void GivenAVersionWhenTwoVersionedEntriesExistThenTheMatchingVersionedEntryIsReturned()
         {
-            const ulong ExpectedFirstVersion = 1,
-                ExpectedSecondVersion = 2;
+            var aggregate = new SerializableEventCentricAggregateRoot();
+            SignedVersion expectedFirst = aggregate.Version;
+            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>();
 
-            var id = Guid.NewGuid();
-            var expectedFirst = new SerializableAggregateRoot(id, version: ExpectedFirstVersion);
-            var expectedSecond = new SerializableAggregateRoot(id, version: ExpectedSecondVersion);
-            var other = new SerializableAggregateRoot();
-            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
+            repository.Save(aggregate);
 
-            repository.Save(expectedFirst);
-            repository.Save(expectedSecond);
+            var context = new SerializableMessage();
+
+            aggregate.Set(new SetRequest(context, Guid.NewGuid()));
+
+            SignedVersion expectedSecond = aggregate.Version;
+
+            repository.Save(aggregate);
+
+            var other = new SerializableEventCentricAggregateRoot();
+
             repository.Save(other);
 
-            SerializableAggregateRoot actualFirst = repository.Get(id, version: ExpectedFirstVersion);
-            SerializableAggregateRoot actualSecond = repository.Get(id, version: ExpectedSecondVersion);
+            SerializableEventCentricAggregateRoot actualFirst = repository.Get(aggregate.Id, version: expectedFirst);
+            SerializableEventCentricAggregateRoot actualSecond = repository.Get(aggregate.Id, version: expectedSecond);
 
             Assert.NotSame(expectedFirst, actualFirst);
-            Assert.Equal(expectedFirst.Id, actualFirst.Id);
-            Assert.Equal(ExpectedFirstVersion, actualFirst.Version);
+            Assert.Equal(aggregate.Id, actualFirst.Id);
+            Assert.Equal(expectedFirst, actualFirst.Version);
 
             Assert.NotSame(expectedSecond, actualSecond);
-            Assert.Equal(expectedSecond.Id, actualSecond.Id);
-            Assert.Equal(ExpectedSecondVersion, actualSecond.Version);
+            Assert.Equal(aggregate.Id, actualSecond.Id);
+            Assert.Equal(expectedSecond, actualSecond.Version);
         }
 
         [Fact]
         public void GivenAVersionWhenNoExistingVersionedEntryMatchesThenNullIsReturned()
         {
-            var id = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(id, version: 1);
+            var aggregate = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
             var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
 
             repository.Save(aggregate);
             repository.Save(other);
 
-            SerializableAggregateRoot actual = repository.Get(id, version: 2);
+            SerializableAggregateRoot actual = repository.Get(aggregate.Id, version: other.Version);
 
             Assert.Null(actual);
         }

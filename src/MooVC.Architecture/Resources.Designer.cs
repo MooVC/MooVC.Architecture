@@ -61,6 +61,42 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A reference to the aggregate from which conflicts were detected must be provided..
+        /// </summary>
+        internal static string AggregateConflictDetectedEventArgsAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedEventArgsAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The events within which conflicts were detected must be provided..
+        /// </summary>
+        internal static string AggregateConflictDetectedEventArgsEventsRequired {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedEventArgsEventsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version at which conflicts were detected must be provided..
+        /// </summary>
+        internal static string AggregateConflictDetectedEventArgsNextRequired {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedEventArgsNextRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version from which conflicts were detected must be provided..
+        /// </summary>
+        internal static string AggregateConflictDetectedEventArgsPreviousRequired {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedEventArgsPreviousRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed..
         /// </summary>
         internal static string AggregateConflictDetectedExceptionExistingEntryMessage {
@@ -97,11 +133,58 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed state from history as the sequence is unordered..
+        /// </summary>
+        internal static string AggregateEventSequenceUnorderedExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateEventSequenceUnorderedExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept its state from history as it current possesses uncommitted changes..
+        /// </summary>
+        internal static string AggregateHasUncommittedChangesExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateHasUncommittedChangesExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed sequence as it starts from version {3}..
+        /// </summary>
+        internal static string AggregateHistoryInvalidForStateExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateHistoryInvalidForStateExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request {0} could not be fulfilled due to a failure to satisfy the following invariants as defined by aggregate {1}:
+        ///
+        ///{2}.
+        /// </summary>
+        internal static string AggregateInvariantsNotSatisfiedDomainExceptionMessage {
+            get {
+                return ResourceManager.GetString("AggregateInvariantsNotSatisfiedDomainExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is currently no aggregate of type {1} with an ID of {0:p}..
         /// </summary>
         internal static string AggregateNotFoundExceptionMessage {
             get {
                 return ResourceManager.GetString("AggregateNotFoundExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
+        /// </summary>
+        internal static string AggregateReconcilerFactoryRequired {
+            get {
+                return ResourceManager.GetString("AggregateReconcilerFactoryRequired", resourceCulture);
             }
         }
         
@@ -124,6 +207,33 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The atomic unit must only contain changes relating to a single version increment of a single aggregate..
+        /// </summary>
+        internal static string AtomicUnitDistinctAggregateVersionRequired {
+            get {
+                return ResourceManager.GetString("AtomicUnitDistinctAggregateVersionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The atomic unit must contain one or more domain events..
+        /// </summary>
+        internal static string AtomicUnitEventsRequired {
+            get {
+                return ResourceManager.GetString("AtomicUnitEventsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The message to be invoked must be provided..
+        /// </summary>
+        internal static string BusMessageRequired {
+            get {
+                return ResourceManager.GetString("BusMessageRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A reference to the aggregate from which the domain event was raised must be provided..
         /// </summary>
         internal static string DomainEventAggregateReferenceRequired {
@@ -133,7 +243,16 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide the bus to which the events are to be propagated..
+        ///   Looks up a localized string similar to A versioned reference for the aggregate must be provided..
+        /// </summary>
+        internal static string DomainEventAggregateRequired {
+            get {
+                return ResourceManager.GetString("DomainEventAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The bus to which the events are to be propagated must be provided..
         /// </summary>
         internal static string DomainEventPropagatorBusRequired {
             get {
@@ -142,11 +261,20 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide the repository from which the events are to be propagated..
+        ///   Looks up a localized string similar to The repository from which the events are to be propagated must be provided..
         /// </summary>
         internal static string DomainEventPropagatorRepositoryRequired {
             get {
                 return ResourceManager.GetString("DomainEventPropagatorRepositoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The handler for the unhandled events must be provided..
+        /// </summary>
+        internal static string DomainEventsUnhandledEventArgsHandlerRequired {
+            get {
+                return ResourceManager.GetString("DomainEventsUnhandledEventArgsHandlerRequired", resourceCulture);
             }
         }
         
@@ -174,15 +302,6 @@ namespace MooVC.Architecture {
         internal static string EntityMaximumIdValueExceededExceptionMessage {
             get {
                 return ResourceManager.GetString("EntityMaximumIdValueExceededExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Aggregate of type {2} with an ID of {0:p} and a version of {1} is not in a suitable state for a load from history..
-        /// </summary>
-        internal static string EventCentricAggregateInvalidStateForLoadFromHistory {
-            get {
-                return ResourceManager.GetString("EventCentricAggregateInvalidStateForLoadFromHistory", resourceCulture);
             }
         }
         
@@ -223,15 +342,6 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The version number cannot be less than {0}..
-        /// </summary>
-        internal static string GenericVersionInvalid {
-            get {
-                return ResourceManager.GetString("GenericVersionInvalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}..
         /// </summary>
         internal static string HandlerFailureExceptionMessage {
@@ -241,11 +351,74 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide the paging instructions for this query..
+        ///   Looks up a localized string similar to The paging instructions for this query must be provided..
         /// </summary>
         internal static string PaginatedQueryPagingRequired {
             get {
                 return ResourceManager.GetString("PaginatedQueryPagingRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The paging instructions that generated the results must be provided..
+        /// </summary>
+        internal static string PaginatedResultPagingRequired {
+            get {
+                return ResourceManager.GetString("PaginatedResultPagingRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An attempt to publish atomic unit {0:p} has failed..
+        /// </summary>
+        internal static string PersistentBusPublishFailure {
+            get {
+                return ResourceManager.GetString("PersistentBusPublishFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The storage that support persistence of domain events published via the bus must be provided..
+        /// </summary>
+        internal static string PersistentBusStoreRequired {
+            get {
+                return ResourceManager.GetString("PersistentBusStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The previous version must be provided..
+        /// </summary>
+        internal static string SignedVersionPreviousRequired {
+            get {
+                return ResourceManager.GetString("SignedVersionPreviousRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A reference to the aggregate for which reconciliation is not supported must be provided..
+        /// </summary>
+        internal static string UnsupportedAggregateDetectedEventArgsAggregateRequired {
+            get {
+                return ResourceManager.GetString("UnsupportedAggregateDetectedEventArgsAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The events requiring reconciliation by an unsupported aggregate type must be provided..
+        /// </summary>
+        internal static string UnsupportedAggregateDetectedEventArgsEventsRequired {
+            get {
+                return ResourceManager.GetString("UnsupportedAggregateDetectedEventArgsEventsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version of the aggregate must be provided..
+        /// </summary>
+        internal static string VersionedReferenceVersionRequired {
+            get {
+                return ResourceManager.GetString("VersionedReferenceVersionRequired", resourceCulture);
             }
         }
     }

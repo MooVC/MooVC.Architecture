@@ -5,7 +5,8 @@
     using System.Linq.Expressions;
     using MooVC;
 
-    internal sealed class AndSpecification<T> : Specification<T>
+    internal sealed class AndSpecification<T>
+        : Specification<T>
     {
         private readonly Specification<T> left;
         private readonly Specification<T> right;

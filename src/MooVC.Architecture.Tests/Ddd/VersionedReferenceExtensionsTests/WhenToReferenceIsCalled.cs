@@ -1,6 +1,6 @@
 namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
 {
-    using System;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenToReferenceIsCalled
@@ -8,7 +8,8 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
         [Fact]
         public void GivenAVersionedReferenceThenAReferenceIsReturned()
         {
-            var versioned = new VersionedReference<AggregateRoot>(Guid.NewGuid());
+            var aggregate = new SerializableAggregateRoot();
+            var versioned = new VersionedReference<AggregateRoot>(aggregate);
             var nonVersioned = versioned.ToReference();
 
             Assert.True(nonVersioned == versioned);

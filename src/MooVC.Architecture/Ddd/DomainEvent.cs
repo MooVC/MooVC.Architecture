@@ -3,27 +3,26 @@
     using System;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
+    using static MooVC.Ensure;
+    using static Resources;
 
     [Serializable]
     public abstract class DomainEvent
         : Message
     {
-        protected DomainEvent(Message context, AggregateRoot aggregate)
-            : base(context)
-        {
-            Aggregate = aggregate.ToVersionedReference();
-        }
-
         protected DomainEvent(Message context, VersionedReference aggregate)
             : base(context)
         {
+            ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);
+
             Aggregate = aggregate;
         }
 
         protected DomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = (VersionedReference)info.GetValue(nameof(Aggregate), typeof(VersionedReference));
+            Aggregate = info.GetValue<VersionedReference>(nameof(Aggregate));
         }
 
         public VersionedReference Aggregate { get; }

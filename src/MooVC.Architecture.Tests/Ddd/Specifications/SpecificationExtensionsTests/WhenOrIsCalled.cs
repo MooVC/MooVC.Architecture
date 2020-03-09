@@ -15,7 +15,7 @@
             {
                 new object[] { null, null },
                 new object[] { null, specification.Object },
-                new object[] { specification.Object, null }
+                new object[] { specification.Object, null },
             };
         }
 
@@ -32,7 +32,7 @@
                 new object[] { negative.Object, negative.Object, false },
                 new object[] { negative.Object, positive.Object, true },
                 new object[] { positive.Object, negative.Object, true },
-                new object[] { positive.Object, positive.Object, true }
+                new object[] { positive.Object, positive.Object, true },
             };
         }
 

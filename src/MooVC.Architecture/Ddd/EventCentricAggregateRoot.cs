@@ -6,7 +6,8 @@
     using System.Reflection;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
-    using Collections.Generic;
+    using MooVC.Collections.Generic;
+    using MooVC.Serialization;
     using static System.String;
     using static Resources;
 
@@ -18,8 +19,8 @@
 
         private readonly List<DomainEvent> changes;
 
-        protected EventCentricAggregateRoot(Guid id, ulong version = DefaultVersion)
-            : base(id, version)
+        protected EventCentricAggregateRoot(Guid id)
+            : base(id)
         {
             changes = new List<DomainEvent>();
         }
@@ -27,21 +28,15 @@
         protected EventCentricAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            changes = (List<DomainEvent>)info.GetValue(nameof(changes), typeof(List<DomainEvent>));
+            changes = info.TryGetInternalValue(nameof(changes), defaultValue: new List<DomainEvent>());
         }
-        
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(changes), changes);
-        }
-
-        protected override bool HasUncommittedChanges
-        {
-            get => changes.Any();
-            private protected set => base.HasUncommittedChanges = value;
+            _ = info.TryAddInternalValue(nameof(changes), changes, predicate: _ => changes.Any());
         }
 
         public IEnumerable<DomainEvent> GetUncommittedChanges()
@@ -51,21 +46,43 @@
 
         public void LoadFromHistory(IEnumerable<DomainEvent> history)
         {
-            if (HasUncommittedChanges || Version != DefaultVersion)
+            if (history.Any())
             {
-                throw new InvalidOperationException(Format(
-                    EventCentricAggregateRootDomainEventHandlerNotSupportedException, 
-                    Id,
-                    Version,
-                    GetType().Name));
+                if (changes.Any())
+                {
+                    throw new AggregateHasUncommittedChangesException(this.ToVersionedReference());
+                }
+
+                IEnumerable<DomainEvent> sequence = history
+                    .OrderBy(@event => @event.Aggregate.Version)
+                    .ToArray();
+
+                if (!sequence.SequenceEqual(history))
+                {
+                    throw new AggregateEventSequenceUnorderedException(this.ToVersionedReference(), history);
+                }
+
+                VersionedReference mismatch = sequence
+                    .Where(@event => @event.Aggregate.Id != Id)
+                    .Select(@event => @event.Aggregate)
+                    .FirstOrDefault();
+
+                if (mismatch is { })
+                {
+                    throw new AggregateEventMismatchException(this.ToVersionedReference(), mismatch);
+                }
+
+                SignedVersion startingVersion = sequence.First().Aggregate.Version;
+
+                if (!(Version.IsNew || startingVersion.IsNext(Version)))
+                {
+                    throw new AggregateHistoryInvalidForStateException(this.ToVersionedReference(), sequence, startingVersion);
+                }
+
+                sequence.ForEach(@event => ApplyChange(() => @event, isNew: false));
+
+                State = new AggregateState(sequence.Last().Aggregate.Version);
             }
-
-            history.ForEach(@event => ApplyChange(() => @event, isNew: false));
-
-            Version = history
-                .Select(@event => @event.Aggregate.Version)
-                .DefaultIfEmpty(DefaultVersion)
-                .Max();
         }
 
         public override void MarkChangesAsCommitted()
@@ -77,10 +94,11 @@
                 changes.Clear();
             }
         }
-        
-        protected void ApplyChange(Func<DomainEvent> change, bool isNew = true)
+
+        protected void ApplyChange<TEvent>(Func<TEvent> change, Action<TEvent> handler = default, bool isNew = true)
+            where TEvent : DomainEvent
         {
-            bool triggersVersionIncrement = isNew && !base.HasUncommittedChanges;
+            bool triggersVersionIncrement = isNew && !HasUncommittedChanges;
 
             if (triggersVersionIncrement)
             {
@@ -89,22 +107,11 @@
 
             try
             {
-                DomainEvent @event = change();
-                Type type = GetType();
-                Type eventType = @event.GetType();
+                TEvent @event = change();
 
-                MethodInfo handler = type
-                    .GetMethod(HandlerName, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { eventType }, null);
+                handler ??= CreateHandler<TEvent>(@event.GetType());
 
-                if (handler == null)
-                {
-                    throw new NotSupportedException(Format(
-                        EventCentricAggregateRootDomainEventHandlerNotSupportedException, 
-                        eventType.Name, 
-                        type.Name));
-                }
-
-                _ = handler.Invoke(this, new object[] { @event });
+                handler(@event);
 
                 if (isNew)
                 {
@@ -122,9 +129,32 @@
             }
         }
 
-        protected override void OnChangesMarkedAsCommitted(EventArgs e = null)
+        protected override void OnChangesMarkedAsCommitted(EventArgs args = default)
         {
             base.OnChangesMarkedAsCommitted(new ChangesMarkedAsCommittedEventArgs(changes));
+        }
+
+        private Action<TEvent> CreateHandler<TEvent>(Type eventType)
+            where TEvent : DomainEvent
+        {
+            Type type = GetType();
+
+            MethodInfo handler = type.GetMethod(
+                HandlerName,
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                null,
+                new[] { eventType },
+                null);
+
+            if (handler is null)
+            {
+                throw new NotSupportedException(Format(
+                    EventCentricAggregateRootDomainEventHandlerNotSupportedException,
+                    eventType.Name,
+                    type.Name));
+            }
+
+            return @event => _ = handler.Invoke(this, new object[] { @event });
         }
     }
 }

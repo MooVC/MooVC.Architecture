@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AggregateConflictDetectedEventArgsAggregateRequired" xml:space="preserve">
+    <value>A reference to the aggregate from which conflicts were detected must be provided.</value>
+  </data>
+  <data name="AggregateConflictDetectedEventArgsEventsRequired" xml:space="preserve">
+    <value>The events within which conflicts were detected must be provided.</value>
+  </data>
+  <data name="AggregateConflictDetectedEventArgsNextRequired" xml:space="preserve">
+    <value>The version at which conflicts were detected must be provided.</value>
+  </data>
+  <data name="AggregateConflictDetectedEventArgsPreviousRequired" xml:space="preserve">
+    <value>The version from which conflicts were detected must be provided.</value>
+  </data>
   <data name="AggregateConflictDetectedExceptionExistingEntryMessage" xml:space="preserve">
     <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed.</value>
   </data>
@@ -129,8 +141,25 @@
   <data name="AggregateEventMismatchExceptionMessage" xml:space="preserve">
     <value>Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}.</value>
   </data>
+  <data name="AggregateEventSequenceUnorderedExceptionMessage" xml:space="preserve">
+    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed state from history as the sequence is unordered.</value>
+  </data>
+  <data name="AggregateHasUncommittedChangesExceptionMessage" xml:space="preserve">
+    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept its state from history as it current possesses uncommitted changes.</value>
+  </data>
+  <data name="AggregateHistoryInvalidForStateExceptionMessage" xml:space="preserve">
+    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed sequence as it starts from version {3}.</value>
+  </data>
+  <data name="AggregateInvariantsNotSatisfiedDomainExceptionMessage" xml:space="preserve">
+    <value>Request {0} could not be fulfilled due to a failure to satisfy the following invariants as defined by aggregate {1}:
+
+{2}</value>
+  </data>
   <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
     <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
+  </data>
+  <data name="AggregateReconcilerFactoryRequired" xml:space="preserve">
+    <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
   </data>
   <data name="AggregateReferenceMismatchExceptionMessage" xml:space="preserve">
     <value>Reference for aggregate {0:p} of type {1} cannot be converted type {2}.</value>
@@ -138,14 +167,29 @@
   <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
     <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>
   </data>
+  <data name="AtomicUnitDistinctAggregateVersionRequired" xml:space="preserve">
+    <value>The atomic unit must only contain changes relating to a single version increment of a single aggregate.</value>
+  </data>
+  <data name="AtomicUnitEventsRequired" xml:space="preserve">
+    <value>The atomic unit must contain one or more domain events.</value>
+  </data>
+  <data name="BusMessageRequired" xml:space="preserve">
+    <value>The message to be invoked must be provided.</value>
+  </data>
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
   </data>
+  <data name="DomainEventAggregateRequired" xml:space="preserve">
+    <value>A versioned reference for the aggregate must be provided.</value>
+  </data>
   <data name="DomainEventPropagatorBusRequired" xml:space="preserve">
-    <value>You must provide the bus to which the events are to be propagated.</value>
+    <value>The bus to which the events are to be propagated must be provided.</value>
   </data>
   <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
-    <value>You must provide the repository from which the events are to be propagated.</value>
+    <value>The repository from which the events are to be propagated must be provided.</value>
+  </data>
+  <data name="DomainEventsUnhandledEventArgsHandlerRequired" xml:space="preserve">
+    <value>The handler for the unhandled events must be provided.</value>
   </data>
   <data name="EnsureReferenceIsNotEmptyMessage" xml:space="preserve">
     <value>A non-empty reference of aggregate type {0} is required.</value>
@@ -155,9 +199,6 @@
   </data>
   <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
     <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
-  </data>
-  <data name="EventCentricAggregateInvalidStateForLoadFromHistory" xml:space="preserve">
-    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} is not in a suitable state for a load from history.</value>
   </data>
   <data name="EventCentricAggregateRootDomainEventHandlerNotSupportedException" xml:space="preserve">
     <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
@@ -171,13 +212,31 @@
   <data name="GenericIdInvalid" xml:space="preserve">
     <value>A non-empty ID must be provided.</value>
   </data>
-  <data name="GenericVersionInvalid" xml:space="preserve">
-    <value>The version number cannot be less than {0}.</value>
-  </data>
   <data name="HandlerFailureExceptionMessage" xml:space="preserve">
     <value>Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}.</value>
   </data>
   <data name="PaginatedQueryPagingRequired" xml:space="preserve">
-    <value>You must provide the paging instructions for this query.</value>
+    <value>The paging instructions for this query must be provided.</value>
+  </data>
+  <data name="PaginatedResultPagingRequired" xml:space="preserve">
+    <value>The paging instructions that generated the results must be provided.</value>
+  </data>
+  <data name="PersistentBusPublishFailure" xml:space="preserve">
+    <value>An attempt to publish atomic unit {0:p} has failed.</value>
+  </data>
+  <data name="PersistentBusStoreRequired" xml:space="preserve">
+    <value>The storage that support persistence of domain events published via the bus must be provided.</value>
+  </data>
+  <data name="SignedVersionPreviousRequired" xml:space="preserve">
+    <value>The previous version must be provided.</value>
+  </data>
+  <data name="UnsupportedAggregateDetectedEventArgsAggregateRequired" xml:space="preserve">
+    <value>A reference to the aggregate for which reconciliation is not supported must be provided.</value>
+  </data>
+  <data name="UnsupportedAggregateDetectedEventArgsEventsRequired" xml:space="preserve">
+    <value>The events requiring reconciliation by an unsupported aggregate type must be provided.</value>
+  </data>
+  <data name="VersionedReferenceVersionRequired" xml:space="preserve">
+    <value>The version of the aggregate must be provided.</value>
   </data>
 </root>

@@ -13,13 +13,13 @@ namespace MooVC.Architecture.Ddd.ValueTests
         [InlineData(0, "", false, new[] { "One" })]
         public void GivenAnInstanceThenAllPropertiesAreSerialized(int expectedFirst, string expectedSecond, bool setThird, string[] expectedFourth)
         {
-            SerializableValue expectedThird = setThird 
-                ? new SerializableValue() 
+            SerializableValue expectedThird = setThird
+                ? new SerializableValue()
                 : default;
 
             var value = new SerializableValue(
-                first: expectedFirst, 
-                second: expectedSecond, 
+                first: expectedFirst,
+                second: expectedSecond,
                 third: expectedThird,
                 fourth: expectedFourth);
             SerializableValue clone = value.Clone();

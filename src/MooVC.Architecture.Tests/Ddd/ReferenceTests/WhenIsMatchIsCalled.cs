@@ -11,7 +11,7 @@
         public void GivenAMatchingReferenceThenTrueIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(aggregateId, AggregateRoot.DefaultVersion);
+            var aggregate = new SerializableAggregateRoot(aggregateId);
             var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
             Assert.True(condition: reference.IsMatch(aggregate));
@@ -45,23 +45,23 @@
 
             Assert.False(condition: reference.IsMatch(aggregate));
         }
-        
+
         [Fact]
         public void GivenAReferenceWithADifferentIdButTheSameTypeThenFalseIsReturned()
         {
             var aggregateId = Guid.NewGuid();
             var referenceId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var aggregate = new Mock<AggregateRoot>(aggregateId);
             var reference = new Reference<AggregateRoot>(referenceId);
 
             Assert.False(condition: reference.IsMatch(aggregate.Object));
         }
-        
+
         [Fact]
         public void GivenAReferenceWithTheSameIdButADifferentTypeThenFalseIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId, AggregateRoot.DefaultVersion);
+            var aggregate = new Mock<AggregateRoot>(aggregateId);
             var reference = new Reference<EventCentricAggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(aggregate.Object));

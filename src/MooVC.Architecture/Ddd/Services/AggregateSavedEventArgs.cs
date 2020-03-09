@@ -4,7 +4,7 @@ namespace MooVC.Architecture.Ddd.Services
         : AggregateEventArgs<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public AggregateSavedEventArgs(TAggregate aggregate) 
+        public AggregateSavedEventArgs(TAggregate aggregate)
             : base(aggregate)
         {
         }

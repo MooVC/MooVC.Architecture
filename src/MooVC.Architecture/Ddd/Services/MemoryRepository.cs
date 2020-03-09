@@ -20,15 +20,15 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected MemoryRepository(SerializationInfo info, StreamingContext context)
         {
-            Store = (Dictionary<Reference, TAggregate>)info.GetValue(nameof(Store), typeof(Dictionary<Reference, TAggregate>));
+            Store = info.TryGetInternalValue(nameof(Store), defaultValue: new Dictionary<Reference, TAggregate>());
         }
 
         protected virtual IDictionary<Reference, TAggregate> Store { get; }
 
-        public override TAggregate Get(Guid id, ulong? version = default)
+        public override TAggregate Get(Guid id, SignedVersion version = default)
         {
-            Reference key = version.HasValue
-                ? (Reference)new VersionedReference<TAggregate>(id, version.Value)
+            Reference key = version is { }
+                ? (Reference)new VersionedReference<TAggregate>(id, version)
                 : new Reference<TAggregate>(id);
 
             return Get(key);
@@ -45,7 +45,7 @@ namespace MooVC.Architecture.Ddd.Services
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(nameof(Store), Store);
+            _ = info.TryAddInternalValue(nameof(Store), Store, predicate: _ => Store.Any());
         }
 
         protected virtual TAggregate Get(Reference key)
@@ -75,10 +75,10 @@ namespace MooVC.Architecture.Ddd.Services
 
             copy.MarkChangesAsCommitted();
 
-            (Reference NonVersioned, Reference Versioned) = GenerateReferences(copy);
+            (Reference nonVersioned, Reference versioned) = GenerateReferences(copy);
 
-            _ = Store[NonVersioned] = copy;
-            _ = Store[Versioned] = copy;
+            _ = Store[nonVersioned] = copy;
+            _ = Store[versioned] = copy;
         }
     }
 }

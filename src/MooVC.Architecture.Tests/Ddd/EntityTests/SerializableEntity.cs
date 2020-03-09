@@ -7,12 +7,12 @@ namespace MooVC.Architecture.Ddd.EntityTests
     internal sealed class SerializableEntity
         : Entity<Guid>
     {
-        public SerializableEntity(Guid id) 
+        public SerializableEntity(Guid id)
             : base(id)
         {
         }
 
-        private SerializableEntity(SerializationInfo info, StreamingContext context) 
+        private SerializableEntity(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

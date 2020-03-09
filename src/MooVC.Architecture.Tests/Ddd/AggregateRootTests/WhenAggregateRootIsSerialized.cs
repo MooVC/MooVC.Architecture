@@ -6,20 +6,17 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
 
     public sealed class WhenAggregateRootIsSerialized
     {
-        [Theory]
-        [InlineData(1)]
-        [InlineData(18446744073709551615)]
-        public void GivenAnInstanceThenAllPropertiesAreSerialized(ulong expectedVersion)
+        [Fact]
+        public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
-            var expectedId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(expectedId, version: expectedVersion);
+            var aggregate = new SerializableAggregateRoot();
             SerializableAggregateRoot clone = aggregate.Clone();
 
             Assert.Equal(aggregate, clone);
             Assert.NotSame(aggregate, clone);
 
-            Assert.Equal(expectedId, clone.Id);
-            Assert.Equal(expectedVersion, clone.Version);
+            Assert.Equal(aggregate.Id, clone.Id);
+            Assert.Equal(aggregate.Version, clone.Version);
             Assert.Equal(aggregate.GetHashCode(), clone.GetHashCode());
         }
     }

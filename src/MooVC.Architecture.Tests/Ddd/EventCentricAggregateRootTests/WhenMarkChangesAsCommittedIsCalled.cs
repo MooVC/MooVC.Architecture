@@ -39,6 +39,8 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
             bool wasInvoked = false;
             var aggregate = new SerializableEventCentricAggregateRoot(Guid.NewGuid());
 
+            aggregate.MarkChangesAsCommitted();
+
             aggregate.ChangesMarkedAsCommitted += (sender, e) => wasInvoked = true;
             aggregate.MarkChangesAsCommitted();
 

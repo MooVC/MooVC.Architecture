@@ -9,8 +9,8 @@
     public static partial class ReferenceExtensions
     {
         public static TAggregate Retrieve<TAggregate>(
-            this Reference reference, 
-            Message context, 
+            this Reference reference,
+            Message context,
             IRepository<TAggregate> repository)
             where TAggregate : AggregateRoot
         {

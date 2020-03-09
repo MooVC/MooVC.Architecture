@@ -4,11 +4,18 @@ namespace MooVC.Architecture.Ddd
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
 
     [Serializable]
     public abstract class Reference
         : Value
     {
+        protected Reference(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Id = info.TryGetValue<Guid>(nameof(Id));
+        }
+
         private protected Reference(Guid id)
         {
             Id = id;
@@ -19,11 +26,11 @@ namespace MooVC.Architecture.Ddd
             Id = aggregate.Id;
         }
 
-        protected Reference(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Id = (Guid)info.GetValue(nameof(Id), typeof(Guid));
-        }
+        public Guid Id { get; }
+
+        public bool IsEmpty => Id == Guid.Empty;
+
+        public abstract Type Type { get; }
 
         public static bool operator ==(Reference first, Reference second)
         {
@@ -33,20 +40,6 @@ namespace MooVC.Architecture.Ddd
         public static bool operator !=(Reference first, Reference second)
         {
             return NotEqualOperator(first, second);
-        }
-
-        private static bool EqualOperator(Reference left, Reference right)
-        {
-            return left is null ^ right is null 
-                ? false 
-                : left is null 
-                    ? true 
-                    : left.Id == right.Id && left.Type == right.Type;
-        }
-
-        private static bool NotEqualOperator(Reference left, Reference right)
-        {
-            return !EqualOperator(left, right);
         }
 
         public override bool Equals(object other)
@@ -59,18 +52,12 @@ namespace MooVC.Architecture.Ddd
             return base.GetHashCode();
         }
 
-        public Guid Id { get; }
-
-        public bool IsEmpty => Id == Guid.Empty;
-
-        public abstract Type Type { get; }
-
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Id), Id);
+            _ = info.TryAddValue(nameof(Id), Id);
         }
 
         public virtual bool IsMatch(AggregateRoot aggregate)
@@ -84,6 +71,20 @@ namespace MooVC.Architecture.Ddd
         {
             yield return Id;
             yield return Type;
+        }
+
+        private static bool EqualOperator(Reference left, Reference right)
+        {
+            return left is null ^ right is null
+                ? false
+                : left is null
+                    ? true
+                    : left.Id == right.Id && left.Type == right.Type;
+        }
+
+        private static bool NotEqualOperator(Reference left, Reference right)
+        {
+            return !EqualOperator(left, right);
         }
     }
 }

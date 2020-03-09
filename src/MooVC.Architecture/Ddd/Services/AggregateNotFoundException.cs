@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using static System.String;
     using static Resources;
 
     [Serializable]
@@ -9,7 +10,7 @@
         where TAggregate : AggregateRoot
     {
         public AggregateNotFoundException(Message context, Guid aggregateId)
-            : base(string.Format(
+            : base(Format(
                 AggregateNotFoundExceptionMessage,
                 aggregateId,
                 typeof(TAggregate).Name))

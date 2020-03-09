@@ -4,21 +4,22 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Linq;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
     [Serializable]
-    public class PaginatedQuery
+    public abstract class PaginatedQuery
         : Message
     {
-        public PaginatedQuery(Paging paging)
+        protected PaginatedQuery(Paging paging)
         {
             ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);
 
             Paging = paging;
         }
 
-        public PaginatedQuery(Message context, Paging paging) 
+        protected PaginatedQuery(Message context, Paging paging)
             : base(context)
         {
             ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);
@@ -26,10 +27,10 @@
             Paging = paging;
         }
 
-        protected PaginatedQuery(SerializationInfo info, StreamingContext context) 
+        protected PaginatedQuery(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Paging = (Paging)info.GetValue(nameof(Paging), typeof(Paging));
+            Paging = info.GetValue<Paging>(nameof(Paging));
         }
 
         public Paging Paging { get; }

@@ -7,18 +7,23 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
     internal sealed class SerializableEventCentricAggregateRoot
         : EventCentricAggregateRoot
     {
-        public SerializableEventCentricAggregateRoot(Message context)
-            : this(Guid.NewGuid())
-        {
-            ApplyChange(() => new SerializableCreatedDomainEvent(context, this));
-        }
-        
-        public SerializableEventCentricAggregateRoot(Guid id) 
-            : base(id, DefaultVersion)
+        public SerializableEventCentricAggregateRoot()
+            : base(Guid.NewGuid())
         {
         }
 
-        private SerializableEventCentricAggregateRoot(SerializationInfo info, StreamingContext context) 
+        public SerializableEventCentricAggregateRoot(Message context)
+            : this(Guid.NewGuid())
+        {
+            ApplyChange(() => new SerializableCreatedDomainEvent(context, this), Handle);
+        }
+
+        public SerializableEventCentricAggregateRoot(Guid id)
+            : base(id)
+        {
+        }
+
+        private SerializableEventCentricAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
@@ -27,7 +32,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
 
         public void Set(SetRequest request)
         {
-            ApplyChange(() => new SerializableSetDomainEvent(request.Context, this, request.Value));
+            ApplyChange(() => new SerializableSetDomainEvent(request.Context, this, request.Value), Handle);
         }
 
         private void Handle(SerializableCreatedDomainEvent @event)

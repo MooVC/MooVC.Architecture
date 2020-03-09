@@ -10,12 +10,12 @@ namespace MooVC.Architecture.Ddd
         : VersionedReference
         where TAggregate : AggregateRoot
     {
-        private static readonly Lazy<VersionedReference<TAggregate>> ActualEmpty =
+        private static readonly Lazy<VersionedReference<TAggregate>> empty =
             new Lazy<VersionedReference<TAggregate>>(() => new VersionedReference<TAggregate>());
 
         private readonly Lazy<Reference<TAggregate>> actualReference;
 
-        public VersionedReference(Guid id, ulong version = AggregateRoot.DefaultVersion)
+        public VersionedReference(Guid id, SignedVersion version)
             : base(id, version)
         {
             ArgumentIsAcceptable(
@@ -34,7 +34,7 @@ namespace MooVC.Architecture.Ddd
         }
 
         private VersionedReference()
-            : base(Guid.Empty, 0)
+            : base(Guid.Empty, SignedVersion.Empty)
         {
             actualReference = new Lazy<Reference<TAggregate>>(() => Reference<TAggregate>.Empty);
         }
@@ -45,7 +45,7 @@ namespace MooVC.Architecture.Ddd
             actualReference = new Lazy<Reference<TAggregate>>(() => this.ToReference());
         }
 
-        public static VersionedReference<TAggregate> Empty => ActualEmpty.Value;
+        public static VersionedReference<TAggregate> Empty => empty.Value;
 
         public Reference<TAggregate> Reference => actualReference.Value;
 

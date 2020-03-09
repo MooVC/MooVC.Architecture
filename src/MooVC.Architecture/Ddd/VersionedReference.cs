@@ -5,6 +5,7 @@ namespace MooVC.Architecture.Ddd
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
+    using MooVC.Serialization;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -12,14 +13,19 @@ namespace MooVC.Architecture.Ddd
     public abstract class VersionedReference
         : Reference
     {
-        private protected VersionedReference(Guid id, ulong version)
+        protected VersionedReference(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Version = info.TryGetValue(nameof(Version), defaultValue: SignedVersion.Empty);
+        }
+
+        private protected VersionedReference(Guid id, SignedVersion version)
             : base(id)
         {
-            ArgumentIsAcceptable(
+            ArgumentNotNull(
                 version,
                 nameof(version),
-                value => value >= AggregateRoot.DefaultVersion || id == Guid.Empty,
-                string.Format(GenericVersionInvalid, AggregateRoot.DefaultVersion));
+                VersionedReferenceVersionRequired);
 
             Version = version;
         }
@@ -30,11 +36,7 @@ namespace MooVC.Architecture.Ddd
             Version = aggregate.Version;
         }
 
-        protected VersionedReference(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Version = (ulong)info.GetValue(nameof(Version), typeof(ulong));
-        }
+        public SignedVersion Version { get; }
 
         public static bool operator ==(VersionedReference first, VersionedReference second)
         {
@@ -46,8 +48,6 @@ namespace MooVC.Architecture.Ddd
             return NotEqualOperator(first, second);
         }
 
-        public ulong Version { get; }
-
         public override bool Equals(object other)
         {
             return other is VersionedReference value
@@ -55,17 +55,22 @@ namespace MooVC.Architecture.Ddd
                 : false;
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Version), Version);
+            _ = info.TryAddValue(nameof(Version), Version, defaultValue: SignedVersion.Empty);
         }
 
         public override bool IsMatch(AggregateRoot aggregate)
         {
-            return base.IsMatch(aggregate) 
+            return base.IsMatch(aggregate)
                 && Version == aggregate.Version;
         }
 
@@ -74,11 +79,6 @@ namespace MooVC.Architecture.Ddd
             return base
                 .GetAtomicValues()
                 .Union(new object[] { Version });
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
 
         private static bool EqualOperator(VersionedReference left, VersionedReference right)

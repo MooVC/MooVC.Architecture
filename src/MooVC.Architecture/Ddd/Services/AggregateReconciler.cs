@@ -1,5 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Architecture.Ddd;
@@ -52,6 +53,38 @@
             return events
                 .Where(@event => @event.Aggregate.Version.CompareTo(version) > 0)
                 .ToArray();
+        }
+
+        protected virtual void Apply(
+            EventCentricAggregateRoot aggregate,
+            IEnumerable<DomainEvent> events,
+            IAggregateReconciliationProxy proxy)
+        {
+            if (events.Any())
+            {
+                try
+                {
+                    aggregate.LoadFromHistory(events);
+
+                    proxy.Save(aggregate);
+                }
+                catch (AggregateHistoryInvalidForStateException invalid)
+                {
+                    OnAggregateConflictDetected(
+                        invalid.Aggregate,
+                        events,
+                        invalid.StartingVersion,
+                        invalid.Aggregate.Version);
+                }
+                catch (AggregateConflictDetectedException conflict)
+                {
+                    OnAggregateConflictDetected(
+                        aggregate.ToVersionedReference(),
+                        events,
+                        conflict.ReceivedVersion,
+                        conflict.PersistedVersion);
+                }
+            }
         }
     }
 }

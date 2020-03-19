@@ -12,7 +12,7 @@
         : EventArgs
     {
         internal AggregateConflictDetectedEventArgs(
-            VersionedReference aggregate,
+            Reference aggregate,
             IEnumerable<DomainEvent> events,
             SignedVersion next,
             SignedVersion previous)
@@ -28,7 +28,7 @@
             Previous = previous;
         }
 
-        public VersionedReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         public IEnumerable<DomainEvent> Events { get; }
 

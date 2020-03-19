@@ -56,7 +56,7 @@
                 events = RemovePreviousVersions(events, existing.Version);
             }
 
-            Apply(existing, events, proxy);
+            Apply(existing, events, proxy, aggregate);
         }
     }
 }

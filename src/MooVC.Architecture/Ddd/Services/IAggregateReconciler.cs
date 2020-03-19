@@ -6,6 +6,8 @@
     {
         event AggregateConflictDetectedEventHandler AggregateConflictDetected;
 
+        event AggregateReconciledEventHandler AggregateReconciled;
+
         event UnsupportedAggregateDetectedEventHandler UnsupportedAggregateDetected;
 
         void Reconcile(IEnumerable<DomainEvent> events);

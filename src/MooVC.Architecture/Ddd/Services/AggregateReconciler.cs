@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Architecture.Ddd;
@@ -10,18 +9,11 @@
     {
         public event AggregateConflictDetectedEventHandler AggregateConflictDetected;
 
+        public event AggregateReconciledEventHandler AggregateReconciled;
+
         public event UnsupportedAggregateDetectedEventHandler UnsupportedAggregateDetected;
 
         public abstract void Reconcile(IEnumerable<DomainEvent> events);
-
-        protected void OnAggregateConflictDetected(
-            VersionedReference aggregate,
-            IEnumerable<DomainEvent> events,
-            SignedVersion next,
-            SignedVersion previous)
-        {
-            AggregateConflictDetected?.Invoke(this, new AggregateConflictDetectedEventArgs(aggregate, events, next, previous));
-        }
 
         protected virtual bool EventsAreNonConflicting(VersionedReference aggregate, IEnumerable<DomainEvent> events, out bool isNew)
         {
@@ -43,6 +35,20 @@
             return true;
         }
 
+        protected void OnAggregateConflictDetected(
+            Reference aggregate,
+            IEnumerable<DomainEvent> events,
+            SignedVersion next,
+            SignedVersion previous)
+        {
+            AggregateConflictDetected?.Invoke(this, new AggregateConflictDetectedEventArgs(aggregate, events, next, previous));
+        }
+
+        protected void OnAggregateReconciled(Reference aggregate, IEnumerable<DomainEvent> events)
+        {
+            AggregateReconciled?.Invoke(this, new AggregateReconciledEventArgs(aggregate, events));
+        }
+
         protected void OnUnsupportedAggregateDetected(Reference aggregate, IEnumerable<DomainEvent> events)
         {
             UnsupportedAggregateDetected?.Invoke(this, new UnsupportedAggregateDetectedEventArgs(aggregate, events));
@@ -58,7 +64,8 @@
         protected virtual void Apply(
             EventCentricAggregateRoot aggregate,
             IEnumerable<DomainEvent> events,
-            IAggregateReconciliationProxy proxy)
+            IAggregateReconciliationProxy proxy,
+            Reference reference)
         {
             if (events.Any())
             {
@@ -67,6 +74,8 @@
                     aggregate.LoadFromHistory(events);
 
                     proxy.Save(aggregate);
+
+                    OnAggregateReconciled(reference, events);
                 }
                 catch (AggregateHistoryInvalidForStateException invalid)
                 {
@@ -79,7 +88,7 @@
                 catch (AggregateConflictDetectedException conflict)
                 {
                     OnAggregateConflictDetected(
-                        aggregate.ToVersionedReference(),
+                        reference,
                         events,
                         conflict.ReceivedVersion,
                         conflict.PersistedVersion);

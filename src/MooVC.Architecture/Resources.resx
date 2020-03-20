@@ -158,6 +158,12 @@
   <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
     <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
   </data>
+  <data name="AggregateReconciledEventArgsAggregateRequired" xml:space="preserve">
+    <value>A reference to the aggregate that was successfull reconciled must be provided.</value>
+  </data>
+  <data name="AggregateReconciledEventArgsEventsRequired" xml:space="preserve">
+    <value>The events that were successfully reconciled must be provided.</value>
+  </data>
   <data name="AggregateReconcilerFactoryRequired" xml:space="preserve">
     <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
   </data>

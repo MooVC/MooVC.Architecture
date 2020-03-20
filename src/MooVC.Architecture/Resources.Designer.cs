@@ -180,6 +180,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A reference to the aggregate that was successfull reconciled must be provided..
+        /// </summary>
+        internal static string AggregateReconciledEventArgsAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateReconciledEventArgsAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The events that were successfully reconciled must be provided..
+        /// </summary>
+        internal static string AggregateReconciledEventArgsEventsRequired {
+            get {
+                return ResourceManager.GetString("AggregateReconciledEventArgsEventsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
         /// </summary>
         internal static string AggregateReconcilerFactoryRequired {

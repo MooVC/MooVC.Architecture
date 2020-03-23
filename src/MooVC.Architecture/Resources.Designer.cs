@@ -405,6 +405,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The footer of previous version {0} is invalid..
+        /// </summary>
+        internal static string SignedVersionPreviousFooterInvalid {
+            get {
+                return ResourceManager.GetString("SignedVersionPreviousFooterInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The previous version must be provided..
         /// </summary>
         internal static string SignedVersionPreviousRequired {

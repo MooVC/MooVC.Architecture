@@ -20,7 +20,7 @@
                 value => value != Guid.Empty,
                 GenericIdInvalid);
 
-            State = new AggregateState(new SignedVersion(), null);
+            State = new AggregateState(new SignedVersion(), SignedVersion.Empty);
         }
 
         protected AggregateRoot(SerializationInfo info, StreamingContext context)

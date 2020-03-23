@@ -233,6 +233,9 @@
   <data name="PersistentBusStoreRequired" xml:space="preserve">
     <value>The storage that support persistence of domain events published via the bus must be provided.</value>
   </data>
+  <data name="SignedVersionPreviousFooterInvalid" xml:space="preserve">
+    <value>The footer of previous version {0} is invalid.</value>
+  </data>
   <data name="SignedVersionPreviousRequired" xml:space="preserve">
     <value>The previous version must be provided.</value>
   </data>

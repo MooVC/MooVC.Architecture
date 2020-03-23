@@ -7,6 +7,7 @@
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
+    using static System.String;
     using static MooVC.Ensure;
     using static Resources;
 
@@ -32,6 +33,12 @@
         internal SignedVersion(SignedVersion previous)
         {
             ArgumentNotNull(previous, nameof(previous), SignedVersionPreviousRequired);
+
+            ArgumentIsAcceptable(
+                previous,
+                nameof(previous),
+                _ => !previous.Footer.SequenceEqual(emptySegment),
+                Format(SignedVersionPreviousFooterInvalid, previous.Number));
 
             Footer = Splice(Guid.NewGuid());
             Header = previous.Footer;
@@ -101,7 +108,7 @@
 
         public override string ToString()
         {
-            return Number.ToString();
+            return $"{Number} ({Signature})";
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -121,7 +128,14 @@
 
         private Lazy<Guid> Combine()
         {
-            return new Lazy<Guid>(() => new Guid(Header.Union(Footer).ToArray()));
+            return new Lazy<Guid>(() =>
+            {
+                var parts = new List<byte>(Header);
+
+                parts.AddRange(Footer);
+
+                return new Guid(parts.ToArray());
+            });
         }
     }
 }

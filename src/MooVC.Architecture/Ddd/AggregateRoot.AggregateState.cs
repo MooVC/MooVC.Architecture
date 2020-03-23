@@ -11,51 +11,53 @@
         private protected readonly struct AggregateState
             : ISerializable
         {
-            public AggregateState(SignedVersion current)
-                : this(current, current)
+            public AggregateState(SignedVersion persisted)
+                : this(persisted, persisted)
             {
             }
 
             public AggregateState(SignedVersion current, SignedVersion persisted)
             {
-                Current = current ?? new SignedVersion();
+                Current = current;
                 Persisted = persisted;
             }
 
             private AggregateState(SerializationInfo info, StreamingContext context)
             {
-                Persisted = info.GetValue<SignedVersion>(nameof(Persisted));
+                Persisted = info.TryGetValue(nameof(Persisted), defaultValue: SignedVersion.Empty);
                 Current = info.TryGetValue(nameof(Current), defaultValue: Persisted);
             }
 
             public SignedVersion Current { get; }
 
-            public bool HasUncommittedChanges => !(IsPersisted && Current == Persisted);
+            public bool HasUncommittedChanges => !(Current.IsEmpty || Current == Persisted);
 
-            public bool IsPersisted => Persisted is { };
+            public bool IsPersisted => !Persisted.IsEmpty;
 
             public SignedVersion Persisted { get; }
 
             public AggregateState Commit()
             {
-                return new AggregateState(Current, Current);
+                return new AggregateState(Current);
             }
 
             [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
             public void GetObjectData(SerializationInfo info, StreamingContext context)
             {
                 _ = info.TryAddValue(nameof(Current), Current, defaultValue: Persisted);
-                info.AddValue(nameof(Persisted), Persisted);
+                _ = info.TryAddValue(nameof(Persisted), Persisted, defaultValue: SignedVersion.Empty);
             }
 
             public AggregateState Increment()
             {
-                return new AggregateState(new SignedVersion(Persisted), Persisted);
+                return new AggregateState(Persisted.Next(), Persisted);
             }
 
             public AggregateState Rollback()
             {
-                return new AggregateState(Persisted, Persisted);
+                return Current.IsNew
+                    ? this
+                    : new AggregateState(Persisted);
             }
         }
     }

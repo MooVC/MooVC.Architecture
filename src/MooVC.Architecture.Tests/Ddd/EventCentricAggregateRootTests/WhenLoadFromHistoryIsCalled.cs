@@ -11,6 +11,8 @@
         [Fact]
         public void GivenEventsStartingFromTheBeginningThenTheHydratedAggregateMatchesTheOriginal()
         {
+            const ulong ExpectedVersionNumer = 1;
+
             var original = new SerializableEventCentricAggregateRoot();
             var context = new SerializableMessage();
 
@@ -22,11 +24,14 @@
 
             Assert.Equal(original, hydrated);
             Assert.Equal(original.Value, hydrated.Value);
+            Assert.Equal(ExpectedVersionNumer, hydrated.Version.Number);
         }
 
         [Fact]
         public void GivenEventsStartingFromTheBeginningContainingMultipleVersionsThenTheHydratedAggregateMatchesTheOriginal()
         {
+            const ulong ExpectedVersionNumer = 3;
+
             var original = new SerializableEventCentricAggregateRoot();
             var context = new SerializableMessage();
 
@@ -38,11 +43,14 @@
 
             Assert.Equal(original, hydrated);
             Assert.Equal(original.Value, hydrated.Value);
+            Assert.Equal(ExpectedVersionNumer, hydrated.Version.Number);
         }
 
         [Fact]
         public void GivenEventsStartingFromAPreviouslyCommittedVersionThenTheHydratedAggregateMatchesTheOriginal()
         {
+            const ulong ExpectedVersionNumer = 4;
+
             var original = new SerializableEventCentricAggregateRoot();
             var context = new SerializableMessage();
 
@@ -56,6 +64,7 @@
 
             Assert.Equal(original, hydrated);
             Assert.Equal(original.Value, hydrated.Value);
+            Assert.Equal(ExpectedVersionNumer, hydrated.Version.Number);
         }
 
         private static IEnumerable<DomainEvent> CommitChanges(

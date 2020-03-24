@@ -57,8 +57,8 @@
         private SignedVersion(SerializationInfo info, StreamingContext context)
                : base(info, context)
         {
-            Footer = info.TryGetValue(nameof(Footer), defaultValue: emptySegment);
-            Header = info.TryGetValue(nameof(Header), defaultValue: emptySegment);
+            Footer = info.TryGetEnumerable(nameof(Footer), emptySegment);
+            Header = info.TryGetEnumerable(nameof(Header), emptySegment);
             Number = info.TryGetValue<ulong>(nameof(Number));
             signature = Combine();
         }
@@ -89,8 +89,8 @@
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddValue(nameof(Footer), Footer, defaultValue: emptySegment);
-            _ = info.TryAddValue(nameof(Header), Header, defaultValue: emptySegment);
+            _ = info.TryAddEnumerable(nameof(Footer), Footer, predicate: IsNotEmptySegment);
+            _ = info.TryAddEnumerable(nameof(Header), Header, predicate: IsNotEmptySegment);
             _ = info.TryAddValue(nameof(Number), Number);
         }
 
@@ -118,6 +118,11 @@
             yield return Number;
         }
 
+        private static bool IsNotEmptySegment(IEnumerable<byte> value)
+        {
+            return !value.SequenceEqual(emptySegment);
+        }
+
         private static IEnumerable<byte> Splice(Guid signature)
         {
             return signature
@@ -128,14 +133,7 @@
 
         private Lazy<Guid> Combine()
         {
-            return new Lazy<Guid>(() =>
-            {
-                var parts = new List<byte>(Header);
-
-                parts.AddRange(Footer);
-
-                return new Guid(parts.ToArray());
-            });
+            return new Lazy<Guid>(() => new Guid(Enumerable.Concat(Header, Footer).ToArray()));
         }
     }
 }

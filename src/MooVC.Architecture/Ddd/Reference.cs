@@ -5,6 +5,8 @@ namespace MooVC.Architecture.Ddd
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Serialization;
+    using static System.String;
+    using static Resources;
 
     [Serializable]
     public abstract class Reference
@@ -18,12 +20,17 @@ namespace MooVC.Architecture.Ddd
 
         private protected Reference(Guid id)
         {
+            if (Type.IsAbstract)
+            {
+                throw new ArgumentException(Format(ReferenceTypeInvalid, Type.Name, Id));
+            }
+
             Id = id;
         }
 
         private protected Reference(AggregateRoot aggregate)
+            : this(aggregate.Id)
         {
-            Id = aggregate.Id;
         }
 
         public Guid Id { get; }

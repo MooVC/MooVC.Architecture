@@ -209,6 +209,9 @@
   <data name="EventCentricAggregateRootDomainEventHandlerNotSupportedException" xml:space="preserve">
     <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
   </data>
+  <data name="EventCentricAggregateRootStateChangesDenied" xml:space="preserve">
+    <value>Changed to the state of an aggregate of type {0} must be made through ApplyChanges.</value>
+  </data>
   <data name="GenericAggregateRequired" xml:space="preserve">
     <value>The aggregate must be provided.</value>
   </data>
@@ -232,6 +235,9 @@
   </data>
   <data name="PersistentBusStoreRequired" xml:space="preserve">
     <value>The storage that support persistence of domain events published via the bus must be provided.</value>
+  </data>
+  <data name="ReferenceTypeInvalid" xml:space="preserve">
+    <value>An reference cannot be generated for abstract type {0} with an ID {1:p}.</value>
   </data>
   <data name="SignedVersionPreviousFooterInvalid" xml:space="preserve">
     <value>The footer of previous version {0} is invalid.</value>

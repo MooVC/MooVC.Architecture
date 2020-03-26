@@ -333,6 +333,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changed to the state of an aggregate of type {0} must be made through ApplyChanges..
+        /// </summary>
+        internal static string EventCentricAggregateRootStateChangesDenied {
+            get {
+                return ResourceManager.GetString("EventCentricAggregateRootStateChangesDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The aggregate must be provided..
         /// </summary>
         internal static string GenericAggregateRequired {
@@ -401,6 +410,15 @@ namespace MooVC.Architecture {
         internal static string PersistentBusStoreRequired {
             get {
                 return ResourceManager.GetString("PersistentBusStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An reference cannot be generated for abstract type {0} with an ID {1:p}..
+        /// </summary>
+        internal static string ReferenceTypeInvalid {
+            get {
+                return ResourceManager.GetString("ReferenceTypeInvalid", resourceCulture);
             }
         }
         

@@ -14,7 +14,7 @@
             new Lazy<Reference<TAggregate>>(() => new Reference<TAggregate>());
 
         public Reference(Guid id)
-            : base(id)
+            : base(id, typeof(TAggregate))
         {
             ArgumentIsAcceptable(
                 id,
@@ -24,12 +24,12 @@
         }
 
         public Reference(TAggregate aggregate)
-            : base(aggregate)
+            : this(aggregate.Id)
         {
         }
 
         private Reference()
-            : base(Guid.Empty)
+            : base(Guid.Empty, typeof(TAggregate))
         {
         }
 
@@ -40,6 +40,14 @@
 
         public static Reference<TAggregate> Empty => empty.Value;
 
-        public override Type Type => typeof(TAggregate);
+        protected override Type DeserializeType(SerializationInfo info, StreamingContext context)
+        {
+            return typeof(TAggregate);
+        }
+
+        protected override void SerializeType(SerializationInfo info, StreamingContext context)
+        {
+            // Do nothing - The Type is already known
+        }
     }
 }

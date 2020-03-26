@@ -29,8 +29,8 @@
         [Fact]
         public void GivenAReferenceForABaseTypeThenFalseIsReturned()
         {
-            var aggregate = new SerializableAggregateRoot();
-            var reference = new VersionedReference<AggregateRoot>(aggregate);
+            var aggregate = new DerivedAggregateRoot(Guid.NewGuid());
+            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
             Assert.False(reference.IsMatch(aggregate));
         }
@@ -49,7 +49,7 @@
         {
             var firstAggregate = new SerializableAggregateRoot();
             var secondAggregate = new SerializableAggregateRoot(firstAggregate.Id);
-            var reference = new VersionedReference<AggregateRoot>(firstAggregate);
+            var reference = new VersionedReference<SerializableAggregateRoot>(firstAggregate);
 
             Assert.False(reference.IsMatch(secondAggregate));
         }
@@ -59,7 +59,7 @@
         {
             var firstAggregate = new SerializableAggregateRoot();
             var secondAggregate = new SerializableAggregateRoot();
-            var reference = new VersionedReference<AggregateRoot>(firstAggregate);
+            var reference = new VersionedReference<SerializableAggregateRoot>(firstAggregate);
 
             Assert.False(reference.IsMatch(secondAggregate));
         }
@@ -67,8 +67,8 @@
         [Fact]
         public void GivenAReferenceWithTheSameIdAndVersionButADifferentTypeThenFalseIsReturned()
         {
-            var aggregate = new SerializableAggregateRoot();
-            var reference = new VersionedReference<EventCentricAggregateRoot>(aggregate.Id, aggregate.Version);
+            var aggregate = new DerivedAggregateRoot(Guid.NewGuid());
+            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate.Id, aggregate.Version);
 
             Assert.False(reference.IsMatch(aggregate));
         }

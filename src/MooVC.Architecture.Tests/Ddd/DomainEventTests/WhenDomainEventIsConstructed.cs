@@ -11,7 +11,7 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
         public void GivenAContextAndAnAggregateReferenceThenTheContextAndAggregateReferenceArePropagated()
         {
             var aggregate = new SerializableAggregateRoot();
-            var expectedAggregate = new VersionedReference<AggregateRoot>(aggregate);
+            var expectedAggregate = new VersionedReference<SerializableAggregateRoot>(aggregate);
             var expectedContext = new SerializableMessage();
 
             var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);
@@ -34,7 +34,7 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
         public void GivenNoContextAndAnAggregateReferenceThenAnArgumentNullExceptionIsThrown()
         {
             var aggregate = new SerializableAggregateRoot();
-            var reference = new VersionedReference<AggregateRoot>(aggregate);
+            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
             _ = Assert.Throws<ArgumentNullException>(
                 () => new SerializableDomainEvent(null, reference));

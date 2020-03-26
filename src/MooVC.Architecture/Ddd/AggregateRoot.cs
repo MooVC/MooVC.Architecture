@@ -86,7 +86,7 @@
             ChangesRolledBack?.Invoke(this, args ?? EventArgs.Empty);
         }
 
-        private protected virtual void MarkChangesAsUncommitted()
+        protected virtual void MarkChangesAsUncommitted()
         {
             if (!HasUncommittedChanges)
             {
@@ -96,7 +96,7 @@
             }
         }
 
-        private protected virtual void RollbackUncommittedChanges()
+        protected virtual void RollbackUncommittedChanges()
         {
             if (HasUncommittedChanges)
             {

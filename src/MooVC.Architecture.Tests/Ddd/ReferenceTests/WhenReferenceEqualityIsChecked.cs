@@ -2,6 +2,7 @@
 {
     using System;
     using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
 
     public class WhenReferenceEqualityIsChecked
@@ -11,8 +12,8 @@
         {
             var aggregate = new SerializableAggregateRoot();
 
-            var first = new Reference<AggregateRoot>(aggregate);
-            var second = new VersionedReference<AggregateRoot>(aggregate);
+            var first = new Reference<SerializableAggregateRoot>(aggregate);
+            var second = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
             Assert.True(first == second);
         }
@@ -22,8 +23,8 @@
         {
             var aggregateId = Guid.NewGuid();
 
-            var first = new Reference<AggregateRoot>(aggregateId);
-            var second = new Reference<AggregateRoot>(aggregateId);
+            var first = new Reference<SerializableAggregateRoot>(aggregateId);
+            var second = new Reference<SerializableAggregateRoot>(aggregateId);
 
             Assert.True(first == second);
         }
@@ -31,8 +32,8 @@
         [Fact]
         public void GivenTwoSeparateInstancesWithTheDifferentIdButSameTypeThenBothAreNotConsideredEqual()
         {
-            var first = new Reference<AggregateRoot>(Guid.NewGuid());
-            var second = new Reference<AggregateRoot>(Guid.NewGuid());
+            var first = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            var second = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
 
             Assert.False(first == second);
         }
@@ -42,8 +43,8 @@
         {
             var aggregateId = Guid.NewGuid();
 
-            var first = new Reference<AggregateRoot>(aggregateId);
-            var second = new Reference<EventCentricAggregateRoot>(aggregateId);
+            var first = new Reference<SerializableAggregateRoot>(aggregateId);
+            var second = new Reference<SerializableEventCentricAggregateRoot>(aggregateId);
 
             Assert.False(first == second);
         }

@@ -10,46 +10,46 @@
 
     public sealed class WhenGetIsCalled
     {
-        private readonly Mock<Message> context;
-        private readonly Mock<IRepository<AggregateRoot>> repository;
+        private readonly SerializableMessage context;
+        private readonly Mock<IRepository<SerializableAggregateRoot>> repository;
 
         public WhenGetIsCalled()
         {
-            context = new Mock<Message>();
-            repository = new Mock<IRepository<AggregateRoot>>();
+            context = new SerializableMessage();
+            repository = new Mock<IRepository<SerializableAggregateRoot>>();
         }
 
         [Fact]
         public void GivenAReferenceAndARequestForTheLatestWhenMoreThanOneVersionExistsThenTheLatestAggregateIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var firstVersion = new Mock<AggregateRoot>(aggregateId);
-            var secondVersion = new Mock<AggregateRoot>(aggregateId);
-            var reference = new Reference<AggregateRoot>(aggregateId);
+            var firstVersion = new SerializableAggregateRoot(aggregateId);
+            var secondVersion = new SerializableAggregateRoot(aggregateId);
+            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<SignedVersion>(v => v == default)))
-               .Returns(secondVersion.Object);
+               .Returns(secondVersion);
 
-            AggregateRoot value = repository.Object.Get(context.Object, reference);
+            SerializableAggregateRoot value = repository.Object.Get(context, reference);
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
-            Assert.Equal(secondVersion.Object, value);
+            Assert.Equal(secondVersion, value);
         }
 
         [Fact]
         public void GivenAVersionedReferenceAndARequestForTheLatestWhenMoreThanOneVersionExistsThenTheRequestedVersionIsReturned()
         {
-            var aggregate = new SerializableEventCentricAggregateRoot();
+            var aggregate = new SerializableAggregateRoot();
             SignedVersion firstVersion = aggregate.Version;
-            var reference = new VersionedReference<AggregateRoot>(aggregate);
+            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
             aggregate.MarkChangesAsCommitted();
 
             var context = new SerializableMessage();
 
-            aggregate.Set(new SetRequest(context, Guid.NewGuid()));
+            aggregate.Set();
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregate.Id), It.Is<SignedVersion>(v => v == firstVersion)))
@@ -67,17 +67,18 @@
         {
             _ = repository
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
-                .Returns(default(AggregateRoot));
+                .Returns(default(SerializableAggregateRoot));
 
             var aggregateId = Guid.NewGuid();
 
-            AggregateNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateNotFoundException<AggregateRoot>>(
-                () => repository.Object.Get(context.Object, aggregateId));
+            AggregateNotFoundException<SerializableAggregateRoot> exception =
+                Assert.Throws<AggregateNotFoundException<SerializableAggregateRoot>>(
+                    () => repository.Object.Get(context, aggregateId));
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
             Assert.Equal(aggregateId, exception.AggregateId);
-            Assert.Equal(context.Object, exception.Context);
+            Assert.Equal(context, exception.Context);
         }
 
         [Fact]
@@ -89,7 +90,7 @@
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregate.Id), It.Is<SignedVersion>(v => v == aggregate.Version)))
                .Returns(aggregate);
 
-            AggregateRoot value = repository.Object.Get(context.Object, aggregate.Id, version: aggregate.Version);
+            AggregateRoot value = repository.Object.Get(context, aggregate.Id, version: aggregate.Version);
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
@@ -101,17 +102,18 @@
         {
             _ = repository
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
-                .Returns(default(AggregateRoot));
+                .Returns(default(SerializableAggregateRoot));
 
-            var reference = new Reference<AggregateRoot>(Guid.NewGuid());
+            var reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
 
-            AggregateNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateNotFoundException<AggregateRoot>>(
-                () => repository.Object.Get(context.Object, reference));
+            AggregateNotFoundException<SerializableAggregateRoot> exception =
+                Assert.Throws<AggregateNotFoundException<SerializableAggregateRoot>>(
+                    () => repository.Object.Get(context, reference));
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
             Assert.Equal(reference.Id, exception.AggregateId);
-            Assert.Equal(context.Object, exception.Context);
+            Assert.Equal(context, exception.Context);
         }
 
         [Fact]
@@ -119,18 +121,19 @@
         {
             _ = repository
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
-                .Returns(default(AggregateRoot));
+                .Returns(default(SerializableAggregateRoot));
 
             var aggregate = new SerializableAggregateRoot();
-            var reference = new VersionedReference<AggregateRoot>(aggregate);
+            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
-            AggregateVersionNotFoundException<AggregateRoot> exception = Assert.Throws<AggregateVersionNotFoundException<AggregateRoot>>(
-                () => repository.Object.Get(context.Object, reference));
+            AggregateVersionNotFoundException<SerializableAggregateRoot> exception =
+                Assert.Throws<AggregateVersionNotFoundException<SerializableAggregateRoot>>(
+                    () => repository.Object.Get(context, reference));
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
             Assert.Equal(reference, exception.Aggregate);
-            Assert.Equal(context.Object, exception.Context);
+            Assert.Equal(context, exception.Context);
         }
 
         [Fact]
@@ -138,12 +141,12 @@
         {
             _ = repository
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
-                .Returns(default(AggregateRoot));
+                .Returns(default(SerializableAggregateRoot));
 
-            var reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid());
+            var reference = new Reference<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => repository.Object.Get(context.Object, reference));
+                () => repository.Object.Get(context, reference));
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Never);
         }
@@ -152,18 +155,18 @@
         public void GivenAReferenceThatExistsThenTheAggregateIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId);
-            var reference = new Reference<AggregateRoot>(aggregateId);
+            var aggregate = new SerializableAggregateRoot(aggregateId);
+            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
             _ = repository
                .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregateId), It.Is<SignedVersion>(v => v == default)))
-               .Returns(aggregate.Object);
+               .Returns(aggregate);
 
-            AggregateRoot value = repository.Object.Get(context.Object, reference);
+            AggregateRoot value = repository.Object.Get(context, reference);
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
-            Assert.Equal(aggregate.Object, value);
+            Assert.Equal(aggregate, value);
         }
     }
 }

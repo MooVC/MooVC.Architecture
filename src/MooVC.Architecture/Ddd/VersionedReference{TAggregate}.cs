@@ -13,10 +13,10 @@ namespace MooVC.Architecture.Ddd
         private static readonly Lazy<VersionedReference<TAggregate>> empty =
             new Lazy<VersionedReference<TAggregate>>(() => new VersionedReference<TAggregate>());
 
-        private readonly Lazy<Reference<TAggregate>> actualReference;
+        private readonly Lazy<Reference<TAggregate>> reference;
 
         public VersionedReference(Guid id, SignedVersion version)
-            : base(id, version)
+            : base(id, typeof(TAggregate), version)
         {
             ArgumentIsAcceptable(
                 id,
@@ -24,31 +24,38 @@ namespace MooVC.Architecture.Ddd
                 value => value != Guid.Empty,
                 GenericIdInvalid);
 
-            actualReference = new Lazy<Reference<TAggregate>>(() => this.ToReference());
+            reference = new Lazy<Reference<TAggregate>>(() => this.ToReference());
         }
 
         public VersionedReference(TAggregate aggregate)
-            : base(aggregate)
+            : this(aggregate.Id, aggregate.Version)
         {
-            actualReference = new Lazy<Reference<TAggregate>>(() => this.ToReference());
         }
 
         private VersionedReference()
-            : base(Guid.Empty, SignedVersion.Empty)
+            : base(Guid.Empty, typeof(TAggregate), SignedVersion.Empty)
         {
-            actualReference = new Lazy<Reference<TAggregate>>(() => Reference<TAggregate>.Empty);
+            reference = new Lazy<Reference<TAggregate>>(() => Reference<TAggregate>.Empty);
         }
 
         private VersionedReference(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            actualReference = new Lazy<Reference<TAggregate>>(() => this.ToReference());
+            reference = new Lazy<Reference<TAggregate>>(() => this.ToReference());
         }
 
         public static VersionedReference<TAggregate> Empty => empty.Value;
 
-        public Reference<TAggregate> Reference => actualReference.Value;
+        public Reference<TAggregate> Reference => reference.Value;
 
-        public override Type Type => typeof(TAggregate);
+        protected override Type DeserializeType(SerializationInfo info, StreamingContext context)
+        {
+            return typeof(TAggregate);
+        }
+
+        protected override void SerializeType(SerializationInfo info, StreamingContext context)
+        {
+            // Do nothing - The Type is already known
+        }
     }
 }

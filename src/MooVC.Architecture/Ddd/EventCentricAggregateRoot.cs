@@ -50,7 +50,7 @@
             {
                 if (changes.Any())
                 {
-                    throw new AggregateHasUncommittedChangesException(this.ToVersionedReference());
+                    throw new AggregateHasUncommittedChangesException(new VersionedReference(this));
                 }
 
                 IEnumerable<DomainEvent> sequence = history
@@ -59,7 +59,7 @@
 
                 if (!sequence.SequenceEqual(history))
                 {
-                    throw new AggregateEventSequenceUnorderedException(this.ToVersionedReference(), history);
+                    throw new AggregateEventSequenceUnorderedException(new VersionedReference(this), history);
                 }
 
                 VersionedReference mismatch = sequence
@@ -69,14 +69,14 @@
 
                 if (mismatch is { })
                 {
-                    throw new AggregateEventMismatchException(this.ToVersionedReference(), mismatch);
+                    throw new AggregateEventMismatchException(new VersionedReference(this), mismatch);
                 }
 
                 SignedVersion startingVersion = sequence.First().Aggregate.Version;
 
                 if (!(Version.IsNew || startingVersion.IsNext(Version)))
                 {
-                    throw new AggregateHistoryInvalidForStateException(this.ToVersionedReference(), sequence, startingVersion);
+                    throw new AggregateHistoryInvalidForStateException(new VersionedReference(this), sequence, startingVersion);
                 }
 
                 sequence.ForEach(@event => ApplyChange(() => @event, isNew: false));
@@ -85,7 +85,7 @@
             }
         }
 
-        public override void MarkChangesAsCommitted()
+        public sealed override void MarkChangesAsCommitted()
         {
             if (HasUncommittedChanges)
             {
@@ -102,7 +102,7 @@
 
             if (triggersVersionIncrement)
             {
-                MarkChangesAsUncommitted();
+                base.MarkChangesAsUncommitted();
             }
 
             try
@@ -122,16 +122,28 @@
             {
                 if (triggersVersionIncrement)
                 {
-                    RollbackUncommittedChanges();
+                    base.RollbackUncommittedChanges();
+
+                    changes.Clear();
                 }
 
                 throw;
             }
         }
 
+        protected sealed override void MarkChangesAsUncommitted()
+        {
+            throw new InvalidOperationException(EventCentricAggregateRootStateChangesDenied);
+        }
+
         protected override void OnChangesMarkedAsCommitted(EventArgs args = default)
         {
             base.OnChangesMarkedAsCommitted(new ChangesMarkedAsCommittedEventArgs(changes));
+        }
+
+        protected sealed override void RollbackUncommittedChanges()
+        {
+            throw new InvalidOperationException(EventCentricAggregateRootStateChangesDenied);
         }
 
         private Action<TEvent> CreateHandler<TEvent>(Type eventType)

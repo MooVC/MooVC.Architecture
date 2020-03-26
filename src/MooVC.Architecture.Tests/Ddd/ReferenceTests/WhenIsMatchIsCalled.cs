@@ -2,6 +2,7 @@
 {
     using System;
     using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Moq;
     using Xunit;
 
@@ -30,8 +31,8 @@
         public void GivenAReferenceForABaseTypeThenFalseIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(aggregateId);
-            var reference = new Reference<AggregateRoot>(aggregateId);
+            var aggregate = new DerivedAggregateRoot(aggregateId);
+            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(aggregate));
         }
@@ -51,20 +52,20 @@
         {
             var aggregateId = Guid.NewGuid();
             var referenceId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId);
-            var reference = new Reference<AggregateRoot>(referenceId);
+            var aggregate = new SerializableAggregateRoot(aggregateId);
+            var reference = new Reference<SerializableAggregateRoot>(referenceId);
 
-            Assert.False(condition: reference.IsMatch(aggregate.Object));
+            Assert.False(condition: reference.IsMatch(aggregate));
         }
 
         [Fact]
         public void GivenAReferenceWithTheSameIdButADifferentTypeThenFalseIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(aggregateId);
-            var reference = new Reference<EventCentricAggregateRoot>(aggregateId);
+            var aggregate = new SerializableAggregateRoot(aggregateId);
+            var reference = new Reference<SerializableEventCentricAggregateRoot>(aggregateId);
 
-            Assert.False(condition: reference.IsMatch(aggregate.Object));
+            Assert.False(condition: reference.IsMatch(aggregate));
         }
     }
 }

@@ -9,7 +9,9 @@ namespace MooVC.Architecture.Ddd
         {
             ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
-            return (VersionedReference<TAggregate>)reference;
+            return reference is VersionedReference<TAggregate> response
+                ? response
+                : new VersionedReference<TAggregate>(reference.Id, reference.Version);
         }
     }
 }

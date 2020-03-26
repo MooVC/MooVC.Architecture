@@ -6,38 +6,42 @@ namespace MooVC.Architecture.Ddd
     using System.Security.Permissions;
     using MooVC.Serialization;
     using static System.String;
+    using static MooVC.Ensure;
     using static Resources;
 
     [Serializable]
-    public abstract class Reference
+    public class Reference
         : Value
     {
-        protected Reference(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        internal Reference(AggregateRoot aggregate)
+            : this(aggregate.Id, aggregate.GetType())
         {
-            Id = info.TryGetValue<Guid>(nameof(Id));
         }
 
-        private protected Reference(Guid id)
+        internal Reference(Guid id, Type type)
         {
-            if (Type.IsAbstract)
-            {
-                throw new ArgumentException(Format(ReferenceTypeInvalid, Type.Name, Id));
-            }
+            ArgumentIsAcceptable(
+                type,
+                nameof(type),
+                _ => !type.IsAbstract,
+                Format(ReferenceTypeInvalid, type.Name, Id));
 
             Id = id;
+            Type = type;
         }
 
-        private protected Reference(AggregateRoot aggregate)
-            : this(aggregate.Id)
+        private protected Reference(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
+            Id = DeserializeId(info, context);
+            Type = DeserializeType(info, context);
         }
 
         public Guid Id { get; }
 
         public bool IsEmpty => Id == Guid.Empty;
 
-        public abstract Type Type { get; }
+        public Type Type { get; }
 
         public static bool operator ==(Reference first, Reference second)
         {
@@ -64,7 +68,8 @@ namespace MooVC.Architecture.Ddd
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddValue(nameof(Id), Id);
+            SerializeId(info, context);
+            SerializeType(info, context);
         }
 
         public virtual bool IsMatch(AggregateRoot aggregate)
@@ -74,10 +79,30 @@ namespace MooVC.Architecture.Ddd
                 : false;
         }
 
+        protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)
+        {
+            return info.TryGetValue<Guid>(nameof(Id));
+        }
+
+        protected virtual Type DeserializeType(SerializationInfo info, StreamingContext context)
+        {
+            return info.GetValue<Type>(nameof(Type));
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Id;
             yield return Type;
+        }
+
+        protected virtual void SerializeId(SerializationInfo info, StreamingContext context)
+        {
+            _ = info.TryAddValue(nameof(Id), Id);
+        }
+
+        protected virtual void SerializeType(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Type), Type);
         }
 
         private static bool EqualOperator(Reference left, Reference right)

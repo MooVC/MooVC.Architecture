@@ -1,6 +1,8 @@
 namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
 {
     using System;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
 
     public sealed class WhenToTypedReferenceIsCalled
@@ -8,8 +10,8 @@ namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
         [Fact]
         public void GivenAMatchingReferenceThenNoExceptionIsThrown()
         {
-            Reference generic = new Reference<AggregateRoot>(Guid.NewGuid());
-            Reference<AggregateRoot> typed = generic.ToTypedReference<AggregateRoot>();
+            Reference generic = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference<SerializableAggregateRoot> typed = generic.ToTypedReference<SerializableAggregateRoot>();
 
             Assert.Same(generic, typed);
         }
@@ -17,8 +19,8 @@ namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
         [Fact]
         public void GivenAMatchingEmptyReferenceThenNoExceptionIsThrown()
         {
-            Reference generic = Reference<AggregateRoot>.Empty;
-            Reference<AggregateRoot> typed = generic.ToTypedReference<AggregateRoot>();
+            Reference generic = Reference<SerializableAggregateRoot>.Empty;
+            Reference<SerializableAggregateRoot> typed = generic.ToTypedReference<SerializableAggregateRoot>();
 
             Assert.Same(generic, typed);
         }
@@ -26,10 +28,10 @@ namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
         [Fact]
         public void GivenAMismatchingReferenceThenAnArgumentExceptionIsThrown()
         {
-            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid());
+            Reference reference = new Reference<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => reference.ToTypedReference<AggregateRoot>());
+                () => reference.ToTypedReference<SerializableAggregateRoot>());
 
             Assert.Equal(nameof(reference), exception.ParamName);
         }
@@ -37,10 +39,10 @@ namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
         [Fact]
         public void GivenAMismatchingEmptyReferenceThenAnArgumentExceptionIsThrown()
         {
-            Reference reference = Reference<EventCentricAggregateRoot>.Empty;
+            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Empty;
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => reference.ToTypedReference<AggregateRoot>());
+                () => reference.ToTypedReference<SerializableAggregateRoot>());
 
             Assert.Equal(nameof(reference), exception.ParamName);
         }

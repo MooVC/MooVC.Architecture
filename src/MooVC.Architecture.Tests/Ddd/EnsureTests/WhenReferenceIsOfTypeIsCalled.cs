@@ -2,6 +2,8 @@ namespace MooVC.Architecture.Ddd.EnsureTests
 {
     using System;
     using MooVC.Architecture.Ddd;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
     using static MooVC.Architecture.Ddd.Ensure;
 
@@ -10,26 +12,26 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMatchingReferenceThenNoExceptionIsThrown()
         {
-            Reference reference = new Reference<AggregateRoot>(Guid.NewGuid());
+            Reference reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
 
-            ReferenceIsOfType<AggregateRoot>(reference, nameof(reference));
+            ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference));
         }
 
         [Fact]
         public void GivenAMatchingEmptyReferenceThenNoExceptionIsThrown()
         {
-            Reference reference = Reference<AggregateRoot>.Empty;
+            Reference reference = Reference<SerializableAggregateRoot>.Empty;
 
-            ReferenceIsOfType<AggregateRoot>(reference, nameof(reference));
+            ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference));
         }
 
         [Fact]
         public void GivenAMismatchingReferenceThenAnArgumentExceptionIsThrown()
         {
-            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid());
+            Reference reference = new Reference<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => ReferenceIsOfType<AggregateRoot>(reference, nameof(reference)));
+                () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference)));
 
             Assert.Equal(nameof(reference), exception.ParamName);
         }
@@ -37,10 +39,10 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingEmptyReferenceThenAnArgumentExceptionIsThrown()
         {
-            Reference reference = Reference<EventCentricAggregateRoot>.Empty;
+            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Empty;
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => ReferenceIsOfType<AggregateRoot>(reference, nameof(reference)));
+                () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference)));
 
             Assert.Equal(nameof(reference), exception.ParamName);
         }
@@ -48,11 +50,11 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
         {
-            Reference reference = new Reference<EventCentricAggregateRoot>(Guid.NewGuid());
+            Reference reference = new Reference<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
             string message = "Some sessage";
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => ReferenceIsOfType<AggregateRoot>(reference, nameof(reference), message));
+                () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference), message));
 
             Assert.StartsWith(message, exception.Message);
         }
@@ -60,11 +62,11 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingEmptyReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
         {
-            Reference reference = Reference<EventCentricAggregateRoot>.Empty;
+            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Empty;
             string message = "Some sessage";
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => ReferenceIsOfType<AggregateRoot>(reference, nameof(reference), message));
+                () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference), message));
 
             Assert.StartsWith(message, exception.Message);
         }

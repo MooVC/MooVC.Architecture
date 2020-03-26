@@ -10,17 +10,17 @@ namespace MooVC.Architecture.Ddd
     using static Resources;
 
     [Serializable]
-    public abstract class VersionedReference
+    public class VersionedReference
         : Reference
     {
-        protected VersionedReference(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        internal VersionedReference(AggregateRoot aggregate)
+            : base(aggregate)
         {
-            Version = info.TryGetValue(nameof(Version), defaultValue: SignedVersion.Empty);
+            Version = aggregate.Version;
         }
 
-        private protected VersionedReference(Guid id, SignedVersion version)
-            : base(id)
+        internal VersionedReference(Guid id, Type type, SignedVersion version)
+            : base(id, type)
         {
             ArgumentNotNull(
                 version,
@@ -30,10 +30,10 @@ namespace MooVC.Architecture.Ddd
             Version = version;
         }
 
-        private protected VersionedReference(AggregateRoot aggregate)
-            : base(aggregate)
+        private protected VersionedReference(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
-            Version = aggregate.Version;
+            Version = info.TryGetValue(nameof(Version), defaultValue: SignedVersion.Empty);
         }
 
         public SignedVersion Version { get; }

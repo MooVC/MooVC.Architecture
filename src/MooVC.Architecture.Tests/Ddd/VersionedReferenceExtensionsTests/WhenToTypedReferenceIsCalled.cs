@@ -11,8 +11,8 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
         public void GivenAMatchingVersionedReferenceThenNoExceptionIsThrown()
         {
             var aggregate = new SerializableAggregateRoot();
-            VersionedReference generic = new VersionedReference<AggregateRoot>(aggregate);
-            VersionedReference<AggregateRoot> typed = generic.ToTypedReference<AggregateRoot>();
+            VersionedReference generic = new VersionedReference<SerializableAggregateRoot>(aggregate);
+            VersionedReference<SerializableAggregateRoot> typed = generic.ToTypedReference<SerializableAggregateRoot>();
 
             Assert.Same(generic, typed);
         }
@@ -20,8 +20,8 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
         [Fact]
         public void GivenAMatchingEmptyVersionedReferenceThenNoExceptionIsThrown()
         {
-            VersionedReference generic = VersionedReference<AggregateRoot>.Empty;
-            VersionedReference<AggregateRoot> typed = generic.ToTypedReference<AggregateRoot>();
+            VersionedReference generic = VersionedReference<SerializableAggregateRoot>.Empty;
+            VersionedReference<SerializableAggregateRoot> typed = generic.ToTypedReference<SerializableAggregateRoot>();
 
             Assert.Same(generic, typed);
         }
@@ -30,7 +30,7 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
         public void GivenAMismatchingVersionedReferenceThenAnArgumentExceptionIsThrown()
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
-            VersionedReference reference = new VersionedReference<EventCentricAggregateRoot>(aggregate);
+            VersionedReference reference = new VersionedReference<SerializableEventCentricAggregateRoot>(aggregate);
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => reference.ToTypedReference<AggregateRoot>());
@@ -41,10 +41,10 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceExtensionsTests
         [Fact]
         public void GivenAMismatchingEmptyVersionedReferenceThenAnArgumentExceptionIsThrown()
         {
-            VersionedReference reference = VersionedReference<EventCentricAggregateRoot>.Empty;
+            VersionedReference reference = VersionedReference<SerializableEventCentricAggregateRoot>.Empty;
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => reference.ToTypedReference<AggregateRoot>());
+                () => reference.ToTypedReference<SerializableAggregateRoot>());
 
             Assert.Equal(nameof(reference), exception.ParamName);
         }

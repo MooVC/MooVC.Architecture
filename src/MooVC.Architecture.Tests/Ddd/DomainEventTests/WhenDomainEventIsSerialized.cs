@@ -12,7 +12,7 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var aggregate = new SerializableAggregateRoot();
-            var expectedAggregate = new VersionedReference<AggregateRoot>(aggregate);
+            var expectedAggregate = new VersionedReference<SerializableAggregateRoot>(aggregate);
             var expectedContext = new SerializableMessage();
 
             var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);

@@ -9,9 +9,8 @@
     public abstract class DomainException
         : InvalidOperationException
     {
-        [Obsolete("To be removed in Version 5. Use DomainException{TAggregate} instead.", true)]
         protected DomainException(Message context, AggregateRoot aggregate, string message)
-            : this(context, aggregate.ToVersionedReference(), message)
+            : this(context, new VersionedReference(aggregate), message)
         {
         }
 

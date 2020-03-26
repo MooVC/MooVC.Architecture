@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.ReferenceTests
 {
     using System;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Moq;
     using Xunit;
 
@@ -10,12 +11,12 @@
         public void GivenAnAggregateThenTheIdAndTypeArePropagated()
         {
             var expectedId = Guid.NewGuid();
-            var aggregate = new Mock<AggregateRoot>(expectedId);
+            var aggregate = new SerializableAggregateRoot(expectedId);
 
-            var reference = new Reference<AggregateRoot>(aggregate.Object);
+            var reference = new Reference<SerializableAggregateRoot>(aggregate);
 
             Assert.Equal(expectedId, reference.Id);
-            Assert.Equal(typeof(AggregateRoot), reference.Type);
+            Assert.Equal(typeof(SerializableAggregateRoot), reference.Type);
         }
 
         [Fact]
@@ -23,10 +24,10 @@
         {
             var expectedId = Guid.NewGuid();
 
-            var reference = new Reference<AggregateRoot>(expectedId);
+            var reference = new Reference<SerializableAggregateRoot>(expectedId);
 
             Assert.Equal(expectedId, reference.Id);
-            Assert.Equal(typeof(AggregateRoot), reference.Type);
+            Assert.Equal(typeof(SerializableAggregateRoot), reference.Type);
         }
 
         [Fact]

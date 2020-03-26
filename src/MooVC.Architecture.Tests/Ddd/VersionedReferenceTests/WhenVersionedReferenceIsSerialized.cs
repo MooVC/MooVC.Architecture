@@ -10,8 +10,8 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var aggregate = new SerializableAggregateRoot();
-            var reference = new VersionedReference<AggregateRoot>(aggregate);
-            VersionedReference<AggregateRoot> clone = reference.Clone();
+            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
+            VersionedReference<SerializableAggregateRoot> clone = reference.Clone();
 
             Assert.Equal(reference, clone);
             Assert.NotSame(reference, clone);

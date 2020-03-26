@@ -4,7 +4,7 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
     using System.Runtime.Serialization;
 
     [Serializable]
-    internal class SerializableAggregateRoot
+    public class SerializableAggregateRoot
         : AggregateRoot
     {
         public SerializableAggregateRoot()
@@ -20,6 +20,11 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         private SerializableAggregateRoot(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+        }
+
+        public void Set()
+        {
+            MarkChangesAsUncommitted();
         }
     }
 }

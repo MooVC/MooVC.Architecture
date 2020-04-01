@@ -74,7 +74,7 @@
 
                 SignedVersion startingVersion = sequence.First().Aggregate.Version;
 
-                if (!(Version.IsNew || startingVersion.IsNext(Version)))
+                if (!(startingVersion.IsNext(Version) || (startingVersion.IsNew && Version.IsNew)))
                 {
                     throw new AggregateHistoryInvalidForStateException(new VersionedReference(this), sequence, startingVersion);
                 }
@@ -111,7 +111,10 @@
 
                 handler ??= CreateHandler<TEvent>(@event.GetType());
 
-                handler(@event);
+                if (handler is { })
+                {
+                    handler(@event);
+                }
 
                 if (isNew)
                 {
@@ -160,10 +163,7 @@
 
             if (handler is null)
             {
-                throw new NotSupportedException(Format(
-                    EventCentricAggregateRootDomainEventHandlerNotSupportedException,
-                    eventType.Name,
-                    type.Name));
+                return default;
             }
 
             return @event => _ = handler.Invoke(this, new object[] { @event });

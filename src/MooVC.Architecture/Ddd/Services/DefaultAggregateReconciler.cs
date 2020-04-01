@@ -12,12 +12,14 @@
         : AggregateReconciler
     {
         private readonly Func<Type, IAggregateReconciliationProxy> factory;
+        private readonly TimeSpan? timeout;
 
-        public DefaultAggregateReconciler(Func<Type, IAggregateReconciliationProxy> factory)
+        public DefaultAggregateReconciler(Func<Type, IAggregateReconciliationProxy> factory, TimeSpan? timeout = default)
         {
             ArgumentNotNull(factory, nameof(factory), AggregateReconcilerFactoryRequired);
 
             this.factory = factory;
+            this.timeout = timeout;
         }
 
         public override void Reconcile(IEnumerable<DomainEvent> events)
@@ -40,10 +42,10 @@
             }
         }
 
-        private void Reconcile(
-            Reference aggregate,
-            IEnumerable<DomainEvent> events,
-            IAggregateReconciliationProxy proxy)
+        private void PerformCoordinatedReconcile(
+           Reference aggregate,
+           IEnumerable<DomainEvent> events,
+           IAggregateReconciliationProxy proxy)
         {
             EventCentricAggregateRoot existing = proxy.Get(aggregate);
 
@@ -57,6 +59,16 @@
             }
 
             Apply(existing, events, proxy, aggregate);
+        }
+
+        private void Reconcile(
+            Reference aggregate,
+            IEnumerable<DomainEvent> events,
+            IAggregateReconciliationProxy proxy)
+        {
+            aggregate.Coordinate(
+                () => PerformCoordinatedReconcile(aggregate, events, proxy),
+                timeout: timeout);
         }
     }
 }

@@ -170,6 +170,9 @@
   <data name="AggregateReferenceMismatchExceptionMessage" xml:space="preserve">
     <value>Reference for aggregate {0:p} of type {1} cannot be converted type {2}.</value>
   </data>
+  <data name="AggregateRootExtensionsCoordinateAggregateRequired" xml:space="preserve">
+    <value>The aggregate that serves as the context for coordination must be provided.</value>
+  </data>
   <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
     <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>
   </data>
@@ -206,9 +209,6 @@
   <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
     <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
   </data>
-  <data name="EventCentricAggregateRootDomainEventHandlerNotSupportedException" xml:space="preserve">
-    <value>Handler for event of type {0} is not supported by aggregate of type {1}.</value>
-  </data>
   <data name="EventCentricAggregateRootStateChangesDenied" xml:space="preserve">
     <value>Changed to the state of an aggregate of type {0} must be made through ApplyChanges.</value>
   </data>
@@ -224,6 +224,9 @@
   <data name="HandlerFailureExceptionMessage" xml:space="preserve">
     <value>Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}.</value>
   </data>
+  <data name="MessageExtensionsCoordinateMessageRequired" xml:space="preserve">
+    <value>The message that serves as the context for coordination must be provided.</value>
+  </data>
   <data name="PaginatedQueryPagingRequired" xml:space="preserve">
     <value>The paging instructions for this query must be provided.</value>
   </data>
@@ -235,6 +238,9 @@
   </data>
   <data name="PersistentBusStoreRequired" xml:space="preserve">
     <value>The storage that support persistence of domain events published via the bus must be provided.</value>
+  </data>
+  <data name="ReferenceExtensionsCoordinateReferenceeRequired" xml:space="preserve">
+    <value>The reference that serves as the context for coordination must be provided.</value>
   </data>
   <data name="ReferenceTypeInvalid" xml:space="preserve">
     <value>An reference cannot be generated for abstract type {0} with an ID {1:p}.</value>

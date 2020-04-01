@@ -216,6 +216,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The aggregate that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string AggregateRootExtensionsCoordinateAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateRootExtensionsCoordinateAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version {2} of aggregate type {1} with an ID of {0:p} could not be found..
         /// </summary>
         internal static string AggregateVersionNotFoundExceptionMessage {
@@ -324,15 +333,6 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handler for event of type {0} is not supported by aggregate of type {1}..
-        /// </summary>
-        internal static string EventCentricAggregateRootDomainEventHandlerNotSupportedException {
-            get {
-                return ResourceManager.GetString("EventCentricAggregateRootDomainEventHandlerNotSupportedException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Changed to the state of an aggregate of type {0} must be made through ApplyChanges..
         /// </summary>
         internal static string EventCentricAggregateRootStateChangesDenied {
@@ -378,6 +378,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The message that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string MessageExtensionsCoordinateMessageRequired {
+            get {
+                return ResourceManager.GetString("MessageExtensionsCoordinateMessageRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The paging instructions for this query must be provided..
         /// </summary>
         internal static string PaginatedQueryPagingRequired {
@@ -410,6 +419,15 @@ namespace MooVC.Architecture {
         internal static string PersistentBusStoreRequired {
             get {
                 return ResourceManager.GetString("PersistentBusStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string ReferenceExtensionsCoordinateReferenceeRequired {
+            get {
+                return ResourceManager.GetString("ReferenceExtensionsCoordinateReferenceeRequired", resourceCulture);
             }
         }
         

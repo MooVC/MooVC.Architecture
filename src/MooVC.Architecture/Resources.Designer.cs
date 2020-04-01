@@ -225,6 +225,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The destination must be provided..
+        /// </summary>
+        internal static string AggregateRootExtensionsDestinationRequired {
+            get {
+                return ResourceManager.GetString("AggregateRootExtensionsDestinationRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version {2} of aggregate type {1} with an ID of {0:p} could not be found..
         /// </summary>
         internal static string AggregateVersionNotFoundExceptionMessage {
@@ -257,6 +266,15 @@ namespace MooVC.Architecture {
         internal static string BusMessageRequired {
             get {
                 return ResourceManager.GetString("BusMessageRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The repository must be provided..
+        /// </summary>
+        internal static string CoordinatedOperationHandlerRepositoryRequired {
+            get {
+                return ResourceManager.GetString("CoordinatedOperationHandlerRepositoryRequired", resourceCulture);
             }
         }
         

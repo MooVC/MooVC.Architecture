@@ -173,6 +173,9 @@
   <data name="AggregateRootExtensionsCoordinateAggregateRequired" xml:space="preserve">
     <value>The aggregate that serves as the context for coordination must be provided.</value>
   </data>
+  <data name="AggregateRootExtensionsDestinationRequired" xml:space="preserve">
+    <value>The destination must be provided.</value>
+  </data>
   <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
     <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>
   </data>
@@ -184,6 +187,9 @@
   </data>
   <data name="BusMessageRequired" xml:space="preserve">
     <value>The message to be invoked must be provided.</value>
+  </data>
+  <data name="CoordinatedOperationHandlerRepositoryRequired" xml:space="preserve">
+    <value>The repository must be provided.</value>
   </data>
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>

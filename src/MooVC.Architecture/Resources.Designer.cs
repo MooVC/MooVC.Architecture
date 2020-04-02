@@ -216,6 +216,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The aggregate that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string AggregateRootExtensionsCoordinateAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateRootExtensionsCoordinateAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The destination must be provided..
+        /// </summary>
+        internal static string AggregateRootExtensionsDestinationRequired {
+            get {
+                return ResourceManager.GetString("AggregateRootExtensionsDestinationRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version {2} of aggregate type {1} with an ID of {0:p} could not be found..
         /// </summary>
         internal static string AggregateVersionNotFoundExceptionMessage {
@@ -248,6 +266,15 @@ namespace MooVC.Architecture {
         internal static string BusMessageRequired {
             get {
                 return ResourceManager.GetString("BusMessageRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The repository must be provided..
+        /// </summary>
+        internal static string CoordinatedOperationHandlerRepositoryRequired {
+            get {
+                return ResourceManager.GetString("CoordinatedOperationHandlerRepositoryRequired", resourceCulture);
             }
         }
         
@@ -324,15 +351,6 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handler for event of type {0} is not supported by aggregate of type {1}..
-        /// </summary>
-        internal static string EventCentricAggregateRootDomainEventHandlerNotSupportedException {
-            get {
-                return ResourceManager.GetString("EventCentricAggregateRootDomainEventHandlerNotSupportedException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Changed to the state of an aggregate of type {0} must be made through ApplyChanges..
         /// </summary>
         internal static string EventCentricAggregateRootStateChangesDenied {
@@ -378,6 +396,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The message that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string MessageExtensionsCoordinateMessageRequired {
+            get {
+                return ResourceManager.GetString("MessageExtensionsCoordinateMessageRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The object that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string ObjectExtensionsCoordinateObjectRequired {
+            get {
+                return ResourceManager.GetString("ObjectExtensionsCoordinateObjectRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The paging instructions for this query must be provided..
         /// </summary>
         internal static string PaginatedQueryPagingRequired {
@@ -414,6 +450,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string ReferenceExtensionsCoordinateReferenceeRequired {
+            get {
+                return ResourceManager.GetString("ReferenceExtensionsCoordinateReferenceeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An reference cannot be generated for abstract type {0} with an ID {1:p}..
         /// </summary>
         internal static string ReferenceTypeInvalid {
@@ -437,6 +482,15 @@ namespace MooVC.Architecture {
         internal static string SignedVersionPreviousRequired {
             get {
                 return ResourceManager.GetString("SignedVersionPreviousRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string TypeExtensionsCoordinateTypeRequired {
+            get {
+                return ResourceManager.GetString("TypeExtensionsCoordinateTypeRequired", resourceCulture);
             }
         }
         

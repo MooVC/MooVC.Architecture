@@ -405,6 +405,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The object that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string ObjectExtensionsCoordinateObjectRequired {
+            get {
+                return ResourceManager.GetString("ObjectExtensionsCoordinateObjectRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The paging instructions for this query must be provided..
         /// </summary>
         internal static string PaginatedQueryPagingRequired {
@@ -473,6 +482,15 @@ namespace MooVC.Architecture {
         internal static string SignedVersionPreviousRequired {
             get {
                 return ResourceManager.GetString("SignedVersionPreviousRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string TypeExtensionsCoordinateTypeRequired {
+            get {
+                return ResourceManager.GetString("TypeExtensionsCoordinateTypeRequired", resourceCulture);
             }
         }
         

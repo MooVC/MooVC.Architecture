@@ -233,6 +233,9 @@
   <data name="MessageExtensionsCoordinateMessageRequired" xml:space="preserve">
     <value>The message that serves as the context for coordination must be provided.</value>
   </data>
+  <data name="ObjectExtensionsCoordinateObjectRequired" xml:space="preserve">
+    <value>The object that serves as the context for coordination must be provided.</value>
+  </data>
   <data name="PaginatedQueryPagingRequired" xml:space="preserve">
     <value>The paging instructions for this query must be provided.</value>
   </data>
@@ -256,6 +259,9 @@
   </data>
   <data name="SignedVersionPreviousRequired" xml:space="preserve">
     <value>The previous version must be provided.</value>
+  </data>
+  <data name="TypeExtensionsCoordinateTypeRequired" xml:space="preserve">
+    <value>The type that serves as the context for coordination must be provided.</value>
   </data>
   <data name="UnsupportedAggregateDetectedEventArgsAggregateRequired" xml:space="preserve">
     <value>A reference to the aggregate for which reconciliation is not supported must be provided.</value>

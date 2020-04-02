@@ -8,7 +8,6 @@
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
-    using static System.String;
     using static Resources;
 
     [Serializable]

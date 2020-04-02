@@ -12,13 +12,18 @@
         : AggregateReconciler
     {
         private readonly Func<Type, IAggregateReconciliationProxy> factory;
+        private readonly bool ignorePreviousVersions;
         private readonly TimeSpan? timeout;
 
-        public DefaultAggregateReconciler(Func<Type, IAggregateReconciliationProxy> factory, TimeSpan? timeout = default)
+        public DefaultAggregateReconciler(
+            Func<Type, IAggregateReconciliationProxy> factory,
+            bool ignorePreviousVersions = true,
+            TimeSpan? timeout = default)
         {
             ArgumentNotNull(factory, nameof(factory), AggregateReconcilerFactoryRequired);
 
             this.factory = factory;
+            this.ignorePreviousVersions = ignorePreviousVersions;
             this.timeout = timeout;
         }
 
@@ -53,7 +58,7 @@
             {
                 existing = proxy.Create(aggregate);
             }
-            else
+            else if (ignorePreviousVersions)
             {
                 events = RemovePreviousVersions(events, existing.Version);
             }

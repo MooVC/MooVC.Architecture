@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
@@ -11,11 +10,9 @@
     using static Resources;
 
     [Serializable]
-    public abstract class EventCentricAggregateRoot
+    public abstract partial class EventCentricAggregateRoot
         : AggregateRoot
     {
-        public const string HandlerName = "Handle";
-
         private readonly List<DomainEvent> changes;
 
         protected EventCentricAggregateRoot(Guid id)
@@ -108,7 +105,7 @@
             {
                 TEvent @event = change();
 
-                handler ??= CreateHandler<TEvent>(@event.GetType());
+                handler ??= ResolveHandler<TEvent>(@event);
 
                 if (handler is { })
                 {
@@ -146,26 +143,6 @@
         protected sealed override void RollbackUncommittedChanges()
         {
             throw new InvalidOperationException(EventCentricAggregateRootStateChangesDenied);
-        }
-
-        private Action<TEvent> CreateHandler<TEvent>(Type eventType)
-            where TEvent : DomainEvent
-        {
-            Type type = GetType();
-
-            MethodInfo handler = type.GetMethod(
-                HandlerName,
-                BindingFlags.NonPublic | BindingFlags.Instance,
-                null,
-                new[] { eventType },
-                null);
-
-            if (handler is null)
-            {
-                return default;
-            }
-
-            return @event => _ = handler.Invoke(this, new object[] { @event });
         }
     }
 }

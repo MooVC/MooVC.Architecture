@@ -6,11 +6,14 @@
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
+    using MooVC.Linq;
 
     [Serializable]
     public abstract class Value
         : ISerializable
     {
+        private const int MaximumOffset = 32;
+
         private readonly Lazy<int> hashCode;
 
         protected Value()
@@ -52,29 +55,11 @@
 
         protected int AggregateHashCode()
         {
-            int value = 0;
-            bool shouldInvert = false;
+            IEnumerable<int> aggregation = AggregateHashCode(GetAtomicValues());
 
-            AggregateHashCode(GetAtomicValues()).ForEach(code =>
-            {
-                if (shouldInvert)
-                {
-                    byte[] bytes = BitConverter.GetBytes(code);
-
-                    bytes = bytes.Reverse().ToArray();
-
-                    code = BitConverter.ToInt32(bytes, 0);
-                }
-
-                unchecked
-                {
-                    value += code;
-                }
-
-                shouldInvert = !shouldInvert;
-            });
-
-            return value;
+            return aggregation.SafeAny()
+                ? CalculateHashCode(aggregation)
+                : 0;
         }
 
         protected IEnumerable<int> AggregateHashCode(IEnumerable<object> values)
@@ -83,6 +68,43 @@
         }
 
         protected abstract IEnumerable<object> GetAtomicValues();
+
+        private static int CalculateHashCode(IEnumerable<int> aggregation)
+        {
+            int value = 0;
+            int[] hashCodes = aggregation.ToArray();
+
+            for (int index = 0; index < hashCodes.Length; index++)
+            {
+                int offset = index % MaximumOffset;
+
+                unchecked
+                {
+                    int hashCode = hashCodes[index];
+
+                    if (offset > 0)
+                    {
+                        if (hashCode == 0)
+                        {
+                            value += index * offset;
+                        }
+                        else
+                        {
+                            int left = hashCode << (MaximumOffset - offset);
+                            int right = hashCode >> offset;
+
+                            value += index * (left | right);
+                        }
+                    }
+                    else
+                    {
+                        value += hashCode;
+                    }
+                }
+            }
+
+            return value;
+        }
 
         private static bool EqualOperator(Value left, Value right)
         {

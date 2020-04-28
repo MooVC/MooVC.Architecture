@@ -16,6 +16,8 @@
     public sealed class AtomicUnit
         : ISerializable
     {
+        private readonly Lazy<VersionedReference> aggregate;
+
         public AtomicUnit(params DomainEvent[] events)
         {
             ArgumentIsAcceptable(events, nameof(events), value => value.SafeAny(), AtomicUnitEventsRequired);
@@ -23,18 +25,28 @@
             ArgumentIsAcceptable(
                 events,
                 nameof(events),
-                value => value.Select(@event => @event.Aggregate).Distinct().Count() == 1,
+                HasSameAggregate,
                 AtomicUnitDistinctAggregateVersionRequired);
 
+            ArgumentIsAcceptable(
+                events,
+                nameof(events),
+                HasSameContext,
+                AtomicUnitDistinctContextRequired);
+
+            aggregate = new Lazy<VersionedReference>(IdentifyAggregate);
             Events = events.Snapshot();
             Id = Guid.NewGuid();
         }
 
         private AtomicUnit(SerializationInfo info, StreamingContext context)
         {
+            aggregate = new Lazy<VersionedReference>(IdentifyAggregate);
             Events = info.GetEnumerable<DomainEvent>(nameof(Events));
             Id = info.GetValue<Guid>(nameof(Id));
         }
+
+        public VersionedReference Aggregate => aggregate.Value;
 
         public IEnumerable<DomainEvent> Events { get; }
 
@@ -45,6 +57,36 @@
         {
             info.AddEnumerable(nameof(Events), Events);
             info.AddValue(nameof(Id), Id);
+        }
+
+        private static bool HasSame<T>(DomainEvent[] events, Func<DomainEvent, T> selector)
+        {
+            return events.Select(selector).Distinct().Count() == 1;
+        }
+
+        private static bool HasSameAggregate(DomainEvent[] events)
+        {
+            return HasSame(events, @event => @event.Aggregate);
+        }
+
+        private static bool HasSameCausationId(DomainEvent[] events)
+        {
+            return HasSame(events, @event => @event.CausationId);
+        }
+
+        private static bool HasSameContext(DomainEvent[] events)
+        {
+            return HasSameCausationId(events) && HasSameCorrelationId(events);
+        }
+
+        private static bool HasSameCorrelationId(DomainEvent[] events)
+        {
+            return HasSame(events, @event => @event.CorrelationId);
+        }
+
+        private VersionedReference IdentifyAggregate()
+        {
+            return Events.First().Aggregate;
         }
     }
 }

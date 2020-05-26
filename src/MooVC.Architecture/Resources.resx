@@ -182,6 +182,9 @@
   <data name="AtomicUnitDistinctAggregateVersionRequired" xml:space="preserve">
     <value>The atomic unit must only contain changes relating to a single version increment of a single aggregate.</value>
   </data>
+  <data name="AtomicUnitDistinctContextRequired" xml:space="preserve">
+    <value>The atomic unit must only contain changes triggered in the context of a single operation.</value>
+  </data>
   <data name="AtomicUnitEventsRequired" xml:space="preserve">
     <value>The atomic unit must contain one or more domain events.</value>
   </data>

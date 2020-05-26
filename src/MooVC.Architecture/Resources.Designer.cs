@@ -252,6 +252,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The atomic unit must only contain changes triggered in the context of a single operation..
+        /// </summary>
+        internal static string AtomicUnitDistinctContextRequired {
+            get {
+                return ResourceManager.GetString("AtomicUnitDistinctContextRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The atomic unit must contain one or more domain events..
         /// </summary>
         internal static string AtomicUnitEventsRequired {

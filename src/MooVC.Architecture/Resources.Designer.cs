@@ -288,6 +288,33 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The store from which events are to be reconciled must be provided..
+        /// </summary>
+        internal static string DefaultEventReconcilerEventStoreRequired {
+            get {
+                return ResourceManager.GetString("DefaultEventReconcilerEventStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The reconciler to be used to reconciled events must be provided..
+        /// </summary>
+        internal static string DefaultEventReconcilerReconcilerRequired {
+            get {
+                return ResourceManager.GetString("DefaultEventReconcilerReconcilerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The store within which the event sequence is to be tracked must be provided..
+        /// </summary>
+        internal static string DefaultEventReconcilerSequenceStoreRequired {
+            get {
+                return ResourceManager.GetString("DefaultEventReconcilerSequenceStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A reference to the aggregate from which the domain event was raised must be provided..
         /// </summary>
         internal static string DomainEventAggregateReferenceRequired {
@@ -365,6 +392,24 @@ namespace MooVC.Architecture {
         internal static string EventCentricAggregateRootStateChangesDenied {
             get {
                 return ResourceManager.GetString("EventCentricAggregateRootStateChangesDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The events must be provided..
+        /// </summary>
+        internal static string EventReconciliationEventArgsEventsRequired {
+            get {
+                return ResourceManager.GetString("EventReconciliationEventArgsEventsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sequence to which reconciliation has advanced must be provided..
+        /// </summary>
+        internal static string EventSequenceAdvancedEventArgsSequenceRequired {
+            get {
+                return ResourceManager.GetString("EventSequenceAdvancedEventArgsSequenceRequired", resourceCulture);
             }
         }
         

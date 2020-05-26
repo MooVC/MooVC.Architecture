@@ -194,6 +194,15 @@
   <data name="CoordinatedOperationHandlerRepositoryRequired" xml:space="preserve">
     <value>The repository must be provided.</value>
   </data>
+  <data name="DefaultEventReconcilerEventStoreRequired" xml:space="preserve">
+    <value>The store from which events are to be reconciled must be provided.</value>
+  </data>
+  <data name="DefaultEventReconcilerReconcilerRequired" xml:space="preserve">
+    <value>The reconciler to be used to reconciled events must be provided.</value>
+  </data>
+  <data name="DefaultEventReconcilerSequenceStoreRequired" xml:space="preserve">
+    <value>The store within which the event sequence is to be tracked must be provided.</value>
+  </data>
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
   </data>
@@ -220,6 +229,12 @@
   </data>
   <data name="EventCentricAggregateRootStateChangesDenied" xml:space="preserve">
     <value>Changed to the state of an aggregate of type {0} must be made through ApplyChanges.</value>
+  </data>
+  <data name="EventReconciliationEventArgsEventsRequired" xml:space="preserve">
+    <value>The events must be provided.</value>
+  </data>
+  <data name="EventSequenceAdvancedEventArgsSequenceRequired" xml:space="preserve">
+    <value>The sequence to which reconciliation has advanced must be provided.</value>
   </data>
   <data name="GenericAggregateRequired" xml:space="preserve">
     <value>The aggregate must be provided.</value>

@@ -8,6 +8,6 @@
 
         public event EventSequenceAdvancedEventHandler EventSequenceAdvanced;
 
-        ulong Reconcile();
+        IEventSequence Reconcile(IEventSequence previous = default);
     }
 }

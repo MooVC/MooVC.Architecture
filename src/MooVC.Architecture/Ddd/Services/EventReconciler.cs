@@ -12,14 +12,15 @@
 
         public event EventSequenceAdvancedEventHandler EventSequenceAdvanced;
 
-        public ulong Reconcile()
+        public IEventSequence Reconcile(IEventSequence previous = default)
         {
-            IEventSequence current = GetCurrentSequence();
+            previous ??= GetPreviousSequence();
+
             bool hasEvents;
 
             do
             {
-                IEnumerable<DomainEvent> events = GetEvents(current, out ulong lastSequence);
+                IEnumerable<DomainEvent> events = GetEvents(previous, out ulong lastSequence);
 
                 hasEvents = events.Any();
 
@@ -27,23 +28,23 @@
                 {
                     Reconcile(events);
 
-                    current = UpdateSequence(current, lastSequence);
+                    previous = UpdateSequence(previous, lastSequence);
 
-                    OnEventSequenceAdvanced(current);
+                    OnEventSequenceAdvanced(previous);
                 }
             }
             while (hasEvents);
 
-            return current.Sequence;
+            return previous;
         }
 
-        protected abstract IEventSequence GetCurrentSequence();
+        protected abstract IEnumerable<DomainEvent> GetEvents(IEventSequence previous, out ulong lastSequence);
 
-        protected abstract IEnumerable<DomainEvent> GetEvents(IEventSequence current, out ulong lastSequence);
+        protected abstract IEventSequence GetPreviousSequence();
 
         protected abstract void Reconcile(IEnumerable<DomainEvent> events);
 
-        protected abstract IEventSequence UpdateSequence(IEventSequence current, ulong lastSequence);
+        protected abstract IEventSequence UpdateSequence(IEventSequence previous, ulong lastSequence);
 
         protected void OnEventsReconciled(IEnumerable<DomainEvent> events)
         {
@@ -55,9 +56,9 @@
             EventsReconciling?.Invoke(this, new EventReconciliationEventArgs(events));
         }
 
-        protected void OnEventSequenceAdvanced(IEventSequence sequence)
+        protected void OnEventSequenceAdvanced(IEventSequence current)
         {
-            EventSequenceAdvanced?.Invoke(this, new EventSequenceAdvancedEventArgs(sequence));
+            EventSequenceAdvanced?.Invoke(this, new EventSequenceAdvancedEventArgs(current));
         }
     }
 }

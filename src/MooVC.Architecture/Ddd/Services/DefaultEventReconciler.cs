@@ -34,14 +34,9 @@
             this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
         }
 
-        protected override IEventSequence GetCurrentSequence()
+        protected override IEnumerable<DomainEvent> GetEvents(IEventSequence previous, out ulong lastSequence)
         {
-            return sequenceStore.Get().LastOrDefault() ?? new EventSequence(default);
-        }
-
-        protected override IEnumerable<DomainEvent> GetEvents(IEventSequence current, out ulong lastSequence)
-        {
-            IEnumerable<SequencedEvents> sequences = eventStore.Read(current.Sequence, numberToRead: numberToRead);
+            IEnumerable<SequencedEvents> sequences = eventStore.Read(previous.Sequence, numberToRead: numberToRead);
 
             lastSequence = sequences
                 .Select(sequence => sequence.Sequence)
@@ -51,6 +46,11 @@
             return sequences
                 .SelectMany(sequence => sequence.Events)
                 .ToArray();
+        }
+
+        protected override IEventSequence GetPreviousSequence()
+        {
+            return sequenceStore.Get().LastOrDefault() ?? new EventSequence(default);
         }
 
         protected override void Reconcile(IEnumerable<DomainEvent> events)
@@ -65,13 +65,13 @@
             }
         }
 
-        protected override IEventSequence UpdateSequence(IEventSequence current, ulong lastSequence)
+        protected override IEventSequence UpdateSequence(IEventSequence previous, ulong lastSequence)
         {
-            var next = new EventSequence(lastSequence);
+            var current = new EventSequence(lastSequence);
 
-            _ = sequenceStore.Create(next);
+            _ = sequenceStore.Create(current);
 
-            return next;
+            return current;
         }
 
         private void PerformReconciliation(IEnumerable<DomainEvent> events)

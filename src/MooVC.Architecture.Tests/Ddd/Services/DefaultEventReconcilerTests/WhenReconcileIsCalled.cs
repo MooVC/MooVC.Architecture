@@ -82,10 +82,10 @@
 
             instance.EventSequenceAdvanced += (sender, e) => wasInvoked = true;
 
-            ulong sequence = instance.Reconcile();
+            IEventSequence current = instance.Reconcile();
 
             Assert.True(wasInvoked);
-            Assert.Equal(highSequence, sequence);
+            Assert.Equal(highSequence, current.Sequence);
 
             SequenceStore.Verify(store => store.Create(It.IsAny<EventSequence>()), times: Times.Once);
             SequenceStore.Verify(store => store.Create(It.Is<EventSequence>(value => value.Sequence == highSequence)), times: Times.Once);
@@ -126,11 +126,58 @@
             instance.EventsReconciling += (sender, e) => eventsReconciling++;
             instance.EventsReconciled += (sender, e) => eventsReconciled++;
 
-            ulong sequence = instance.Reconcile();
+            _ = instance.Reconcile();
 
             Assert.Equal(sequences.Count(), eventsReconciling);
             Assert.Equal(sequences.Count(), eventsReconciled);
             Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
+        }
+
+        [Fact]
+        public void GivenSequencesWithAPreviousSequenceThenTheReconcilerIsInvokedOnceForEachAggregateAboveTheLastSequence()
+        {
+            const int ExpectedInvocations = 1;
+            int eventsReconciling = 0;
+            int eventsReconciled = 0;
+
+            SequencedEvents[] sequences = new[]
+            {
+                new SequencedEvents(1, CreateEvents()),
+                new SequencedEvents(2, CreateEvents()),
+                new SequencedEvents(3, CreateEvents()),
+                new SequencedEvents(4, CreateEvents()),
+                new SequencedEvents(7, CreateEvents()),
+            };
+
+            var previous = new EventSequence(2);
+            SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence > previous.Sequence).ToArray();
+            var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
+
+            _ = EventStore
+                .Setup(store => store.Read(It.Is<ulong>(value => value == previous.Sequence), It.IsAny<ushort>()))
+                .Returns(expected);
+
+            _ = EventStore
+                .Setup(store => store.Read(It.Is<ulong>(value => value > previous.Sequence), It.IsAny<ushort>()))
+                .Returns(new SequencedEvents[0]);
+
+            _ = Reconciler
+               .Setup(reconciler => reconciler.Reconcile(It.IsAny<IEnumerable<DomainEvent>>()))
+               .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
+
+            instance.EventsReconciling += (sender, e) => eventsReconciling++;
+            instance.EventsReconciled += (sender, e) => eventsReconciled++;
+
+            _ = instance.Reconcile(previous: previous);
+
+            int skips = sequences.Count(aggregate => aggregate.Sequence <= previous.Sequence);
+            int invocations = sequences.Count() - skips;
+
+            Assert.Equal(invocations, eventsReconciling);
+            Assert.Equal(invocations, eventsReconciled);
+            Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
+
+            SequenceStore.Verify(store => store.Create(It.IsAny<EventSequence>()), times: Times.Once);
         }
 
         private DomainEvent[] CreateEvents()

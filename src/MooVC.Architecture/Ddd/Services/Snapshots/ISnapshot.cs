@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Runtime.Serialization;
+    using MooVC.Architecture.Ddd.Services.Reconciliation;
 
     public interface ISnapshot
         : ISerializable

@@ -306,15 +306,6 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The store within which the event sequence is to be tracked must be provided..
-        /// </summary>
-        internal static string DefaultEventReconcilerSequenceStoreRequired {
-            get {
-                return ResourceManager.GetString("DefaultEventReconcilerSequenceStoreRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The aggregate reconciler must be provided..
         /// </summary>
         internal static string DefaultReconciliationOrchestratorAggregateReconcilerRequired {
@@ -446,15 +437,6 @@ namespace MooVC.Architecture {
         internal static string EventReconciliationEventArgsEventsRequired {
             get {
                 return ResourceManager.GetString("EventReconciliationEventArgsEventsRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The sequence to which reconciliation has advanced must be provided..
-        /// </summary>
-        internal static string EventSequenceAdvancedEventArgsSequenceRequired {
-            get {
-                return ResourceManager.GetString("EventSequenceAdvancedEventArgsSequenceRequired", resourceCulture);
             }
         }
         

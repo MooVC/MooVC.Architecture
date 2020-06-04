@@ -7,30 +7,23 @@
         : DefaultEventReconcilerTests
     {
         [Fact]
-        public void GivenAnEventStoreAReconcilerAndANullSequenceStoreThenAnArgumentNullExceptionIsThrown()
+        public void GivenAnEventStoreAndANullReconcilerThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DefaultEventReconciler(EventStore.Object, Reconciler.Object, null));
+                () => new DefaultEventReconciler(EventStore.Object, null));
         }
 
         [Fact]
-        public void GivenAnEventStoreASequenceStoreAndANullReconcilerThenAnArgumentNullExceptionIsThrown()
+        public void GivenAReconcilerAndANullEventStoreThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DefaultEventReconciler(EventStore.Object, null, SequenceStore.Object));
+                () => new DefaultEventReconciler(null, Reconciler.Object));
         }
 
         [Fact]
-        public void GivenAReconcilerAndASequenceStoreAndANullEventStoreThenAnArgumentNullExceptionIsThrown()
+        public void GivenAnEventStoreAReconcilerThenAnInstanceIsCreated()
         {
-            _ = Assert.Throws<ArgumentNullException>(
-                () => new DefaultEventReconciler(null, Reconciler.Object, SequenceStore.Object));
-        }
-
-        [Fact]
-        public void GivenAnEventStoreAReconcilerAndASequenceStoreThenAnInstanceIsCreated()
-        {
-            _ = new DefaultEventReconciler(EventStore.Object, Reconciler.Object, SequenceStore.Object);
+            _ = new DefaultEventReconciler(EventStore.Object, Reconciler.Object);
         }
     }
 }

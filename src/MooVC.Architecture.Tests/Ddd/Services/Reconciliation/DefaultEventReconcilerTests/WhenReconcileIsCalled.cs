@@ -5,7 +5,6 @@
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
-    using MooVC.Linq;
     using Moq;
     using Xunit;
 
@@ -16,16 +15,12 @@
 
         public WhenReconcileIsCalled()
         {
-            instance = new DefaultEventReconciler(EventStore.Object, Reconciler.Object, SequenceStore.Object);
+            instance = new DefaultEventReconciler(EventStore.Object, Reconciler.Object);
         }
 
         [Fact]
         public void GivenNoSequenceThenAZeroSequenceIsRequested()
         {
-            _ = SequenceStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new EventSequence[0]);
-
             _ = EventStore
                 .Setup(store => store.Read(It.IsAny<ulong>(), It.IsAny<ushort>()))
                 .Returns(new SequencedEvents[0]);
@@ -42,15 +37,11 @@
         [InlineData(ulong.MaxValue)]
         public void GivenASequenceThenEventsFromThatSequenceAreRequested(ulong sequence)
         {
-            _ = SequenceStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new[] { new EventSequence(sequence) });
-
             _ = EventStore
                 .Setup(store => store.Read(It.IsAny<ulong>(), It.IsAny<ushort>()))
                 .Returns(new SequencedEvents[0]);
 
-            _ = instance.Reconcile();
+            _ = instance.Reconcile(previous: sequence);
 
             EventStore.Verify(store => store.Read(It.IsAny<ulong>(), It.IsAny<ushort>()), times: Times.Once);
             EventStore.Verify(store => store.Read(It.Is<ulong>(value => value == sequence), It.IsAny<ushort>()), times: Times.Once);
@@ -63,10 +54,6 @@
         public void GivenSequencesThenTheSequenceIsAdvancedToTheHighestSequence(ulong lowSequence, ulong highSequence)
         {
             bool wasInvoked = false;
-
-            _ = SequenceStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new EventSequence[0]);
 
             _ = EventStore
                 .Setup(store => store.Read(It.Is<ulong>(value => value == ulong.MinValue), It.IsAny<ushort>()))
@@ -82,13 +69,10 @@
 
             instance.EventSequenceAdvanced += (sender, e) => wasInvoked = true;
 
-            IEventSequence current = instance.Reconcile();
+            ulong? current = instance.Reconcile();
 
             Assert.True(wasInvoked);
-            Assert.Equal(highSequence, current.Sequence);
-
-            SequenceStore.Verify(store => store.Create(It.IsAny<EventSequence>()), times: Times.Once);
-            SequenceStore.Verify(store => store.Create(It.Is<EventSequence>(value => value.Sequence == highSequence)), times: Times.Once);
+            Assert.Equal(highSequence, current);
         }
 
         [Fact]
@@ -106,10 +90,6 @@
             };
 
             var aggregates = sequences.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
-
-            _ = SequenceStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new EventSequence[0]);
 
             _ = EventStore
                 .Setup(store => store.Read(It.Is<ulong>(value => value == ulong.MinValue), It.IsAny<ushort>()))
@@ -149,21 +129,21 @@
                 new SequencedEvents(5, CreateEvents()),
             };
 
-            var previous = new EventSequence(1);
-            var target = new EventSequence(4);
+            ulong previous = 1;
+            ulong target = 4;
 
             SequencedEvents[] expected = sequences
-                .Where(aggregate => aggregate.Sequence > previous.Sequence && aggregate.Sequence <= target.Sequence)
+                .Where(aggregate => aggregate.Sequence > previous && aggregate.Sequence <= target)
                 .ToArray();
 
             var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
 
             _ = EventStore
-                .Setup(store => store.Read(It.Is<ulong>(value => value == previous.Sequence), It.IsAny<ushort>()))
+                .Setup(store => store.Read(It.Is<ulong>(value => value == previous), It.IsAny<ushort>()))
                 .Returns(expected);
 
             _ = EventStore
-                .Setup(store => store.Read(It.Is<ulong>(value => value > previous.Sequence), It.IsAny<ushort>()))
+                .Setup(store => store.Read(It.Is<ulong>(value => value > previous), It.IsAny<ushort>()))
                 .Returns(new SequencedEvents[0]);
 
             _ = Reconciler
@@ -181,9 +161,6 @@
             Assert.Equal(invocations, eventsReconciling);
             Assert.Equal(invocations, eventsReconciled);
             Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
-
-            SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Never);
-            SequenceStore.Verify(store => store.Create(It.IsAny<EventSequence>()), times: Times.Once);
         }
 
         [Fact]
@@ -202,16 +179,16 @@
                 new SequencedEvents(7, CreateEvents()),
             };
 
-            var previous = new EventSequence(2);
-            SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence > previous.Sequence).ToArray();
+            ulong previous = 2;
+            SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence > previous).ToArray();
             var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
 
             _ = EventStore
-                .Setup(store => store.Read(It.Is<ulong>(value => value == previous.Sequence), It.IsAny<ushort>()))
+                .Setup(store => store.Read(It.Is<ulong>(value => value == previous), It.IsAny<ushort>()))
                 .Returns(expected);
 
             _ = EventStore
-                .Setup(store => store.Read(It.Is<ulong>(value => value > previous.Sequence), It.IsAny<ushort>()))
+                .Setup(store => store.Read(It.Is<ulong>(value => value > previous), It.IsAny<ushort>()))
                 .Returns(new SequencedEvents[0]);
 
             _ = Reconciler
@@ -229,9 +206,6 @@
             Assert.Equal(invocations, eventsReconciling);
             Assert.Equal(invocations, eventsReconciled);
             Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
-
-            SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Never);
-            SequenceStore.Verify(store => store.Create(It.IsAny<EventSequence>()), times: Times.Once);
         }
 
         [Fact]
@@ -250,8 +224,8 @@
                 new SequencedEvents(5, CreateEvents()),
             };
 
-            var target = new EventSequence(3);
-            SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence <= target.Sequence).ToArray();
+            ulong target = 3;
+            SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence <= target).ToArray();
             var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
 
             _ = EventStore
@@ -277,9 +251,6 @@
             Assert.Equal(invocations, eventsReconciling);
             Assert.Equal(invocations, eventsReconciled);
             Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
-
-            SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
-            SequenceStore.Verify(store => store.Create(It.IsAny<EventSequence>()), times: Times.Once);
         }
 
         private DomainEvent[] CreateEvents()

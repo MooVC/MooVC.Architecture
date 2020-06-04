@@ -15,13 +15,15 @@
         private readonly IEventReconciler eventReconciler;
         private readonly IStore<IEventSequence, ulong> sequenceStore;
         private readonly IStore<ISnapshot, ulong> snapshotStore;
+        private readonly Func<ulong, IEventSequence, IEventSequence> sequenceFactory;
 
         public DefaultReconciliationOrchestrator(
             IAggregateReconciler aggregateReconciler,
             IStore<EventCentricAggregateRoot, Guid> aggregateStore,
             IEventReconciler eventReconciler,
             IStore<IEventSequence, ulong> sequenceStore,
-            IStore<ISnapshot, ulong> snapshotStore)
+            IStore<ISnapshot, ulong> snapshotStore,
+            Func<ulong, IEventSequence, IEventSequence> sequenceFactory = default)
         {
             ArgumentNotNull(aggregateReconciler, nameof(aggregateReconciler), DefaultReconciliationOrchestratorAggregateReconcilerRequired);
             ArgumentNotNull(aggregateStore, nameof(aggregateStore), DefaultReconciliationOrchestratorAggregateStoreRequired);
@@ -34,6 +36,7 @@
             this.eventReconciler = eventReconciler;
             this.sequenceStore = sequenceStore;
             this.snapshotStore = snapshotStore;
+            this.sequenceFactory = sequenceFactory ?? DefaultSequenceFactory;
 
             aggregateReconciler.AggregateConflictDetected += AggregateReconciler_AggregateConflictDetected;
         }
@@ -51,11 +54,14 @@
                 previous = RestoreLatestSnapshot();
             }
 
-            IEventSequence current = ReconcileEvents(previous, target);
+            ulong? current = ReconcileEvents(previous, target);
 
-            UpdateSequence(current);
+            return UpdateSequence(current, previous);
+        }
 
-            return current;
+        private static IEventSequence DefaultSequenceFactory(ulong current, IEventSequence previous)
+        {
+            return new EventSequence(current);
         }
 
         private IEventSequence GetPreviousSequence()
@@ -63,9 +69,9 @@
             return sequenceStore.Get().LastOrDefault();
         }
 
-        private IEventSequence ReconcileEvents(IEventSequence previous, IEventSequence target)
+        private ulong? ReconcileEvents(IEventSequence previous, IEventSequence target)
         {
-            return eventReconciler.Reconcile(previous: previous, target: target);
+            return eventReconciler.Reconcile(previous: previous?.Sequence, target: target?.Sequence);
         }
 
         private IEventSequence RestoreLatestSnapshot()
@@ -86,9 +92,18 @@
             return default;
         }
 
-        private void UpdateSequence(IEventSequence current)
+        private IEventSequence UpdateSequence(ulong? current, IEventSequence previous)
         {
-            _ = sequenceStore.Create(current);
+            if (current.HasValue)
+            {
+                IEventSequence sequence = sequenceFactory(current.Value, previous);
+
+                _ = sequenceStore.Create(sequence);
+
+                return sequence;
+            }
+
+            return previous;
         }
 
         private void AggregateReconciler_AggregateConflictDetected(

@@ -2,6 +2,6 @@
 {
     public interface ISnapshotProvider
     {
-        ISnapshot Generate(IEventSequence target = default);
+        ISnapshot Generate(ulong? target = default);
     }
 }

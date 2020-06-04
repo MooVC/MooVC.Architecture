@@ -15,34 +15,30 @@
 
         private readonly IEventStore<SequencedEvents, ulong> eventStore;
         private readonly IAggregateReconciler reconciler;
-        private readonly IStore<EventSequence, ulong> sequenceStore;
         private readonly ushort numberToRead;
 
         public DefaultEventReconciler(
             IEventStore<SequencedEvents, ulong> eventStore,
             IAggregateReconciler reconciler,
-            IStore<EventSequence, ulong> sequenceStore,
             ushort numberToRead = DefaultNumberToRead)
         {
             ArgumentNotNull(eventStore, nameof(eventStore), DefaultEventReconcilerEventStoreRequired);
             ArgumentNotNull(reconciler, nameof(reconciler), DefaultEventReconcilerReconcilerRequired);
-            ArgumentNotNull(sequenceStore, nameof(sequenceStore), DefaultEventReconcilerSequenceStoreRequired);
 
             this.eventStore = eventStore;
             this.reconciler = reconciler;
-            this.sequenceStore = sequenceStore;
             this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
         }
 
         protected override IEnumerable<DomainEvent> GetEvents(
-            IEventSequence previous,
-            out ulong lastSequence,
-            IEventSequence target = default)
+            ulong? previous,
+            out ulong? lastSequence,
+            ulong? target = default)
         {
-            if (ShouldReadEvents(previous, target, out ushort numberToRead))
+            if (ShouldReadEvents(previous, target, out ushort numberToRead, out ulong start))
             {
                 IEnumerable<SequencedEvents> sequences = eventStore.Read(
-                    previous.Sequence,
+                    start,
                     numberToRead: numberToRead);
 
                 lastSequence = sequences
@@ -55,14 +51,9 @@
                     .ToArray();
             }
 
-            lastSequence = previous.Sequence;
+            lastSequence = previous;
 
             return Enumerable.Empty<DomainEvent>();
-        }
-
-        protected override IEventSequence GetPreviousSequence()
-        {
-            return sequenceStore.Get().LastOrDefault() ?? new EventSequence(default);
         }
 
         protected override void Reconcile(IEnumerable<DomainEvent> events)
@@ -77,27 +68,19 @@
             }
         }
 
-        protected override IEventSequence UpdateSequence(IEventSequence previous, ulong lastSequence)
-        {
-            var current = new EventSequence(lastSequence);
-
-            _ = sequenceStore.Create(current);
-
-            return current;
-        }
-
-        private bool ShouldReadEvents(IEventSequence previous, IEventSequence target, out ushort numberToRead)
+        private bool ShouldReadEvents(ulong? previous, ulong? target, out ushort numberToRead, out ulong start)
         {
             numberToRead = this.numberToRead;
+            start = previous.GetValueOrDefault();
 
-            if (target is { })
+            if (target.HasValue)
             {
-                if (target.Sequence <= previous.Sequence)
+                if (target.Value <= start)
                 {
                     return false;
                 }
 
-                ulong difference = target.Sequence - previous.Sequence;
+                ulong difference = target.Value - start;
 
                 numberToRead = (ushort)Math.Min(numberToRead, difference);
             }

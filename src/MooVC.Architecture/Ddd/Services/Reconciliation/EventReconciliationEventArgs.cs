@@ -8,7 +8,7 @@
 
     public sealed class EventReconciliationEventArgs
     {
-        internal EventReconciliationEventArgs(IEnumerable<DomainEvent> events)
+        public EventReconciliationEventArgs(IEnumerable<DomainEvent> events)
         {
             ArgumentIsAcceptable(
                 events,

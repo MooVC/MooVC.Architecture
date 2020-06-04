@@ -9,13 +9,10 @@
         {
             EventStore = new Mock<IEventStore<SequencedEvents, ulong>>();
             Reconciler = new Mock<IAggregateReconciler>();
-            SequenceStore = new Mock<IStore<EventSequence, ulong>>();
         }
 
         protected Mock<IEventStore<SequencedEvents, ulong>> EventStore { get; }
 
         protected Mock<IAggregateReconciler> Reconciler { get; }
-
-        protected Mock<IStore<EventSequence, ulong>> SequenceStore { get; }
     }
 }

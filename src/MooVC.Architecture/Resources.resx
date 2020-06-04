@@ -200,9 +200,6 @@
   <data name="DefaultEventReconcilerReconcilerRequired" xml:space="preserve">
     <value>The reconciler to be used to reconciled events must be provided.</value>
   </data>
-  <data name="DefaultEventReconcilerSequenceStoreRequired" xml:space="preserve">
-    <value>The store within which the event sequence is to be tracked must be provided.</value>
-  </data>
   <data name="DefaultReconciliationOrchestratorAggregateReconcilerRequired" xml:space="preserve">
     <value>The aggregate reconciler must be provided.</value>
   </data>
@@ -247,9 +244,6 @@
   </data>
   <data name="EventReconciliationEventArgsEventsRequired" xml:space="preserve">
     <value>The events must be provided.</value>
-  </data>
-  <data name="EventSequenceAdvancedEventArgsSequenceRequired" xml:space="preserve">
-    <value>The sequence to which reconciliation has advanced must be provided.</value>
   </data>
   <data name="GenericAggregateRequired" xml:space="preserve">
     <value>The aggregate must be provided.</value>

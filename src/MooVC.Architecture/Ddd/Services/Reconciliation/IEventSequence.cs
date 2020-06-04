@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Ddd.Services
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
     using System;
     using System.Runtime.Serialization;

@@ -34,18 +34,30 @@
             this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
         }
 
-        protected override IEnumerable<DomainEvent> GetEvents(IEventSequence previous, out ulong lastSequence)
+        protected override IEnumerable<DomainEvent> GetEvents(
+            IEventSequence previous,
+            out ulong lastSequence,
+            IEventSequence target = default)
         {
-            IEnumerable<SequencedEvents> sequences = eventStore.Read(previous.Sequence, numberToRead: numberToRead);
+            if (ShouldReadEvents(previous, target, out ushort numberToRead))
+            {
+                IEnumerable<SequencedEvents> sequences = eventStore.Read(
+                    previous.Sequence,
+                    numberToRead: numberToRead);
 
-            lastSequence = sequences
-                .Select(sequence => sequence.Sequence)
-                .DefaultIfEmpty()
-                .Max();
+                lastSequence = sequences
+                    .Select(sequence => sequence.Sequence)
+                    .DefaultIfEmpty()
+                    .Max();
 
-            return sequences
-                .SelectMany(sequence => sequence.Events)
-                .ToArray();
+                return sequences
+                    .SelectMany(sequence => sequence.Events)
+                    .ToArray();
+            }
+
+            lastSequence = previous.Sequence;
+
+            return Enumerable.Empty<DomainEvent>();
         }
 
         protected override IEventSequence GetPreviousSequence()
@@ -72,6 +84,25 @@
             _ = sequenceStore.Create(current);
 
             return current;
+        }
+
+        private bool ShouldReadEvents(IEventSequence previous, IEventSequence target, out ushort numberToRead)
+        {
+            numberToRead = this.numberToRead;
+
+            if (target is { })
+            {
+                if (target.Sequence <= previous.Sequence)
+                {
+                    return false;
+                }
+
+                ulong difference = target.Sequence - previous.Sequence;
+
+                numberToRead = (ushort)Math.Min(numberToRead, difference);
+            }
+
+            return true;
         }
 
         private void PerformReconciliation(IEnumerable<DomainEvent> events)

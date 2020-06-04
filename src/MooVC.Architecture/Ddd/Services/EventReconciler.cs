@@ -12,7 +12,7 @@
 
         public event EventSequenceAdvancedEventHandler EventSequenceAdvanced;
 
-        public IEventSequence Reconcile(IEventSequence previous = default)
+        public IEventSequence Reconcile(IEventSequence previous = default, IEventSequence target = default)
         {
             previous ??= GetPreviousSequence();
 
@@ -20,7 +20,7 @@
 
             do
             {
-                IEnumerable<DomainEvent> events = GetEvents(previous, out ulong lastSequence);
+                IEnumerable<DomainEvent> events = GetEvents(previous, out ulong lastSequence, target: target);
 
                 hasEvents = events.Any();
 
@@ -38,7 +38,10 @@
             return previous;
         }
 
-        protected abstract IEnumerable<DomainEvent> GetEvents(IEventSequence previous, out ulong lastSequence);
+        protected abstract IEnumerable<DomainEvent> GetEvents(
+            IEventSequence previous,
+            out ulong lastSequence,
+            IEventSequence target = default);
 
         protected abstract IEventSequence GetPreviousSequence();
 

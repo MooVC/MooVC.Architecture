@@ -203,6 +203,21 @@
   <data name="DefaultEventReconcilerSequenceStoreRequired" xml:space="preserve">
     <value>The store within which the event sequence is to be tracked must be provided.</value>
   </data>
+  <data name="DefaultReconciliationOrchestratorAggregateReconcilerRequired" xml:space="preserve">
+    <value>The aggregate reconciler must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorAggregateStoreRequired" xml:space="preserve">
+    <value>The store in which the aggregates are persisted must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorEventReconcilerRequired" xml:space="preserve">
+    <value>The event reconciler must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorSequenceStoreRequired" xml:space="preserve">
+    <value>The store reponsible for tracking the event sequence must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorSnapshotStoreRequired" xml:space="preserve">
+    <value>The store responsible for providing the snapshots must be provided.</value>
+  </data>
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
   </data>
@@ -278,14 +293,17 @@
   <data name="SignedVersionPreviousRequired" xml:space="preserve">
     <value>The previous version must be provided.</value>
   </data>
+  <data name="SnapshotRestorationCompletedEventArgsSequenceRequired" xml:space="preserve">
+    <value>The sequence of the snapshot must be provided.</value>
+  </data>
+  <data name="SnapshotSequenceRequired" xml:space="preserve">
+    <value>The sequence for the snapshot must be provided.</value>
+  </data>
   <data name="TypeExtensionsCoordinateTypeRequired" xml:space="preserve">
     <value>The type that serves as the context for coordination must be provided.</value>
   </data>
-  <data name="UnsupportedAggregateDetectedEventArgsAggregateRequired" xml:space="preserve">
-    <value>A reference to the aggregate for which reconciliation is not supported must be provided.</value>
-  </data>
-  <data name="UnsupportedAggregateDetectedEventArgsEventsRequired" xml:space="preserve">
-    <value>The events requiring reconciliation by an unsupported aggregate type must be provided.</value>
+  <data name="UnsupportedAggregateTypeDetectedEventArgsTypeRequired" xml:space="preserve">
+    <value>A type of the aggregate for which reconciliation is not supported must be provided.</value>
   </data>
   <data name="VersionedReferenceVersionRequired" xml:space="preserve">
     <value>The version of the aggregate must be provided.</value>

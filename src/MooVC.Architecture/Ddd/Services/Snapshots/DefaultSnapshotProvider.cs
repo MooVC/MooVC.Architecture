@@ -6,6 +6,8 @@
     using System.Linq;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Persistence;
+    using static MooVC.Ensure;
+    using static Resources;
 
     public sealed class DefaultSnapshotProvider
         : ISnapshotProvider
@@ -19,12 +21,15 @@
             Func<Func<Type, IAggregateReconciliationProxy>> factory,
             ushort numberToRead = DefaultEventReconciler.DefaultNumberToRead)
         {
+            ArgumentNotNull(eventStore, nameof(eventStore), DefaultSnapshotProviderEventStoreRequired);
+            ArgumentNotNull(factory, nameof(factory), DefaultSnapshotProviderFactoryRequired);
+
             this.eventStore = eventStore;
             this.factory = factory;
             this.numberToRead = numberToRead;
         }
 
-        public ISnapshot Generate(ulong? target = null)
+        public ISnapshot Generate(ulong? target = default)
         {
             IEventReconciler reconciler = CreateEventReconciler(out Func<IEnumerable<EventCentricAggregateRoot>> aggregates);
             ulong? current = reconciler.Reconcile(target: target);

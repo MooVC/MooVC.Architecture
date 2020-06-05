@@ -215,6 +215,12 @@
   <data name="DefaultReconciliationOrchestratorSnapshotStoreRequired" xml:space="preserve">
     <value>The store responsible for providing the snapshots must be provided.</value>
   </data>
+  <data name="DefaultSnapshotProviderEventStoreRequired" xml:space="preserve">
+    <value>The store from which events are to be snapshot must be provided.</value>
+  </data>
+  <data name="DefaultSnapshotProviderFactoryRequired" xml:space="preserve">
+    <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
+  </data>
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
   </data>

@@ -351,6 +351,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The store from which events are to be snapshot must be provided..
+        /// </summary>
+        internal static string DefaultSnapshotProviderEventStoreRequired {
+            get {
+                return ResourceManager.GetString("DefaultSnapshotProviderEventStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
+        /// </summary>
+        internal static string DefaultSnapshotProviderFactoryRequired {
+            get {
+                return ResourceManager.GetString("DefaultSnapshotProviderFactoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A reference to the aggregate from which the domain event was raised must be provided..
         /// </summary>
         internal static string DomainEventAggregateReferenceRequired {

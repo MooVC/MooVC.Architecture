@@ -2,7 +2,7 @@
 {
     public sealed class EventSequenceAdvancedEventArgs
     {
-        public EventSequenceAdvancedEventArgs(ulong sequence)
+        internal EventSequenceAdvancedEventArgs(ulong sequence)
         {
             Sequence = sequence;
         }

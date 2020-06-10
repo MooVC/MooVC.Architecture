@@ -12,12 +12,12 @@
     public sealed class DefaultSnapshotProvider
         : ISnapshotProvider
     {
-        private readonly IEventStore<SequencedEvents, ulong> eventStore;
+        private readonly IEventStore<ISequencedEvents, ulong> eventStore;
         private readonly Func<Func<Type, IAggregateReconciliationProxy>> factory;
         private readonly ushort numberToRead;
 
         public DefaultSnapshotProvider(
-            IEventStore<SequencedEvents, ulong> eventStore,
+            IEventStore<ISequencedEvents, ulong> eventStore,
             Func<Func<Type, IAggregateReconciliationProxy>> factory,
             ushort numberToRead = DefaultEventReconciler.DefaultNumberToRead)
         {

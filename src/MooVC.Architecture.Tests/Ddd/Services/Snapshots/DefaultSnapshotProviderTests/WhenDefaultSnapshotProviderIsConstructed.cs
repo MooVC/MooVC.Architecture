@@ -9,12 +9,12 @@
     public sealed class WhenDefaultSnapshotProviderIsConstructed
     {
         private readonly Mock<IAggregateReconciliationProxy> proxy;
-        private readonly Mock<IEventStore<SequencedEvents, ulong>> store;
+        private readonly Mock<IEventStore<ISequencedEvents, ulong>> store;
 
         public WhenDefaultSnapshotProviderIsConstructed()
         {
             proxy = new Mock<IAggregateReconciliationProxy>();
-            store = new Mock<IEventStore<SequencedEvents, ulong>>();
+            store = new Mock<IEventStore<ISequencedEvents, ulong>>();
         }
 
         [Fact]

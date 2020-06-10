@@ -281,6 +281,15 @@ namespace MooVC.Architecture {
         /// <summary>
         ///   Looks up a localized string similar to The repository must be provided..
         /// </summary>
+        internal static string CoordinatedGenerateHandlerRepositoryRequired {
+            get {
+                return ResourceManager.GetString("CoordinatedGenerateHandlerRepositoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The repository must be provided..
+        /// </summary>
         internal static string CoordinatedOperationHandlerRepositoryRequired {
             get {
                 return ResourceManager.GetString("CoordinatedOperationHandlerRepositoryRequired", resourceCulture);

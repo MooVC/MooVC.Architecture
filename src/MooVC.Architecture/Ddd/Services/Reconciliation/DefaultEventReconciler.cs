@@ -13,12 +13,12 @@
         public const ushort DefaultNumberToRead = 200;
         public const ushort MinimumNumberToRead = 1;
 
-        private readonly IEventStore<SequencedEvents, ulong> eventStore;
+        private readonly IEventStore<ISequencedEvents, ulong> eventStore;
         private readonly IAggregateReconciler reconciler;
         private readonly ushort numberToRead;
 
         public DefaultEventReconciler(
-            IEventStore<SequencedEvents, ulong> eventStore,
+            IEventStore<ISequencedEvents, ulong> eventStore,
             IAggregateReconciler reconciler,
             ushort numberToRead = DefaultNumberToRead)
         {
@@ -37,7 +37,7 @@
         {
             if (ShouldReadEvents(previous, target, out ushort numberToRead, out ulong start))
             {
-                IEnumerable<SequencedEvents> sequences = eventStore.Read(
+                IEnumerable<ISequencedEvents> sequences = eventStore.Read(
                     start,
                     numberToRead: numberToRead);
 

@@ -6,7 +6,8 @@
 
     [Serializable]
     public sealed class SequencedEvents
-        : AtomicUnit<ulong>
+        : AtomicUnit<ulong>,
+          ISequencedEvents
     {
         public SequencedEvents(ulong sequence, params DomainEvent[] events)
             : base(sequence, events)

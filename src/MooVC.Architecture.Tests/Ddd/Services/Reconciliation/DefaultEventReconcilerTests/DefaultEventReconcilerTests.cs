@@ -7,11 +7,11 @@
     {
         protected DefaultEventReconcilerTests()
         {
-            EventStore = new Mock<IEventStore<SequencedEvents, ulong>>();
+            EventStore = new Mock<IEventStore<ISequencedEvents, ulong>>();
             Reconciler = new Mock<IAggregateReconciler>();
         }
 
-        protected Mock<IEventStore<SequencedEvents, ulong>> EventStore { get; }
+        protected Mock<IEventStore<ISequencedEvents, ulong>> EventStore { get; }
 
         protected Mock<IAggregateReconciler> Reconciler { get; }
     }

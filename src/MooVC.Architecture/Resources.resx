@@ -191,6 +191,9 @@
   <data name="BusMessageRequired" xml:space="preserve">
     <value>The message to be invoked must be provided.</value>
   </data>
+  <data name="CoordinatedGenerateHandlerRepositoryRequired" xml:space="preserve">
+    <value>The repository must be provided.</value>
+  </data>
   <data name="CoordinatedOperationHandlerRepositoryRequired" xml:space="preserve">
     <value>The repository must be provided.</value>
   </data>

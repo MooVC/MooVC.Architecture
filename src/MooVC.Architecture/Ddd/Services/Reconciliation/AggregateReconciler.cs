@@ -1,5 +1,6 @@
-﻿namespace MooVC.Architecture.Ddd.Services
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Architecture.Ddd;
@@ -11,7 +12,9 @@
 
         public event AggregateReconciledEventHandler AggregateReconciled;
 
-        public event UnsupportedAggregateDetectedEventHandler UnsupportedAggregateDetected;
+        public event UnsupportedAggregateTypeDetectedEventHandler UnsupportedAggregateTypeDetected;
+
+        public abstract void Reconcile(params EventCentricAggregateRoot[] aggregates);
 
         public abstract void Reconcile(IEnumerable<DomainEvent> events);
 
@@ -49,9 +52,9 @@
             AggregateReconciled?.Invoke(this, new AggregateReconciledEventArgs(aggregate, events));
         }
 
-        protected void OnUnsupportedAggregateDetected(Reference aggregate, IEnumerable<DomainEvent> events)
+        protected void OnUnsupportedAggregateTypeDetected(Type type)
         {
-            UnsupportedAggregateDetected?.Invoke(this, new UnsupportedAggregateDetectedEventArgs(aggregate, events));
+            UnsupportedAggregateTypeDetected?.Invoke(this, new UnsupportedAggregateTypeDetectedEventArgs(type));
         }
 
         protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(IEnumerable<DomainEvent> events, SignedVersion version)

@@ -29,8 +29,8 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             aggregate.Set(request);
             repository.Save(aggregate);
 
-            Assert.True(changes.OfType<SerializableCreatedDomainEvent>().Count() == 1);
-            Assert.True(changes.OfType<SerializableSetDomainEvent>().Count() == 1);
+            _ = Assert.Single(changes.OfType<SerializableCreatedDomainEvent>());
+            _ = Assert.Single(changes.OfType<SerializableSetDomainEvent>());
             Assert.Equal(ExpectedTotalChanges, changes.Length);
         }
     }

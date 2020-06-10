@@ -396,6 +396,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The reconciler from which the events are to be propagated must be provided..
+        /// </summary>
+        internal static string DomainEventPropagatorReconcilerRequired {
+            get {
+                return ResourceManager.GetString("DomainEventPropagatorReconcilerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The repository from which the events are to be propagated must be provided..
         /// </summary>
         internal static string DomainEventPropagatorRepositoryRequired {

@@ -1,6 +1,7 @@
 namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
 {
     using System;
+    using MooVC.Architecture.Ddd.Services.Reconciliation;
     using Moq;
     using Xunit;
 
@@ -20,6 +21,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
         {
             var bus = new Mock<IBus>();
             var repository = new Mock<IRepository<EventCentricAggregateRoot>>();
+
             _ = new DomainEventPropagator<EventCentricAggregateRoot>(bus.Object, repository.Object);
         }
 
@@ -30,6 +32,33 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
 
             _ = Assert.Throws<ArgumentNullException>(
                 () => new DomainEventPropagator<EventCentricAggregateRoot>(null, repository.Object));
+        }
+
+        [Fact]
+        public void GivenABusAndNoReconcilerThenAnArgumentNullExceptionIsThrown()
+        {
+            var bus = new Mock<IBus>();
+
+            _ = Assert.Throws<ArgumentNullException>(
+                () => new DomainEventPropagator(bus.Object, null));
+        }
+
+        [Fact]
+        public void GivenABusAndAReconcilerThenNoExceptionIsThrown()
+        {
+            var bus = new Mock<IBus>();
+            var reconciler = new Mock<IAggregateReconciler>();
+
+            _ = new DomainEventPropagator(bus.Object, reconciler.Object);
+        }
+
+        [Fact]
+        public void GivenNoBusAndAReconcilerThenAnArgumentNullExceptionIsThrown()
+        {
+            var reconciler = new Mock<IAggregateReconciler>();
+
+            _ = Assert.Throws<ArgumentNullException>(
+                () => new DomainEventPropagator(null, reconciler.Object));
         }
     }
 }

@@ -230,6 +230,9 @@
   <data name="DomainEventPropagatorBusRequired" xml:space="preserve">
     <value>The bus to which the events are to be propagated must be provided.</value>
   </data>
+  <data name="DomainEventPropagatorReconcilerRequired" xml:space="preserve">
+    <value>The reconciler from which the events are to be propagated must be provided.</value>
+  </data>
   <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
     <value>The repository from which the events are to be propagated must be provided.</value>
   </data>

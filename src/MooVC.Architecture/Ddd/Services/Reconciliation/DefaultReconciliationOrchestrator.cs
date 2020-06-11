@@ -7,17 +7,16 @@
     using static MooVC.Ensure;
     using static Resources;
 
-    public sealed class DefaultReconciliationOrchestrator<TEventSequence, TSnapshot>
+    public sealed class DefaultReconciliationOrchestrator<TEventSequence>
         : IReconciliationOrchestrator
         where TEventSequence : class, IEventSequence
-        where TSnapshot : class, ISnapshot
     {
         private readonly IAggregateReconciler aggregateReconciler;
         private readonly Func<Reference, EventCentricAggregateRoot> aggregateSource;
         private readonly IEventReconciler eventReconciler;
         private readonly Func<ulong, TEventSequence> sequenceFactory;
         private readonly IStore<TEventSequence, ulong> sequenceStore;
-        private readonly Func<TSnapshot> snapshotSource;
+        private readonly Func<ISnapshot> snapshotSource;
 
         public DefaultReconciliationOrchestrator(
             IAggregateReconciler aggregateReconciler,
@@ -25,7 +24,7 @@
             IEventReconciler eventReconciler,
             Func<ulong, TEventSequence> sequenceFactory,
             IStore<TEventSequence, ulong> sequenceStore,
-            Func<TSnapshot> snapshotSource)
+            Func<ISnapshot> snapshotSource)
         {
             ArgumentNotNull(aggregateReconciler, nameof(aggregateReconciler), DefaultReconciliationOrchestratorAggregateReconcilerRequired);
             ArgumentNotNull(aggregateSource, nameof(aggregateSource), DefaultReconciliationOrchestratorAggregateSourceRequired);

@@ -9,17 +9,18 @@
     using static MooVC.Ensure;
     using static Resources;
 
-    public sealed class DefaultSnapshotProvider
+    public sealed class DefaultSnapshotProvider<TSequencedEvents>
         : ISnapshotProvider
+        where TSequencedEvents : class, ISequencedEvents
     {
-        private readonly IEventStore<ISequencedEvents, ulong> eventStore;
+        private readonly IEventStore<TSequencedEvents, ulong> eventStore;
         private readonly Func<Func<Type, IAggregateReconciliationProxy>> factory;
         private readonly ushort numberToRead;
 
         public DefaultSnapshotProvider(
-            IEventStore<ISequencedEvents, ulong> eventStore,
+            IEventStore<TSequencedEvents, ulong> eventStore,
             Func<Func<Type, IAggregateReconciliationProxy>> factory,
-            ushort numberToRead = DefaultEventReconciler.DefaultNumberToRead)
+            ushort numberToRead = DefaultEventReconciler<TSequencedEvents>.DefaultNumberToRead)
         {
             ArgumentNotNull(eventStore, nameof(eventStore), DefaultSnapshotProviderEventStoreRequired);
             ArgumentNotNull(factory, nameof(factory), DefaultSnapshotProviderFactoryRequired);
@@ -71,7 +72,10 @@
                 .SelectMany(proxy => proxy.GetAll())
                 .ToArray();
 
-            return new DefaultEventReconciler(eventStore, aggregateReconciler, numberToRead: numberToRead);
+            return new DefaultEventReconciler<TSequencedEvents>(
+                eventStore,
+                aggregateReconciler,
+                numberToRead: numberToRead);
         }
     }
 }

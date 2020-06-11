@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.DefaultReconciliationOrchestratorTests
 {
     using System;
+    using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Architecture.Ddd.Services.Snapshots;
     using MooVC.Persistence;
     using Moq;
@@ -12,8 +13,9 @@
             AggregateReconciler = new Mock<IAggregateReconciler>();
             AggregateStore = new Mock<IStore<EventCentricAggregateRoot, Guid>>();
             EventReconciler = new Mock<IEventReconciler>();
-            SequenceStore = new Mock<IStore<IEventSequence, ulong>>();
-            SnapshotStore = new Mock<IStore<ISnapshot, ulong>>();
+            SequenceFactory = sequence => new EventSequence(sequence);
+            SequenceStore = new Mock<IStore<EventSequence, ulong>>();
+            SnapshotStore = new Mock<IStore<Snapshot, ulong>>();
         }
 
         protected Mock<IAggregateReconciler> AggregateReconciler { get; }
@@ -22,8 +24,10 @@
 
         protected Mock<IEventReconciler> EventReconciler { get; }
 
-        protected Mock<IStore<IEventSequence, ulong>> SequenceStore { get; }
+        protected Func<ulong, EventSequence> SequenceFactory { get; }
 
-        protected Mock<IStore<ISnapshot, ulong>> SnapshotStore { get; }
+        protected Mock<IStore<EventSequence, ulong>> SequenceStore { get; }
+
+        protected Mock<IStore<Snapshot, ulong>> SnapshotStore { get; }
     }
 }

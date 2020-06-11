@@ -10,20 +10,20 @@
         public void GivenAnEventStoreAndANullReconcilerThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DefaultEventReconciler(EventStore.Object, null));
+                () => new DefaultEventReconciler<SequencedEvents>(EventStore.Object, null));
         }
 
         [Fact]
         public void GivenAReconcilerAndANullEventStoreThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DefaultEventReconciler(null, Reconciler.Object));
+                () => new DefaultEventReconciler<SequencedEvents>(null, Reconciler.Object));
         }
 
         [Fact]
         public void GivenAnEventStoreAReconcilerThenAnInstanceIsCreated()
         {
-            _ = new DefaultEventReconciler(EventStore.Object, Reconciler.Object);
+            _ = new DefaultEventReconciler<SequencedEvents>(EventStore.Object, Reconciler.Object);
         }
     }
 }

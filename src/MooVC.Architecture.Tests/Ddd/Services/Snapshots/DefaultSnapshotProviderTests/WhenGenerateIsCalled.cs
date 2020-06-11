@@ -13,12 +13,12 @@
     public sealed class WhenGenerateIsCalled
     {
         private readonly Mock<IAggregateReconciliationProxy> proxy;
-        private readonly Mock<IEventStore<ISequencedEvents, ulong>> store;
+        private readonly Mock<IEventStore<SequencedEvents, ulong>> store;
 
         public WhenGenerateIsCalled()
         {
             proxy = new Mock<IAggregateReconciliationProxy>();
-            store = new Mock<IEventStore<ISequencedEvents, ulong>>();
+            store = new Mock<IEventStore<SequencedEvents, ulong>>();
         }
 
         [Fact]
@@ -47,7 +47,7 @@
                 .Setup(store => store.Read(It.Is<ulong>(lastIndex => lastIndex > ulong.MinValue), It.IsAny<ushort>()))
                 .Returns(new SequencedEvents[0]);
 
-            var instance = new DefaultSnapshotProvider(store.Object, () => type => proxy.Object);
+            var instance = new DefaultSnapshotProvider<SequencedEvents>(store.Object, () => type => proxy.Object);
             ISnapshot snapshot = instance.Generate();
 
             EventCentricAggregateRoot actual = Assert.Single(snapshot.Aggregates);
@@ -96,7 +96,11 @@
                     new SequencedEvents(lastIndex + 1, aggregates.Values.ElementAt((int)lastIndex).Events),
                 });
 
-            var instance = new DefaultSnapshotProvider(store.Object, () => type => proxy.Object, numberToRead: 1);
+            var instance = new DefaultSnapshotProvider<SequencedEvents>(
+                store.Object,
+                () => type => proxy.Object,
+                numberToRead: 1);
+
             ISnapshot snapshot = instance.Generate(target: 2);
 
             Assert.Equal(first, firstSnapshot);

@@ -11,11 +11,11 @@
     public sealed class WhenReconcileIsCalled
         : DefaultEventReconcilerTests
     {
-        private readonly DefaultEventReconciler instance;
+        private readonly DefaultEventReconciler<SequencedEvents> instance;
 
         public WhenReconcileIsCalled()
         {
-            instance = new DefaultEventReconciler(EventStore.Object, Reconciler.Object);
+            instance = new DefaultEventReconciler<SequencedEvents>(EventStore.Object, Reconciler.Object);
         }
 
         [Fact]

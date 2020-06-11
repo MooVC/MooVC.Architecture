@@ -6,7 +6,8 @@
 
     [Serializable]
     public sealed class EventSequence
-        : IEventSequence
+        : IEventSequence,
+          ISerializable
     {
         public EventSequence(ulong sequence, DateTime? timeStamp = default)
         {

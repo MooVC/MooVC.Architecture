@@ -12,7 +12,7 @@
         {
             _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
                 AggregateReconciler.Object,
-                AggregateStore.Object,
+                reference => default,
                 EventReconciler.Object,
                 SequenceFactory,
                 SequenceStore.Object,
@@ -24,11 +24,11 @@
         {
             _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
                 AggregateReconciler.Object,
-                AggregateStore.Object,
+                reference => default,
                 EventReconciler.Object,
                 SequenceFactory,
                 null,
-                SnapshotStore.Object));
+                () => default));
         }
 
         [Fact]
@@ -36,11 +36,11 @@
         {
             _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
                 AggregateReconciler.Object,
-                AggregateStore.Object,
+                reference => default,
                 EventReconciler.Object,
                 null,
                 SequenceStore.Object,
-                SnapshotStore.Object));
+                () => default));
         }
 
         [Fact]
@@ -48,11 +48,11 @@
         {
             _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
                 AggregateReconciler.Object,
-                AggregateStore.Object,
+                reference => default,
                 null,
                 SequenceFactory,
                 SequenceStore.Object,
-                SnapshotStore.Object));
+                () => default));
         }
 
         [Fact]
@@ -64,7 +64,7 @@
                 EventReconciler.Object,
                 SequenceFactory,
                 SequenceStore.Object,
-                SnapshotStore.Object));
+                () => default));
         }
 
         [Fact]
@@ -72,11 +72,11 @@
         {
             _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
                 null,
-                AggregateStore.Object,
+                reference => default,
                 EventReconciler.Object,
                 SequenceFactory,
                 SequenceStore.Object,
-                SnapshotStore.Object));
+                () => default));
         }
 
         [Fact]
@@ -84,11 +84,11 @@
         {
             _ = new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
                 AggregateReconciler.Object,
-                AggregateStore.Object,
+                reference => default,
                 EventReconciler.Object,
                 SequenceFactory,
                 SequenceStore.Object,
-                SnapshotStore.Object);
+                () => default);
         }
     }
 }

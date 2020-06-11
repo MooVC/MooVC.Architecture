@@ -1,5 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.DefaultReconciliationOrchestratorTests
 {
+    using System;
     using System.Linq;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services.Snapshots;
@@ -10,19 +11,6 @@
     public sealed class WhenReconcileIsCalled
         : DefaultReconciliationOrchestratorTests
     {
-        private readonly DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance;
-
-        public WhenReconcileIsCalled()
-        {
-            instance = new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
-                AggregateReconciler.Object,
-                AggregateStore.Object,
-                EventReconciler.Object,
-                SequenceFactory,
-                SequenceStore.Object,
-                SnapshotStore.Object);
-        }
-
         [Fact]
         public void GivenAPreviousSequenceThenSnapshotRecoveryIsNotTriggered()
         {
@@ -32,6 +20,16 @@
 
             bool wasSnapshotRestorationCommencingInvoked = false;
             bool wasSnapshotRestorationCompletedInvoked = false;
+            bool wasTriggered = false;
+
+            Snapshot SnapshotSource()
+            {
+                wasTriggered = true;
+
+                return default;
+            }
+
+            DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
             instance.SnapshotRestorationCommencing += (_, __) => wasSnapshotRestorationCommencingInvoked = true;
             instance.SnapshotRestorationCompleted += (_, __) => wasSnapshotRestorationCompletedInvoked = true;
@@ -40,9 +38,9 @@
 
             Assert.False(wasSnapshotRestorationCommencingInvoked);
             Assert.False(wasSnapshotRestorationCompletedInvoked);
+            Assert.False(wasTriggered);
 
             SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
-            SnapshotStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Never);
         }
 
         [Fact]
@@ -54,6 +52,8 @@
             _ = SequenceStore
                 .Setup(store => store.Get(It.IsAny<Paging>()))
                 .Returns(new[] { sequence });
+
+            DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance = CreateReconciler();
 
             instance.Reconcile();
 
@@ -76,14 +76,22 @@
                 .Setup(store => store.Get(It.IsAny<Paging>()))
                 .Returns(new EventSequence[0]);
 
-            _ = SnapshotStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new Snapshot[0]);
+            bool wasTriggered = false;
+
+            Snapshot SnapshotSource()
+            {
+                wasTriggered = true;
+
+                return default;
+            }
+
+            DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
             instance.Reconcile();
 
+            Assert.True(wasTriggered);
+
             SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
-            SnapshotStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
         }
 
         [Fact]
@@ -97,12 +105,18 @@
                 .Setup(store => store.Get(It.IsAny<Paging>()))
                 .Returns(new EventSequence[0]);
 
-            _ = SnapshotStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new[] { snapshot });
-
             bool wasSnapshotRestorationCommencingInvoked = false;
             bool wasSnapshotRestorationCompletedInvoked = false;
+            bool wasTriggered = false;
+
+            Snapshot SnapshotSource()
+            {
+                wasTriggered = true;
+
+                return snapshot;
+            }
+
+            DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
             instance.SnapshotRestorationCommencing += (_, __) => wasSnapshotRestorationCommencingInvoked = true;
             instance.SnapshotRestorationCompleted += (_, __) => wasSnapshotRestorationCompletedInvoked = true;
@@ -111,6 +125,7 @@
 
             Assert.True(wasSnapshotRestorationCommencingInvoked);
             Assert.True(wasSnapshotRestorationCompletedInvoked);
+            Assert.True(wasTriggered);
 
             AggregateReconciler.Verify(reconciler => reconciler.Reconcile(It.IsAny<EventCentricAggregateRoot[]>()), times: Times.Once);
 
@@ -120,7 +135,19 @@
                 times: Times.Once);
 
             SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
-            SnapshotStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
+        }
+
+        private DefaultReconciliationOrchestrator<EventSequence, Snapshot> CreateReconciler(Func<Snapshot> snapshotSource = default)
+        {
+            snapshotSource ??= () => default;
+
+            return new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+                AggregateReconciler.Object,
+                reference => default,
+                EventReconciler.Object,
+                SequenceFactory,
+                SequenceStore.Object,
+                snapshotSource);
         }
     }
 }

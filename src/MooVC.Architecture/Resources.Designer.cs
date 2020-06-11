@@ -324,11 +324,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The store in which the aggregates are persisted must be provided..
+        ///   Looks up a localized string similar to The source from which the aggregates are obtained must be provided..
         /// </summary>
-        internal static string DefaultReconciliationOrchestratorAggregateStoreRequired {
+        internal static string DefaultReconciliationOrchestratorAggregateSourceRequired {
             get {
-                return ResourceManager.GetString("DefaultReconciliationOrchestratorAggregateStoreRequired", resourceCulture);
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorAggregateSourceRequired", resourceCulture);
             }
         }
         
@@ -360,11 +360,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The store responsible for providing the snapshots must be provided..
+        ///   Looks up a localized string similar to The source responsible for providing the snapshots must be provided..
         /// </summary>
-        internal static string DefaultReconciliationOrchestratorSnapshotStoreRequired {
+        internal static string DefaultReconciliationOrchestratorSnapshotSourceRequired {
             get {
-                return ResourceManager.GetString("DefaultReconciliationOrchestratorSnapshotStoreRequired", resourceCulture);
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorSnapshotSourceRequired", resourceCulture);
             }
         }
         

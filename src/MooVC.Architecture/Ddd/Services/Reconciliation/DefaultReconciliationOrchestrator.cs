@@ -13,33 +13,33 @@
         where TSnapshot : class, ISnapshot
     {
         private readonly IAggregateReconciler aggregateReconciler;
-        private readonly IStore<EventCentricAggregateRoot, Guid> aggregateStore;
+        private readonly Func<Reference, EventCentricAggregateRoot> aggregateSource;
         private readonly IEventReconciler eventReconciler;
-        private readonly IStore<TEventSequence, ulong> sequenceStore;
-        private readonly IStore<TSnapshot, ulong> snapshotStore;
         private readonly Func<ulong, TEventSequence> sequenceFactory;
+        private readonly IStore<TEventSequence, ulong> sequenceStore;
+        private readonly Func<TSnapshot> snapshotSource;
 
         public DefaultReconciliationOrchestrator(
             IAggregateReconciler aggregateReconciler,
-            IStore<EventCentricAggregateRoot, Guid> aggregateStore,
+            Func<Reference, EventCentricAggregateRoot> aggregateSource,
             IEventReconciler eventReconciler,
             Func<ulong, TEventSequence> sequenceFactory,
             IStore<TEventSequence, ulong> sequenceStore,
-            IStore<TSnapshot, ulong> snapshotStore)
+            Func<TSnapshot> snapshotSource)
         {
             ArgumentNotNull(aggregateReconciler, nameof(aggregateReconciler), DefaultReconciliationOrchestratorAggregateReconcilerRequired);
-            ArgumentNotNull(aggregateStore, nameof(aggregateStore), DefaultReconciliationOrchestratorAggregateStoreRequired);
+            ArgumentNotNull(aggregateSource, nameof(aggregateSource), DefaultReconciliationOrchestratorAggregateSourceRequired);
             ArgumentNotNull(eventReconciler, nameof(eventReconciler), DefaultReconciliationOrchestratorEventReconcilerRequired);
             ArgumentNotNull(sequenceFactory, nameof(sequenceFactory), DefaultReconciliationOrchestratorSequenceFactoryRequired);
             ArgumentNotNull(sequenceStore, nameof(sequenceStore), DefaultReconciliationOrchestratorSequenceStoreRequired);
-            ArgumentNotNull(snapshotStore, nameof(snapshotStore), DefaultReconciliationOrchestratorSnapshotStoreRequired);
+            ArgumentNotNull(snapshotSource, nameof(snapshotSource), DefaultReconciliationOrchestratorSnapshotSourceRequired);
 
             this.aggregateReconciler = aggregateReconciler;
-            this.aggregateStore = aggregateStore;
+            this.aggregateSource = aggregateSource;
             this.eventReconciler = eventReconciler;
             this.sequenceFactory = sequenceFactory;
             this.sequenceStore = sequenceStore;
-            this.snapshotStore = snapshotStore;
+            this.snapshotSource = snapshotSource;
 
             this.aggregateReconciler.AggregateConflictDetected += AggregateReconciler_AggregateConflictDetected;
             this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;
@@ -53,7 +53,7 @@
         {
             IEventSequence previous = GetPreviousSequence();
 
-            if (previous is null)
+            if (previous is null || previous.Sequence == 0)
             {
                 previous = RestoreLatestSnapshot();
             }
@@ -73,7 +73,7 @@
 
         private IEventSequence RestoreLatestSnapshot()
         {
-            ISnapshot latest = snapshotStore.Get().LastOrDefault();
+            ISnapshot latest = snapshotSource();
 
             if (latest is { })
             {
@@ -103,7 +103,7 @@
             IAggregateReconciler sender,
             AggregateConflictDetectedEventArgs e)
         {
-            EventCentricAggregateRoot aggregate = aggregateStore.Get(e.Aggregate.Id);
+            EventCentricAggregateRoot aggregate = aggregateSource(e.Aggregate);
 
             sender.Reconcile(aggregate);
         }

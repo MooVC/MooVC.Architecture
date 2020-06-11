@@ -7,36 +7,39 @@
     using static MooVC.Ensure;
     using static Resources;
 
-    public sealed class DefaultReconciliationOrchestrator
+    public sealed class DefaultReconciliationOrchestrator<TEventSequence, TSnapshot>
         : IReconciliationOrchestrator
+        where TEventSequence : class, IEventSequence
+        where TSnapshot : class, ISnapshot
     {
         private readonly IAggregateReconciler aggregateReconciler;
         private readonly IStore<EventCentricAggregateRoot, Guid> aggregateStore;
         private readonly IEventReconciler eventReconciler;
-        private readonly IStore<IEventSequence, ulong> sequenceStore;
-        private readonly IStore<ISnapshot, ulong> snapshotStore;
-        private readonly Func<ulong, IEventSequence> sequenceFactory;
+        private readonly IStore<TEventSequence, ulong> sequenceStore;
+        private readonly IStore<TSnapshot, ulong> snapshotStore;
+        private readonly Func<ulong, TEventSequence> sequenceFactory;
 
         public DefaultReconciliationOrchestrator(
             IAggregateReconciler aggregateReconciler,
             IStore<EventCentricAggregateRoot, Guid> aggregateStore,
             IEventReconciler eventReconciler,
-            IStore<IEventSequence, ulong> sequenceStore,
-            IStore<ISnapshot, ulong> snapshotStore,
-            Func<ulong, IEventSequence> sequenceFactory = default)
+            Func<ulong, TEventSequence> sequenceFactory,
+            IStore<TEventSequence, ulong> sequenceStore,
+            IStore<TSnapshot, ulong> snapshotStore)
         {
             ArgumentNotNull(aggregateReconciler, nameof(aggregateReconciler), DefaultReconciliationOrchestratorAggregateReconcilerRequired);
             ArgumentNotNull(aggregateStore, nameof(aggregateStore), DefaultReconciliationOrchestratorAggregateStoreRequired);
             ArgumentNotNull(eventReconciler, nameof(eventReconciler), DefaultReconciliationOrchestratorEventReconcilerRequired);
+            ArgumentNotNull(sequenceFactory, nameof(sequenceFactory), DefaultReconciliationOrchestratorSequenceFactoryRequired);
             ArgumentNotNull(sequenceStore, nameof(sequenceStore), DefaultReconciliationOrchestratorSequenceStoreRequired);
             ArgumentNotNull(snapshotStore, nameof(snapshotStore), DefaultReconciliationOrchestratorSnapshotStoreRequired);
 
             this.aggregateReconciler = aggregateReconciler;
             this.aggregateStore = aggregateStore;
             this.eventReconciler = eventReconciler;
+            this.sequenceFactory = sequenceFactory;
             this.sequenceStore = sequenceStore;
             this.snapshotStore = snapshotStore;
-            this.sequenceFactory = sequenceFactory ?? DefaultSequenceFactory;
 
             this.aggregateReconciler.AggregateConflictDetected += AggregateReconciler_AggregateConflictDetected;
             this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;
@@ -56,11 +59,6 @@
             }
 
             ReconcileEvents(previous, target);
-        }
-
-        private static IEventSequence DefaultSequenceFactory(ulong current)
-        {
-            return new EventSequence(current);
         }
 
         private IEventSequence GetPreviousSequence()
@@ -93,7 +91,7 @@
 
         private void UpdateSequence(ulong current)
         {
-            IEventSequence sequence = sequenceFactory(current);
+            TEventSequence sequence = sequenceFactory(current);
 
             if (sequence is { })
             {

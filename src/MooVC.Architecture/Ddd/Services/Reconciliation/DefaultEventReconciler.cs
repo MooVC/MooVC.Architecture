@@ -7,18 +7,19 @@
     using static MooVC.Ensure;
     using static Resources;
 
-    public sealed class DefaultEventReconciler
+    public sealed class DefaultEventReconciler<TSequencedEvents>
         : EventReconciler
+        where TSequencedEvents : class, ISequencedEvents
     {
         public const ushort DefaultNumberToRead = 200;
         public const ushort MinimumNumberToRead = 1;
 
-        private readonly IEventStore<ISequencedEvents, ulong> eventStore;
+        private readonly IEventStore<TSequencedEvents, ulong> eventStore;
         private readonly IAggregateReconciler reconciler;
         private readonly ushort numberToRead;
 
         public DefaultEventReconciler(
-            IEventStore<ISequencedEvents, ulong> eventStore,
+            IEventStore<TSequencedEvents, ulong> eventStore,
             IAggregateReconciler reconciler,
             ushort numberToRead = DefaultNumberToRead)
         {
@@ -37,7 +38,7 @@
         {
             if (ShouldReadEvents(previous, target, out ushort numberToRead, out ulong start))
             {
-                IEnumerable<ISequencedEvents> sequences = eventStore.Read(
+                IEnumerable<TSequencedEvents> sequences = eventStore.Read(
                     start,
                     numberToRead: numberToRead);
 

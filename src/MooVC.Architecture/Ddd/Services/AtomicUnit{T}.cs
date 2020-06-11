@@ -53,7 +53,7 @@
         public T Id { get; }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddEnumerable(nameof(Events), Events);
             info.AddValue(nameof(Id), Id);

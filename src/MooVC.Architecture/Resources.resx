@@ -212,6 +212,9 @@
   <data name="DefaultReconciliationOrchestratorEventReconcilerRequired" xml:space="preserve">
     <value>The event reconciler must be provided.</value>
   </data>
+  <data name="DefaultReconciliationOrchestratorSequenceFactoryRequired" xml:space="preserve">
+    <value>The factory to be used to generate a new sequence must be provided.</value>
+  </data>
   <data name="DefaultReconciliationOrchestratorSequenceStoreRequired" xml:space="preserve">
     <value>The store reponsible for tracking the event sequence must be provided.</value>
   </data>

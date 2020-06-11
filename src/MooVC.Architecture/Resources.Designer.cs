@@ -342,6 +342,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The factory to be used to generate a new sequence must be provided..
+        /// </summary>
+        internal static string DefaultReconciliationOrchestratorSequenceFactoryRequired {
+            get {
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorSequenceFactoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The store reponsible for tracking the event sequence must be provided..
         /// </summary>
         internal static string DefaultReconciliationOrchestratorSequenceStoreRequired {

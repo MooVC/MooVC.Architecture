@@ -5,7 +5,18 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MooVC.Architecture", "MooVC.Architecture\MooVC.Architecture.csproj", "{6191BDF0-23DA-4458-8B3E-DEC78A15F514}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MooVC.Architecture.Tests", "MooVC.Architecture.Tests\MooVC.Architecture.Tests.csproj", "{16C92F5F-53C5-4004-883F-F768608602BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MooVC.Architecture.Tests", "MooVC.Architecture.Tests\MooVC.Architecture.Tests.csproj", "{16C92F5F-53C5-4004-883F-F768608602BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9656C3C2-E8C5-462F-9A5D-3BF6A479A6A9}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitignore = ..\.gitignore
+		..\azure-pipelines.yml = ..\azure-pipelines.yml
+		..\gitversion.yml = ..\gitversion.yml
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+		..\stylecop.analyzers.ruleset = ..\stylecop.analyzers.ruleset
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -10,14 +10,15 @@
     public sealed class WhenReconcileIsCalled
         : DefaultReconciliationOrchestratorTests
     {
-        private readonly DefaultReconciliationOrchestrator instance;
+        private readonly DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance;
 
         public WhenReconcileIsCalled()
         {
-            instance = new DefaultReconciliationOrchestrator(
+            instance = new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
                 AggregateReconciler.Object,
                 AggregateStore.Object,
                 EventReconciler.Object,
+                SequenceFactory,
                 SequenceStore.Object,
                 SnapshotStore.Object);
         }
@@ -73,11 +74,11 @@
         {
             _ = SequenceStore
                 .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new IEventSequence[0]);
+                .Returns(new EventSequence[0]);
 
             _ = SnapshotStore
                 .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new ISnapshot[0]);
+                .Returns(new Snapshot[0]);
 
             instance.Reconcile();
 
@@ -94,7 +95,7 @@
 
             _ = SequenceStore
                 .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new IEventSequence[0]);
+                .Returns(new EventSequence[0]);
 
             _ = SnapshotStore
                 .Setup(store => store.Get(It.IsAny<Paging>()))

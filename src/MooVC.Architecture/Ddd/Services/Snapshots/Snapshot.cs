@@ -12,7 +12,8 @@
 
     [Serializable]
     public sealed class Snapshot
-        : ISnapshot
+        : ISnapshot,
+          ISerializable
     {
         public Snapshot(IEnumerable<EventCentricAggregateRoot> aggregates, IEventSequence sequence)
         {

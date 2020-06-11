@@ -206,8 +206,8 @@
   <data name="DefaultReconciliationOrchestratorAggregateReconcilerRequired" xml:space="preserve">
     <value>The aggregate reconciler must be provided.</value>
   </data>
-  <data name="DefaultReconciliationOrchestratorAggregateStoreRequired" xml:space="preserve">
-    <value>The store in which the aggregates are persisted must be provided.</value>
+  <data name="DefaultReconciliationOrchestratorAggregateSourceRequired" xml:space="preserve">
+    <value>The source from which the aggregates are obtained must be provided.</value>
   </data>
   <data name="DefaultReconciliationOrchestratorEventReconcilerRequired" xml:space="preserve">
     <value>The event reconciler must be provided.</value>
@@ -218,8 +218,8 @@
   <data name="DefaultReconciliationOrchestratorSequenceStoreRequired" xml:space="preserve">
     <value>The store reponsible for tracking the event sequence must be provided.</value>
   </data>
-  <data name="DefaultReconciliationOrchestratorSnapshotStoreRequired" xml:space="preserve">
-    <value>The store responsible for providing the snapshots must be provided.</value>
+  <data name="DefaultReconciliationOrchestratorSnapshotSourceRequired" xml:space="preserve">
+    <value>The source responsible for providing the snapshots must be provided.</value>
   </data>
   <data name="DefaultSnapshotProviderEventStoreRequired" xml:space="preserve">
     <value>The store from which events are to be snapshot must be provided.</value>

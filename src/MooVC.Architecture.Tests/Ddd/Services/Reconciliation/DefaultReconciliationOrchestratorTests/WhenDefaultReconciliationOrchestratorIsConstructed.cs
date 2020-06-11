@@ -10,7 +10,7 @@
         [Fact]
         public void GivenEverythingExceptASnapshotStoreThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence>(
                 AggregateReconciler.Object,
                 reference => default,
                 EventReconciler.Object,
@@ -22,7 +22,7 @@
         [Fact]
         public void GivenEverythingExceptASequenceStoreThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence>(
                 AggregateReconciler.Object,
                 reference => default,
                 EventReconciler.Object,
@@ -34,7 +34,7 @@
         [Fact]
         public void GivenEverythingExceptASequenceFactoryThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence>(
                 AggregateReconciler.Object,
                 reference => default,
                 EventReconciler.Object,
@@ -46,7 +46,7 @@
         [Fact]
         public void GivenEverythingExceptAnEventReconcilerThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence>(
                 AggregateReconciler.Object,
                 reference => default,
                 null,
@@ -58,7 +58,7 @@
         [Fact]
         public void GivenEverythingExceptAnAgggregateStoreThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence>(
                 AggregateReconciler.Object,
                 null,
                 EventReconciler.Object,
@@ -70,7 +70,7 @@
         [Fact]
         public void GivenEverythingExceptAnAggregateReconcilerThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+            _ = Assert.Throws<ArgumentNullException>(() => new DefaultReconciliationOrchestrator<EventSequence>(
                 null,
                 reference => default,
                 EventReconciler.Object,
@@ -82,7 +82,7 @@
         [Fact]
         public void GivenEverythingThenAnInstanceIsCreated()
         {
-            _ = new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+            _ = new DefaultReconciliationOrchestrator<EventSequence>(
                 AggregateReconciler.Object,
                 reference => default,
                 EventReconciler.Object,

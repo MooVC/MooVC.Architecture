@@ -29,7 +29,7 @@
                 return default;
             }
 
-            DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance = CreateReconciler(snapshotSource: SnapshotSource);
+            DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
             instance.SnapshotRestorationCommencing += (_, __) => wasSnapshotRestorationCommencingInvoked = true;
             instance.SnapshotRestorationCompleted += (_, __) => wasSnapshotRestorationCompletedInvoked = true;
@@ -53,7 +53,7 @@
                 .Setup(store => store.Get(It.IsAny<Paging>()))
                 .Returns(new[] { sequence });
 
-            DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance = CreateReconciler();
+            DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler();
 
             instance.Reconcile();
 
@@ -85,7 +85,7 @@
                 return default;
             }
 
-            DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance = CreateReconciler(snapshotSource: SnapshotSource);
+            DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
             instance.Reconcile();
 
@@ -116,7 +116,7 @@
                 return snapshot;
             }
 
-            DefaultReconciliationOrchestrator<EventSequence, Snapshot> instance = CreateReconciler(snapshotSource: SnapshotSource);
+            DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
             instance.SnapshotRestorationCommencing += (_, __) => wasSnapshotRestorationCommencingInvoked = true;
             instance.SnapshotRestorationCompleted += (_, __) => wasSnapshotRestorationCompletedInvoked = true;
@@ -137,11 +137,11 @@
             SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
         }
 
-        private DefaultReconciliationOrchestrator<EventSequence, Snapshot> CreateReconciler(Func<Snapshot> snapshotSource = default)
+        private DefaultReconciliationOrchestrator<EventSequence> CreateReconciler(Func<Snapshot> snapshotSource = default)
         {
             snapshotSource ??= () => default;
 
-            return new DefaultReconciliationOrchestrator<EventSequence, Snapshot>(
+            return new DefaultReconciliationOrchestrator<EventSequence>(
                 AggregateReconciler.Object,
                 reference => default,
                 EventReconciler.Object,

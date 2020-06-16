@@ -1,5 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
+    using System;
     using System.Collections.Generic;
     using MooVC.Collections.Generic;
     using MooVC.Linq;
@@ -7,6 +8,7 @@
     using static Resources;
 
     public sealed class EventReconciliationEventArgs
+        : EventArgs
     {
         public EventReconciliationEventArgs(IEnumerable<DomainEvent> events)
         {

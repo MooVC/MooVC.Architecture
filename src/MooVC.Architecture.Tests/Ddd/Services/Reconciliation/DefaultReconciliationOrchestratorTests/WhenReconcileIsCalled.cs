@@ -135,6 +135,8 @@
                 times: Times.Once);
 
             SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
+            SequenceStore.Verify(store => store.Create(It.IsAny<EventSequence>()), times: Times.Once);
+            SequenceStore.Verify(store => store.Create(It.Is<EventSequence>(updated => updated.Sequence == sequence.Sequence)), times: Times.Once);
         }
 
         private DefaultReconciliationOrchestrator<EventSequence> CreateReconciler(Func<Snapshot> snapshotSource = default)

@@ -80,6 +80,8 @@
 
                 aggregateReconciler.Reconcile(latest.Aggregates.ToArray());
 
+                UpdateSequence(latest.Sequence.Sequence);
+
                 SnapshotRestorationCompleted?.Invoke(this, new SnapshotRestorationCompletedEventArgs(latest.Sequence));
 
                 return latest.Sequence;

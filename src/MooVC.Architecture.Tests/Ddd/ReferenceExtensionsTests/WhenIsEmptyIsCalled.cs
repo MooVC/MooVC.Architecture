@@ -35,7 +35,7 @@
         {
             var reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
 
-            Assert.True(reference.IsEmpty());
+            Assert.False(reference.IsEmpty());
         }
 
         [Fact]

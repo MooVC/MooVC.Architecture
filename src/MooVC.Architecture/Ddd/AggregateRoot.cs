@@ -29,11 +29,11 @@
             State = info.GetInternalValue<AggregateState>(nameof(State));
         }
 
-        public event EventHandler ChangesMarkedAsCommitted;
+        public event EventHandler? ChangesMarkedAsCommitted;
 
-        public event EventHandler ChangesMarkedAsUncommitted;
+        public event EventHandler? ChangesMarkedAsUncommitted;
 
-        public event EventHandler ChangesRolledBack;
+        public event EventHandler? ChangesRolledBack;
 
         public SignedVersion Version => State.Current;
 
@@ -41,7 +41,7 @@
 
         private protected AggregateState State { get; set; }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             return base.Equals(other) &&
                 other is AggregateRoot aggregate
@@ -71,17 +71,17 @@
             }
         }
 
-        protected virtual void OnChangesMarkedAsCommitted(EventArgs args = default)
+        protected virtual void OnChangesMarkedAsCommitted(EventArgs? args = default)
         {
             ChangesMarkedAsCommitted?.Invoke(this, args ?? EventArgs.Empty);
         }
 
-        protected virtual void OnChangesMarkedAsUncommitted(EventArgs args = default)
+        protected virtual void OnChangesMarkedAsUncommitted(EventArgs? args = default)
         {
             ChangesMarkedAsUncommitted?.Invoke(this, args ?? EventArgs.Empty);
         }
 
-        protected virtual void OnChangesRolledBack(EventArgs args = default)
+        protected virtual void OnChangesRolledBack(EventArgs? args = default)
         {
             ChangesRolledBack?.Invoke(this, args ?? EventArgs.Empty);
         }

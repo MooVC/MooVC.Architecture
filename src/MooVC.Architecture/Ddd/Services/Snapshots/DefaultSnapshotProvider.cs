@@ -30,7 +30,7 @@
             this.numberToRead = numberToRead;
         }
 
-        public ISnapshot Generate(ulong? target = default)
+        public ISnapshot? Generate(ulong? target = default)
         {
             IEventReconciler reconciler = CreateEventReconciler(out Func<IEnumerable<EventCentricAggregateRoot>> aggregates);
             ulong? current = reconciler.Reconcile(target: target);
@@ -50,7 +50,7 @@
             var proxies = new ConcurrentDictionary<Type, IAggregateReconciliationProxy>();
             Func<Type, IAggregateReconciliationProxy> external = factory();
 
-            IAggregateReconciliationProxy ProxyFactory(Type aggregate)
+            IAggregateReconciliationProxy? ProxyFactory(Type aggregate)
             {
                 if (!proxies.TryGetValue(aggregate, out IAggregateReconciliationProxy proxy))
                 {

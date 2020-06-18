@@ -8,6 +8,7 @@
     [Serializable]
     public abstract class Entity<T>
         : ISerializable
+        where T : notnull
     {
         protected Entity(T id)
         {
@@ -21,17 +22,17 @@
 
         public T Id { get; }
 
-        public static bool operator ==(Entity<T> first, Entity<T> second)
+        public static bool operator ==(Entity<T>? first, Entity<T>? second)
         {
             return EqualOperator(first, second);
         }
 
-        public static bool operator !=(Entity<T> first, Entity<T> second)
+        public static bool operator !=(Entity<T>? first, Entity<T>? second)
         {
             return NotEqualOperator(first, second);
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             return other is Entity<T> entity
                 && Id.Equals(entity.Id);
@@ -48,14 +49,14 @@
             info.AddValue(nameof(Id), Id);
         }
 
-        private static bool EqualOperator(Entity<T> left, Entity<T> right)
+        private static bool EqualOperator(Entity<T>? left, Entity<T>? right)
         {
             return left is null ^ right is null
                 ? false
                 : left is null || left.Equals(right);
         }
 
-        private static bool NotEqualOperator(Entity<T> left, Entity<T> right)
+        private static bool NotEqualOperator(Entity<T>? left, Entity<T>? right)
         {
             return !EqualOperator(left, right);
         }

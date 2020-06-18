@@ -38,17 +38,17 @@ namespace MooVC.Architecture.Ddd
 
         public SignedVersion Version { get; }
 
-        public static bool operator ==(VersionedReference first, VersionedReference second)
+        public static bool operator ==(VersionedReference? first, VersionedReference? second)
         {
             return EqualOperator(first, second);
         }
 
-        public static bool operator !=(VersionedReference first, VersionedReference second)
+        public static bool operator !=(VersionedReference? first, VersionedReference? second)
         {
             return NotEqualOperator(first, second);
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             return other is VersionedReference value
                 ? Id == value.Id && Type == value.Type && Version == value.Version
@@ -81,14 +81,14 @@ namespace MooVC.Architecture.Ddd
                 .Union(new object[] { Version });
         }
 
-        private static bool EqualOperator(VersionedReference left, VersionedReference right)
+        private static bool EqualOperator(VersionedReference? left, VersionedReference? right)
         {
             return left is null ^ right is null
                 ? false
                 : left is null || left.Equals(right);
         }
 
-        private static bool NotEqualOperator(VersionedReference left, VersionedReference right)
+        private static bool NotEqualOperator(VersionedReference? left, VersionedReference? right)
         {
             return !EqualOperator(left, right);
         }

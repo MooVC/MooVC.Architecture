@@ -36,7 +36,7 @@ namespace MooVC.Architecture.Ddd.Services
             PerformRead(() => base.GetObjectData(info, context));
         }
 
-        protected override TAggregate Get(Reference key)
+        protected override TAggregate? Get(Reference key)
         {
             return PerformRead(() => base.Get(key));
         }

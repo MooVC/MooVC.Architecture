@@ -6,9 +6,9 @@ namespace MooVC.Architecture.Services
     public abstract class Bus
         : IBus
     {
-        public event MessageInvokedEventHandler Invoked;
+        public event MessageInvokedEventHandler? Invoked;
 
-        public event MessageInvokingEventHandler Invoking;
+        public event MessageInvokingEventHandler? Invoking;
 
         public void Invoke(Message message)
         {

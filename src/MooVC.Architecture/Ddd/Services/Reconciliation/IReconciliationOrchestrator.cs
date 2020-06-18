@@ -6,6 +6,6 @@
 
         event SnapshotRestorationCompletedEventHandler SnapshotRestorationCompleted;
 
-        void Reconcile(IEventSequence target = default);
+        void Reconcile(IEventSequence? target = default);
     }
 }

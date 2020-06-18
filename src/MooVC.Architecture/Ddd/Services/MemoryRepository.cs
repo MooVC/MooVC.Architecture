@@ -25,7 +25,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected virtual IDictionary<Reference, TAggregate> Store { get; }
 
-        public override TAggregate Get(Guid id, SignedVersion version = default)
+        public override TAggregate? Get(Guid id, SignedVersion? version = default)
         {
             Reference key = version is { }
                 ? (Reference)new VersionedReference<TAggregate>(id, version)
@@ -48,14 +48,14 @@ namespace MooVC.Architecture.Ddd.Services
             _ = info.TryAddInternalValue(nameof(Store), Store, predicate: _ => Store.Any());
         }
 
-        protected virtual TAggregate Get(Reference key)
+        protected virtual TAggregate? Get(Reference key)
         {
             _ = Store.TryGetValue(key, out TAggregate aggregate);
 
             return aggregate?.Clone();
         }
 
-        protected override VersionedReference GetCurrentVersion(TAggregate aggregate)
+        protected override VersionedReference? GetCurrentVersion(TAggregate aggregate)
         {
             Reference nonVersioned = aggregate.ToReference();
 

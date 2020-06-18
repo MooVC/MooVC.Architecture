@@ -10,7 +10,7 @@
 
         event AggregateSavingEventHandler<TAggregate> AggregateSaving;
 
-        TAggregate Get(Guid id, SignedVersion version = default);
+        TAggregate? Get(Guid id, SignedVersion? version = default);
 
         IEnumerable<TAggregate> GetAll();
 

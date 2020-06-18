@@ -12,12 +12,12 @@
     public sealed class DefaultAggregateReconciler
         : AggregateReconciler
     {
-        private readonly Func<Type, IAggregateReconciliationProxy> factory;
+        private readonly Func<Type, IAggregateReconciliationProxy?> factory;
         private readonly bool ignorePreviousVersions;
         private readonly TimeSpan? timeout;
 
         public DefaultAggregateReconciler(
-            Func<Type, IAggregateReconciliationProxy> factory,
+            Func<Type, IAggregateReconciliationProxy?> factory,
             bool ignorePreviousVersions = true,
             TimeSpan? timeout = default)
         {
@@ -34,7 +34,7 @@
             {
                 foreach (IGrouping<Type, EventCentricAggregateRoot> aggregateTypes in aggregates.GroupBy(aggregate => aggregate.GetType()))
                 {
-                    IAggregateReconciliationProxy proxy = factory(aggregateTypes.Key);
+                    IAggregateReconciliationProxy? proxy = factory(aggregateTypes.Key);
 
                     if (proxy is null)
                     {
@@ -54,7 +54,7 @@
             {
                 foreach (IGrouping<Type, DomainEvent> aggregateTypes in events.GroupBy(@event => @event.Aggregate.Type))
                 {
-                    IAggregateReconciliationProxy proxy = factory(aggregateTypes.Key);
+                    IAggregateReconciliationProxy? proxy = factory(aggregateTypes.Key);
 
                     if (proxy is null)
                     {

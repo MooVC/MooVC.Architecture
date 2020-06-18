@@ -6,11 +6,11 @@
     public abstract class EventReconciler
         : IEventReconciler
     {
-        public event EventsReconciledEventHandler EventsReconciled;
+        public event EventsReconciledEventHandler? EventsReconciled;
 
-        public event EventsReconcilingEventHandler EventsReconciling;
+        public event EventsReconcilingEventHandler? EventsReconciling;
 
-        public event EventSequenceAdvancedEventHandler EventSequenceAdvanced;
+        public event EventSequenceAdvancedEventHandler? EventSequenceAdvanced;
 
         public ulong? Reconcile(ulong? previous = default, ulong? target = default)
         {
@@ -26,7 +26,7 @@
                 {
                     Reconcile(events);
 
-                    OnEventSequenceAdvanced(lastSequence.Value);
+                    OnEventSequenceAdvanced(lastSequence!.Value);
 
                     previous = lastSequence;
                 }

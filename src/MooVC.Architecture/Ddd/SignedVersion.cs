@@ -77,7 +77,7 @@
 
         public Guid Signature => signature.Value;
 
-        public int CompareTo(SignedVersion other)
+        public int CompareTo(SignedVersion? other)
         {
             return other is { }
                 ? Number.CompareTo(other.Number)
@@ -94,7 +94,7 @@
             _ = info.TryAddValue(nameof(Number), Number);
         }
 
-        public bool IsNext(SignedVersion previous)
+        public bool IsNext(SignedVersion? previous)
         {
             return previous is { }
                 ? !IsNew && (Number - previous.Number) == 1 && Header.SequenceEqual(previous.Footer)

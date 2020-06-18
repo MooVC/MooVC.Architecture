@@ -21,7 +21,7 @@
             this.store = store;
         }
 
-        public event PassiveExceptionEventHandler FailureEmitted;
+        public event PassiveExceptionEventHandler? FailureEmitted;
 
         protected override void PerformPublish(DomainEvent[] events)
         {

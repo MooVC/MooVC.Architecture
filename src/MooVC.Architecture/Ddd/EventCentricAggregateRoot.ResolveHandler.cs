@@ -9,7 +9,7 @@
         public const string HandlerName = "Handle";
         private static readonly ConcurrentDictionary<Type, MethodInfo> handlers = new ConcurrentDictionary<Type, MethodInfo>();
 
-        protected virtual Action<TEvent> ResolveHandler<TEvent>(DomainEvent @event)
+        protected virtual Action<TEvent>? ResolveHandler<TEvent>(DomainEvent @event)
            where TEvent : DomainEvent
         {
             MethodInfo handler = LocateHandler(@event);

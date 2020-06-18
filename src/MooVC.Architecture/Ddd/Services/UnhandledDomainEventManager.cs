@@ -21,7 +21,7 @@
             this.bus.Unhandled += Bus_Unhandled;
         }
 
-        public event PassiveExceptionEventHandler FailureEmitted;
+        public event PassiveExceptionEventHandler? FailureEmitted;
 
         protected override void Dispose(bool isDisposing)
         {

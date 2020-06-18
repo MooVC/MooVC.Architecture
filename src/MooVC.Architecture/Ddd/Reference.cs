@@ -43,17 +43,17 @@ namespace MooVC.Architecture.Ddd
 
         public Type Type { get; }
 
-        public static bool operator ==(Reference first, Reference second)
+        public static bool operator ==(Reference? first, Reference? second)
         {
             return EqualOperator(first, second);
         }
 
-        public static bool operator !=(Reference first, Reference second)
+        public static bool operator !=(Reference? first, Reference? second)
         {
             return NotEqualOperator(first, second);
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             return EqualOperator(this, other as Reference);
         }
@@ -105,16 +105,22 @@ namespace MooVC.Architecture.Ddd
             info.AddValue(nameof(Type), Type);
         }
 
-        private static bool EqualOperator(Reference left, Reference right)
+        private static bool EqualOperator(Reference? left, Reference? right)
         {
-            return left is null ^ right is null
-                ? false
-                : left is null
-                    ? true
-                    : left.Id == right.Id && left.Type == right.Type;
+            if (left is null ^ right is null)
+            {
+                return false;
+            }
+
+            if (left is null)
+            {
+                return true;
+            }
+
+            return left.Id == right!.Id && left.Type == right.Type;
         }
 
-        private static bool NotEqualOperator(Reference left, Reference right)
+        private static bool NotEqualOperator(Reference? left, Reference? right)
         {
             return !EqualOperator(left, right);
         }

@@ -15,9 +15,9 @@
         }
 
         [Fact]
-        public void GivenANullQueryThenAnArgumentNullExceptionIsThrown()
+        public void GivenANullQueryThenANullReferenceExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedResult<PaginatedQuery, int>(null, new int[0], 0));
+            _ = Assert.Throws<NullReferenceException>(() => new SerializablePaginatedResult<PaginatedQuery, int>(null, new int[0], 0));
         }
 
         [Fact]

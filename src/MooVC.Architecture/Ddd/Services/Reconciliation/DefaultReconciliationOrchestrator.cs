@@ -44,13 +44,13 @@
             this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;
         }
 
-        public event SnapshotRestorationCommencingEventHandler SnapshotRestorationCommencing;
+        public event SnapshotRestorationCommencingEventHandler? SnapshotRestorationCommencing;
 
-        public event SnapshotRestorationCompletedEventHandler SnapshotRestorationCompleted;
+        public event SnapshotRestorationCompletedEventHandler? SnapshotRestorationCompleted;
 
-        public void Reconcile(IEventSequence target = default)
+        public void Reconcile(IEventSequence? target = default)
         {
-            IEventSequence previous = GetPreviousSequence();
+            IEventSequence? previous = GetPreviousSequence();
 
             if (previous is null || previous.Sequence == 0)
             {
@@ -60,17 +60,17 @@
             ReconcileEvents(previous, target);
         }
 
-        private IEventSequence GetPreviousSequence()
+        private IEventSequence? GetPreviousSequence()
         {
             return sequenceStore.Get().LastOrDefault();
         }
 
-        private void ReconcileEvents(IEventSequence previous, IEventSequence target)
+        private void ReconcileEvents(IEventSequence? previous, IEventSequence? target)
         {
             _ = eventReconciler.Reconcile(previous: previous?.Sequence, target: target?.Sequence);
         }
 
-        private IEventSequence RestoreLatestSnapshot()
+        private IEventSequence? RestoreLatestSnapshot()
         {
             ISnapshot latest = snapshotSource();
 

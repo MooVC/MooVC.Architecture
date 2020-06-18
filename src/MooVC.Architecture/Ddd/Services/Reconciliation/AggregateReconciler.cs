@@ -8,11 +8,11 @@
     public abstract class AggregateReconciler
         : IAggregateReconciler
     {
-        public event AggregateConflictDetectedEventHandler AggregateConflictDetected;
+        public event AggregateConflictDetectedEventHandler? AggregateConflictDetected;
 
-        public event AggregateReconciledEventHandler AggregateReconciled;
+        public event AggregateReconciledEventHandler? AggregateReconciled;
 
-        public event UnsupportedAggregateTypeDetectedEventHandler UnsupportedAggregateTypeDetected;
+        public event UnsupportedAggregateTypeDetectedEventHandler? UnsupportedAggregateTypeDetected;
 
         public abstract void Reconcile(params EventCentricAggregateRoot[] aggregates);
 

@@ -47,6 +47,7 @@
         }
 
         public static long SignedNextId<T>(IEnumerable<T> entities, long max, bool reassign, Func<T, long> selector, long start)
+            where T : notnull
         {
             long value = entities.Select(selector).DefaultIfEmpty().Max();
 
@@ -70,6 +71,7 @@
         }
 
         public static ulong UnsignedNextId<T>(IEnumerable<T> entities, ulong max, bool reassign, Func<T, ulong> selector, ulong start)
+            where T : notnull
         {
             ulong value = entities.Select(selector).DefaultIfEmpty().Max();
 

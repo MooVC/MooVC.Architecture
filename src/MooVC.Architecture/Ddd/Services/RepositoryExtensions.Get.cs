@@ -9,10 +9,10 @@
             this IRepository<TAggregate> repository,
             Message context,
             Guid id,
-            SignedVersion version = default)
+            SignedVersion? version = default)
             where TAggregate : AggregateRoot
         {
-            TAggregate aggregate = repository.Get(id, version: version);
+            TAggregate? aggregate = repository.Get(id, version: version);
 
             if (aggregate is null)
             {

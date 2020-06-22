@@ -8,11 +8,11 @@
         : IRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public event AggregateSavedEventHandler<TAggregate> AggregateSaved;
+        public event AggregateSavedEventHandler<TAggregate>? AggregateSaved;
 
-        public event AggregateSavingEventHandler<TAggregate> AggregateSaving;
+        public event AggregateSavingEventHandler<TAggregate>? AggregateSaving;
 
-        public abstract TAggregate Get(Guid id, SignedVersion version = default);
+        public abstract TAggregate? Get(Guid id, SignedVersion? version = default);
 
         public abstract IEnumerable<TAggregate> GetAll();
 
@@ -27,7 +27,7 @@
 
         protected virtual bool CheckForConflicts(TAggregate aggregate)
         {
-            VersionedReference currentVersion = GetCurrentVersion(aggregate);
+            VersionedReference? currentVersion = GetCurrentVersion(aggregate);
 
             if (aggregate.Version == currentVersion?.Version)
             {
@@ -39,7 +39,7 @@
             return true;
         }
 
-        protected abstract VersionedReference GetCurrentVersion(TAggregate aggregate);
+        protected abstract VersionedReference? GetCurrentVersion(TAggregate aggregate);
 
         protected void OnAggregateSaved(TAggregate aggregate)
         {

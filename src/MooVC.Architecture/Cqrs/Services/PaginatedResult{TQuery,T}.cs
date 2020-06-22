@@ -12,7 +12,7 @@
         where TQuery : PaginatedQuery
     {
         protected PaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)
-            : base(query, query?.Paging, results, totalResults)
+            : base(query, query.Paging, results, totalResults)
         {
             Query = query;
         }

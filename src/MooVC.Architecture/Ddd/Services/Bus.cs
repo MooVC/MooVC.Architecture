@@ -1,18 +1,17 @@
 namespace MooVC.Architecture.Ddd.Services
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
     using MooVC.Linq;
 
     public abstract class Bus
         : IBus
     {
-        public event DomainEventsPublishedEventHandler Published;
+        public event DomainEventsPublishedEventHandler? Published;
 
-        public event DomainEventsPublishingEventHandler Publishing;
+        public event DomainEventsPublishingEventHandler? Publishing;
 
-        public event DomainEventsUnhandledEventHandler Unhandled;
+        public event DomainEventsUnhandledEventHandler? Unhandled;
 
         public void Publish(params DomainEvent[] events)
         {

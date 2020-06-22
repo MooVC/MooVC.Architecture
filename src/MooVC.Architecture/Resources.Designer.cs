@@ -252,6 +252,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The atomic unit must only contain changes triggered in the context of a single operation..
+        /// </summary>
+        internal static string AtomicUnitDistinctContextRequired {
+            get {
+                return ResourceManager.GetString("AtomicUnitDistinctContextRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The atomic unit must contain one or more domain events..
         /// </summary>
         internal static string AtomicUnitEventsRequired {
@@ -272,9 +281,108 @@ namespace MooVC.Architecture {
         /// <summary>
         ///   Looks up a localized string similar to The repository must be provided..
         /// </summary>
+        internal static string CoordinatedGenerateHandlerRepositoryRequired {
+            get {
+                return ResourceManager.GetString("CoordinatedGenerateHandlerRepositoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The repository must be provided..
+        /// </summary>
         internal static string CoordinatedOperationHandlerRepositoryRequired {
             get {
                 return ResourceManager.GetString("CoordinatedOperationHandlerRepositoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The store from which events are to be reconciled must be provided..
+        /// </summary>
+        internal static string DefaultEventReconcilerEventStoreRequired {
+            get {
+                return ResourceManager.GetString("DefaultEventReconcilerEventStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The reconciler to be used to reconciled events must be provided..
+        /// </summary>
+        internal static string DefaultEventReconcilerReconcilerRequired {
+            get {
+                return ResourceManager.GetString("DefaultEventReconcilerReconcilerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The aggregate reconciler must be provided..
+        /// </summary>
+        internal static string DefaultReconciliationOrchestratorAggregateReconcilerRequired {
+            get {
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorAggregateReconcilerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The source from which the aggregates are obtained must be provided..
+        /// </summary>
+        internal static string DefaultReconciliationOrchestratorAggregateSourceRequired {
+            get {
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorAggregateSourceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The event reconciler must be provided..
+        /// </summary>
+        internal static string DefaultReconciliationOrchestratorEventReconcilerRequired {
+            get {
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorEventReconcilerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The factory to be used to generate a new sequence must be provided..
+        /// </summary>
+        internal static string DefaultReconciliationOrchestratorSequenceFactoryRequired {
+            get {
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorSequenceFactoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The store reponsible for tracking the event sequence must be provided..
+        /// </summary>
+        internal static string DefaultReconciliationOrchestratorSequenceStoreRequired {
+            get {
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorSequenceStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The source responsible for providing the snapshots must be provided..
+        /// </summary>
+        internal static string DefaultReconciliationOrchestratorSnapshotSourceRequired {
+            get {
+                return ResourceManager.GetString("DefaultReconciliationOrchestratorSnapshotSourceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The store from which events are to be snapshot must be provided..
+        /// </summary>
+        internal static string DefaultSnapshotProviderEventStoreRequired {
+            get {
+                return ResourceManager.GetString("DefaultSnapshotProviderEventStoreRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
+        /// </summary>
+        internal static string DefaultSnapshotProviderFactoryRequired {
+            get {
+                return ResourceManager.GetString("DefaultSnapshotProviderFactoryRequired", resourceCulture);
             }
         }
         
@@ -302,6 +410,15 @@ namespace MooVC.Architecture {
         internal static string DomainEventPropagatorBusRequired {
             get {
                 return ResourceManager.GetString("DomainEventPropagatorBusRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The reconciler from which the events are to be propagated must be provided..
+        /// </summary>
+        internal static string DomainEventPropagatorReconcilerRequired {
+            get {
+                return ResourceManager.GetString("DomainEventPropagatorReconcilerRequired", resourceCulture);
             }
         }
         
@@ -356,6 +473,15 @@ namespace MooVC.Architecture {
         internal static string EventCentricAggregateRootStateChangesDenied {
             get {
                 return ResourceManager.GetString("EventCentricAggregateRootStateChangesDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The events must be provided..
+        /// </summary>
+        internal static string EventReconciliationEventArgsEventsRequired {
+            get {
+                return ResourceManager.GetString("EventReconciliationEventArgsEventsRequired", resourceCulture);
             }
         }
         
@@ -486,6 +612,24 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The sequence of the snapshot must be provided..
+        /// </summary>
+        internal static string SnapshotRestorationCompletedEventArgsSequenceRequired {
+            get {
+                return ResourceManager.GetString("SnapshotRestorationCompletedEventArgsSequenceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sequence for the snapshot must be provided..
+        /// </summary>
+        internal static string SnapshotSequenceRequired {
+            get {
+                return ResourceManager.GetString("SnapshotSequenceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The type that serves as the context for coordination must be provided..
         /// </summary>
         internal static string TypeExtensionsCoordinateTypeRequired {
@@ -495,20 +639,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A reference to the aggregate for which reconciliation is not supported must be provided..
+        ///   Looks up a localized string similar to A type of the aggregate for which reconciliation is not supported must be provided..
         /// </summary>
-        internal static string UnsupportedAggregateDetectedEventArgsAggregateRequired {
+        internal static string UnsupportedAggregateTypeDetectedEventArgsTypeRequired {
             get {
-                return ResourceManager.GetString("UnsupportedAggregateDetectedEventArgsAggregateRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The events requiring reconciliation by an unsupported aggregate type must be provided..
-        /// </summary>
-        internal static string UnsupportedAggregateDetectedEventArgsEventsRequired {
-            get {
-                return ResourceManager.GetString("UnsupportedAggregateDetectedEventArgsEventsRequired", resourceCulture);
+                return ResourceManager.GetString("UnsupportedAggregateTypeDetectedEventArgsTypeRequired", resourceCulture);
             }
         }
         

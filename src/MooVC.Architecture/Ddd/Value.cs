@@ -26,17 +26,17 @@
             hashCode = new Lazy<int>(AggregateHashCode);
         }
 
-        public static bool operator ==(Value first, Value second)
+        public static bool operator ==(Value? first, Value? second)
         {
             return EqualOperator(first, second);
         }
 
-        public static bool operator !=(Value first, Value second)
+        public static bool operator !=(Value? first, Value? second)
         {
             return NotEqualOperator(first, second);
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             return other is Value value
                 ? GetHashCode() == value.GetHashCode()
@@ -106,14 +106,14 @@
             return value;
         }
 
-        private static bool EqualOperator(Value left, Value right)
+        private static bool EqualOperator(Value? left, Value? right)
         {
             return left is null ^ right is null
                 ? false
                 : left is null || left.Equals(right);
         }
 
-        private static bool NotEqualOperator(Value left, Value right)
+        private static bool NotEqualOperator(Value? left, Value? right)
         {
             return !EqualOperator(left, right);
         }

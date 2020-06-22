@@ -1,31 +1,28 @@
-namespace MooVC.Architecture.Ddd.Services
+﻿namespace MooVC.Architecture.Ddd.Services
 {
-    using System.Collections.Generic;
     using System.Linq;
+    using MooVC.Architecture.Ddd.Services.Reconciliation;
+    using static MooVC.Architecture.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
-    public sealed class DomainEventPropagator<TAggregate>
-        where TAggregate : EventCentricAggregateRoot
+    public sealed class DomainEventPropagator
     {
         private readonly IBus bus;
-        private readonly IRepository<TAggregate> repository;
+        private readonly IAggregateReconciler reconciler;
 
-        public DomainEventPropagator(IBus bus, IRepository<TAggregate> repository)
+        public DomainEventPropagator(IBus bus, IAggregateReconciler reconciler)
         {
             ArgumentNotNull(bus, nameof(bus), DomainEventPropagatorBusRequired);
-            ArgumentNotNull(repository, nameof(repository), DomainEventPropagatorRepositoryRequired);
+            ArgumentNotNull(reconciler, nameof(reconciler), DomainEventPropagatorReconcilerRequired);
 
             this.bus = bus;
-            this.repository = repository;
-            this.repository.AggregateSaved += Repository_AggregateSaved;
+            this.reconciler = reconciler;
+            this.reconciler.AggregateReconciled += Reconciler_AggregateReconciled;
         }
 
-        private void Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedEventArgs<TAggregate> e)
+        private void Reconciler_AggregateReconciled(IAggregateReconciler sender, AggregateReconciledEventArgs e)
         {
-            IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
-
-            bus.Publish(changes.ToArray());
+            bus.Publish(e.Events.ToArray());
         }
     }
 }

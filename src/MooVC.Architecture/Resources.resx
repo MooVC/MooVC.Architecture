@@ -182,14 +182,50 @@
   <data name="AtomicUnitDistinctAggregateVersionRequired" xml:space="preserve">
     <value>The atomic unit must only contain changes relating to a single version increment of a single aggregate.</value>
   </data>
+  <data name="AtomicUnitDistinctContextRequired" xml:space="preserve">
+    <value>The atomic unit must only contain changes triggered in the context of a single operation.</value>
+  </data>
   <data name="AtomicUnitEventsRequired" xml:space="preserve">
     <value>The atomic unit must contain one or more domain events.</value>
   </data>
   <data name="BusMessageRequired" xml:space="preserve">
     <value>The message to be invoked must be provided.</value>
   </data>
+  <data name="CoordinatedGenerateHandlerRepositoryRequired" xml:space="preserve">
+    <value>The repository must be provided.</value>
+  </data>
   <data name="CoordinatedOperationHandlerRepositoryRequired" xml:space="preserve">
     <value>The repository must be provided.</value>
+  </data>
+  <data name="DefaultEventReconcilerEventStoreRequired" xml:space="preserve">
+    <value>The store from which events are to be reconciled must be provided.</value>
+  </data>
+  <data name="DefaultEventReconcilerReconcilerRequired" xml:space="preserve">
+    <value>The reconciler to be used to reconciled events must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorAggregateReconcilerRequired" xml:space="preserve">
+    <value>The aggregate reconciler must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorAggregateSourceRequired" xml:space="preserve">
+    <value>The source from which the aggregates are obtained must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorEventReconcilerRequired" xml:space="preserve">
+    <value>The event reconciler must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorSequenceFactoryRequired" xml:space="preserve">
+    <value>The factory to be used to generate a new sequence must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorSequenceStoreRequired" xml:space="preserve">
+    <value>The store reponsible for tracking the event sequence must be provided.</value>
+  </data>
+  <data name="DefaultReconciliationOrchestratorSnapshotSourceRequired" xml:space="preserve">
+    <value>The source responsible for providing the snapshots must be provided.</value>
+  </data>
+  <data name="DefaultSnapshotProviderEventStoreRequired" xml:space="preserve">
+    <value>The store from which events are to be snapshot must be provided.</value>
+  </data>
+  <data name="DefaultSnapshotProviderFactoryRequired" xml:space="preserve">
+    <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
   </data>
   <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
     <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
@@ -199,6 +235,9 @@
   </data>
   <data name="DomainEventPropagatorBusRequired" xml:space="preserve">
     <value>The bus to which the events are to be propagated must be provided.</value>
+  </data>
+  <data name="DomainEventPropagatorReconcilerRequired" xml:space="preserve">
+    <value>The reconciler from which the events are to be propagated must be provided.</value>
   </data>
   <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
     <value>The repository from which the events are to be propagated must be provided.</value>
@@ -217,6 +256,9 @@
   </data>
   <data name="EventCentricAggregateRootStateChangesDenied" xml:space="preserve">
     <value>Changed to the state of an aggregate of type {0} must be made through ApplyChanges.</value>
+  </data>
+  <data name="EventReconciliationEventArgsEventsRequired" xml:space="preserve">
+    <value>The events must be provided.</value>
   </data>
   <data name="GenericAggregateRequired" xml:space="preserve">
     <value>The aggregate must be provided.</value>
@@ -260,14 +302,17 @@
   <data name="SignedVersionPreviousRequired" xml:space="preserve">
     <value>The previous version must be provided.</value>
   </data>
+  <data name="SnapshotRestorationCompletedEventArgsSequenceRequired" xml:space="preserve">
+    <value>The sequence of the snapshot must be provided.</value>
+  </data>
+  <data name="SnapshotSequenceRequired" xml:space="preserve">
+    <value>The sequence for the snapshot must be provided.</value>
+  </data>
   <data name="TypeExtensionsCoordinateTypeRequired" xml:space="preserve">
     <value>The type that serves as the context for coordination must be provided.</value>
   </data>
-  <data name="UnsupportedAggregateDetectedEventArgsAggregateRequired" xml:space="preserve">
-    <value>A reference to the aggregate for which reconciliation is not supported must be provided.</value>
-  </data>
-  <data name="UnsupportedAggregateDetectedEventArgsEventsRequired" xml:space="preserve">
-    <value>The events requiring reconciliation by an unsupported aggregate type must be provided.</value>
+  <data name="UnsupportedAggregateTypeDetectedEventArgsTypeRequired" xml:space="preserve">
+    <value>A type of the aggregate for which reconciliation is not supported must be provided.</value>
   </data>
   <data name="VersionedReferenceVersionRequired" xml:space="preserve">
     <value>The version of the aggregate must be provided.</value>

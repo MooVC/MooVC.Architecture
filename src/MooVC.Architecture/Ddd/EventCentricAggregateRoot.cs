@@ -91,7 +91,7 @@
             }
         }
 
-        protected void ApplyChange<TEvent>(Func<TEvent> change, Action<TEvent> handler = default, bool isNew = true)
+        protected void ApplyChange<TEvent>(Func<TEvent> change, Action<TEvent>? handler = default, bool isNew = true)
             where TEvent : DomainEvent
         {
             bool triggersVersionIncrement = isNew && !HasUncommittedChanges;
@@ -135,7 +135,7 @@
             throw new InvalidOperationException(EventCentricAggregateRootStateChangesDenied);
         }
 
-        protected override void OnChangesMarkedAsCommitted(EventArgs args = default)
+        protected override void OnChangesMarkedAsCommitted(EventArgs? args = default)
         {
             base.OnChangesMarkedAsCommitted(new ChangesMarkedAsCommittedEventArgs(changes));
         }

@@ -35,6 +35,18 @@
         }
 
         [Fact]
+        public void GiveEventsFromASingleAggregateVersionButTwoDifferentContextsThenAnArgumentExceptionIsThrown()
+        {
+            var version = new SerializableAggregateRoot().ToVersionedReference();
+            var firstContext = new SerializableMessage();
+            var secondContext = new SerializableMessage();
+            var firstEvent = new SerializableDomainEvent(firstContext, version);
+            var secondEvent = new SerializableDomainEvent(secondContext, version);
+
+            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(firstEvent, secondEvent));
+        }
+
+        [Fact]
         public void GiveEventsFromTwoAggregatesThenAnArgumentExceptionIsThrown()
         {
             var firstVersion = new SerializableAggregateRoot().ToVersionedReference();

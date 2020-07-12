@@ -5,9 +5,6 @@ namespace MooVC.Architecture.Ddd
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using MooVC.Serialization;
-    using static System.String;
-    using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public class Reference
@@ -20,12 +17,6 @@ namespace MooVC.Architecture.Ddd
 
         internal Reference(Guid id, Type type)
         {
-            ArgumentIsAcceptable(
-                type,
-                nameof(type),
-                _ => !type.IsAbstract,
-                Format(ReferenceTypeInvalid, type.Name, Id));
-
             Id = id;
             Type = type;
         }

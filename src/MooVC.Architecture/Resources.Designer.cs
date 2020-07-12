@@ -585,15 +585,6 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An reference cannot be generated for abstract type {0} with an ID {1:p}..
-        /// </summary>
-        internal static string ReferenceTypeInvalid {
-            get {
-                return ResourceManager.GetString("ReferenceTypeInvalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The footer of previous version {0} is invalid..
         /// </summary>
         internal static string SignedVersionPreviousFooterInvalid {

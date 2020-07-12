@@ -26,7 +26,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.*" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.*" PrivateAssets="All" />
-    <PackageReference Include="MooVC" Version="2.*" />
+    <PackageReference Include="MooVC" Version="2.4.0-alpha*" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

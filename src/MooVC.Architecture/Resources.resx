@@ -293,9 +293,6 @@
   <data name="ReferenceExtensionsCoordinateReferenceeRequired" xml:space="preserve">
     <value>The reference that serves as the context for coordination must be provided.</value>
   </data>
-  <data name="ReferenceTypeInvalid" xml:space="preserve">
-    <value>An reference cannot be generated for abstract type {0} with an ID {1:p}.</value>
-  </data>
   <data name="SignedVersionPreviousFooterInvalid" xml:space="preserve">
     <value>The footer of previous version {0} is invalid.</value>
   </data>

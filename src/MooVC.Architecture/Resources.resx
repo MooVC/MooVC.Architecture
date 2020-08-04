@@ -290,6 +290,9 @@
   <data name="PersistentBusStoreRequired" xml:space="preserve">
     <value>The storage that support persistence of domain events published via the bus must be provided.</value>
   </data>
+  <data name="ProjectionAggregateRequired" xml:space="preserve">
+    <value>A reference to the aggregate must be provided.</value>
+  </data>
   <data name="ReferenceExtensionsCoordinateReferenceeRequired" xml:space="preserve">
     <value>The reference that serves as the context for coordination must be provided.</value>
   </data>

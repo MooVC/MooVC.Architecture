@@ -576,6 +576,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A reference to the aggregate must be provided..
+        /// </summary>
+        internal static string ProjectionAggregateRequired {
+            get {
+                return ResourceManager.GetString("ProjectionAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
         /// </summary>
         internal static string ReferenceExtensionsCoordinateReferenceeRequired {

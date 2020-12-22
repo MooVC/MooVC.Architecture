@@ -522,6 +522,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The message that is the subject of this event must be provided..
+        /// </summary>
+        internal static string MessageEventArgsMessageRequired {
+            get {
+                return ResourceManager.GetString("MessageEventArgsMessageRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The message that serves as the context for coordination must be provided..
         /// </summary>
         internal static string MessageExtensionsCoordinateMessageRequired {

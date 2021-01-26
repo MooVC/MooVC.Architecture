@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <Authors>Paul Martins</Authors>
+    <Authors>Paul Martins;ControlSoft Automation Systems Limited</Authors>
     <CodeAnalysisRuleSet>../../stylecop.analyzers.ruleset</CodeAnalysisRuleSet>
     <Company>MooVC</Company>
     <Copyright>MooVC © 2019-2020</Copyright>
@@ -18,7 +17,6 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="5.*">
       <PrivateAssets>all</PrivateAssets>
@@ -33,7 +31,6 @@
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.*" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -41,12 +38,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
 </Project>

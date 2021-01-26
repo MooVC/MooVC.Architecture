@@ -1,14 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
+    <Authors>Paul Martins;ControlSoft Automation Systems Limited</Authors>
     <CodeAnalysisRuleSet>../../stylecop.analyzers.ruleset</CodeAnalysisRuleSet>
+    <Company>MooVC</Company>
+    <Copyright>MooVC © 2019-2020</Copyright>
+    <Description>Tests a framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/MooVC/moovc.architecture</PackageProjectUrl>
+    <Product>MooVC</Product>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryUrl>https://github.com/MooVC/moovc.architecture.git</RepositoryUrl>
     <RootNamespace>MooVC.Architecture</RootNamespace>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="3.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.*" />
     <PackageReference Include="Moq" Version="4.*" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.*">
@@ -21,9 +33,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\MooVC.Architecture\MooVC.Architecture.csproj" />
   </ItemGroup>
-
 </Project>

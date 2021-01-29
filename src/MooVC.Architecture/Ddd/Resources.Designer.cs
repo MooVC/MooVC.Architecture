@@ -225,6 +225,15 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
+        /// </summary>
+        internal static string ReferenceExtensionsCoordinateReferenceeRequired {
+            get {
+                return ResourceManager.GetString("ReferenceExtensionsCoordinateReferenceeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A non-empty ID for the aggregate this reference represents must be provided..
         /// </summary>
         internal static string ReferenceIdRequired {

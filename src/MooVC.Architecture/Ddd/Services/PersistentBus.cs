@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using MooVC.Diagnostics;
     using MooVC.Persistence;
     using static System.String;
     using static MooVC.Architecture.Ddd.Services.Resources;
@@ -9,7 +10,7 @@
 
     public sealed class PersistentBus
         : Bus,
-          IEmitFailures
+          IEmitDiagnostics
     {
         private readonly IStore<AtomicUnit, Guid> store;
 
@@ -20,7 +21,7 @@
             this.store = store;
         }
 
-        public event PassiveExceptionEventHandler? FailureEmitted;
+        public event DiagnosticsEmittedEventHandler? DiagnosticsEmitted;
 
         protected override void PerformPublish(DomainEvent[] events)
         {
@@ -49,17 +50,25 @@
             }
             catch (Exception ex)
             {
-                OnFailureEncountered(Format(PersistentBusPublishFailure, unit.Id), ex);
+                OnDiagnosticsEmitted(
+                    Level.Error,
+                    cause: ex,
+                    message: Format(PersistentBusPublishFailure, unit.Id));
 
                 throw;
             }
         }
 
-        private void OnFailureEncountered(string message, Exception failure)
+        private void OnDiagnosticsEmitted(Level level, Exception? cause = default, string? message = default)
         {
-            FailureEmitted?.Invoke(
+            DiagnosticsEmitted?.Invoke(
                 this,
-                new PassiveExceptionEventArgs(message, exception: failure));
+                new DiagnosticsEmittedEventArgs
+                {
+                    Cause = cause,
+                    Level = level,
+                    Message = message,
+                });
         }
     }
 }

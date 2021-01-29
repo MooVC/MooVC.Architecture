@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Persistence;
-    using static MooVC.Ensure;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
+    using static MooVC.Ensure;
 
     public sealed class DefaultEventReconciler<TSequencedEvents>
         : EventReconciler

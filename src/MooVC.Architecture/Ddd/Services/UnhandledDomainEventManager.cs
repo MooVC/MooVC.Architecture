@@ -4,12 +4,12 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using MooVC.Collections.Generic;
-    using MooVC.Logging;
+    using MooVC.Diagnostics;
     using MooVC.Processing;
+    using static MooVC.Architecture.Ddd.Services.Resources;
 
     public sealed class UnhandledDomainEventManager
-        : TimedJobQueue<DomainEventsUnhandledEventArgs>,
-          IEmitFailures
+        : TimedJobQueue<DomainEventsUnhandledEventArgs>
     {
         private readonly IBus bus;
 
@@ -21,8 +21,6 @@
             this.bus.Unhandled += Bus_Unhandled;
         }
 
-        public event PassiveExceptionEventHandler? FailureEmitted;
-
         protected override void Dispose(bool isDisposing)
         {
             if (isDisposing)
@@ -31,11 +29,6 @@
 
                 base.Dispose(isDisposing);
             }
-        }
-
-        protected override void OnFailureEncountered(Exception failure)
-        {
-            FailureEmitted?.Invoke(this, new PassiveExceptionEventArgs(failure));
         }
 
         protected override IEnumerable<DomainEventsUnhandledEventArgs> Process(IEnumerable<DomainEventsUnhandledEventArgs> jobs)
@@ -53,7 +46,10 @@
                 }
                 catch (Exception ex)
                 {
-                    OnFailureEncountered(ex);
+                    OnDiagnosticsEmitted(
+                        Level.Warning,
+                        cause: ex,
+                        message: UnhandledDomainEventManagerProcessFailure);
 
                     failures.Add(job);
                 }

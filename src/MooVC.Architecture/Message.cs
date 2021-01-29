@@ -38,7 +38,7 @@
 
         public DateTime TimeStamp { get; } = DateTime.UtcNow;
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             return other is Message message
                 && Id == message.Id;

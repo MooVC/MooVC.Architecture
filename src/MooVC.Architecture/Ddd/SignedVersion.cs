@@ -95,8 +95,9 @@
         public bool IsNext(SignedVersion? previous)
         {
             return previous is { }
-                ? !IsNew && (Number - previous.Number) == 1 && Header.SequenceEqual(previous.Footer)
-                : false;
+                && !IsNew
+                && (Number - previous.Number) == 1
+                && Header.SequenceEqual(previous.Footer);
         }
 
         public SignedVersion Next()

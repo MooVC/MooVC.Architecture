@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AggregateConflictDetectedExceptionExistingEntryMessage" xml:space="preserve">
+    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed.</value>
+  </data>
+  <data name="AggregateConflictDetectedExceptionNoExistingEntryMessage" xml:space="preserve">
+    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but the initial version was expected.</value>
+  </data>
+  <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
+    <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
+  </data>
   <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
     <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>
   </data>
@@ -151,9 +160,12 @@
     <value>The cloner that is to be used to guarantee object immutability must be provided.</value>
   </data>
   <data name="PersistentBusPublishFailure" xml:space="preserve">
-    <value>An attempt to publish atomic unit {0:p} has failed.</value>
+    <value>A failure has prevented the succesful publication of atomic unit {0:p}.</value>
   </data>
   <data name="PersistentBusStoreRequired" xml:space="preserve">
     <value>The storage that support persistence of domain events published via the bus must be provided.</value>
+  </data>
+  <data name="UnhandledDomainEventManagerProcessFailure" xml:space="preserve">
+    <value>A failure has prevented the successful reprocessing of unhandled domain events.</value>
   </data>
 </root>

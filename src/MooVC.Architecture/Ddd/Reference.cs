@@ -63,9 +63,7 @@ namespace MooVC.Architecture.Ddd
 
         public virtual bool IsMatch(AggregateRoot aggregate)
         {
-            return Type == aggregate?.GetType()
-                ? Id == aggregate.Id
-                : false;
+            return Type == aggregate?.GetType() && Id == aggregate.Id;
         }
 
         protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)

@@ -57,7 +57,7 @@
                     throw new AggregateEventSequenceUnorderedException(new VersionedReference(this), history);
                 }
 
-                VersionedReference mismatch = sequence
+                VersionedReference? mismatch = sequence
                     .Where(@event => @event.Aggregate.Id != Id)
                     .Select(@event => @event.Aggregate)
                     .FirstOrDefault();

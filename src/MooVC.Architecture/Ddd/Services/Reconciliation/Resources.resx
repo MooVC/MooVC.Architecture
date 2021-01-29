@@ -129,15 +129,6 @@
   <data name="AggregateConflictDetectedEventArgsPreviousRequired" xml:space="preserve">
     <value>The version from which conflicts were detected must be provided.</value>
   </data>
-  <data name="AggregateConflictDetectedExceptionExistingEntryMessage" xml:space="preserve">
-    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed.</value>
-  </data>
-  <data name="AggregateConflictDetectedExceptionNoExistingEntryMessage" xml:space="preserve">
-    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but the initial version was expected.</value>
-  </data>
-  <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
-    <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
-  </data>
   <data name="AggregateReconciledEventArgsAggregateRequired" xml:space="preserve">
     <value>A reference to the aggregate that was successfull reconciled must be provided.</value>
   </data>

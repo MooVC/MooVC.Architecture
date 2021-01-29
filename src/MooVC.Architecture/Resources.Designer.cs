@@ -88,15 +88,6 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
-        /// </summary>
-        internal static string ReferenceExtensionsCoordinateReferenceeRequired {
-            get {
-                return ResourceManager.GetString("ReferenceExtensionsCoordinateReferenceeRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The context of the request must be provided..
         /// </summary>
         internal static string RequestContextRequired {

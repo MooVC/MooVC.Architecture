@@ -173,6 +173,9 @@
   <data name="ProjectionAggregateRequired" xml:space="preserve">
     <value>A reference to the aggregate must be provided.</value>
   </data>
+  <data name="ReferenceExtensionsCoordinateReferenceeRequired" xml:space="preserve">
+    <value>The reference that serves as the context for coordination must be provided.</value>
+  </data>
   <data name="ReferenceIdRequired" xml:space="preserve">
     <value>A non-empty ID for the aggregate this reference represents must be provided.</value>
   </data>

@@ -1,8 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
-    using static MooVC.Ensure;
     using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Ensure;
 
     public static partial class ReferenceExtensions
     {

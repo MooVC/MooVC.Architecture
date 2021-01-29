@@ -97,33 +97,6 @@ namespace MooVC.Architecture.Ddd.Services.Reconciliation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed..
-        /// </summary>
-        internal static string AggregateConflictDetectedExceptionExistingEntryMessage {
-            get {
-                return ResourceManager.GetString("AggregateConflictDetectedExceptionExistingEntryMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but the initial version was expected..
-        /// </summary>
-        internal static string AggregateConflictDetectedExceptionNoExistingEntryMessage {
-            get {
-                return ResourceManager.GetString("AggregateConflictDetectedExceptionNoExistingEntryMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is currently no aggregate of type {1} with an ID of {0:p}..
-        /// </summary>
-        internal static string AggregateNotFoundExceptionMessage {
-            get {
-                return ResourceManager.GetString("AggregateNotFoundExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A reference to the aggregate that was successfull reconciled must be provided..
         /// </summary>
         internal static string AggregateReconciledEventArgsAggregateRequired {

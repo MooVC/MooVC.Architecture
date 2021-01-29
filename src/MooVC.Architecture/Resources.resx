@@ -126,9 +126,6 @@
   <data name="ObjectExtensionsCoordinateObjectRequired" xml:space="preserve">
     <value>The object that serves as the context for coordination must be provided.</value>
   </data>
-  <data name="ReferenceExtensionsCoordinateReferenceeRequired" xml:space="preserve">
-    <value>The reference that serves as the context for coordination must be provided.</value>
-  </data>
   <data name="RequestContextRequired" xml:space="preserve">
     <value>The context of the request must be provided.</value>
   </data>

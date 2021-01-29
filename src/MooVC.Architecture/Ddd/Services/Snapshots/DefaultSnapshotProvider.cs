@@ -14,12 +14,12 @@
         where TSequencedEvents : class, ISequencedEvents
     {
         private readonly IEventStore<TSequencedEvents, ulong> eventStore;
-        private readonly Func<Func<Type, IAggregateReconciliationProxy>> factory;
+        private readonly Func<Func<Type, IAggregateReconciliationProxy?>> factory;
         private readonly ushort numberToRead;
 
         public DefaultSnapshotProvider(
             IEventStore<TSequencedEvents, ulong> eventStore,
-            Func<Func<Type, IAggregateReconciliationProxy>> factory,
+            Func<Func<Type, IAggregateReconciliationProxy?>> factory,
             ushort numberToRead = DefaultEventReconciler<TSequencedEvents>.DefaultNumberToRead)
         {
             ArgumentNotNull(eventStore, nameof(eventStore), DefaultSnapshotProviderEventStoreRequired);
@@ -48,11 +48,11 @@
         private IEventReconciler CreateEventReconciler(out Func<IEnumerable<EventCentricAggregateRoot>> aggregates)
         {
             var proxies = new ConcurrentDictionary<Type, IAggregateReconciliationProxy>();
-            Func<Type, IAggregateReconciliationProxy> external = factory();
+            Func<Type, IAggregateReconciliationProxy?> external = factory();
 
             IAggregateReconciliationProxy? ProxyFactory(Type aggregate)
             {
-                if (!proxies.TryGetValue(aggregate, out IAggregateReconciliationProxy proxy))
+                if (!proxies.TryGetValue(aggregate, out IAggregateReconciliationProxy? proxy))
                 {
                     proxy = external(aggregate);
 

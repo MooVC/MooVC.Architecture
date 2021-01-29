@@ -3,12 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
-    using static MooVC.Ensure;
     using static MooVC.Architecture.Ddd.Services.Snapshots.Resources;
+    using static MooVC.Ensure;
 
     [Serializable]
     public sealed class Snapshot

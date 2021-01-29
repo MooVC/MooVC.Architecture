@@ -50,8 +50,9 @@ namespace MooVC.Architecture.Ddd
         public override bool Equals(object? other)
         {
             return other is VersionedReference value
-                ? Id == value.Id && Type == value.Type && Version == value.Version
-                : false;
+                && Id == value.Id
+                && Type == value.Type
+                && Version == value.Version;
         }
 
         public override int GetHashCode()
@@ -81,9 +82,7 @@ namespace MooVC.Architecture.Ddd
 
         private static bool EqualOperator(VersionedReference? left, VersionedReference? right)
         {
-            return left is null ^ right is null
-                ? false
-                : left is null || left.Equals(right);
+            return !(left is null ^ right is null) && (left is null || left.Equals(right));
         }
 
         private static bool NotEqualOperator(VersionedReference? left, VersionedReference? right)

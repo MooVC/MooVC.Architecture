@@ -11,14 +11,14 @@
         {
             ArgumentNotNull(type, nameof(type), TypeExtensionsCoordinateTypeRequired);
 
-            Coordinator.Apply(type.FullName, operation, timeout: timeout);
+            Coordinator.Apply(type.GenerateContext(), operation, timeout: timeout);
         }
 
         public static void Coordinate(this Type type, Guid id, Action operation, TimeSpan? timeout = default)
         {
             ArgumentNotNull(type, nameof(type), TypeExtensionsCoordinateTypeRequired);
 
-            string context = $"{type.FullName}-{id:N}";
+            string context = $"{type.GenerateContext()}-{id:N}";
 
             Coordinator.Apply(context, operation, timeout: timeout);
         }

@@ -2,10 +2,9 @@ namespace MooVC.Architecture.Ddd.Services
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class AggregateEventArgs<TAggregate>
@@ -15,7 +14,7 @@ namespace MooVC.Architecture.Ddd.Services
     {
         protected AggregateEventArgs(TAggregate aggregate)
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), GenericAggregateRequired);
+            ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventArgsAggregateRequired);
 
             Aggregate = aggregate;
         }
@@ -27,7 +26,6 @@ namespace MooVC.Architecture.Ddd.Services
 
         public TAggregate Aggregate { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(Aggregate), Aggregate);

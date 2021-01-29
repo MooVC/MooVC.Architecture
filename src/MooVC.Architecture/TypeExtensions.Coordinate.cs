@@ -2,8 +2,8 @@
 {
     using System;
     using MooVC.Threading;
+    using static MooVC.Architecture.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public static partial class TypeExtensions
     {

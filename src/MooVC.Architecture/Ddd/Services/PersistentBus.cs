@@ -2,11 +2,10 @@
 {
     using System;
     using System.Threading.Tasks;
-    using MooVC.Logging;
     using MooVC.Persistence;
     using static System.String;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class PersistentBus
         : Bus,

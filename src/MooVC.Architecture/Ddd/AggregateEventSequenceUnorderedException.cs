@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using MooVC.Collections.Generic;
     using static System.String;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     [Serializable]
     public sealed class AggregateEventSequenceUnorderedException

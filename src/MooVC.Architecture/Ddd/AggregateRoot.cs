@@ -2,10 +2,9 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract partial class AggregateRoot
@@ -18,7 +17,7 @@
                 id,
                 nameof(id),
                 value => value != Guid.Empty,
-                GenericIdInvalid);
+                AggregateRootIdRequired);
 
             State = new AggregateState(new SignedVersion(), SignedVersion.Empty);
         }
@@ -53,7 +52,6 @@
             return base.GetHashCode() ^ Version.GetHashCode();
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

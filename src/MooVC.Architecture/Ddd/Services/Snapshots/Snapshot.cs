@@ -8,7 +8,7 @@
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
     using static MooVC.Ensure;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Services.Snapshots.Resources;
 
     [Serializable]
     public sealed class Snapshot
@@ -33,7 +33,6 @@
 
         public IEventSequence Sequence { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(Sequence), Sequence);

@@ -2,7 +2,7 @@
 {
     using MooVC.Architecture.Ddd.Services;
     using static MooVC.Ensure;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     public static partial class AggregateRootExtensions
     {
@@ -11,7 +11,7 @@
         {
             if (aggregate is { } && aggregate.HasUncommittedChanges)
             {
-                ArgumentNotNull(destination, nameof(destination), AggregateRootExtensionsDestinationRequired);
+                ArgumentNotNull(destination, nameof(destination), AggregateRootExtensionsSaveDestinationRequired);
 
                 destination.Save(aggregate);
             }

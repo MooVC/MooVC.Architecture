@@ -2,7 +2,7 @@
 {
     using System;
     using static System.String;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     public static partial class Ensure
     {

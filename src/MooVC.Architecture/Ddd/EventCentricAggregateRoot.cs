@@ -7,7 +7,7 @@
     using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     [Serializable]
     public abstract partial class EventCentricAggregateRoot
@@ -27,7 +27,6 @@
             changes = info.TryGetInternalValue(nameof(changes), defaultValue: new List<DomainEvent>());
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

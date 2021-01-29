@@ -5,7 +5,7 @@
     using System.Linq;
     using MooVC.Persistence;
     using static MooVC.Ensure;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
 
     public sealed class DefaultEventReconciler<TSequencedEvents>
         : EventReconciler

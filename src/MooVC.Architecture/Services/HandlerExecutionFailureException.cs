@@ -2,7 +2,7 @@
 {
     using System;
     using static System.String;
-    using static Resources;
+    using static MooVC.Architecture.Services.Resources;
 
     [Serializable]
     public sealed class HandlerExecutionFailureException<TMessage>
@@ -12,7 +12,7 @@
         public HandlerExecutionFailureException(TMessage context, Type handler, Exception cause)
             : base(
                   Format(
-                      HandlerFailureExceptionMessage,
+                      HandlerExecutionFailureException,
                       handler.Name,
                       context.Id,
                       context.CorrelationId,

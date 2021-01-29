@@ -2,11 +2,10 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Linq;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Cqrs.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class PaginatedQuery
@@ -35,7 +34,6 @@
 
         public Paging Paging { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

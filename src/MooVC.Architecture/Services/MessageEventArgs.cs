@@ -2,10 +2,9 @@ namespace MooVC.Architecture.Services
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class MessageEventArgs
@@ -26,7 +25,6 @@ namespace MooVC.Architecture.Services
 
         public Message Message { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(Message), Message);

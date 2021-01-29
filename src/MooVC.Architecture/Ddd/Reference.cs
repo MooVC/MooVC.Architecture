@@ -3,7 +3,6 @@ namespace MooVC.Architecture.Ddd
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
 
     [Serializable]
@@ -54,7 +53,6 @@ namespace MooVC.Architecture.Ddd
             return base.GetHashCode();
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

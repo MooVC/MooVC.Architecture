@@ -6,8 +6,8 @@
     using MooVC.Architecture.Ddd;
     using MooVC.Collections.Generic;
     using MooVC.Linq;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class DefaultAggregateReconciler
         : AggregateReconciler
@@ -21,7 +21,7 @@
             bool ignorePreviousVersions = true,
             TimeSpan? timeout = default)
         {
-            ArgumentNotNull(factory, nameof(factory), AggregateReconcilerFactoryRequired);
+            ArgumentNotNull(factory, nameof(factory), DefaultAggregateReconcilerFactoryRequired);
 
             this.factory = factory;
             this.ignorePreviousVersions = ignorePreviousVersions;

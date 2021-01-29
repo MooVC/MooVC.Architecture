@@ -24,7 +24,6 @@ namespace MooVC.Architecture.Ddd
 
         public IEnumerable<DomainEvent> Changes { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             _ = info.TryAddEnumerable(nameof(Changes), Changes);

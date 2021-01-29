@@ -3,7 +3,7 @@ namespace MooVC.Architecture.Ddd
     using System;
     using System.Collections.Generic;
     using static System.String;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     [Serializable]
     public sealed class AggregateInvariantsNotSatisfiedDomainException

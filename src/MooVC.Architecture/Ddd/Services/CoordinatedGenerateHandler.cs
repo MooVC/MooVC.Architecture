@@ -4,8 +4,8 @@
     using MooVC.Architecture;
     using MooVC.Architecture.Ddd;
     using MooVC.Architecture.Services;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public abstract class CoordinatedGenerateHandler<TAggregate, TCommand>
         : IHandler<TCommand>

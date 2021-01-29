@@ -1,8 +1,8 @@
 ﻿namespace MooVC.Architecture
 {
     using System;
+    using static MooVC.Architecture.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public static partial class MessageExtensions
     {

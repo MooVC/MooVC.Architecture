@@ -6,8 +6,8 @@
     using System.Linq;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Persistence;
+    using static MooVC.Architecture.Ddd.Services.Snapshots.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class DefaultSnapshotProvider<TSequencedEvents>
         : ISnapshotProvider

@@ -1,7 +1,7 @@
 namespace MooVC.Architecture.Services
 {
+    using static MooVC.Architecture.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public abstract class Bus
         : IBus

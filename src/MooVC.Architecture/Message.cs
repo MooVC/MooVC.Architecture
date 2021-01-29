@@ -2,10 +2,9 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class Message
@@ -17,7 +16,7 @@
 
         protected Message(Message context)
         {
-            ArgumentNotNull(context, nameof(context), GenericContextRequired);
+            ArgumentNotNull(context, nameof(context), MessageContextRequired);
 
             CausationId = context.Id;
             CorrelationId = context.CorrelationId;
@@ -50,7 +49,6 @@
             return Id.GetHashCode();
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             _ = info.TryAddValue(nameof(CausationId), CausationId);

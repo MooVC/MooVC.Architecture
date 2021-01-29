@@ -5,20 +5,14 @@ namespace MooVC.Architecture.Ddd.Services
     using System.Runtime.Serialization;
     using System.Security.Permissions;
     using System.Threading;
+    using MooVC.Serialization;
 
-    [Serializable]
     public class ConcurrentMemoryRepository<TAggregate>
         : MemoryRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public ConcurrentMemoryRepository()
-            : base()
-        {
-            StoreLock = new ReaderWriterLockSlim();
-        }
-
-        protected ConcurrentMemoryRepository(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        public ConcurrentMemoryRepository(ICloner cloner)
+            : base(cloner)
         {
             StoreLock = new ReaderWriterLockSlim();
         }
@@ -28,12 +22,6 @@ namespace MooVC.Architecture.Ddd.Services
         public override IEnumerable<TAggregate> GetAll()
         {
             return PerformRead(() => base.GetAll());
-        }
-
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            PerformRead(() => base.GetObjectData(info, context));
         }
 
         protected override TAggregate? Get(Reference key)

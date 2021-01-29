@@ -2,8 +2,8 @@
 {
     using System;
     using System.Runtime.Serialization;
+    using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public sealed class Reference<TAggregate>
@@ -20,7 +20,7 @@
                 id,
                 nameof(id),
                 value => value != Guid.Empty,
-                GenericIdInvalid);
+                ReferenceIdRequired);
         }
 
         public Reference(TAggregate aggregate)

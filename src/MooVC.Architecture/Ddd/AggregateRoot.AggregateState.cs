@@ -41,7 +41,6 @@
                 return new AggregateState(Current);
             }
 
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
             public void GetObjectData(SerializationInfo info, StreamingContext context)
             {
                 _ = info.TryAddValue(nameof(Current), Current, defaultValue: Persisted);

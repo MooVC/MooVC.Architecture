@@ -4,8 +4,8 @@
     using System.Linq;
     using MooVC.Architecture.Ddd.Services.Snapshots;
     using MooVC.Persistence;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class DefaultReconciliationOrchestrator<TEventSequence>
         : IReconciliationOrchestrator

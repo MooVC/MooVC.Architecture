@@ -117,163 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AggregateConflictDetectedEventArgsAggregateRequired" xml:space="preserve">
-    <value>A reference to the aggregate from which conflicts were detected must be provided.</value>
-  </data>
-  <data name="AggregateConflictDetectedEventArgsEventsRequired" xml:space="preserve">
-    <value>The events within which conflicts were detected must be provided.</value>
-  </data>
-  <data name="AggregateConflictDetectedEventArgsNextRequired" xml:space="preserve">
-    <value>The version at which conflicts were detected must be provided.</value>
-  </data>
-  <data name="AggregateConflictDetectedEventArgsPreviousRequired" xml:space="preserve">
-    <value>The version from which conflicts were detected must be provided.</value>
-  </data>
-  <data name="AggregateConflictDetectedExceptionExistingEntryMessage" xml:space="preserve">
-    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed.</value>
-  </data>
-  <data name="AggregateConflictDetectedExceptionNoExistingEntryMessage" xml:space="preserve">
-    <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but the initial version was expected.</value>
-  </data>
-  <data name="AggregateDoesNotExistExceptionMessage" xml:space="preserve">
-    <value>An empty reference for aggregate type {0} cannot be retrieved.</value>
-  </data>
-  <data name="AggregateEventMismatchExceptionMessage" xml:space="preserve">
-    <value>Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}.</value>
-  </data>
-  <data name="AggregateEventSequenceUnorderedExceptionMessage" xml:space="preserve">
-    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed state from history as the sequence is unordered.</value>
-  </data>
-  <data name="AggregateHasUncommittedChangesExceptionMessage" xml:space="preserve">
-    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept its state from history as it current possesses uncommitted changes.</value>
-  </data>
-  <data name="AggregateHistoryInvalidForStateExceptionMessage" xml:space="preserve">
-    <value>Aggregate of type {2} with an ID of {0:p} and a version of {1} cannot accept the proposed sequence as it starts from version {3}.</value>
-  </data>
-  <data name="AggregateInvariantsNotSatisfiedDomainExceptionMessage" xml:space="preserve">
-    <value>Request {0} could not be fulfilled due to a failure to satisfy the following invariants as defined by aggregate {1}:
-
-{2}</value>
-  </data>
-  <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
-    <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
-  </data>
-  <data name="AggregateReconciledEventArgsAggregateRequired" xml:space="preserve">
-    <value>A reference to the aggregate that was successfull reconciled must be provided.</value>
-  </data>
-  <data name="AggregateReconciledEventArgsEventsRequired" xml:space="preserve">
-    <value>The events that were successfully reconciled must be provided.</value>
-  </data>
-  <data name="AggregateReconcilerFactoryRequired" xml:space="preserve">
-    <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
-  </data>
-  <data name="AggregateReferenceMismatchExceptionMessage" xml:space="preserve">
-    <value>Reference for aggregate {0:p} of type {1} cannot be converted type {2}.</value>
-  </data>
-  <data name="AggregateRootExtensionsCoordinateAggregateRequired" xml:space="preserve">
-    <value>The aggregate that serves as the context for coordination must be provided.</value>
-  </data>
-  <data name="AggregateRootExtensionsDestinationRequired" xml:space="preserve">
-    <value>The destination must be provided.</value>
-  </data>
-  <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
-    <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>
-  </data>
-  <data name="AtomicUnitDistinctAggregateVersionRequired" xml:space="preserve">
-    <value>The atomic unit must only contain changes relating to a single version increment of a single aggregate.</value>
-  </data>
-  <data name="AtomicUnitDistinctContextRequired" xml:space="preserve">
-    <value>The atomic unit must only contain changes triggered in the context of a single operation.</value>
-  </data>
-  <data name="AtomicUnitEventsRequired" xml:space="preserve">
-    <value>The atomic unit must contain one or more domain events.</value>
-  </data>
-  <data name="BusMessageRequired" xml:space="preserve">
-    <value>The message to be invoked must be provided.</value>
-  </data>
-  <data name="CoordinatedGenerateHandlerRepositoryRequired" xml:space="preserve">
-    <value>The repository must be provided.</value>
-  </data>
-  <data name="CoordinatedOperationHandlerRepositoryRequired" xml:space="preserve">
-    <value>The repository must be provided.</value>
-  </data>
-  <data name="DefaultEventReconcilerEventStoreRequired" xml:space="preserve">
-    <value>The store from which events are to be reconciled must be provided.</value>
-  </data>
-  <data name="DefaultEventReconcilerReconcilerRequired" xml:space="preserve">
-    <value>The reconciler to be used to reconciled events must be provided.</value>
-  </data>
-  <data name="DefaultReconciliationOrchestratorAggregateReconcilerRequired" xml:space="preserve">
-    <value>The aggregate reconciler must be provided.</value>
-  </data>
-  <data name="DefaultReconciliationOrchestratorAggregateSourceRequired" xml:space="preserve">
-    <value>The source from which the aggregates are obtained must be provided.</value>
-  </data>
-  <data name="DefaultReconciliationOrchestratorEventReconcilerRequired" xml:space="preserve">
-    <value>The event reconciler must be provided.</value>
-  </data>
-  <data name="DefaultReconciliationOrchestratorSequenceFactoryRequired" xml:space="preserve">
-    <value>The factory to be used to generate a new sequence must be provided.</value>
-  </data>
-  <data name="DefaultReconciliationOrchestratorSequenceStoreRequired" xml:space="preserve">
-    <value>The store reponsible for tracking the event sequence must be provided.</value>
-  </data>
-  <data name="DefaultReconciliationOrchestratorSnapshotSourceRequired" xml:space="preserve">
-    <value>The source responsible for providing the snapshots must be provided.</value>
-  </data>
-  <data name="DefaultSnapshotProviderEventStoreRequired" xml:space="preserve">
-    <value>The store from which events are to be snapshot must be provided.</value>
-  </data>
-  <data name="DefaultSnapshotProviderFactoryRequired" xml:space="preserve">
-    <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
-  </data>
-  <data name="DomainEventAggregateReferenceRequired" xml:space="preserve">
-    <value>A reference to the aggregate from which the domain event was raised must be provided.</value>
-  </data>
-  <data name="DomainEventAggregateRequired" xml:space="preserve">
-    <value>A versioned reference for the aggregate must be provided.</value>
-  </data>
-  <data name="DomainEventPropagatorBusRequired" xml:space="preserve">
-    <value>The bus to which the events are to be propagated must be provided.</value>
-  </data>
-  <data name="DomainEventPropagatorReconcilerRequired" xml:space="preserve">
-    <value>The reconciler from which the events are to be propagated must be provided.</value>
-  </data>
-  <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
-    <value>The repository from which the events are to be propagated must be provided.</value>
-  </data>
-  <data name="DomainEventsUnhandledEventArgsHandlerRequired" xml:space="preserve">
-    <value>The handler for the unhandled events must be provided.</value>
-  </data>
-  <data name="EnsureReferenceIsNotEmptyMessage" xml:space="preserve">
-    <value>A non-empty reference of aggregate type {0} is required.</value>
-  </data>
-  <data name="EnsureReferenceIsOfTypeMessage" xml:space="preserve">
-    <value>The reference provided is for an aggregate of type {0}.  {1} is required.</value>
-  </data>
-  <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
-    <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
-  </data>
-  <data name="EventCentricAggregateRootStateChangesDenied" xml:space="preserve">
-    <value>Changed to the state of an aggregate of type {0} must be made through ApplyChanges.</value>
-  </data>
-  <data name="EventReconciliationEventArgsEventsRequired" xml:space="preserve">
-    <value>The events must be provided.</value>
-  </data>
-  <data name="GenericAggregateRequired" xml:space="preserve">
-    <value>The aggregate must be provided.</value>
-  </data>
-  <data name="GenericContextRequired" xml:space="preserve">
-    <value>The context for this request must be provided.</value>
-  </data>
-  <data name="GenericIdInvalid" xml:space="preserve">
-    <value>A non-empty ID must be provided.</value>
-  </data>
-  <data name="HandlerFailureExceptionMessage" xml:space="preserve">
-    <value>Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}.</value>
-  </data>
-  <data name="MessageEventArgsMessageRequired" xml:space="preserve">
-    <value>The message that is the subject of this event must be provided.</value>
+  <data name="MessageContextRequired" xml:space="preserve">
+    <value>The context of the message must be provided.</value>
   </data>
   <data name="MessageExtensionsCoordinateMessageRequired" xml:space="preserve">
     <value>The message that serves as the context for coordination must be provided.</value>
@@ -281,43 +126,13 @@
   <data name="ObjectExtensionsCoordinateObjectRequired" xml:space="preserve">
     <value>The object that serves as the context for coordination must be provided.</value>
   </data>
-  <data name="PaginatedQueryPagingRequired" xml:space="preserve">
-    <value>The paging instructions for this query must be provided.</value>
-  </data>
-  <data name="PaginatedResultPagingRequired" xml:space="preserve">
-    <value>The paging instructions that generated the results must be provided.</value>
-  </data>
-  <data name="PersistentBusPublishFailure" xml:space="preserve">
-    <value>An attempt to publish atomic unit {0:p} has failed.</value>
-  </data>
-  <data name="PersistentBusStoreRequired" xml:space="preserve">
-    <value>The storage that support persistence of domain events published via the bus must be provided.</value>
-  </data>
-  <data name="ProjectionAggregateRequired" xml:space="preserve">
-    <value>A reference to the aggregate must be provided.</value>
-  </data>
   <data name="ReferenceExtensionsCoordinateReferenceeRequired" xml:space="preserve">
     <value>The reference that serves as the context for coordination must be provided.</value>
   </data>
-  <data name="SignedVersionPreviousFooterInvalid" xml:space="preserve">
-    <value>The footer of previous version {0} is invalid.</value>
-  </data>
-  <data name="SignedVersionPreviousRequired" xml:space="preserve">
-    <value>The previous version must be provided.</value>
-  </data>
-  <data name="SnapshotRestorationCompletedEventArgsSequenceRequired" xml:space="preserve">
-    <value>The sequence of the snapshot must be provided.</value>
-  </data>
-  <data name="SnapshotSequenceRequired" xml:space="preserve">
-    <value>The sequence for the snapshot must be provided.</value>
+  <data name="RequestContextRequired" xml:space="preserve">
+    <value>The context of the request must be provided.</value>
   </data>
   <data name="TypeExtensionsCoordinateTypeRequired" xml:space="preserve">
     <value>The type that serves as the context for coordination must be provided.</value>
-  </data>
-  <data name="UnsupportedAggregateTypeDetectedEventArgsTypeRequired" xml:space="preserve">
-    <value>A type of the aggregate for which reconciliation is not supported must be provided.</value>
-  </data>
-  <data name="VersionedReferenceVersionRequired" xml:space="preserve">
-    <value>The version of the aggregate must be provided.</value>
   </data>
 </root>

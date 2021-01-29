@@ -4,13 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Architecture.Ddd;
     using MooVC.Collections.Generic;
     using MooVC.Linq;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class AtomicUnit<T>
@@ -52,7 +51,6 @@
 
         public T Id { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddEnumerable(nameof(Events), Events);

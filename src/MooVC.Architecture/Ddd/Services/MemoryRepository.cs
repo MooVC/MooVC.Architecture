@@ -3,27 +3,24 @@ namespace MooVC.Architecture.Ddd.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Services.Resources;
+    using static MooVC.Ensure;
 
-    [Serializable]
     public class MemoryRepository<TAggregate>
-        : Repository<TAggregate>,
-          ISerializable
+        : Repository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public MemoryRepository()
+        private readonly ICloner cloner;
+
+        public MemoryRepository(ICloner cloner)
         {
-            Store = new Dictionary<Reference, TAggregate>();
+            ArgumentNotNull(cloner, nameof(cloner), MemoryRepositoryClonerRequired);
+
+            this.cloner = cloner;
         }
 
-        protected MemoryRepository(SerializationInfo info, StreamingContext context)
-        {
-            Store = info.TryGetInternalValue(nameof(Store), defaultValue: new Dictionary<Reference, TAggregate>());
-        }
-
-        protected virtual IDictionary<Reference, TAggregate> Store { get; }
+        protected virtual IDictionary<Reference, TAggregate> Store { get; } = new Dictionary<Reference, TAggregate>();
 
         public override TAggregate? Get(Guid id, SignedVersion? version = default)
         {
@@ -38,30 +35,30 @@ namespace MooVC.Architecture.Ddd.Services
         {
             return Store
                 .Where(entry => entry.Key is Reference<TAggregate>)
-                .Select(entry => entry.Value.Clone())
+                .Select(entry => cloner.Clone(entry.Value))
                 .ToArray();
-        }
-
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            _ = info.TryAddInternalValue(nameof(Store), Store, predicate: _ => Store.Any());
         }
 
         protected virtual TAggregate? Get(Reference key)
         {
-            _ = Store.TryGetValue(key, out TAggregate aggregate);
+            if (Store.TryGetValue(key, out TAggregate? aggregate))
+            {
+                return cloner.Clone(aggregate);
+            }
 
-            return aggregate?.Clone();
+            return default;
         }
 
         protected override VersionedReference? GetCurrentVersion(TAggregate aggregate)
         {
             Reference nonVersioned = aggregate.ToReference();
 
-            _ = Store.TryGetValue(nonVersioned, out TAggregate existing);
+            if (Store.TryGetValue(nonVersioned, out TAggregate? existing))
+            {
+                return existing.ToVersionedReference();
+            }
 
-            return existing?.ToVersionedReference();
+            return default;
         }
 
         protected virtual (Reference NonVersioned, Reference Versioned) GenerateReferences(TAggregate aggregate)
@@ -71,7 +68,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected override void UpdateStore(TAggregate aggregate)
         {
-            TAggregate copy = aggregate.Clone();
+            TAggregate copy = cloner.Clone(aggregate);
 
             copy.MarkChangesAsCommitted();
 

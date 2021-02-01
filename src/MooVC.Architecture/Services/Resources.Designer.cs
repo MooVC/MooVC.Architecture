@@ -70,15 +70,6 @@ namespace MooVC.Architecture.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}..
-        /// </summary>
-        internal static string HandlerExecutionFailureException {
-            get {
-                return ResourceManager.GetString("HandlerExecutionFailureException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The message that is the subject of this event must be provided..
         /// </summary>
         internal static string MessageEventArgsMessageRequired {

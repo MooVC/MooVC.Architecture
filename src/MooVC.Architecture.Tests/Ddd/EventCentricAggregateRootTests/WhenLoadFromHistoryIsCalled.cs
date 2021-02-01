@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Architecture.MessageTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

@@ -34,7 +34,7 @@
 
         private AggregateConflictDetectedEventArgs(SerializationInfo info, StreamingContext context)
         {
-            Aggregate = info.TryGetValue<Reference>(nameof(Aggregate));
+            Aggregate = info.TryGetValue<Reference>(nameof(Aggregate), defaultValue: Reference<AggregateRoot>.Empty);
             Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
             Next = info.GetValue<SignedVersion>(nameof(Next));
             Previous = info.GetValue<SignedVersion>(nameof(Previous));

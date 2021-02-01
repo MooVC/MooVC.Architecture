@@ -7,13 +7,14 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
     using Xunit;
 
     public sealed class WhenGetIsCalled
+        : ConcurrentMemoryRepositoryTests
     {
         [Fact]
         public void GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturned()
         {
             var expected = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
-            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>(Cloner);
 
             repository.Save(expected);
             repository.Save(other);
@@ -29,7 +30,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         public void GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturned()
         {
             var other = new SerializableAggregateRoot();
-            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>(Cloner);
 
             repository.Save(other);
 
@@ -43,7 +44,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             var other = new SerializableEventCentricAggregateRoot();
-            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>(Cloner);
 
             repository.Save(aggregate);
 
@@ -66,7 +67,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             SignedVersion expectedFirst = aggregate.Version;
-            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>(Cloner);
 
             repository.Save(aggregate);
 
@@ -99,7 +100,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         {
             var aggregate = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
-            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>(Cloner);
 
             repository.Save(aggregate);
             repository.Save(other);

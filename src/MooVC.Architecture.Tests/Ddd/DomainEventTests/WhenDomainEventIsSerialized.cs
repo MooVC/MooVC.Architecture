@@ -3,6 +3,7 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
     using System;
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

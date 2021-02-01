@@ -9,11 +9,12 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
     using Xunit;
 
     public sealed class WhenGetAllIsCalled
+        : ConcurrentMemoryRepositoryTests
     {
         [Fact]
         public void GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturned()
         {
-            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>(Cloner);
             IEnumerable<SerializableAggregateRoot> results = repository.GetAll();
 
             Assert.Empty(results);
@@ -26,7 +27,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
 
             var first = new SerializableEventCentricAggregateRoot();
             var second = new SerializableEventCentricAggregateRoot();
-            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>();
+            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>(Cloner);
 
             repository.Save(first);
             repository.Save(second);

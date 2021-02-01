@@ -3,6 +3,7 @@
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

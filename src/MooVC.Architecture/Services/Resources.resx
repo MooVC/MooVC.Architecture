@@ -120,9 +120,6 @@
   <data name="BusMessageRequired" xml:space="preserve">
     <value>The message to be invoked must be provided.</value>
   </data>
-  <data name="HandlerExecutionFailureException" xml:space="preserve">
-    <value>Handler for message of type {0} has failed to process message {1:p} for transaction {2:p}.</value>
-  </data>
   <data name="MessageEventArgsMessageRequired" xml:space="preserve">
     <value>The message that is the subject of this event must be provided.</value>
   </data>

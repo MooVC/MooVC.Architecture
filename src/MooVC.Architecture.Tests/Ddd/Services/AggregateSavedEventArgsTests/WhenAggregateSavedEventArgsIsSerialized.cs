@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.AggregateSavedEventArgsTests
 {
     using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

@@ -1,6 +1,7 @@
 namespace MooVC.Architecture.Ddd.AggregateRootTests
 {
     using System;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

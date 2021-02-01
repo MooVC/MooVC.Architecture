@@ -4,12 +4,13 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
     using Xunit;
 
     public sealed class WhenSaveIsCalled
+        : MemoryRepositoryTests
     {
         [Fact]
         public void GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheAggregateIsAddedAndTheVersionIncremented()
         {
             var expected = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new MemoryRepository<SerializableAggregateRoot>(Cloner);
 
             repository.Save(expected);
 
@@ -25,7 +26,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             var saved = new SerializableAggregateRoot();
             var pending = new SerializableAggregateRoot(saved.Id);
 
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            var repository = new MemoryRepository<SerializableAggregateRoot>(Cloner);
 
             repository.Save(saved);
 
@@ -40,7 +41,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         public void GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavedEventIsRaisedPriorToTheVersionIncrement()
         {
             var expectedAggregate = new SerializableAggregateRoot();
-            var expectedRepository = new MemoryRepository<SerializableAggregateRoot>();
+            var expectedRepository = new MemoryRepository<SerializableAggregateRoot>(Cloner);
             bool wasInvoked = false;
 
             void Aggregate_Saved(IRepository<SerializableAggregateRoot> actualRepository, AggregateSavedEventArgs<SerializableAggregateRoot> e)
@@ -63,7 +64,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         public void GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavingEventIsRaisedPriorToTheVersionIncrement()
         {
             var expectedAggregate = new SerializableAggregateRoot();
-            var expectedRepository = new MemoryRepository<SerializableAggregateRoot>();
+            var expectedRepository = new MemoryRepository<SerializableAggregateRoot>(Cloner);
             bool wasInvoked = false;
 
             void Aggregate_Saving(IRepository<SerializableAggregateRoot> actualRepository, AggregateSavingEventArgs<SerializableAggregateRoot> e)

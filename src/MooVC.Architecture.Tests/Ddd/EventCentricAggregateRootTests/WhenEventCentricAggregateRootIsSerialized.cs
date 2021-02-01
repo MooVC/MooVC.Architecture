@@ -2,6 +2,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
 {
     using System;
     using MooVC.Architecture.MessageTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

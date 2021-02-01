@@ -1,5 +1,6 @@
 namespace MooVC.Architecture.Ddd.ValueTests
 {
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

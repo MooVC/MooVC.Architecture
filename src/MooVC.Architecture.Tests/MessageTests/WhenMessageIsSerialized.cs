@@ -1,5 +1,6 @@
 namespace MooVC.Architecture.MessageTests
 {
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

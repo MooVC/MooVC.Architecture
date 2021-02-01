@@ -4,6 +4,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
     using System.Linq;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
+    using MooVC.Serialization;
     using Moq;
     using Xunit;
 
@@ -18,7 +19,8 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var aggregate = new SerializableEventCentricAggregateRoot(context);
             var request = new SetRequest(context, Guid.NewGuid());
             var bus = new Mock<IBus>();
-            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>();
+            var cloner = new BinaryFormatterCloner();
+            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>(cloner);
             var propagator = new DomainEventPropagator<SerializableEventCentricAggregateRoot>(bus.Object, repository);
             var changes = new DomainEvent[0];
 

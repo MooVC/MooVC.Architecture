@@ -5,9 +5,12 @@
     <Company>MooVC</Company>
     <Copyright>MooVC © 2019-2020</Copyright>
     <Description>Tests a framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
+    <NoWarn>NU5105;SYSLIB0011</NoWarn>
+    <Nullable>enable</Nullable>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/MooVC/moovc.architecture</PackageProjectUrl>
     <Product>MooVC</Product>

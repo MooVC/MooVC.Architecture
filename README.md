@@ -18,7 +18,14 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed MooVC.Architecture to target version 3.x of MooVC (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.MemoryRepository so that it is no longer serializable (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.MemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
+- Changed Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).
+- Changed Ddd.Services.ConcurrentMemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
+- Changed Ddd.Services.MemoryRepository so that it is no longer serializable (**Breaking Change**).
+- Changed Ddd.Services.MemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
+- Deleted Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
+
+# End-User Impact
+
+- Services.Handler & Services.HandlerExecutionFailureException
+
+These classes where seen as offering little-to-no value and have therefore been removed.  It is recommended that generic failures be captured and handled by the bus that performs execution of the command.  Validation should also be deferred to the domain layer, where appropriate derivations of Ddd.DomainException can be thrown.

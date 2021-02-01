@@ -1,5 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.EventSequenceTests
 {
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

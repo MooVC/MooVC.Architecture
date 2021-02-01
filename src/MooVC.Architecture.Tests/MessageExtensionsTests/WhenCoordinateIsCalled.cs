@@ -13,7 +13,7 @@
             message = new SerializableMessage();
         }
 
-        protected override void Coordinate(Action operation, TimeSpan? timeout = null)
+        protected override void Coordinate(Action operation, TimeSpan? timeout = default)
         {
             message.Coordinate(operation, timeout: timeout);
         }

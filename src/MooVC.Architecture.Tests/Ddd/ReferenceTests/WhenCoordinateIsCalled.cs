@@ -13,7 +13,7 @@
             reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
         }
 
-        protected override void Coordinate(Action operation, TimeSpan? timeout = null)
+        protected override void Coordinate(Action operation, TimeSpan? timeout = default)
         {
             reference.Coordinate(operation, timeout: timeout);
         }

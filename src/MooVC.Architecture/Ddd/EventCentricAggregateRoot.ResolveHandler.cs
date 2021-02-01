@@ -27,9 +27,9 @@
             return aggregateType.GetMethod(
                 HandlerName,
                 BindingFlags.NonPublic | BindingFlags.Instance,
-                null,
+                default,
                 new[] { eventType },
-                null);
+                default);
         }
 
         private static MethodInfo? LocateHandler(DomainEvent @event)

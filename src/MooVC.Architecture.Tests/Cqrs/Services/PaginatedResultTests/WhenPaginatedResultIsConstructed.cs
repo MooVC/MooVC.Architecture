@@ -32,7 +32,7 @@
         [Theory]
         [InlineData(new int[0], ushort.MinValue, ushort.MinValue, ulong.MinValue)]
         [InlineData(new[] { 1, 2, 3 }, 5, 1, 3)]
-        [InlineData(null, ushort.MinValue, ushort.MaxValue, ushort.MaxValue)]
+        [InlineData(default, ushort.MinValue, ushort.MaxValue, ushort.MaxValue)]
         [InlineData(new[] { 4 }, 10, 5, 50)]
         [InlineData(new[] { -100, -200 }, 100, 3, 202)]
         public void GivenContextResultsAndTotalResultsThenTheContextResultsAndTotalResultsPropertiesAreSetToMatch(
@@ -57,7 +57,7 @@
         [Theory]
         [InlineData(new int[0], ushort.MinValue, ushort.MinValue, ulong.MinValue)]
         [InlineData(new[] { 1, 2, 3 }, 5, 1, 3)]
-        [InlineData(null, ushort.MinValue, ushort.MaxValue, ushort.MaxValue)]
+        [InlineData(default, ushort.MinValue, ushort.MaxValue, ushort.MaxValue)]
         [InlineData(new[] { 4 }, 10, 5, 50)]
         [InlineData(new[] { -100, -200 }, 100, 3, 202)]
         public void GivenQueryResultsAndTotalResultsThenTheQueryResultsAndTotalResultsPropertiesAreSetToMatch(

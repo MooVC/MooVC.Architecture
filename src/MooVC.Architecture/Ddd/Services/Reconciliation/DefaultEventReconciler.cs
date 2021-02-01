@@ -93,7 +93,7 @@
         {
             OnEventsReconciling(events);
 
-            reconciler.Reconcile(events);
+            reconciler.Reconcile(events.ToArray());
 
             OnEventsReconciled(events);
         }

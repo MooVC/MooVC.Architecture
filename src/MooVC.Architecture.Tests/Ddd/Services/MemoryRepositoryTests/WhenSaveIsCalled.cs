@@ -14,8 +14,9 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
 
             repository.Save(expected);
 
-            SerializableAggregateRoot actual = repository.Get(expected.Id);
+            SerializableAggregateRoot? actual = repository.Get(expected.Id);
 
+            Assert.NotNull(actual);
             Assert.Equal(expected, actual);
             Assert.NotSame(expected, actual);
         }

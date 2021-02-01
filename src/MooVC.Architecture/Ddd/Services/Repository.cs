@@ -34,7 +34,7 @@
                 return false;
             }
 
-            AggregateDoesNotConflict<TAggregate>(aggregate, currentVersion: currentVersion?.Version);
+            AggregateDoesNotConflict(aggregate, currentVersion: currentVersion?.Version);
 
             return true;
         }

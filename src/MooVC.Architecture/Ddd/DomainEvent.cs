@@ -10,18 +10,18 @@
     public abstract class DomainEvent
         : Message
     {
-        protected DomainEvent(Message context, VersionedReference aggregate)
+        protected DomainEvent(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Aggregate = info.GetValue<VersionedReference>(nameof(Aggregate));
+        }
+
+        private protected DomainEvent(Message context, VersionedReference aggregate)
             : base(context)
         {
             ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);
 
             Aggregate = aggregate;
-        }
-
-        protected DomainEvent(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Aggregate = info.GetValue<VersionedReference>(nameof(Aggregate));
         }
 
         public VersionedReference Aggregate { get; }

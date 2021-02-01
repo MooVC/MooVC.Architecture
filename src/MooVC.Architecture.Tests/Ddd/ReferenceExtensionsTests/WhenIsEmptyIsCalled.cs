@@ -25,7 +25,7 @@
         [Fact]
         public void GivenANullReferenceThenTheResponseIsPositive()
         {
-            Reference reference = default;
+            Reference? reference = default;
 
             Assert.True(reference.IsEmpty());
         }

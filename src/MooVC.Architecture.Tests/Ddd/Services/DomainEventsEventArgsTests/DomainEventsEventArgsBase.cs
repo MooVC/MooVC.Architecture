@@ -12,11 +12,10 @@
         {
             var context = new SerializableMessage();
             var aggregate = new SerializableAggregateRoot();
-            var version = aggregate.ToVersionedReference();
 
             return Enumerable
                 .Range(0, count)
-                .Select(_ => new SerializableDomainEvent(context, version))
+                .Select(_ => new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate))
                 .ToArray();
         }
     }

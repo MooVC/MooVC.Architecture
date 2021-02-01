@@ -3,7 +3,7 @@ namespace MooVC.Architecture.Ddd.Services
     using System;
     using System.Runtime.Serialization;
     using MooVC.Serialization;
-    using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
 
     [Serializable]

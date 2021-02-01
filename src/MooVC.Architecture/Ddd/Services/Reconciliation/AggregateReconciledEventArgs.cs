@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Runtime.Serialization;
     using MooVC.Architecture.Ddd;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
@@ -28,7 +29,7 @@
 
         private AggregateReconciledEventArgs(SerializationInfo info, StreamingContext context)
         {
-            Aggregate = info.TryGetValue<Reference>(nameof(Aggregate), defaultValue: Reference<AggregateRoot>.Empty);
+            Aggregate = info.TryGetReference(nameof(Aggregate));
             Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
         }
 

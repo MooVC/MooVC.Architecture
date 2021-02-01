@@ -2,7 +2,6 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Architecture.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
     using static MooVC.Architecture.Ddd.Resources;

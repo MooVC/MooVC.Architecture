@@ -9,13 +9,13 @@
         : ArgumentException
     {
         private protected AggregateConflictDetectedException(
-               Reference aggregate,
-               SignedVersion received)
-               : base(Format(
-                   AggregateConflictDetectedExceptionNoExistingEntryMessage,
-                   aggregate.Id,
-                   aggregate.Type.Name,
-                   received))
+            Reference aggregate,
+            SignedVersion received)
+            : base(Format(
+                AggregateConflictDetectedExceptionNoExistingEntryMessage,
+                aggregate.Id,
+                aggregate.Type.Name,
+                received))
         {
             Aggregate = aggregate;
             PersistedVersion = SignedVersion.Empty;

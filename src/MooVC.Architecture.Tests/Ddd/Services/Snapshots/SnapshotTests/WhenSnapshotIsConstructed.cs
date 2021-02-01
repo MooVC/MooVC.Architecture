@@ -23,14 +23,14 @@
         {
             EventCentricAggregateRoot[] aggregates = new[] { new SerializableEventCentricAggregateRoot() };
 
-            _ = Assert.Throws<ArgumentNullException>(() => new Snapshot(aggregates, default));
+            _ = Assert.Throws<ArgumentNullException>(() => new Snapshot(aggregates, default!));
         }
 
         [Fact]
         public void GivenANullAggregatesCollectionAndASequenceThenAnInstanceIsCreated()
         {
             var sequence = new EventSequence(2);
-            var instance = new Snapshot(default, sequence);
+            var instance = new Snapshot(default!, sequence);
 
             Assert.Equal(new EventCentricAggregateRoot[0], instance.Aggregates);
             Assert.Equal(sequence, instance.Sequence);

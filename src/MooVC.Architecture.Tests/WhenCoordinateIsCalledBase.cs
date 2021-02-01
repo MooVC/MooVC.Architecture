@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading;
     using System.Threading.Tasks;
     using Xunit;
 
@@ -11,7 +10,7 @@
         [Fact]
         public void GivenAnEmptyOperationThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => Coordinate(null));
+            _ = Assert.Throws<ArgumentNullException>(() => Coordinate(default!));
         }
 
         [Fact]
@@ -31,25 +30,6 @@
             Task.WaitAll(tasks);
 
             Assert.Equal(ExpectedCount, counter);
-        }
-
-        [Fact(Skip = "Non-deterministic.")]
-        public void GivenMultipleThreadsWithATimeoutSetThenATimeoutExceptionIsThrownForAllBarOne()
-        {
-            const int ExpectedCount = 5;
-
-            static void Operation()
-            {
-                Thread.Sleep(250);
-            }
-
-            Task[] tasks = CreateTasks(
-                () => Coordinate(Operation, timeout: TimeSpan.FromMilliseconds(50)),
-                ExpectedCount + 1);
-
-            AggregateException exception = Assert.Throws<AggregateException>(() => Task.WaitAll(tasks));
-
-            Assert.Equal(ExpectedCount, exception.InnerExceptions.Count);
         }
 
         protected abstract void Coordinate(Action operation, TimeSpan? timeout = default);

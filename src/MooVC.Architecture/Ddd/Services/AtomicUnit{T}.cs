@@ -19,7 +19,11 @@
 
         protected AtomicUnit(T id, params DomainEvent[] events)
         {
-            ArgumentIsAcceptable(events, nameof(events), value => value.SafeAny(), AtomicUnitEventsRequired);
+            ArgumentIsAcceptable(
+                events,
+                nameof(events),
+                value => value.Any(),
+                AtomicUnitEventsRequired);
 
             ArgumentIsAcceptable(
                 events,

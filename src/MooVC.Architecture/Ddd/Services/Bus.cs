@@ -1,8 +1,8 @@
 namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
-    using MooVC.Linq;
 
     public abstract class Bus
         : IBus
@@ -15,7 +15,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         public void Publish(params DomainEvent[] events)
         {
-            if (events.SafeAny())
+            if (events.Any())
             {
                 OnPublishing(events);
 

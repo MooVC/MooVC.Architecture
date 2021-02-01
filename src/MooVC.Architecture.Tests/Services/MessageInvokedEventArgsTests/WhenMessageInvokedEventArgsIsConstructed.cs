@@ -19,10 +19,10 @@
         [Fact]
         public void GivenANullAggregateThenAnArgumentNullExceptionIsThrown()
         {
-            SerializableMessage message = default;
+            SerializableMessage? message = default;
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new MessageInvokedEventArgs(message));
+                () => new MessageInvokedEventArgs(message!));
 
             Assert.Equal(nameof(message), exception.ParamName);
         }

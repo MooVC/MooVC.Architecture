@@ -2,6 +2,7 @@ namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Collections.Generic;
+    using static System.Environment;
     using static System.String;
     using static MooVC.Architecture.Ddd.Resources;
 
@@ -9,8 +10,6 @@ namespace MooVC.Architecture.Ddd
     public sealed class AggregateInvariantsNotSatisfiedDomainException
         : DomainException
     {
-        private const string Separator = "\r\n";
-
         public AggregateInvariantsNotSatisfiedDomainException(
             Request request,
             VersionedReference aggregate,
@@ -22,7 +21,7 @@ namespace MooVC.Architecture.Ddd
                       AggregateInvariantsNotSatisfiedDomainExceptionMessage,
                       request.GetType().Name,
                       aggregate.Type.Name,
-                      Join(Separator, explainations)))
+                      Join(NewLine, explainations)))
         {
         }
     }

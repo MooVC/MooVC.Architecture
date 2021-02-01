@@ -18,7 +18,7 @@
         [Fact]
         public void GivenNullPagingThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedQuery(null));
+            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedQuery(default!));
         }
     }
 }

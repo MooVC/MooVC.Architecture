@@ -26,7 +26,7 @@
             {
                 wasTriggered = true;
 
-                return default;
+                return default!;
             }
 
             DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler(snapshotSource: SnapshotSource);
@@ -82,7 +82,7 @@
             {
                 wasTriggered = true;
 
-                return default;
+                return default!;
             }
 
             DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler(snapshotSource: SnapshotSource);
@@ -139,13 +139,13 @@
             SequenceStore.Verify(store => store.Create(It.Is<EventSequence>(updated => updated.Sequence == sequence.Sequence)), times: Times.Once);
         }
 
-        private DefaultReconciliationOrchestrator<EventSequence> CreateReconciler(Func<Snapshot> snapshotSource = default)
+        private DefaultReconciliationOrchestrator<EventSequence> CreateReconciler(Func<Snapshot>? snapshotSource = default)
         {
-            snapshotSource ??= () => default;
+            snapshotSource ??= () => default!;
 
             return new DefaultReconciliationOrchestrator<EventSequence>(
                 AggregateReconciler.Object,
-                reference => default,
+                reference => default!,
                 EventReconciler.Object,
                 SequenceFactory,
                 SequenceStore.Object,

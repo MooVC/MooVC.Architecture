@@ -2,9 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.Serialization;
     using MooVC.Collections.Generic;
-    using MooVC.Linq;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
@@ -19,7 +19,7 @@
             ArgumentIsAcceptable(
                 events,
                 nameof(events),
-                _ => events.SafeAny(),
+                _ => events.Any(),
                 EventReconciliationEventArgsEventsRequired);
 
             Events = events.Snapshot();

@@ -10,7 +10,7 @@
         [Fact]
         public void GivenNullEventsThenAnInstanceIsCreated()
         {
-            var @event = new DomainEventsPublishedEventArgs(default);
+            var @event = new DomainEventsPublishedEventArgs(default!);
 
             Assert.Empty(@event.Events);
         }

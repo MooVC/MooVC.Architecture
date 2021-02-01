@@ -1,10 +1,8 @@
 namespace MooVC.Architecture.Ddd.AggregateRootTests
 {
-    using System;
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenDomainEventIsSerialized
@@ -13,20 +11,18 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var aggregate = new SerializableAggregateRoot();
-            var expectedAggregate = new VersionedReference<SerializableAggregateRoot>(aggregate);
             var expectedContext = new SerializableMessage();
-
-            var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);
-            SerializableDomainEvent clone = @event.Clone();
+            var @event = new SerializableDomainEvent<SerializableAggregateRoot>(expectedContext, aggregate);
+            SerializableDomainEvent<SerializableAggregateRoot> clone = @event.Clone();
 
             Assert.Equal(@event, clone);
             Assert.NotSame(@event, clone);
 
-            Assert.Equal(@event.Aggregate, @event.Aggregate);
-            Assert.Equal(@event.CausationId, @event.CausationId);
-            Assert.Equal(@event.CorrelationId, @event.CorrelationId);
-            Assert.Equal(@event.Id, @event.Id);
-            Assert.Equal(@event.TimeStamp, @event.TimeStamp);
+            Assert.Equal(@event.Aggregate, clone.Aggregate);
+            Assert.Equal(@event.CausationId, clone.CausationId);
+            Assert.Equal(@event.CorrelationId, clone.CorrelationId);
+            Assert.Equal(@event.Id, clone.Id);
+            Assert.Equal(@event.TimeStamp, clone.TimeStamp);
             Assert.Equal(@event.GetHashCode(), clone.GetHashCode());
         }
     }

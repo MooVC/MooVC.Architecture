@@ -120,9 +120,6 @@
   <data name="AggregateDoesNotExistExceptionMessage" xml:space="preserve">
     <value>An empty reference for aggregate type {0} cannot be retrieved.</value>
   </data>
-  <data name="AggregateEventArgsAggregateRequired" xml:space="preserve">
-    <value>The aggregate to which the event relates must be provided.</value>
-  </data>
   <data name="AggregateEventMismatchExceptionMessage" xml:space="preserve">
     <value>Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}.</value>
   </data>
@@ -148,6 +145,9 @@
   </data>
   <data name="AggregateRootExtensionsSaveDestinationRequired" xml:space="preserve">
     <value>The destination must be provided.</value>
+  </data>
+  <data name="AggregateRootExtensionsToVersionedReferenceAggregateRequired" xml:space="preserve">
+    <value>The aggregate must be provided.</value>
   </data>
   <data name="AggregateRootIdRequired" xml:space="preserve">
     <value>A non-empty ID for the aggregate must be provided.</value>

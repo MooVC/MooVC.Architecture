@@ -2,31 +2,30 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
 
     [Serializable]
     public abstract class DomainException
         : InvalidOperationException
     {
-        protected DomainException(Message context, AggregateRoot aggregate, string message)
-            : this(context, new VersionedReference(aggregate), message)
-        {
-        }
-
-        protected DomainException(Message context, VersionedReference aggregate, string message)
-            : base(message)
-        {
-            Aggregate = aggregate;
-            Context = context;
-        }
-
         protected DomainException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             Aggregate = info.GetValue<VersionedReference>(nameof(Aggregate));
             Context = info.GetValue<Message>(nameof(Context));
             TimeStamp = info.GetDateTime(nameof(TimeStamp));
+        }
+
+        private protected DomainException(Message context, AggregateRoot aggregate, string message)
+            : this(context, new VersionedReference(aggregate), message)
+        {
+        }
+
+        private protected DomainException(Message context, VersionedReference aggregate, string message)
+            : base(message)
+        {
+            Aggregate = aggregate;
+            Context = context;
         }
 
         public VersionedReference Aggregate { get; }

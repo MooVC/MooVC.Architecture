@@ -79,6 +79,15 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The aggregate to which the event relates must be provided..
+        /// </summary>
+        internal static string AggregateEventArgsAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateEventArgsAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is currently no aggregate of type {1} with an ID of {0:p}..
         /// </summary>
         internal static string AggregateNotFoundExceptionMessage {

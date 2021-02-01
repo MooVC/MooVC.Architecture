@@ -11,19 +11,22 @@
         [Fact]
         public void GivenANullContextThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedResult<int>(null, new Paging(), new int[0], 0));
+            _ = Assert.Throws<ArgumentNullException>(
+                () => new SerializablePaginatedResult<int>(default!, new Paging(), new int[0], 0));
         }
 
         [Fact]
         public void GivenANullQueryThenANullReferenceExceptionIsThrown()
         {
-            _ = Assert.Throws<NullReferenceException>(() => new SerializablePaginatedResult<PaginatedQuery, int>(null, new int[0], 0));
+            _ = Assert.Throws<NullReferenceException>(
+                () => new SerializablePaginatedResult<PaginatedQuery, int>(default!, new int[0], 0));
         }
 
         [Fact]
         public void GivenNullPagingThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new SerializablePaginatedResult<int>(new SerializableMessage(), null, new int[0], 0));
+            _ = Assert.Throws<ArgumentNullException>(
+                () => new SerializablePaginatedResult<int>(new SerializableMessage(), default!, new int[0], 0));
         }
 
         [Theory]

@@ -1,5 +1,6 @@
 namespace MooVC.Architecture.Ddd.ValueTests
 {
+    using System.Collections.Generic;
     using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
@@ -7,14 +8,19 @@ namespace MooVC.Architecture.Ddd.ValueTests
     public sealed class WhenValueIsSerialized
     {
         [Theory]
+        [InlineData(0, "", true, default)]
         [InlineData(0, "", true, new[] { "One", "Two" })]
         [InlineData(2147483647, "Test 1", true, new[] { "One", "Two", "Three", "Four" })]
         [InlineData(-2147483648, "Test 2", true, new string[0])]
         [InlineData(0, null, true, new[] { "One", "Two", "Three" })]
         [InlineData(0, "", false, new[] { "One" })]
-        public void GivenAnInstanceThenAllPropertiesAreSerialized(int expectedFirst, string expectedSecond, bool setThird, string[] expectedFourth)
+        public void GivenAnInstanceThenAllPropertiesAreSerialized(
+            int expectedFirst,
+            string? expectedSecond,
+            bool setThird,
+            IEnumerable<string>? expectedFourth)
         {
-            SerializableValue expectedThird = setThird
+            SerializableValue? expectedThird = setThird
                 ? new SerializableValue()
                 : default;
 
@@ -23,16 +29,16 @@ namespace MooVC.Architecture.Ddd.ValueTests
                 second: expectedSecond,
                 third: expectedThird,
                 fourth: expectedFourth);
-            SerializableValue clone = value.Clone();
+            SerializableValue deserialized = value.Clone();
 
-            Assert.Equal(value, clone);
-            Assert.NotSame(value, clone);
+            Assert.Equal(value, deserialized);
+            Assert.NotSame(value, deserialized);
 
-            Assert.Equal(expectedFirst, clone.First);
-            Assert.Equal(expectedSecond, clone.Second);
-            Assert.Equal(expectedThird, clone.Third);
-            Assert.Equal(expectedFourth, clone.Fourth);
-            Assert.Equal(value.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(expectedFirst, deserialized.First);
+            Assert.Equal(expectedSecond, deserialized.Second);
+            Assert.Equal(expectedThird, deserialized.Third);
+            Assert.Equal(expectedFourth, deserialized.Fourth);
+            Assert.Equal(value.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

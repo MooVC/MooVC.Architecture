@@ -25,7 +25,7 @@
         [Fact]
         public void GivenANullSpecificationThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => default(Specification<int>).Not());
+            _ = Assert.Throws<ArgumentNullException>(() => default(Specification<int>)!.Not());
         }
 
         [Theory]

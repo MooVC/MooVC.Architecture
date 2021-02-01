@@ -18,14 +18,29 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed MooVC.Architecture to target version 3.x of MooVC (**Breaking Change**).
+- Changed constructors for Ddd.DomainException to private protected (**Breaking Change**).
+- Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
 - Changed Ddd.Services.MemoryRepository so that it is no longer serializable (**Breaking Change**).
 - Changed Ddd.Services.MemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
+- Changed MooVC.Architecture.Ddd.Services.Reconciliation.IAggregateReconciler.Reconcile to accept a params array instead of an IEnumerable of Domain Events (**Breaking Change**).
 - Deleted Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
 
 # End-User Impact
 
-- Services.Handler & Services.HandlerExecutionFailureException
+- Ddd.DomainEvent Constructor (Impact: Medium)
+
+This change was applied to force consumption of the types variant Ddd.DomainEvent<TAggregate> which will always result in an instance that correctly refers to the aggregate type to which it relates.
+
+- Ddd.DomainException Constructor (Impact: Medium)
+
+This change was applied to force consumption of the types variant Ddd.DomainException<TAggregate> which will always result in an instance that correctly refers to the aggregate type to which it relates.
+
+- Ddd.Services.ConcurrentMemoryRepository & Ddd.Services.MemoryRepository (Impact: Medium)
+
+Due to the addition of the ICloner to the constructor, it is now no longer possible to clone these classes. It is recommended that consumers use the GetAll method to implement serialization if required.
+
+- Services.Handler & Services.HandlerExecutionFailureException (Impact: Low)
 
 These classes where seen as offering little-to-no value and have therefore been removed.  It is recommended that generic failures be captured and handled by the bus that performs execution of the command.  Validation should also be deferred to the domain layer, where appropriate derivations of Ddd.DomainException can be thrown.

@@ -70,15 +70,6 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The aggregate to which the event relates must be provided..
-        /// </summary>
-        internal static string AggregateEventArgsAggregateRequired {
-            get {
-                return ResourceManager.GetString("AggregateEventArgsAggregateRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}..
         /// </summary>
         internal static string AggregateEventMismatchExceptionMessage {
@@ -149,6 +140,15 @@ namespace MooVC.Architecture.Ddd {
         internal static string AggregateRootExtensionsSaveDestinationRequired {
             get {
                 return ResourceManager.GetString("AggregateRootExtensionsSaveDestinationRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The aggregate must be provided..
+        /// </summary>
+        internal static string AggregateRootExtensionsToVersionedReferenceAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateRootExtensionsToVersionedReferenceAggregateRequired", resourceCulture);
             }
         }
         

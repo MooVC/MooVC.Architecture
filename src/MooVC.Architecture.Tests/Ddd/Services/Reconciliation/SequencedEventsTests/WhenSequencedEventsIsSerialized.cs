@@ -4,7 +4,6 @@
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenSequencedEventsIsSerialized
@@ -16,9 +15,10 @@
         {
             var aggregate = new SerializableAggregateRoot();
             var context = new SerializableMessage();
-            SerializableDomainEvent[] events = new[]
+
+            SerializableDomainEvent<SerializableAggregateRoot>[] events = new[]
             {
-                new SerializableDomainEvent(context, aggregate.ToVersionedReference()),
+                new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
             };
 
             var original = new SequencedEvents(sequence, events);

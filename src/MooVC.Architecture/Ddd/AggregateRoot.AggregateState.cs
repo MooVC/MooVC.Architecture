@@ -2,7 +2,6 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
 
     public abstract partial class AggregateRoot

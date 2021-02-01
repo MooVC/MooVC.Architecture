@@ -27,14 +27,14 @@
         public void GivenAnEventStoreAndANullFactoryThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DefaultSnapshotProvider<SequencedEvents>(store.Object, default));
+                () => new DefaultSnapshotProvider<SequencedEvents>(store.Object, default!));
         }
 
         [Fact]
         public void GivenAFactoryAndANullEventStoreThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DefaultSnapshotProvider<SequencedEvents>(default, () => type => proxy.Object));
+                () => new DefaultSnapshotProvider<SequencedEvents>(default!, () => type => proxy.Object));
         }
     }
 }

@@ -2,9 +2,7 @@ namespace MooVC.Architecture.Ddd.ValueTests
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
 
@@ -12,7 +10,7 @@ namespace MooVC.Architecture.Ddd.ValueTests
     internal sealed class SerializableValue
         : Value
     {
-        public SerializableValue(int first = 0, string second = default, Value third = default, string[] fourth = default)
+        public SerializableValue(int first = 0, string? second = default, Value? third = default, IEnumerable<string>? fourth = default)
         {
             First = first;
             Second = second;
@@ -31,9 +29,9 @@ namespace MooVC.Architecture.Ddd.ValueTests
 
         public int First { get; }
 
-        public string Second { get; }
+        public string? Second { get; }
 
-        public Value Third { get; }
+        public Value? Third { get; }
 
         public IEnumerable<string> Fourth { get; }
 
@@ -50,8 +48,8 @@ namespace MooVC.Architecture.Ddd.ValueTests
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return First;
-            yield return Second;
-            yield return Third;
+            yield return Second!;
+            yield return Third!;
             yield return Fourth;
         }
     }

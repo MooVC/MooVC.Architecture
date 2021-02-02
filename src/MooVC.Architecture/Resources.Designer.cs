@@ -70,15 +70,6 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The context of the message must be provided..
-        /// </summary>
-        internal static string MessageContextRequired {
-            get {
-                return ResourceManager.GetString("MessageContextRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The message that serves as the context for coordination must be provided..
         /// </summary>
         internal static string MessageExtensionsCoordinateMessageRequired {

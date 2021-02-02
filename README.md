@@ -18,6 +18,7 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
+- Changed Message so that its two, non-serialization related constructors, are now merged into a single constructor that accepts a context as an optional parameter.
 - Changed MooVC.Architecture to target version 3.x of MooVC (**Breaking Change**).
 - Changed constructors for Ddd.DomainException to private protected (**Breaking Change**).
 - Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).
@@ -28,12 +29,22 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 - Changed MooVC.Architecture.Ddd.Services.Reconciliation.IAggregateReconciler.Reconcile to accept a params array instead of an IEnumerable of Domain Events (**Breaking Change**).
 - Deleted Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
 - Moved Ddd.Entity<T> to the root namespace (**Breaking Change**).
+- Moved Ddd.Value to the root namespace (**Breaking Change**).
+
+## Bug Fixes
+
+- Changed Message to inherit from Entity<Guid>, meaning that two messages will be deemed equal if they are of the same type and have the same Id (**Breaking Change**).
+- Changed Entity<T> so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
 
 # End-User Impact
 
 - Ddd.Entity<T> Namespace (Impact: High)
 
 Entity was moved to facilitate a new inheritance change involving Message that would facilitate a greater degree of reuse and consistency accross the framework.  This resulted in a namespace change that would result in compilation failures for any consumer that utilized Ddd.Entity<T>.  While the solution is straightforward, every reference would need to be changed from MooVC.Architecture.Ddd to MooVC.Architecture.
+
+- Ddd.Value Namespace  (Impact: High)
+
+Value was moved to for consistency with Entity<T>.  This resulted in a namespace change that would result in compilation failures for any consumer that utilized Ddd.Value.  While the solution is straightforward, every reference would need to be changed from MooVC.Architecture.Ddd to MooVC.Architecture.
 
 - Ddd.DomainEvent Constructor (Impact: Medium)
 
@@ -46,6 +57,10 @@ This change was applied to force consumption of the types variant Ddd.DomainExce
 - Ddd.Services.ConcurrentMemoryRepository & Ddd.Services.MemoryRepository (Impact: Medium)
 
 Due to the addition of the ICloner to the constructor, it is now no longer possible to clone these classes. It is recommended that consumers use the GetAll method to implement serialization if required.
+
+- Message and Entity<T> Equality (Impact: Low)
+
+It was always intended that messages and entities with the same Id be deemed equal if their Id and type where equalfix.  It is not anticipated that this have an impact due to the intent however, this may differ depending on your use-case.
 
 - Services.Handler & Services.HandlerExecutionFailureException (Impact: Low)
 

@@ -44,7 +44,9 @@
 
         public virtual bool Equals(Entity<T>? other)
         {
-            return other is { } && Id.Equals(other.Id);
+            return other is { }
+                && Id.Equals(other.Id)
+                && GetType() == other.GetType();
         }
 
         public override int GetHashCode()

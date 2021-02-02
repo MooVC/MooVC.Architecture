@@ -120,9 +120,6 @@
   <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
     <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
   </data>
-  <data name="MessageContextRequired" xml:space="preserve">
-    <value>The context of the message must be provided.</value>
-  </data>
   <data name="MessageExtensionsCoordinateMessageRequired" xml:space="preserve">
     <value>The message that serves as the context for coordination must be provided.</value>
   </data>

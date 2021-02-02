@@ -1,13 +1,13 @@
-﻿namespace MooVC.Architecture.Ddd
+﻿namespace MooVC.Architecture
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
 
     [Serializable]
     public abstract class Entity<T>
-        : ISerializable
+        : ISerializable,
+          IEquatable<Entity<T>>
         where T : notnull
     {
         protected Entity(T id)
@@ -34,8 +34,17 @@
 
         public override bool Equals(object? other)
         {
-            return other is Entity<T> entity
-                && Id.Equals(entity.Id);
+            if (other is Entity<T> entity)
+            {
+                return Equals(entity);
+            }
+
+            return false;
+        }
+
+        public virtual bool Equals(Entity<T>? other)
+        {
+            return other is { } && Id.Equals(other.Id);
         }
 
         public override int GetHashCode()
@@ -50,9 +59,8 @@
 
         private static bool EqualOperator(Entity<T>? left, Entity<T>? right)
         {
-            return left is null ^ right is null
-                ? false
-                : left is null || left.Equals(right);
+            return !(left is null ^ right is null)
+                && (left is null || left.Equals(right));
         }
 
         private static bool NotEqualOperator(Entity<T>? left, Entity<T>? right)

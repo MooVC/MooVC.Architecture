@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Ddd
+﻿namespace MooVC.Architecture
 {
     using System;
     using System.Collections.Generic;

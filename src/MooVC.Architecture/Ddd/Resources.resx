@@ -164,9 +164,6 @@
   <data name="EnsureReferenceIsOfTypeMessage" xml:space="preserve">
     <value>The reference provided is for an aggregate of type {0}.  {1} is required.</value>
   </data>
-  <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
-    <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
-  </data>
   <data name="EventCentricAggregateRootStateChangesDenied" xml:space="preserve">
     <value>Changed to the state of an aggregate of type {0} must be made through ApplyChanges.</value>
   </data>

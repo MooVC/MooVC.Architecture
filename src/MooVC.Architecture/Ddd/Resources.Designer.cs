@@ -198,15 +198,6 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The maximum supported ID of {0} for entity of type {1} has been exceeded..
-        /// </summary>
-        internal static string EntityMaximumIdValueExceededExceptionMessage {
-            get {
-                return ResourceManager.GetString("EntityMaximumIdValueExceededExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Changed to the state of an aggregate of type {0} must be made through ApplyChanges..
         /// </summary>
         internal static string EventCentricAggregateRootStateChangesDenied {

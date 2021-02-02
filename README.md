@@ -17,6 +17,7 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 ## Enhancements
 
 - Created new contextual resource files and migrated resources from centralized resource file.
+- Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
 - Changed MooVC.Architecture to target version 3.x of MooVC (**Breaking Change**).
 - Changed constructors for Ddd.DomainException to private protected (**Breaking Change**).
 - Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).
@@ -26,8 +27,13 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 - Changed Ddd.Services.MemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
 - Changed MooVC.Architecture.Ddd.Services.Reconciliation.IAggregateReconciler.Reconcile to accept a params array instead of an IEnumerable of Domain Events (**Breaking Change**).
 - Deleted Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
+- Moved Ddd.Entity<T> to the root namespace (**Breaking Change**).
 
 # End-User Impact
+
+- Ddd.Entity<T> Namespace (Impact: High)
+
+Entity was moved to facilitate a new inheritance change involving Message that would facilitate a greater degree of reuse and consistency accross the framework.  This resulted in a namespace change that would result in compilation failures for any consumer that utilized Ddd.Entity<T>.  While the solution is straightforward, every reference would need to be changed from MooVC.Architecture.Ddd to MooVC.Architecture.
 
 - Ddd.DomainEvent Constructor (Impact: Medium)
 

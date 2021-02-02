@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EntityMaximumIdValueExceededExceptionMessage" xml:space="preserve">
+    <value>The maximum supported ID of {0} for entity of type {1} has been exceeded.</value>
+  </data>
   <data name="MessageContextRequired" xml:space="preserve">
     <value>The context of the message must be provided.</value>
   </data>

@@ -1,8 +1,8 @@
-﻿namespace MooVC.Architecture.Ddd
+﻿namespace MooVC.Architecture
 {
     using System;
     using static System.String;
-    using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Architecture.Resources;
 
     [Serializable]
     public sealed class EntityMaximumIdValueExceededException

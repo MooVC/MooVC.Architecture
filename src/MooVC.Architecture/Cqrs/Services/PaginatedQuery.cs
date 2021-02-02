@@ -13,7 +13,7 @@
     {
         protected PaginatedQuery(Paging paging)
         {
-            ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);
+            ArgumentNotNull(paging, nameof(paging), PaginatedQueryPagingRequired);
 
             Paging = paging;
         }
@@ -21,7 +21,7 @@
         protected PaginatedQuery(Message context, Paging paging)
             : base(context)
         {
-            ArgumentNotNull(paging, nameof(Paging), PaginatedQueryPagingRequired);
+            ArgumentNotNull(paging, nameof(paging), PaginatedQueryPagingRequired);
 
             Paging = paging;
         }

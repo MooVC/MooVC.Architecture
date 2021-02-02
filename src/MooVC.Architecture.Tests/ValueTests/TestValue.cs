@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Ddd.ValueTests
+﻿namespace MooVC.Architecture.ValueTests
 {
     using System.Collections.Generic;
 

@@ -2,7 +2,6 @@ namespace MooVC.Architecture.Ddd.EntityTests
 {
     using System;
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenEntityIsSerialized
@@ -11,14 +10,14 @@ namespace MooVC.Architecture.Ddd.EntityTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var expectedId = Guid.NewGuid();
-            var entity = new SerializableEntity(expectedId);
-            SerializableEntity clone = entity.Clone();
+            var original = new SerializableEntity(expectedId);
+            SerializableEntity deserialized = original.Clone();
 
-            Assert.Equal(entity, clone);
-            Assert.NotSame(entity, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Equal(expectedId, clone.Id);
-            Assert.Equal(entity.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(expectedId, deserialized.Id);
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

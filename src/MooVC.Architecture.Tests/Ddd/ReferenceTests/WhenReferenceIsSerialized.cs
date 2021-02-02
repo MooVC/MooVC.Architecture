@@ -3,7 +3,6 @@ namespace MooVC.Architecture.Ddd.ReferenceTests
     using System;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenReferenceIsSerialized
@@ -12,14 +11,14 @@ namespace MooVC.Architecture.Ddd.ReferenceTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var expectedId = Guid.NewGuid();
-            var reference = new Reference<SerializableAggregateRoot>(expectedId);
-            Reference<SerializableAggregateRoot> clone = reference.Clone();
+            var original = new Reference<SerializableAggregateRoot>(expectedId);
+            Reference<SerializableAggregateRoot> deserialized = original.Clone();
 
-            Assert.Equal(reference, clone);
-            Assert.NotSame(reference, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Equal(expectedId, clone.Id);
-            Assert.Equal(reference.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(expectedId, deserialized.Id);
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

@@ -18,7 +18,6 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
-- Changed Message so that its two, non-serialization related constructors, are now merged into a single constructor that accepts a context as an optional parameter.
 - Changed MooVC.Architecture to target version 3.x of MooVC (**Breaking Change**).
 - Changed constructors for Ddd.DomainException to private protected (**Breaking Change**).
 - Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).

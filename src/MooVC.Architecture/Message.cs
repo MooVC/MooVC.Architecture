@@ -3,19 +3,25 @@
     using System;
     using System.Runtime.Serialization;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Resources;
+    using static MooVC.Ensure;
 
     [Serializable]
     public abstract class Message
         : Entity<Guid>
     {
-        protected Message(Message? context = default)
+        protected Message()
             : base(Guid.NewGuid())
         {
-            if (context is { })
-            {
-                CausationId = context.Id;
-                CorrelationId = context.CorrelationId;
-            }
+        }
+
+        protected Message(Message context)
+            : this()
+        {
+            ArgumentNotNull(context, nameof(context), MessageContextRequired);
+
+            CausationId = context.Id;
+            CorrelationId = context.CorrelationId;
         }
 
         protected Message(SerializationInfo info, StreamingContext context)

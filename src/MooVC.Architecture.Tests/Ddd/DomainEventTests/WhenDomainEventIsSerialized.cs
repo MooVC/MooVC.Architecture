@@ -12,18 +12,18 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         {
             var aggregate = new SerializableAggregateRoot();
             var expectedContext = new SerializableMessage();
-            var @event = new SerializableDomainEvent<SerializableAggregateRoot>(expectedContext, aggregate);
-            SerializableDomainEvent<SerializableAggregateRoot> clone = @event.Clone();
+            var original = new SerializableDomainEvent<SerializableAggregateRoot>(expectedContext, aggregate);
+            SerializableDomainEvent<SerializableAggregateRoot> deserialized = original.Clone();
 
-            Assert.Equal(@event, clone);
-            Assert.NotSame(@event, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Equal(@event.Aggregate, clone.Aggregate);
-            Assert.Equal(@event.CausationId, clone.CausationId);
-            Assert.Equal(@event.CorrelationId, clone.CorrelationId);
-            Assert.Equal(@event.Id, clone.Id);
-            Assert.Equal(@event.TimeStamp, clone.TimeStamp);
-            Assert.Equal(@event.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(original.Aggregate, deserialized.Aggregate);
+            Assert.Equal(original.CausationId, deserialized.CausationId);
+            Assert.Equal(original.CorrelationId, deserialized.CorrelationId);
+            Assert.Equal(original.Id, deserialized.Id);
+            Assert.Equal(original.TimeStamp, deserialized.TimeStamp);
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

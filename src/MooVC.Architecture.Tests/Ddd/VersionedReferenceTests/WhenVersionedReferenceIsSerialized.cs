@@ -2,7 +2,6 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceTests
 {
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenVersionedReferenceIsSerialized
@@ -11,15 +10,15 @@ namespace MooVC.Architecture.Ddd.VersionedReferenceTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var aggregate = new SerializableAggregateRoot();
-            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
-            VersionedReference<SerializableAggregateRoot> clone = reference.Clone();
+            var original = new VersionedReference<SerializableAggregateRoot>(aggregate);
+            VersionedReference<SerializableAggregateRoot> deserialized = original.Clone();
 
-            Assert.Equal(reference, clone);
-            Assert.NotSame(reference, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Equal(aggregate.Id, clone.Id);
-            Assert.Equal(aggregate.Version, clone.Version);
-            Assert.Equal(reference.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(aggregate.Id, deserialized.Id);
+            Assert.Equal(aggregate.Version, deserialized.Version);
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

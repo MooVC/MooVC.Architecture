@@ -1,7 +1,6 @@
 namespace MooVC.Architecture.MessageTests
 {
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenMessageIsSerialized
@@ -9,36 +8,36 @@ namespace MooVC.Architecture.MessageTests
         [Fact]
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
-            var message = new SerializableMessage();
-            SerializableMessage clone = message.Clone();
+            var original = new SerializableMessage();
+            SerializableMessage deserialized = original.Clone();
 
-            Assert.Equal(message, clone);
-            Assert.NotSame(message, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Equal(message.CausationId, clone.CausationId);
-            Assert.Equal(message.CorrelationId, clone.CorrelationId);
-            Assert.Equal(message.Id, clone.Id);
-            Assert.Equal(message.TimeStamp, clone.TimeStamp);
+            Assert.Equal(original.CausationId, deserialized.CausationId);
+            Assert.Equal(original.CorrelationId, deserialized.CorrelationId);
+            Assert.Equal(original.Id, deserialized.Id);
+            Assert.Equal(original.TimeStamp, deserialized.TimeStamp);
 
-            Assert.Equal(message.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
 
         [Fact]
         public void GivenAnInstanceBasedOnAnInstanceThenAllPropertiesAreSerialized()
         {
             var expected = new SerializableMessage();
-            var message = new SerializableMessage(expected);
-            SerializableMessage clone = message.Clone();
+            var original = new SerializableMessage(context: expected);
+            SerializableMessage deserialized = original.Clone();
 
-            Assert.Equal(message, clone);
-            Assert.NotSame(message, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Equal(message.CausationId, clone.CausationId);
-            Assert.Equal(message.CorrelationId, clone.CorrelationId);
-            Assert.Equal(message.Id, clone.Id);
-            Assert.Equal(message.TimeStamp, clone.TimeStamp);
+            Assert.Equal(original.CausationId, deserialized.CausationId);
+            Assert.Equal(original.CorrelationId, deserialized.CorrelationId);
+            Assert.Equal(original.Id, deserialized.Id);
+            Assert.Equal(original.TimeStamp, deserialized.TimeStamp);
 
-            Assert.Equal(message.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

@@ -12,18 +12,18 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         public void GivenAnInstanceWhenNoChangesArePendingThenAllPropertiesAreSerialized()
         {
             var expectedId = Guid.NewGuid();
-            var aggregate = new SerializableEventCentricAggregateRoot(expectedId);
+            var original = new SerializableEventCentricAggregateRoot(expectedId);
 
-            aggregate.MarkChangesAsCommitted();
+            original.MarkChangesAsCommitted();
 
-            SerializableEventCentricAggregateRoot clone = aggregate.Clone();
+            SerializableEventCentricAggregateRoot deserialized = original.Clone();
 
-            Assert.Equal(aggregate, clone);
-            Assert.NotSame(aggregate, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Empty(clone.GetUncommittedChanges());
-            Assert.Equal(expectedId, clone.Id);
-            Assert.Equal(aggregate.GetHashCode(), clone.GetHashCode());
+            Assert.Empty(deserialized.GetUncommittedChanges());
+            Assert.Equal(expectedId, deserialized.Id);
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
 
         [Fact]
@@ -33,18 +33,18 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
             var value = Guid.NewGuid();
             var context = new SerializableMessage();
             var request = new SetRequest(context, value);
-            var aggregate = new SerializableEventCentricAggregateRoot(expectedId);
+            var original = new SerializableEventCentricAggregateRoot(expectedId);
 
-            aggregate.Set(request);
+            original.Set(request);
 
-            SerializableEventCentricAggregateRoot clone = aggregate.Clone();
+            SerializableEventCentricAggregateRoot deserialized = original.Clone();
 
-            Assert.Equal(aggregate, clone);
-            Assert.NotSame(aggregate, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Equal(aggregate.GetUncommittedChanges(), clone.GetUncommittedChanges());
-            Assert.Equal(expectedId, clone.Id);
-            Assert.Equal(aggregate.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(original.GetUncommittedChanges(), deserialized.GetUncommittedChanges());
+            Assert.Equal(expectedId, deserialized.Id);
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

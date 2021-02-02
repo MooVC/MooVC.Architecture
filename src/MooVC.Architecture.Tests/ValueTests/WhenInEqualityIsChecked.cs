@@ -4,6 +4,15 @@
 
     public sealed class WhenInEqualityIsChecked
     {
+        [Fact]
+        public void GivenTwoEmptyInstancesThenInEqualityIsNegative()
+        {
+            var first = new EmptyValue();
+            var second = new EmptyValue();
+
+            Assert.False(first != second);
+        }
+
         [Theory]
         [InlineData(1, 2, 3, 4, 5, 6)]
         [InlineData(1, 2, 3, 1, 2, 4)]

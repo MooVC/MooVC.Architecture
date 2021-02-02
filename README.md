@@ -18,6 +18,7 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
+- Changed Value so that it now implements IEquatable<Value>.
 - Changed MooVC.Architecture to target version 3.x of MooVC (**Breaking Change**).
 - Changed constructors for Ddd.DomainException to private protected (**Breaking Change**).
 - Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).
@@ -34,6 +35,7 @@ MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the
 
 - Changed Message to inherit from Entity<Guid>, meaning that two messages will be deemed equal if they are of the same type and have the same Id (**Breaking Change**).
 - Changed Entity<T> so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
+- Changed Value so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
 
 # End-User Impact
 
@@ -57,9 +59,9 @@ This change was applied to force consumption of the types variant Ddd.DomainExce
 
 Due to the addition of the ICloner to the constructor, it is now no longer possible to clone these classes. It is recommended that consumers use the GetAll method to implement serialization if required.
 
-- Message and Entity<T> Equality (Impact: Low)
+- Entity<T>, Message and Value Equality (Impact: Low)
 
-It was always intended that messages and entities with the same Id be deemed equal if their Id and type where equalfix.  It is not anticipated that this have an impact due to the intent however, this may differ depending on your use-case.
+It was always intended that messages and entities with the same Id be deemed equal if their Id and type where equal.  Values too should also only be deemed equal if the individual properties and its type are the same.  It is not anticipated that this have an impact due to the intent however, this may differ depending on your use-case.
 
 - Services.Handler & Services.HandlerExecutionFailureException (Impact: Low)
 

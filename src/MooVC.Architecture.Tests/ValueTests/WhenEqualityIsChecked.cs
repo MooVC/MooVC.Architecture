@@ -4,6 +4,18 @@
 
     public sealed class WhenEqualityIsChecked
     {
+        [Fact]
+        public void GivenTwoEmptyInstancesThenEqualityIsPositive()
+        {
+            var first = new EmptyValue();
+            var second = new EmptyValue();
+
+            Assert.NotSame(first, second);
+            Assert.Equal(first, second);
+            Assert.True(first == second);
+            Assert.True(first.Equals(second));
+        }
+
         [Theory]
         [InlineData(1, 2, 3, 4, 5, 6)]
         [InlineData(1, 2, 3, 1, 2, 4)]

@@ -27,6 +27,7 @@ namespace MooVC.Architecture.ValueTests
                 second: expectedSecond,
                 third: expectedThird,
                 fourth: expectedFourth);
+
             SerializableValue deserialized = value.Clone();
 
             Assert.Equal(value, deserialized);

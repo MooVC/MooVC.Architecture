@@ -4,11 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using MooVC.Linq;
 
     [Serializable]
     public abstract class Value
-        : ISerializable
+        : ISerializable,
+          IEquatable<Value>
     {
         private const int MaximumOffset = 32;
 
@@ -36,9 +36,22 @@
 
         public override bool Equals(object? other)
         {
-            return other is Value value
-                ? GetHashCode() == value.GetHashCode()
-                : false;
+            if (other is Value value)
+            {
+                return Equals(value);
+            }
+
+            return false;
+        }
+
+        public bool Equals(Value? other)
+        {
+            if (other is { } && other.GetType() == GetType())
+            {
+                return other.GetHashCode() == GetHashCode();
+            }
+
+            return false;
         }
 
         public override int GetHashCode()
@@ -54,17 +67,17 @@
         {
             IEnumerable<int> aggregation = AggregateHashCode(GetAtomicValues());
 
-            return aggregation.SafeAny()
+            return aggregation.Any()
                 ? CalculateHashCode(aggregation)
                 : 0;
         }
 
-        protected IEnumerable<int> AggregateHashCode(IEnumerable<object> values)
+        protected IEnumerable<int> AggregateHashCode(IEnumerable<object?> values)
         {
             return values.SelectMany(CalculateHashCode);
         }
 
-        protected abstract IEnumerable<object> GetAtomicValues();
+        protected abstract IEnumerable<object?> GetAtomicValues();
 
         private static int CalculateHashCode(IEnumerable<int> aggregation)
         {
@@ -115,7 +128,7 @@
             return !EqualOperator(left, right);
         }
 
-        private IEnumerable<int> CalculateHashCode(object value)
+        private IEnumerable<int> CalculateHashCode(object? value)
         {
             if (value is Array array)
             {

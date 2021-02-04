@@ -77,7 +77,9 @@ namespace MooVC.Architecture.Ddd
 
             typeName = info.TryGetInternalString(nameof(typeName));
 
-            return Type.GetType(typeName, true);
+            var type = Type.GetType(typeName, true);
+
+            return type!;
         }
 
         protected override IEnumerable<object> GetAtomicValues()

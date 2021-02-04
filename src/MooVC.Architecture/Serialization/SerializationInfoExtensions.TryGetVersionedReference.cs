@@ -7,10 +7,10 @@
     public static partial class SerializationInfoExtensions
     {
         public static VersionedReference TryGetVersionedReference(
-               this SerializationInfo info,
-               string name)
+            this SerializationInfo info,
+            string name)
         {
-            return info.TryGetValue(name, defaultValue: VersionedReference<AggregateRoot>.Empty);
+            return info.TryGetValue<VersionedReference>(name, defaultValue: VersionedReference<AggregateRoot>.Empty);
         }
 
         public static VersionedReference<TAggregate> TryGetVersionedReference<TAggregate>(

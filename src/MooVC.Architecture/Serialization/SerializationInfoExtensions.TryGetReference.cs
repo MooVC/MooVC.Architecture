@@ -10,7 +10,7 @@
                this SerializationInfo info,
                string name)
         {
-            return info.TryGetValue(name, defaultValue: Reference<AggregateRoot>.Empty);
+            return info.TryGetValue<Reference>(name, defaultValue: Reference<AggregateRoot>.Empty);
         }
 
         public static Reference<TAggregate> TryGetReference<TAggregate>(

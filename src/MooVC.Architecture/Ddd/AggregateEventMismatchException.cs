@@ -5,20 +5,14 @@
     using MooVC.Architecture.Serialization;
     using static System.String;
     using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Ensure;
 
     [Serializable]
     public sealed class AggregateEventMismatchException
         : ArgumentException
     {
         public AggregateEventMismatchException(VersionedReference aggregate, VersionedReference eventAggregate)
-            : base(Format(
-                AggregateEventMismatchExceptionMessage,
-                aggregate.Id,
-                aggregate.Type.Name,
-                aggregate.Version,
-                eventAggregate.Id,
-                eventAggregate.Type.Name,
-                eventAggregate.Version))
+            : base(FormatMessage(aggregate, eventAggregate))
         {
             Aggregate = aggregate;
             EventAggregate = eventAggregate;
@@ -41,6 +35,21 @@
 
             _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
             _ = info.TryAddVersionedReference(nameof(EventAggregate), EventAggregate);
+        }
+
+        private static string FormatMessage(VersionedReference aggregate, VersionedReference eventAggregate)
+        {
+            ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventMismatchExceptionAggregateRequired);
+            ArgumentNotNull(eventAggregate, nameof(eventAggregate), AggregateEventMismatchExceptionEventAggregateRequired);
+
+            return Format(
+                AggregateEventMismatchExceptionMessage,
+                aggregate.Id,
+                aggregate.Type.Name,
+                aggregate.Version,
+                eventAggregate.Id,
+                eventAggregate.Type.Name,
+                eventAggregate.Version);
         }
     }
 }

@@ -73,7 +73,11 @@ namespace MooVC.Architecture.Ddd
 
         protected virtual Type DeserializeType(SerializationInfo info, StreamingContext context)
         {
-            return info.GetValue<Type>(nameof(Type));
+            string typeName;
+
+            typeName = info.GetInternalString(nameof(typeName));
+
+            return Type.GetType(typeName, true);
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -89,7 +93,9 @@ namespace MooVC.Architecture.Ddd
 
         protected virtual void SerializeType(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(nameof(Type), Type);
+            string typeName = Type.AssemblyQualifiedName;
+
+            info.AddInternalValue(nameof(typeName), typeName);
         }
 
         private static bool EqualOperator(Reference? left, Reference? right)

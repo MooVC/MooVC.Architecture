@@ -40,6 +40,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed Message to inherit from Entity<Guid>, meaning that two messages will be deemed equal if they are of the same type and have the same Id (**Breaking Change**).
 - Changed Entity<T> so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
 - Changed Value so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
+- Changed the manner to which the type of a reference is serialized due to a serialization failure (**Breaking Change**).
 
 # End-User Impact
 

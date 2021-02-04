@@ -5,6 +5,7 @@
     using MooVC.Serialization;
     using static System.String;
     using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Ensure;
 
     [Serializable]
     public sealed class AggregateDoesNotExistException<TAggregate>
@@ -14,6 +15,8 @@
         public AggregateDoesNotExistException(Message context)
             : base(Format(AggregateDoesNotExistExceptionMessage, typeof(TAggregate).Name))
         {
+            ArgumentNotNull(context, nameof(context), AggregateDoesNotExistExceptionContextRequired);
+
             Context = context;
         }
 

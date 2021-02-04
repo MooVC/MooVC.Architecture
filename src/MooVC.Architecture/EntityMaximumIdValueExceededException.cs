@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture
 {
     using System;
+    using System.Runtime.Serialization;
     using static System.String;
     using static MooVC.Architecture.Resources;
 
@@ -21,6 +22,11 @@
                 EntityMaximumIdValueExceededExceptionMessage,
                 max,
                 type.Name))
+        {
+        }
+
+        private EntityMaximumIdValueExceededException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

@@ -120,7 +120,7 @@
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
-            Assert.Equal(aggregateId, exception.AggregateId);
+            Assert.Equal(reference, exception.Aggregate);
             Assert.Equal(context, exception.Context);
         }
 
@@ -229,7 +229,7 @@
             Guid[] actual = exception
                 .InnerExceptions
                 .Cast<AggregateNotFoundException<SerializableAggregateRoot>>()
-                .Select(aggregate => aggregate.AggregateId)
+                .Select(aggregate => aggregate.Aggregate.Id)
                 .OrderBy(item => item)
                 .ToArray();
 

@@ -1,6 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using System.Runtime.Serialization;
+    using MooVC.Architecture.Serialization;
     using static System.String;
     using static MooVC.Architecture.Ddd.Resources;
 
@@ -19,6 +21,19 @@
             Reference = reference;
         }
 
+        private AggregateReferenceMismatchException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Reference = info.TryGetReference(nameof(Reference));
+        }
+
         public Reference Reference { get; }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            _ = info.TryAddReference(nameof(Reference), Reference);
+        }
     }
 }

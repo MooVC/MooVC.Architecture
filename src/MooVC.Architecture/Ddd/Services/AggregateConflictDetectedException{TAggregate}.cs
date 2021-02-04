@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Runtime.Serialization;
 
     [Serializable]
     public sealed class AggregateConflictDetectedException<TAggregate>
@@ -24,6 +25,11 @@
 
         public AggregateConflictDetectedException(Guid aggregateId, SignedVersion persistedVersion, SignedVersion receivedVersion)
             : this(new Reference<TAggregate>(aggregateId), persistedVersion, receivedVersion)
+        {
+        }
+
+        private AggregateConflictDetectedException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 

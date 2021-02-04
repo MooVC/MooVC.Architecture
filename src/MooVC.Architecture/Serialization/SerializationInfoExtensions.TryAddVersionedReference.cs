@@ -7,11 +7,10 @@
 
     public static partial class SerializationInfoExtensions
     {
-        public static bool TryAddVersionedReference<TAggregate>(
+        public static bool TryAddVersionedReference(
             this SerializationInfo info,
             string name,
-            [NotNullWhen(true)] VersionedReference<TAggregate>? reference)
-            where TAggregate : AggregateRoot
+            [NotNullWhen(true)] VersionedReference? reference)
         {
             return info.TryAddValue(name, reference, predicate: _ => reference is { } && !reference.IsEmpty);
         }

@@ -187,15 +187,6 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The cloner that is to be used to guarantee object immutability must be provided..
-        /// </summary>
-        internal static string MemoryRepositoryClonerRequired {
-            get {
-                return ResourceManager.GetString("MemoryRepositoryClonerRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A failure has prevented the succesful publication of atomic unit {0:p}..
         /// </summary>
         internal static string PersistentBusPublishFailure {

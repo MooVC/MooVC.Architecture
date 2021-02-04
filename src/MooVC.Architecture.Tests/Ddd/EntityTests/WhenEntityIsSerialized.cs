@@ -2,6 +2,7 @@ namespace MooVC.Architecture.Ddd.EntityTests
 {
     using System;
     using MooVC.Architecture.Serialization;
+    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenEntityIsSerialized

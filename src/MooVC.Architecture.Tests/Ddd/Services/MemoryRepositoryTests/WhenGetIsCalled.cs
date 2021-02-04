@@ -9,12 +9,16 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
     public sealed class WhenGetIsCalled
         : MemoryRepositoryTests
     {
-        [Fact]
-        public void GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturned(bool useCloner)
         {
             var expected = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>(Cloner);
+
+            MemoryRepository<SerializableAggregateRoot> repository =
+                Create<SerializableAggregateRoot>(useCloner);
 
             repository.Save(expected);
             repository.Save(other);
@@ -27,11 +31,15 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             Assert.NotSame(expected, actual);
         }
 
-        [Fact]
-        public void GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturned(bool useCloner)
         {
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>(Cloner);
+
+            MemoryRepository<SerializableAggregateRoot> repository =
+                Create<SerializableAggregateRoot>(useCloner);
 
             repository.Save(other);
 
@@ -40,11 +48,15 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             Assert.Null(actual);
         }
 
-        [Fact]
-        public void GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturned(bool useCloner)
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
-            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>(Cloner);
+
+            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
+                Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             repository.Save(aggregate);
 
@@ -66,12 +78,16 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             Assert.Equal(aggregate.Version, actual.Version);
         }
 
-        [Fact]
-        public void GivenAVersionWhenTwoVersionedEntriesExistThenTheMatchingVersionedEntryIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAVersionWhenTwoVersionedEntriesExistThenTheMatchingVersionedEntryIsReturned(bool useCloner)
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             SignedVersion expectedFirst = aggregate.Version;
-            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>(Cloner);
+
+            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
+                Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             repository.Save(aggregate);
 
@@ -101,12 +117,16 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             Assert.Equal(expectedSecond, actualSecond.Version);
         }
 
-        [Fact]
-        public void GivenAVersionWhenNoExistingVersionedEntryMatchesThenNullIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAVersionWhenNoExistingVersionedEntryMatchesThenNullIsReturned(bool useCloner)
         {
             var aggregate = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>(Cloner);
+
+            MemoryRepository<SerializableAggregateRoot> repository =
+                Create<SerializableAggregateRoot>(useCloner);
 
             repository.Save(aggregate);
             repository.Save(other);

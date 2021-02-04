@@ -4,20 +4,18 @@ namespace MooVC.Architecture.Ddd.Services
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Serialization;
-    using static MooVC.Architecture.Ddd.Services.Resources;
-    using static MooVC.Ensure;
 
     public class MemoryRepository<TAggregate>
         : Repository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        private readonly ICloner cloner;
+        private readonly Func<TAggregate, TAggregate> cloner;
 
-        public MemoryRepository(ICloner cloner)
+        public MemoryRepository(ICloner? cloner = default)
         {
-            ArgumentNotNull(cloner, nameof(cloner), MemoryRepositoryClonerRequired);
-
-            this.cloner = cloner;
+            this.cloner = cloner is { }
+                ? cloner.Clone
+                : SerializableExtensions.Clone;
         }
 
         protected virtual IDictionary<Reference, TAggregate> Store { get; } = new Dictionary<Reference, TAggregate>();
@@ -35,7 +33,7 @@ namespace MooVC.Architecture.Ddd.Services
         {
             return Store
                 .Where(entry => entry.Key is Reference<TAggregate>)
-                .Select(entry => cloner.Clone(entry.Value))
+                .Select(entry => cloner(entry.Value))
                 .ToArray();
         }
 
@@ -43,7 +41,7 @@ namespace MooVC.Architecture.Ddd.Services
         {
             if (Store.TryGetValue(key, out TAggregate? aggregate))
             {
-                return cloner.Clone(aggregate);
+                return cloner(aggregate);
             }
 
             return default;
@@ -68,7 +66,7 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected override void UpdateStore(TAggregate aggregate)
         {
-            TAggregate copy = cloner.Clone(aggregate);
+            TAggregate copy = cloner(aggregate);
 
             copy.MarkChangesAsCommitted();
 

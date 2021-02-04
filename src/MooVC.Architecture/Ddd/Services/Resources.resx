@@ -159,9 +159,6 @@
   <data name="DomainEventsUnhandledEventArgsHandlerRequired" xml:space="preserve">
     <value>The handler for the unhandled events must be provided.</value>
   </data>
-  <data name="MemoryRepositoryClonerRequired" xml:space="preserve">
-    <value>The cloner that is to be used to guarantee object immutability must be provided.</value>
-  </data>
   <data name="PersistentBusPublishFailure" xml:space="preserve">
     <value>A failure has prevented the succesful publication of atomic unit {0:p}.</value>
   </data>

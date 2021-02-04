@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using MooVC.Architecture.Ddd.Services.DomainEventsEventArgsTests;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenDomainEventsPublishingEventArgsIsSerialized

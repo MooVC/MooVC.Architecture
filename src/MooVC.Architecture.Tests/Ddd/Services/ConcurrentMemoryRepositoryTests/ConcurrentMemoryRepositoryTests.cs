@@ -10,5 +10,15 @@
         }
 
         public ICloner Cloner { get; }
+
+        protected ConcurrentMemoryRepository<TAggregate> Create<TAggregate>(bool useCloner)
+            where TAggregate : AggregateRoot
+        {
+            ICloner? cloner = useCloner
+                ? Cloner
+                : default;
+
+            return new ConcurrentMemoryRepository<TAggregate>(cloner: cloner);
+        }
     }
 }

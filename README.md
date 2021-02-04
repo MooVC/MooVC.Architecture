@@ -12,7 +12,7 @@ While the original MooVC PHP based framework has long since been deprecated, man
 
 ## Overview
 
-MooVC.Architecture has been upgraded to target .Net 5.0, taking advantage of the many new language features which can be found [here](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five).
+MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, taking advantage of the many new language features which can be found [here](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five).
 
 ## Enhancements
 

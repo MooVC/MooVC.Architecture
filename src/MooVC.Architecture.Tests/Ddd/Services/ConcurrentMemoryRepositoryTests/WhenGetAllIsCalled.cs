@@ -11,23 +11,31 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
     public sealed class WhenGetAllIsCalled
         : ConcurrentMemoryRepositoryTests
     {
-        [Fact]
-        public void GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturned(bool useCloner)
         {
-            var repository = new ConcurrentMemoryRepository<SerializableAggregateRoot>(Cloner);
+            ConcurrentMemoryRepository<SerializableAggregateRoot> repository =
+                Create<SerializableAggregateRoot>(useCloner);
+
             IEnumerable<SerializableAggregateRoot> results = repository.GetAll();
 
             Assert.Empty(results);
         }
 
-        [Fact]
-        public void GivenAPopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAPopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned(bool useCloner)
         {
             const int ExpectedTotal = 2;
 
             var first = new SerializableEventCentricAggregateRoot();
             var second = new SerializableEventCentricAggregateRoot();
-            var repository = new ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot>(Cloner);
+
+            ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot> repository =
+                Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             repository.Save(first);
             repository.Save(second);

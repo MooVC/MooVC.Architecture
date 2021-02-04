@@ -118,9 +118,8 @@
 
         private static bool EqualOperator(Value? left, Value? right)
         {
-            return left is null ^ right is null
-                ? false
-                : left is null || left.Equals(right);
+            return !(left is null ^ right is null)
+                && (left is null || left.Equals(right));
         }
 
         private static bool NotEqualOperator(Value? left, Value? right)

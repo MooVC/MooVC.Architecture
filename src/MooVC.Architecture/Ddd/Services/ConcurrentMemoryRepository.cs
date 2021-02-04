@@ -9,8 +9,8 @@ namespace MooVC.Architecture.Ddd.Services
         : MemoryRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public ConcurrentMemoryRepository(ICloner cloner)
-            : base(cloner)
+        public ConcurrentMemoryRepository(ICloner? cloner = default)
+            : base(cloner: cloner)
         {
             StoreLock = new ReaderWriterLockSlim();
         }

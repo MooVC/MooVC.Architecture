@@ -155,6 +155,9 @@
   <data name="AggregateReferenceMismatchExceptionMessage" xml:space="preserve">
     <value>Reference for aggregate {0:p} of type {1} cannot be converted type {2}.</value>
   </data>
+  <data name="AggregateReferenceMismatchExceptionReferenceRequired" xml:space="preserve">
+    <value>The reference that serves as the subject of the conversion must be provided.</value>
+  </data>
   <data name="AggregateRootExtensionsCoordinateAggregateRequired" xml:space="preserve">
     <value>The aggregate that serves as the context for coordination must be provided.</value>
   </data>

@@ -16,11 +16,6 @@
             TimeStamp = info.GetDateTime(nameof(TimeStamp));
         }
 
-        private protected DomainException(Message context, AggregateRoot aggregate, string message)
-            : this(context, new VersionedReference(aggregate), message)
-        {
-        }
-
         private protected DomainException(Message context, VersionedReference aggregate, string message)
             : base(message)
         {

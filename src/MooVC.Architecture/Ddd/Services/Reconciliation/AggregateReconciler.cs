@@ -93,8 +93,8 @@
                     OnAggregateConflictDetected(
                         reference,
                         events,
-                        conflict.ReceivedVersion,
-                        conflict.PersistedVersion);
+                        conflict.Received,
+                        conflict.Persisted);
                 }
             }
         }

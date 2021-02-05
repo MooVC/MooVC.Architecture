@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AggregateConflictDetectedExceptionAggregateRequired" xml:space="preserve">
+    <value>The aggregate in which they conflict was detected must be provided.</value>
+  </data>
   <data name="AggregateConflictDetectedExceptionExistingEntryMessage" xml:space="preserve">
     <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed.</value>
   </data>
   <data name="AggregateConflictDetectedExceptionNoExistingEntryMessage" xml:space="preserve">
     <value>A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but the initial version was expected.</value>
+  </data>
+  <data name="AggregateConflictDetectedExceptionPersistedRequired" xml:space="preserve">
+    <value>The version of the persisted aggregate in which the conflict detection must be provided.</value>
+  </data>
+  <data name="AggregateConflictDetectedExceptionReceivedRequired" xml:space="preserve">
+    <value>The version of the aggregate received that resulted in the conflict detection must be provided.</value>
   </data>
   <data name="AggregateEventArgsAggregateRequired" xml:space="preserve">
     <value>The aggregate to which the event relates must be provided.</value>

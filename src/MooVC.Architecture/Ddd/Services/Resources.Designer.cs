@@ -61,6 +61,15 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The aggregate in which they conflict was detected must be provided..
+        /// </summary>
+        internal static string AggregateConflictDetectedExceptionAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedExceptionAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A conflict has been detected while attempting to commit changes to aggregate of type {1} with an ID of {0:p}.  Version {2} was received, but version {3} has been previously committed..
         /// </summary>
         internal static string AggregateConflictDetectedExceptionExistingEntryMessage {
@@ -75,6 +84,24 @@ namespace MooVC.Architecture.Ddd.Services {
         internal static string AggregateConflictDetectedExceptionNoExistingEntryMessage {
             get {
                 return ResourceManager.GetString("AggregateConflictDetectedExceptionNoExistingEntryMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version of the persisted aggregate in which the conflict detection must be provided..
+        /// </summary>
+        internal static string AggregateConflictDetectedExceptionPersistedRequired {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedExceptionPersistedRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version of the aggregate received that resulted in the conflict detection must be provided..
+        /// </summary>
+        internal static string AggregateConflictDetectedExceptionReceivedRequired {
+            get {
+                return ResourceManager.GetString("AggregateConflictDetectedExceptionReceivedRequired", resourceCulture);
             }
         }
         

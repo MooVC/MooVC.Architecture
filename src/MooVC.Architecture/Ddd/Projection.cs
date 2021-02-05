@@ -12,7 +12,7 @@
         where TAggregate : AggregateRoot
     {
         protected Projection(TAggregate aggregate)
-            : this(aggregate.ToVersionedReference())
+            : this(CreateReference(aggregate))
         {
         }
 
@@ -33,6 +33,11 @@
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
+        }
+
+        private static VersionedReference<TAggregate> CreateReference(TAggregate aggregate)
+        {
+            return aggregate?.ToVersionedReference() ?? VersionedReference<TAggregate>.Empty;
         }
     }
 }

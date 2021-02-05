@@ -43,7 +43,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
                     () => repository.Save(pending));
 
             Assert.Equal(saved.Id, exception.Aggregate.Id);
-            Assert.Equal(saved.Version, exception.PersistedVersion);
+            Assert.Equal(saved.Version, exception.Persisted);
         }
 
         [Theory]

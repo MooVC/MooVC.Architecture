@@ -8,23 +8,23 @@
         : AggregateConflictDetectedException
         where TAggregate : AggregateRoot
     {
-        public AggregateConflictDetectedException(Reference<TAggregate> aggregate, SignedVersion receivedVersion)
-            : base(aggregate, receivedVersion)
+        public AggregateConflictDetectedException(Reference<TAggregate> aggregate, SignedVersion received)
+            : base(aggregate, received)
         {
         }
 
-        public AggregateConflictDetectedException(Guid aggregateId, SignedVersion receivedVersion)
-            : this(new Reference<TAggregate>(aggregateId), receivedVersion)
+        public AggregateConflictDetectedException(Guid aggregateId, SignedVersion received)
+            : this(new Reference<TAggregate>(aggregateId), received)
         {
         }
 
-        public AggregateConflictDetectedException(Reference aggregate, SignedVersion persistedVersion, SignedVersion receivedVersion)
-            : base(aggregate, persistedVersion, receivedVersion)
+        public AggregateConflictDetectedException(Reference<TAggregate> aggregate, SignedVersion persisted, SignedVersion received)
+            : base(aggregate, persisted, received)
         {
         }
 
-        public AggregateConflictDetectedException(Guid aggregateId, SignedVersion persistedVersion, SignedVersion receivedVersion)
-            : this(new Reference<TAggregate>(aggregateId), persistedVersion, receivedVersion)
+        public AggregateConflictDetectedException(Guid aggregateId, SignedVersion persisted, SignedVersion received)
+            : this(new Reference<TAggregate>(aggregateId), persisted, received)
         {
         }
 

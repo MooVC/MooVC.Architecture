@@ -70,6 +70,15 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The type of the entity must be provided..
+        /// </summary>
+        internal static string EntityMaximumIdValueExceededExceptionTypeRequired {
+            get {
+                return ResourceManager.GetString("EntityMaximumIdValueExceededExceptionTypeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The context of the message must be provided..
         /// </summary>
         internal static string MessageContextRequired {

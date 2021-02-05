@@ -5,7 +5,9 @@
     using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using static System.String;
+    using static MooVC.Architecture.Ddd.Ensure;
     using static MooVC.Architecture.Ddd.Services.Resources;
+    using static MooVC.Ensure;
 
     [Serializable]
     public sealed class AggregateVersionNotFoundException<TAggregate>
@@ -13,11 +15,7 @@
         where TAggregate : AggregateRoot
     {
         public AggregateVersionNotFoundException(Message context, VersionedReference<TAggregate> aggregate)
-               : base(Format(
-                   AggregateVersionNotFoundExceptionMessage,
-                   aggregate.Id,
-                   aggregate.Type.Name,
-                   aggregate.Version))
+            : base(FormatMessage(context, aggregate))
         {
             Aggregate = aggregate;
             Context = context;
@@ -45,6 +43,18 @@
 
             _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
             info.AddValue(nameof(Context), Context);
+        }
+
+        private static string FormatMessage(Message context, VersionedReference<TAggregate> aggregate)
+        {
+            ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateVersionNotFoundExceptionAggregateRequired);
+            ArgumentNotNull(context, nameof(context), AggregateVersionNotFoundExceptionContextRequired);
+
+            return Format(
+                AggregateVersionNotFoundExceptionMessage,
+                aggregate.Id,
+                aggregate.Type.Name,
+                aggregate.Version);
         }
     }
 }

@@ -115,11 +115,47 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A reference to the aggregate that was sought must be provided..
+        /// </summary>
+        internal static string AggregateNotFoundExceptionAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateNotFoundExceptionAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The context in which the aggregate was requested must be provided..
+        /// </summary>
+        internal static string AggregateNotFoundExceptionContextRequired {
+            get {
+                return ResourceManager.GetString("AggregateNotFoundExceptionContextRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is currently no aggregate of type {1} with an ID of {0:p}..
         /// </summary>
         internal static string AggregateNotFoundExceptionMessage {
             get {
                 return ResourceManager.GetString("AggregateNotFoundExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The reference to the aggregate requested must be provided..
+        /// </summary>
+        internal static string AggregateVersionNotFoundExceptionAggregateRequired {
+            get {
+                return ResourceManager.GetString("AggregateVersionNotFoundExceptionAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The context in which the aggregate version was requested must be provided..
+        /// </summary>
+        internal static string AggregateVersionNotFoundExceptionContextRequired {
+            get {
+                return ResourceManager.GetString("AggregateVersionNotFoundExceptionContextRequired", resourceCulture);
             }
         }
         

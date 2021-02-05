@@ -135,8 +135,20 @@
   <data name="AggregateEventArgsAggregateRequired" xml:space="preserve">
     <value>The aggregate to which the event relates must be provided.</value>
   </data>
+  <data name="AggregateNotFoundExceptionAggregateRequired" xml:space="preserve">
+    <value>A reference to the aggregate that was sought must be provided.</value>
+  </data>
+  <data name="AggregateNotFoundExceptionContextRequired" xml:space="preserve">
+    <value>The context in which the aggregate was requested must be provided.</value>
+  </data>
   <data name="AggregateNotFoundExceptionMessage" xml:space="preserve">
     <value>There is currently no aggregate of type {1} with an ID of {0:p}.</value>
+  </data>
+  <data name="AggregateVersionNotFoundExceptionAggregateRequired" xml:space="preserve">
+    <value>The reference to the aggregate requested must be provided.</value>
+  </data>
+  <data name="AggregateVersionNotFoundExceptionContextRequired" xml:space="preserve">
+    <value>The context in which the aggregate version was requested must be provided.</value>
   </data>
   <data name="AggregateVersionNotFoundExceptionMessage" xml:space="preserve">
     <value>Version {2} of aggregate type {1} with an ID of {0:p} could not be found.</value>

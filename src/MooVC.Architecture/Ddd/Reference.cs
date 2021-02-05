@@ -109,7 +109,7 @@ namespace MooVC.Architecture.Ddd
 
             if (left is null)
             {
-                return true;
+                return Equals(left, right);
             }
 
             return left.Id == right!.Id && left.Type == right.Type;

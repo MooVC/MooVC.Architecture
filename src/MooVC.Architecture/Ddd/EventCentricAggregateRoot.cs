@@ -93,16 +93,16 @@
         protected void ApplyChange<TEvent>(Func<TEvent> change, Action<TEvent>? handler = default, bool isNew = true)
             where TEvent : DomainEvent
         {
-            bool triggersVersionIncrement = isNew && !HasUncommittedChanges;
+            TEvent? @event = default;
 
-            if (triggersVersionIncrement)
+            if (isNew && !HasUncommittedChanges)
             {
                 base.MarkChangesAsUncommitted();
             }
 
             try
             {
-                TEvent @event = change();
+                @event = change();
 
                 handler ??= ResolveHandler<TEvent>(@event);
 
@@ -118,11 +118,14 @@
             }
             catch
             {
-                if (triggersVersionIncrement)
+                if (isNew && @event is { })
                 {
-                    base.RollbackUncommittedChanges();
+                    _ = changes.Remove(@event);
 
-                    changes.Clear();
+                    if (!changes.Any())
+                    {
+                        base.RollbackUncommittedChanges();
+                    }
                 }
 
                 throw;

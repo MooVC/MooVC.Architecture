@@ -30,9 +30,19 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
 
         public Guid Value { get; private set; }
 
+        public void Fail(FailRequest request)
+        {
+            ApplyChange(() => new SerializableFailedDomainEvent(request.Context, this), Handle);
+        }
+
         public void Set(SetRequest request)
         {
             ApplyChange(() => new SerializableSetDomainEvent(request.Context, this, request.Value), Handle);
+        }
+
+        private void Handle(SerializableFailedDomainEvent @event)
+        {
+            throw new InvalidOperationException();
         }
 
         private void Handle(SerializableCreatedDomainEvent @event)

@@ -41,6 +41,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed Entity<T> so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
 - Changed Value so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
 - Changed the manner to which the type of a reference is serialized due to a serialization failure (**Breaking Change**).
+- Changed the Ddd.EventCentricAggregateRoot.ApplyChange behavior to account for inconsistent behavior on failure.
 
 # End-User Impact
 

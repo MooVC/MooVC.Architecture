@@ -4,7 +4,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
     using System.Runtime.Serialization;
 
     [Serializable]
-    internal sealed class SerializableEventCentricAggregateRoot
+    public sealed class SerializableEventCentricAggregateRoot
         : EventCentricAggregateRoot
     {
         public SerializableEventCentricAggregateRoot()
@@ -38,6 +38,16 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         public void Set(SetRequest request)
         {
             ApplyChange(() => new SerializableSetDomainEvent(request.Context, this, request.Value), Handle);
+        }
+
+        public void TriggerMarkChangesAsUncommitted()
+        {
+            MarkChangesAsUncommitted();
+        }
+
+        public void TriggerRollbackUncommittedChanges()
+        {
+            RollbackUncommittedChanges();
         }
 
         private void Handle(SerializableFailedDomainEvent @event)

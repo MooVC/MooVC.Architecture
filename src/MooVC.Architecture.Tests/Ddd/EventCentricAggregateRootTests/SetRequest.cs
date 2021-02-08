@@ -2,7 +2,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
 {
     using System;
 
-    internal sealed class SetRequest
+    public sealed class SetRequest
         : Request
     {
         public SetRequest(Message context, Guid value)

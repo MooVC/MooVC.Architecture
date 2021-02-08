@@ -4,7 +4,7 @@
     using System.Runtime.Serialization;
 
     [Serializable]
-    internal sealed class SerializableFailedDomainEvent
+    public sealed class SerializableFailedDomainEvent
         : DomainEvent<SerializableEventCentricAggregateRoot>
     {
         public SerializableFailedDomainEvent(Message context, SerializableEventCentricAggregateRoot aggregate)

@@ -44,16 +44,6 @@ namespace MooVC.Architecture.Ddd.Services
             }
         }
 
-        protected virtual void PerformRead(Action read)
-        {
-            _ = PerformRead(() =>
-              {
-                  read();
-
-                  return 0;
-              });
-        }
-
         protected virtual T PerformRead<T>(Func<T> read)
         {
             try

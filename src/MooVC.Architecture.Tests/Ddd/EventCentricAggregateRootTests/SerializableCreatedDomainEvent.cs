@@ -4,7 +4,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
     using System.Runtime.Serialization;
 
     [Serializable]
-    internal sealed class SerializableCreatedDomainEvent
+    public sealed class SerializableCreatedDomainEvent
         : DomainEvent<SerializableEventCentricAggregateRoot>
     {
         public SerializableCreatedDomainEvent(Message context, SerializableEventCentricAggregateRoot aggregate)

@@ -1,6 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
 {
-    internal sealed class FailRequest
+    public sealed class FailRequest
         : Request
     {
         public FailRequest(Message context)

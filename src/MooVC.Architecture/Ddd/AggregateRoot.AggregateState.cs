@@ -31,8 +31,6 @@
 
             public bool HasUncommittedChanges => !(Current.IsEmpty || Current == Persisted);
 
-            public bool IsPersisted => !Persisted.IsEmpty;
-
             public SignedVersion Persisted { get; }
 
             public AggregateState Commit()

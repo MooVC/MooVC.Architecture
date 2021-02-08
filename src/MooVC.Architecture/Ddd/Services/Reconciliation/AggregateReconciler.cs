@@ -16,7 +16,7 @@
 
         public abstract void Reconcile(params EventCentricAggregateRoot[] aggregates);
 
-        public abstract void Reconcile(IEnumerable<DomainEvent> events);
+        public abstract void Reconcile(params DomainEvent[] events);
 
         protected virtual bool EventsAreNonConflicting(VersionedReference aggregate, IEnumerable<DomainEvent> events, out bool isNew)
         {
@@ -93,8 +93,8 @@
                     OnAggregateConflictDetected(
                         reference,
                         events,
-                        conflict.ReceivedVersion,
-                        conflict.PersistedVersion);
+                        conflict.Received,
+                        conflict.Persisted);
                 }
             }
         }

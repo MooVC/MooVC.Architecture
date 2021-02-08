@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Persistence;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class DefaultEventReconciler<TSequencedEvents>
         : EventReconciler
@@ -93,7 +93,7 @@
         {
             OnEventsReconciling(events);
 
-            reconciler.Reconcile(events);
+            reconciler.Reconcile(events.ToArray());
 
             OnEventsReconciled(events);
         }

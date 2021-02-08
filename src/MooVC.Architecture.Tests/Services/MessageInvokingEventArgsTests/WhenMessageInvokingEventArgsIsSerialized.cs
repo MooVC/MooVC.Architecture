@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Services.MessageInvokingEventArgsTests
 {
     using MooVC.Architecture.MessageTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

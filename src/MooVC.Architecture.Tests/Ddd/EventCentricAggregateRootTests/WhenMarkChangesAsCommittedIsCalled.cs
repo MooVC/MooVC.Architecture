@@ -22,7 +22,7 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
                 var changes = e as ChangesMarkedAsCommittedEventArgs;
 
                 Assert.NotNull(changes);
-                Assert.True(changes.Changes.Count() == 1);
+                Assert.True(changes!.Changes.Count() == 1);
                 _ = Assert.IsType<SerializableSetDomainEvent>(changes.Changes.First());
 
                 wasInvoked = true;

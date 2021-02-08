@@ -13,17 +13,18 @@
         {
             var aggregate = new SerializableAggregateRoot();
             var context = new SerializableMessage();
-            SerializableDomainEvent[] events = new[]
+
+            SerializableDomainEvent<SerializableAggregateRoot>[] events = new[]
             {
-                new SerializableDomainEvent(context, aggregate.ToVersionedReference()),
+                new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
             };
 
-            var unit = new AtomicUnit(events);
-            AtomicUnit deserialized = unit.Clone();
+            var original = new AtomicUnit(events);
+            AtomicUnit deserialized = original.Clone();
 
-            Assert.Equal(unit.Id, deserialized.Id);
-            Assert.Equal(unit.Events, deserialized.Events);
-            Assert.NotSame(unit, deserialized);
+            Assert.Equal(original.Id, deserialized.Id);
+            Assert.Equal(original.Events, deserialized.Events);
+            Assert.NotSame(original, deserialized);
         }
     }
 }

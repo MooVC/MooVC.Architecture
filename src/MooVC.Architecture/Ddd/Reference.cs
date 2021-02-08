@@ -3,7 +3,6 @@ namespace MooVC.Architecture.Ddd
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
 
     [Serializable]
@@ -54,7 +53,6 @@ namespace MooVC.Architecture.Ddd
             return base.GetHashCode();
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -65,9 +63,7 @@ namespace MooVC.Architecture.Ddd
 
         public virtual bool IsMatch(AggregateRoot aggregate)
         {
-            return Type == aggregate?.GetType()
-                ? Id == aggregate.Id
-                : false;
+            return Type == aggregate?.GetType() && Id == aggregate.Id;
         }
 
         protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)
@@ -77,7 +73,13 @@ namespace MooVC.Architecture.Ddd
 
         protected virtual Type DeserializeType(SerializationInfo info, StreamingContext context)
         {
-            return info.GetValue<Type>(nameof(Type));
+            string? typeName;
+
+            typeName = info.TryGetInternalString(nameof(typeName));
+
+            var type = Type.GetType(typeName, true);
+
+            return type!;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -93,7 +95,9 @@ namespace MooVC.Architecture.Ddd
 
         protected virtual void SerializeType(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(nameof(Type), Type);
+            string? typeName = Type.AssemblyQualifiedName;
+
+            _ = info.TryAddInternalValue(nameof(typeName), typeName);
         }
 
         private static bool EqualOperator(Reference? left, Reference? right)
@@ -105,7 +109,7 @@ namespace MooVC.Architecture.Ddd
 
             if (left is null)
             {
-                return true;
+                return Equals(left, right);
             }
 
             return left.Id == right!.Id && left.Type == right.Type;

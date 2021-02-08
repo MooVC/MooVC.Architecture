@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class DomainEventsUnhandledEventArgs
         : DomainEventsEventArgs

@@ -2,10 +2,9 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Architecture.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     [Serializable]
     public abstract class Projection<TAggregate>
@@ -13,7 +12,7 @@
         where TAggregate : AggregateRoot
     {
         protected Projection(TAggregate aggregate)
-            : this(aggregate.ToVersionedReference())
+            : this(CreateReference(aggregate))
         {
         }
 
@@ -31,10 +30,14 @@
 
         public VersionedReference<TAggregate> Aggregate { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
+        }
+
+        private static VersionedReference<TAggregate> CreateReference(TAggregate aggregate)
+        {
+            return aggregate?.ToVersionedReference() ?? VersionedReference<TAggregate>.Empty;
         }
     }
 }

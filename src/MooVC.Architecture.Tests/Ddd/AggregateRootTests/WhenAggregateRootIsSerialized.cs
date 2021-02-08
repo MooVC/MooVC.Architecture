@@ -1,6 +1,6 @@
 namespace MooVC.Architecture.Ddd.AggregateRootTests
 {
-    using System;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 
@@ -9,15 +9,15 @@ namespace MooVC.Architecture.Ddd.AggregateRootTests
         [Fact]
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
-            var aggregate = new SerializableAggregateRoot();
-            SerializableAggregateRoot clone = aggregate.Clone();
+            var original = new SerializableAggregateRoot();
+            SerializableAggregateRoot deserialized = original.Clone();
 
-            Assert.Equal(aggregate, clone);
-            Assert.NotSame(aggregate, clone);
+            Assert.Equal(original, deserialized);
+            Assert.NotSame(original, deserialized);
 
-            Assert.Equal(aggregate.Id, clone.Id);
-            Assert.Equal(aggregate.Version, clone.Version);
-            Assert.Equal(aggregate.GetHashCode(), clone.GetHashCode());
+            Assert.Equal(original.Id, deserialized.Id);
+            Assert.Equal(original.Version, deserialized.Version);
+            Assert.Equal(original.GetHashCode(), deserialized.GetHashCode());
         }
     }
 }

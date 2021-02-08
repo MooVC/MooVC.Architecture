@@ -19,7 +19,7 @@ namespace MooVC.Architecture.RequestTests
         public void GivenNoContextThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new TestableRequest(null));
+                () => new TestableRequest(default!));
         }
     }
 }

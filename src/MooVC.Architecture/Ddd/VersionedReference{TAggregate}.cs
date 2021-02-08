@@ -2,8 +2,8 @@ namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Runtime.Serialization;
+    using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public sealed class VersionedReference<TAggregate>
@@ -22,7 +22,7 @@ namespace MooVC.Architecture.Ddd
                 id,
                 nameof(id),
                 value => value != Guid.Empty,
-                GenericIdInvalid);
+                VersionedReferenceIdRequired);
 
             reference = new Lazy<Reference<TAggregate>>(() => this.ToReference());
         }

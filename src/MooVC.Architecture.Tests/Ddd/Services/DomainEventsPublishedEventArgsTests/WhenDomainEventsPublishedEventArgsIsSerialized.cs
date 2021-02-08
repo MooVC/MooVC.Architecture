@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using MooVC.Architecture.Ddd.Services.DomainEventsEventArgsTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 
@@ -11,7 +12,7 @@
         [Fact]
         public void GivenNullEventsThenAllPropertiesAreSerialized()
         {
-            var @event = new DomainEventsPublishedEventArgs(default);
+            var @event = new DomainEventsPublishedEventArgs(default!);
             DomainEventsPublishedEventArgs deserialized = @event.Clone();
 
             Assert.NotSame(@event, deserialized);

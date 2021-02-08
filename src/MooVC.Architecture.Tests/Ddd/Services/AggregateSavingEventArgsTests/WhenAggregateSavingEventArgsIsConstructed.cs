@@ -19,10 +19,10 @@
         [Fact]
         public void GivenANullAggregateThenAnArgumentNullExceptionIsThrown()
         {
-            SerializableAggregateRoot aggregate = default;
+            SerializableAggregateRoot? aggregate = default;
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new AggregateSavingEventArgs<SerializableAggregateRoot>(aggregate));
+                () => new AggregateSavingEventArgs<SerializableAggregateRoot>(aggregate!));
 
             Assert.Equal(nameof(aggregate), exception.ParamName);
         }

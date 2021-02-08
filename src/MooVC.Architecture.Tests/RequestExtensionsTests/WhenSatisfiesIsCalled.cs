@@ -71,7 +71,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
             {
                 wasInvoked = true;
 
-                return default;
+                return default!;
             }
 
             request.Satisfies(Factory);
@@ -90,7 +90,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
             {
                 wasInvoked = true;
 
-                return default;
+                return default!;
             }
 
             request.Satisfies(
@@ -112,7 +112,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
             var context = new SerializableMessage();
             var request = new TestableRequest(context);
             var aggregate = new SerializableAggregateRoot();
-            var expected = new Mock<DomainException>(context, aggregate, string.Empty);
+            var expected = new Mock<DomainException<SerializableAggregateRoot>>(context, aggregate, string.Empty);
 
             bool wasInvoked = false;
 

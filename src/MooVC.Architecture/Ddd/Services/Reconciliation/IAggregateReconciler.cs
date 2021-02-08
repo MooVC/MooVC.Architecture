@@ -1,7 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
-    using System.Collections.Generic;
-
     public interface IAggregateReconciler
     {
         event AggregateConflictDetectedEventHandler AggregateConflictDetected;
@@ -12,6 +10,6 @@
 
         void Reconcile(params EventCentricAggregateRoot[] aggregates);
 
-        void Reconcile(IEnumerable<DomainEvent> events);
+        void Reconcile(params DomainEvent[] events);
     }
 }

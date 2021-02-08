@@ -4,10 +4,11 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
     using System.Runtime.Serialization;
 
     [Serializable]
-    internal sealed class SerializableDomainEvent
-        : DomainEvent
+    internal sealed class SerializableDomainEvent<TAggregateRoot>
+        : DomainEvent<TAggregateRoot>
+        where TAggregateRoot : AggregateRoot
     {
-        public SerializableDomainEvent(Message context, VersionedReference aggregate)
+        public SerializableDomainEvent(Message context, TAggregateRoot aggregate)
             : base(context, aggregate)
         {
         }

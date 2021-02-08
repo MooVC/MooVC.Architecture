@@ -4,10 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     [Serializable]
     public abstract partial class EventCentricAggregateRoot
@@ -27,7 +26,6 @@
             changes = info.TryGetInternalValue(nameof(changes), defaultValue: new List<DomainEvent>());
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -58,7 +56,7 @@
                     throw new AggregateEventSequenceUnorderedException(new VersionedReference(this), history);
                 }
 
-                VersionedReference mismatch = sequence
+                VersionedReference? mismatch = sequence
                     .Where(@event => @event.Aggregate.Id != Id)
                     .Select(@event => @event.Aggregate)
                     .FirstOrDefault();
@@ -94,16 +92,16 @@
         protected void ApplyChange<TEvent>(Func<TEvent> change, Action<TEvent>? handler = default, bool isNew = true)
             where TEvent : DomainEvent
         {
-            bool triggersVersionIncrement = isNew && !HasUncommittedChanges;
+            TEvent? @event = default;
 
-            if (triggersVersionIncrement)
+            if (isNew && !HasUncommittedChanges)
             {
                 base.MarkChangesAsUncommitted();
             }
 
             try
             {
-                TEvent @event = change();
+                @event = change();
 
                 handler ??= ResolveHandler<TEvent>(@event);
 
@@ -119,11 +117,14 @@
             }
             catch
             {
-                if (triggersVersionIncrement)
+                if (isNew && @event is { })
                 {
-                    base.RollbackUncommittedChanges();
+                    _ = changes.Remove(@event);
 
-                    changes.Clear();
+                    if (!changes.Any())
+                    {
+                        base.RollbackUncommittedChanges();
+                    }
                 }
 
                 throw;

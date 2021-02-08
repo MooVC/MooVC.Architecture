@@ -23,7 +23,7 @@
             var aggregate = new SerializableAggregateRoot();
             var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
-            Assert.False(reference.IsMatch(null));
+            Assert.False(reference.IsMatch(default!));
         }
 
         [Fact]

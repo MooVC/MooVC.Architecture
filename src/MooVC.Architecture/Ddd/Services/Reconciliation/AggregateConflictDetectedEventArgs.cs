@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Architecture.Ddd;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public sealed class AggregateConflictDetectedEventArgs
@@ -35,7 +35,7 @@
 
         private AggregateConflictDetectedEventArgs(SerializationInfo info, StreamingContext context)
         {
-            Aggregate = info.TryGetValue<Reference>(nameof(Aggregate));
+            Aggregate = info.TryGetReference(nameof(Aggregate));
             Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
             Next = info.GetValue<SignedVersion>(nameof(Next));
             Previous = info.GetValue<SignedVersion>(nameof(Previous));
@@ -49,7 +49,6 @@
 
         public SignedVersion Previous { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             _ = info.TryAddValue(nameof(Aggregate), Aggregate);

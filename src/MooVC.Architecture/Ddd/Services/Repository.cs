@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using static Ensure;
+    using static MooVC.Architecture.Ddd.Services.Ensure;
 
     public abstract class Repository<TAggregate>
         : IRepository<TAggregate>
@@ -34,7 +34,7 @@
                 return false;
             }
 
-            AggregateDoesNotConflict<TAggregate>(aggregate, currentVersion: currentVersion?.Version);
+            AggregateDoesNotConflict(aggregate, currentVersion: currentVersion?.Version);
 
             return true;
         }

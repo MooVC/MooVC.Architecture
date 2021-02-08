@@ -22,10 +22,10 @@
         {
             const int ExpectedCount = 2;
 
-            var version = new SerializableAggregateRoot().ToVersionedReference();
+            var aggregate = new SerializableAggregateRoot();
             var context = new SerializableMessage();
-            var first = new SerializableDomainEvent(context, version);
-            var second = new SerializableDomainEvent(context, version);
+            var first = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+            var second = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
 
             var unit = new AtomicUnit(first, second);
 
@@ -37,11 +37,11 @@
         [Fact]
         public void GiveEventsFromASingleAggregateVersionButTwoDifferentContextsThenAnArgumentExceptionIsThrown()
         {
-            var version = new SerializableAggregateRoot().ToVersionedReference();
+            var aggregate = new SerializableAggregateRoot();
             var firstContext = new SerializableMessage();
             var secondContext = new SerializableMessage();
-            var firstEvent = new SerializableDomainEvent(firstContext, version);
-            var secondEvent = new SerializableDomainEvent(secondContext, version);
+            var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(firstContext, aggregate);
+            var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(secondContext, aggregate);
 
             _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(firstEvent, secondEvent));
         }
@@ -49,11 +49,11 @@
         [Fact]
         public void GiveEventsFromTwoAggregatesThenAnArgumentExceptionIsThrown()
         {
-            var firstVersion = new SerializableAggregateRoot().ToVersionedReference();
-            var secondVersion = new SerializableAggregateRoot().ToVersionedReference();
+            var firstAggregate = new SerializableAggregateRoot();
+            var secondAggregate = new SerializableAggregateRoot();
             var context = new SerializableMessage();
-            var firstEvent = new SerializableDomainEvent(context, firstVersion);
-            var secondEvent = new SerializableDomainEvent(context, secondVersion);
+            var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, firstAggregate);
+            var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, secondAggregate);
 
             _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(firstEvent, secondEvent));
         }
@@ -62,15 +62,13 @@
         public void GiveEventsFromTwoDifferentVersionsOfTheSameAggregateThenAnArgumentExceptionIsThrown()
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
-            var firstVersion = aggregate.ToVersionedReference();
             var context = new SerializableMessage();
+            var firstEvent = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(context, aggregate);
 
             aggregate.MarkChangesAsCommitted();
             aggregate.Set(new SetRequest(context, Guid.NewGuid()));
 
-            var secondVersion = aggregate.ToVersionedReference();
-            var firstEvent = new SerializableDomainEvent(context, firstVersion);
-            var secondEvent = new SerializableDomainEvent(context, secondVersion);
+            var secondEvent = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(context, aggregate);
 
             _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(firstEvent, secondEvent));
         }

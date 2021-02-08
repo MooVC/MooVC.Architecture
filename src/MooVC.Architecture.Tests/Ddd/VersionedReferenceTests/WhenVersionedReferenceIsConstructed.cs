@@ -39,7 +39,7 @@
         [Fact]
         public void GivenAnIdAndANullVersionThenAnArgumentNullExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentNullException>(() => new VersionedReference<SerializableAggregateRoot>(Guid.NewGuid(), null));
+            _ = Assert.Throws<ArgumentNullException>(() => new VersionedReference<SerializableAggregateRoot>(Guid.NewGuid(), default!));
         }
     }
 }

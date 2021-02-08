@@ -2,23 +2,15 @@ namespace MooVC.Architecture.Ddd.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using System.Threading;
+    using MooVC.Serialization;
 
-    [Serializable]
     public class ConcurrentMemoryRepository<TAggregate>
         : MemoryRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public ConcurrentMemoryRepository()
-            : base()
-        {
-            StoreLock = new ReaderWriterLockSlim();
-        }
-
-        protected ConcurrentMemoryRepository(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        public ConcurrentMemoryRepository(ICloner? cloner = default)
+            : base(cloner: cloner)
         {
             StoreLock = new ReaderWriterLockSlim();
         }
@@ -28,12 +20,6 @@ namespace MooVC.Architecture.Ddd.Services
         public override IEnumerable<TAggregate> GetAll()
         {
             return PerformRead(() => base.GetAll());
-        }
-
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            PerformRead(() => base.GetObjectData(info, context));
         }
 
         protected override TAggregate? Get(Reference key)
@@ -56,16 +42,6 @@ namespace MooVC.Architecture.Ddd.Services
             {
                 StoreLock.ExitUpgradeableReadLock();
             }
-        }
-
-        protected virtual void PerformRead(Action read)
-        {
-            _ = PerformRead(() =>
-              {
-                  read();
-
-                  return 0;
-              });
         }
 
         protected virtual T PerformRead<T>(Func<T> read)

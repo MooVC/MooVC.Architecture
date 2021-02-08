@@ -24,7 +24,7 @@
         {
             var aggregate = new SerializableAggregateRoot();
 
-            _ = Assert.Throws<ArgumentNullException>(() => aggregate.Save(null));
+            _ = Assert.Throws<ArgumentNullException>(() => aggregate.Save(default!));
         }
 
         [Fact]
@@ -45,16 +45,16 @@
             var aggregate = new SerializableAggregateRoot();
 
             aggregate.MarkChangesAsCommitted();
-            aggregate.Save(null);
+            aggregate.Save(default!);
         }
 
         [Fact]
         public void GivenANullAggregateThenSaveIsNotCalled()
         {
             var repository = new Mock<IRepository<SerializableAggregateRoot>>();
-            SerializableAggregateRoot aggregate = default;
+            SerializableAggregateRoot? aggregate = default;
 
-            aggregate.Save(repository.Object);
+            aggregate!.Save(repository.Object);
 
             repository.Verify(repo => repo.Save(It.IsAny<SerializableAggregateRoot>()), Times.Never);
         }

@@ -33,7 +33,7 @@
 
             _ = proxy
                 .Setup(proxy => proxy.Get(It.IsAny<Reference>()))
-                .Returns(default(EventCentricAggregateRoot));
+                .Returns(default(EventCentricAggregateRoot)!);
 
             _ = proxy
                 .Setup(proxy => proxy.GetAll())
@@ -48,9 +48,11 @@
                 .Returns(new SequencedEvents[0]);
 
             var instance = new DefaultSnapshotProvider<SequencedEvents>(store.Object, () => type => proxy.Object);
-            ISnapshot snapshot = instance.Generate();
+            ISnapshot? snapshot = instance.Generate();
 
-            EventCentricAggregateRoot actual = Assert.Single(snapshot.Aggregates);
+            Assert.NotNull(snapshot);
+
+            EventCentricAggregateRoot actual = Assert.Single(snapshot!.Aggregates);
             Assert.Equal(expected, actual);
 
             proxy.Verify(proxy => proxy.Create(It.IsAny<Reference>()), times: Times.Once);
@@ -83,7 +85,7 @@
 
             _ = proxy
                 .Setup(proxy => proxy.Get(It.IsAny<Reference>()))
-                .Returns(default(EventCentricAggregateRoot));
+                .Returns(default(EventCentricAggregateRoot)!);
 
             _ = proxy
                 .Setup(proxy => proxy.GetAll())
@@ -101,7 +103,7 @@
                 () => type => proxy.Object,
                 numberToRead: 1);
 
-            ISnapshot snapshot = instance.Generate(target: 2);
+            _ = instance.Generate(target: 2);
 
             Assert.Equal(first, firstSnapshot);
             Assert.Equal(second, secondSnapshot);

@@ -4,10 +4,9 @@ namespace MooVC.Architecture.Ddd
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public class VersionedReference
@@ -51,8 +50,9 @@ namespace MooVC.Architecture.Ddd
         public override bool Equals(object? other)
         {
             return other is VersionedReference value
-                ? Id == value.Id && Type == value.Type && Version == value.Version
-                : false;
+                && Id == value.Id
+                && Type == value.Type
+                && Version == value.Version;
         }
 
         public override int GetHashCode()
@@ -60,7 +60,6 @@ namespace MooVC.Architecture.Ddd
             return base.GetHashCode();
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -83,9 +82,7 @@ namespace MooVC.Architecture.Ddd
 
         private static bool EqualOperator(VersionedReference? left, VersionedReference? right)
         {
-            return left is null ^ right is null
-                ? false
-                : left is null || left.Equals(right);
+            return !(left is null ^ right is null) && (left is null || left.Equals(right));
         }
 
         private static bool NotEqualOperator(VersionedReference? left, VersionedReference? right)

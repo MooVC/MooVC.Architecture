@@ -2,13 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Collections.Generic;
-    using MooVC.Linq;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public sealed class EventReconciliationEventArgs
@@ -20,7 +19,7 @@
             ArgumentIsAcceptable(
                 events,
                 nameof(events),
-                _ => events.SafeAny(),
+                _ => events.Any(),
                 EventReconciliationEventArgsEventsRequired);
 
             Events = events.Snapshot();
@@ -33,7 +32,6 @@
 
         public IEnumerable<DomainEvent> Events { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             _ = info.TryAddEnumerable(nameof(Events), Events);

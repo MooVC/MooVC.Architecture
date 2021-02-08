@@ -2,8 +2,8 @@ namespace MooVC.Architecture.Ddd.Services
 {
     using System.Collections.Generic;
     using System.Linq;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class DomainEventPropagator<TAggregate>
         where TAggregate : EventCentricAggregateRoot

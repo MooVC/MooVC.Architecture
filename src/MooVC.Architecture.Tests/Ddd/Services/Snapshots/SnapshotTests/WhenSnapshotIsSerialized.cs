@@ -2,6 +2,7 @@
 {
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

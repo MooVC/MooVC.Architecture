@@ -1,6 +1,6 @@
 namespace MooVC.Architecture.Ddd
 {
-    using static Ensure;
+    using static MooVC.Architecture.Ddd.Ensure;
 
     public static partial class VersionedReferenceExtensions
     {

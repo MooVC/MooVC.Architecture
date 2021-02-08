@@ -3,7 +3,6 @@ namespace MooVC.Architecture.Ddd.Services
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
 
@@ -24,7 +23,6 @@ namespace MooVC.Architecture.Ddd.Services
 
         public IEnumerable<DomainEvent> Events { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             _ = info.TryAddEnumerable(nameof(Events), Events);

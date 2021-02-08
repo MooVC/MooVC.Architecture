@@ -3,12 +3,11 @@ namespace MooVC.Architecture.Cqrs.Services
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Linq;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Cqrs.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class PaginatedResult<T>
@@ -36,7 +35,6 @@ namespace MooVC.Architecture.Cqrs.Services
 
         public ulong TotalResults { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -48,7 +46,7 @@ namespace MooVC.Architecture.Cqrs.Services
 
         internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)
         {
-            ArgumentNotNull(paging, nameof(paging), PaginatedResultPagingRequired);
+            ArgumentNotNull(paging, nameof(paging), PaginatedResultCalculateTotalPagesPagingRequired);
 
             decimal requiredPages = (decimal)totalResults / paging.Size;
             ulong totalPages = (ulong)Math.Ceiling(requiredPages);

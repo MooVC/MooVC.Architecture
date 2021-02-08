@@ -7,15 +7,15 @@
 
     public sealed class WhenAndNotIsCalled
     {
-        public static IEnumerable<object[]> GivenANullSpecificationThenAnArgumentNullExceptionIsThrownData()
+        public static IEnumerable<object?[]> GivenANullSpecificationThenAnArgumentNullExceptionIsThrownData()
         {
             var specification = new Mock<Specification<int>>();
 
             return new[]
             {
-                new object[] { null, null },
-                new object[] { null, specification.Object },
-                new object[] { specification.Object, null },
+                new object?[] { default, default },
+                new object?[] { default, specification.Object },
+                new object?[] { specification.Object, default },
             };
         }
 
@@ -38,9 +38,9 @@
 
         [Theory]
         [MemberData(nameof(GivenANullSpecificationThenAnArgumentNullExceptionIsThrownData))]
-        public void GivenANullSpecificationThenAnArgumentNullExceptionIsThrown(Specification<int> first, Specification<int> second)
+        public void GivenANullSpecificationThenAnArgumentNullExceptionIsThrown(Specification<int>? first, Specification<int>? second)
         {
-            _ = Assert.Throws<ArgumentNullException>(() => first.AndNot(second));
+            _ = Assert.Throws<ArgumentNullException>(() => first!.AndNot(second!));
         }
 
         [Theory]

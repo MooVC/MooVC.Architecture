@@ -18,7 +18,7 @@ namespace MooVC.Architecture.MessageTests
         public void GivenAnInstanceBasedOnAnInstanceThenTheCorrelationPropagatedAndTheCausationIsSetToTheIdOfTheOriginal()
         {
             var expected = new SerializableMessage();
-            var message = new SerializableMessage(expected);
+            var message = new SerializableMessage(context: expected);
 
             Assert.Equal(expected.Id, message.CausationId);
             Assert.Equal(expected.CorrelationId, message.CorrelationId);

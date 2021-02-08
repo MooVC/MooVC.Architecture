@@ -8,36 +8,34 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
     public sealed class WhenDomainEventIsConstructed
     {
         [Fact]
-        public void GivenAContextAndAnAggregateReferenceThenTheContextAndAggregateReferenceArePropagated()
+        public void GivenAContextAndAnAggregateThenTheContextAndAggregateReferenceArePropagated()
         {
             var aggregate = new SerializableAggregateRoot();
-            var expectedAggregate = new VersionedReference<SerializableAggregateRoot>(aggregate);
-            var expectedContext = new SerializableMessage();
+            var context = new SerializableMessage();
 
-            var @event = new SerializableDomainEvent(expectedContext, expectedAggregate);
+            var @event = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
 
-            Assert.Equal(expectedAggregate, @event.Aggregate);
-            Assert.Equal(expectedContext.Id, @event.CausationId);
-            Assert.Equal(expectedContext.CorrelationId, @event.CorrelationId);
+            Assert.True(@event.Aggregate.IsMatch(aggregate));
+            Assert.Equal(context.Id, @event.CausationId);
+            Assert.Equal(context.CorrelationId, @event.CorrelationId);
         }
 
         [Fact]
-        public void GivenAContextAndNoAggregateReferenceThenAnArgumentNullExceptionIsThrown()
+        public void GivenAContextAndNoAggregateThenAnArgumentNullExceptionIsThrown()
         {
             var context = new SerializableMessage();
 
             _ = Assert.Throws<ArgumentNullException>(
-                () => new SerializableDomainEvent(context, null));
+                () => new SerializableDomainEvent<SerializableAggregateRoot>(context, default!));
         }
 
         [Fact]
-        public void GivenNoContextAndAnAggregateReferenceThenAnArgumentNullExceptionIsThrown()
+        public void GivenNoContextAndAnAggregateThenAnArgumentNullExceptionIsThrown()
         {
             var aggregate = new SerializableAggregateRoot();
-            var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
             _ = Assert.Throws<ArgumentNullException>(
-                () => new SerializableDomainEvent(null, reference));
+                () => new SerializableDomainEvent<SerializableAggregateRoot>(default!, aggregate));
         }
     }
 }

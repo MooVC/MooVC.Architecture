@@ -5,7 +5,7 @@
     public sealed class WhenCoordinateIsCalled
         : WhenCoordinateIsCalledBase
     {
-        protected override void Coordinate(Action operation, TimeSpan? timeout = null)
+        protected override void Coordinate(Action operation, TimeSpan? timeout = default)
         {
             GetType().Coordinate(operation, timeout: timeout);
         }

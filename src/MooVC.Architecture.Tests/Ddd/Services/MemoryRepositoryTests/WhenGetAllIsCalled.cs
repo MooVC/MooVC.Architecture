@@ -9,24 +9,31 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
     using Xunit;
 
     public sealed class WhenGetAllIsCalled
+        : MemoryRepositoryTests
     {
-        [Fact]
-        public void GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturned(bool useCloner)
         {
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+            MemoryRepository<SerializableAggregateRoot> repository = Create<SerializableAggregateRoot>(useCloner);
             IEnumerable<SerializableAggregateRoot> results = repository.GetAll();
 
             Assert.Empty(results);
         }
 
-        [Fact]
-        public void GivenApopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenApopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned(bool useCloner)
         {
             const int ExpectedTotal = 2;
 
             var first = new SerializableEventCentricAggregateRoot();
             var second = new SerializableEventCentricAggregateRoot();
-            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>();
+
+            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
+                Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             repository.Save(first);
             repository.Save(second);

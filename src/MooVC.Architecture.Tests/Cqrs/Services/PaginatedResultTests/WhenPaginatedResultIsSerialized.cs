@@ -2,6 +2,7 @@
 {
     using MooVC.Architecture.Cqrs.Services.PaginatedQueryTests;
     using MooVC.Architecture.MessageTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Linq;
     using MooVC.Serialization;
     using Xunit;

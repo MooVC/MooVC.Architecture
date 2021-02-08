@@ -2,7 +2,6 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
 
     [Serializable]
     public sealed class EventSequence
@@ -25,7 +24,6 @@
 
         public DateTime TimeStamp { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(Sequence), Sequence);

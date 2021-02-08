@@ -77,7 +77,7 @@
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
-            Assert.Equal(aggregateId, exception.AggregateId);
+            Assert.Equal(aggregateId, exception.Aggregate.Id);
             Assert.Equal(context, exception.Context);
         }
 
@@ -112,7 +112,7 @@
 
             repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
-            Assert.Equal(reference.Id, exception.AggregateId);
+            Assert.Equal(reference, exception.Aggregate);
             Assert.Equal(context, exception.Context);
         }
 

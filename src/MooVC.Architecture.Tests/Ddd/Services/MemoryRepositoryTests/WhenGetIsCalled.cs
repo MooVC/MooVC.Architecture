@@ -7,42 +7,56 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
     using Xunit;
 
     public sealed class WhenGetIsCalled
+        : MemoryRepositoryTests
     {
-        [Fact]
-        public void GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturned(bool useCloner)
         {
             var expected = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+
+            MemoryRepository<SerializableAggregateRoot> repository =
+                Create<SerializableAggregateRoot>(useCloner);
 
             repository.Save(expected);
             repository.Save(other);
 
-            SerializableAggregateRoot actual = repository.Get(expected.Id);
+            SerializableAggregateRoot? actual = repository.Get(expected.Id);
 
-            Assert.Equal(expected.Id, actual.Id);
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Id, actual!.Id);
             Assert.Equal(expected.Version, actual.Version);
             Assert.NotSame(expected, actual);
         }
 
-        [Fact]
-        public void GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturned(bool useCloner)
         {
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+
+            MemoryRepository<SerializableAggregateRoot> repository =
+                Create<SerializableAggregateRoot>(useCloner);
 
             repository.Save(other);
 
-            SerializableAggregateRoot actual = repository.Get(Guid.NewGuid());
+            SerializableAggregateRoot? actual = repository.Get(Guid.NewGuid());
 
             Assert.Null(actual);
         }
 
-        [Fact]
-        public void GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturned(bool useCloner)
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
-            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>();
+
+            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
+                Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             repository.Save(aggregate);
 
@@ -56,19 +70,24 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
 
             repository.Save(other);
 
-            SerializableEventCentricAggregateRoot actual = repository.Get(aggregate.Id);
+            SerializableEventCentricAggregateRoot? actual = repository.Get(aggregate.Id);
 
+            Assert.NotNull(actual);
             Assert.NotSame(aggregate, actual);
-            Assert.Equal(aggregate.Id, actual.Id);
+            Assert.Equal(aggregate.Id, actual!.Id);
             Assert.Equal(aggregate.Version, actual.Version);
         }
 
-        [Fact]
-        public void GivenAVersionWhenTwoVersionedEntriesExistThenTheMatchingVersionedEntryIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAVersionWhenTwoVersionedEntriesExistThenTheMatchingVersionedEntryIsReturned(bool useCloner)
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             SignedVersion expectedFirst = aggregate.Version;
-            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>();
+
+            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
+                Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             repository.Save(aggregate);
 
@@ -84,29 +103,35 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
 
             repository.Save(other);
 
-            SerializableEventCentricAggregateRoot actualFirst = repository.Get(aggregate.Id, version: expectedFirst);
-            SerializableEventCentricAggregateRoot actualSecond = repository.Get(aggregate.Id, version: expectedSecond);
+            SerializableEventCentricAggregateRoot? actualFirst = repository.Get(aggregate.Id, version: expectedFirst);
+            SerializableEventCentricAggregateRoot? actualSecond = repository.Get(aggregate.Id, version: expectedSecond);
 
+            Assert.NotNull(actualFirst);
             Assert.NotSame(expectedFirst, actualFirst);
-            Assert.Equal(aggregate.Id, actualFirst.Id);
+            Assert.Equal(aggregate.Id, actualFirst!.Id);
             Assert.Equal(expectedFirst, actualFirst.Version);
 
+            Assert.NotNull(actualSecond);
             Assert.NotSame(expectedSecond, actualSecond);
-            Assert.Equal(aggregate.Id, actualSecond.Id);
+            Assert.Equal(aggregate.Id, actualSecond!.Id);
             Assert.Equal(expectedSecond, actualSecond.Version);
         }
 
-        [Fact]
-        public void GivenAVersionWhenNoExistingVersionedEntryMatchesThenNullIsReturned()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GivenAVersionWhenNoExistingVersionedEntryMatchesThenNullIsReturned(bool useCloner)
         {
             var aggregate = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
-            var repository = new MemoryRepository<SerializableAggregateRoot>();
+
+            MemoryRepository<SerializableAggregateRoot> repository =
+                Create<SerializableAggregateRoot>(useCloner);
 
             repository.Save(aggregate);
             repository.Save(other);
 
-            SerializableAggregateRoot actual = repository.Get(aggregate.Id, version: other.Version);
+            SerializableAggregateRoot? actual = repository.Get(aggregate.Id, version: other.Version);
 
             Assert.Null(actual);
         }

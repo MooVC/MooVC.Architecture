@@ -100,7 +100,7 @@
                 .Returns(new SequencedEvents[0]);
 
             _ = Reconciler
-               .Setup(reconciler => reconciler.Reconcile(It.IsAny<IEnumerable<DomainEvent>>()))
+               .Setup(reconciler => reconciler.Reconcile(It.IsAny<DomainEvent[]>()))
                .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
 
             instance.EventsReconciling += (sender, e) => eventsReconciling++;
@@ -147,7 +147,7 @@
                 .Returns(new SequencedEvents[0]);
 
             _ = Reconciler
-               .Setup(reconciler => reconciler.Reconcile(It.IsAny<IEnumerable<DomainEvent>>()))
+               .Setup(reconciler => reconciler.Reconcile(It.IsAny<DomainEvent[]>()))
                .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
 
             instance.EventsReconciling += (sender, e) => eventsReconciling++;
@@ -192,7 +192,7 @@
                 .Returns(new SequencedEvents[0]);
 
             _ = Reconciler
-               .Setup(reconciler => reconciler.Reconcile(It.IsAny<IEnumerable<DomainEvent>>()))
+               .Setup(reconciler => reconciler.Reconcile(It.IsAny<DomainEvent[]>()))
                .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
 
             instance.EventsReconciling += (sender, e) => eventsReconciling++;
@@ -237,7 +237,7 @@
                 .Returns(new SequencedEvents[0]);
 
             _ = Reconciler
-               .Setup(reconciler => reconciler.Reconcile(It.IsAny<IEnumerable<DomainEvent>>()))
+               .Setup(reconciler => reconciler.Reconcile(It.IsAny<DomainEvent[]>()))
                .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
 
             instance.EventsReconciling += (sender, e) => eventsReconciling++;
@@ -255,10 +255,10 @@
 
         private DomainEvent[] CreateEvents()
         {
-            var version = new SerializableAggregateRoot().ToVersionedReference();
+            var aggregate = new SerializableAggregateRoot();
             var context = new SerializableMessage();
-            var firstEvent = new SerializableDomainEvent(context, version);
-            var secondEvent = new SerializableDomainEvent(context, version);
+            var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+            var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
 
             return new[] { firstEvent, secondEvent };
         }

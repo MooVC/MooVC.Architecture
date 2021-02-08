@@ -1,8 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using MooVC.Architecture.Ddd.Services;
+    using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public static partial class AggregateRootExtensions
     {
@@ -11,7 +11,7 @@
         {
             if (aggregate is { } && aggregate.HasUncommittedChanges)
             {
-                ArgumentNotNull(destination, nameof(destination), AggregateRootExtensionsDestinationRequired);
+                ArgumentNotNull(destination, nameof(destination), AggregateRootExtensionsSaveDestinationRequired);
 
                 destination.Save(aggregate);
             }

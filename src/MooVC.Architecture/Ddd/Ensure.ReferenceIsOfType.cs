@@ -1,12 +1,15 @@
 namespace MooVC.Architecture.Ddd
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using static System.String;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     public static partial class Ensure
     {
-        public static void ReferenceIsOfType<TAggregate>(Reference reference, string argumentName)
+        public static void ReferenceIsOfType<TAggregate>(
+            [NotNull] Reference? reference,
+            string argumentName)
             where TAggregate : AggregateRoot
         {
             ReferenceIsOfType<TAggregate>(
@@ -15,7 +18,10 @@ namespace MooVC.Architecture.Ddd
                 Format(EnsureReferenceIsOfTypeMessage, reference?.Type.Name, typeof(TAggregate).Name));
         }
 
-        public static void ReferenceIsOfType<TAggregate>(Reference reference, string argumentName, string message)
+        public static void ReferenceIsOfType<TAggregate>(
+            [NotNull] Reference? reference,
+            string argumentName,
+            string message)
             where TAggregate : AggregateRoot
         {
             if (reference is null || reference.Type != typeof(TAggregate))

@@ -2,7 +2,7 @@
 {
     using System.Linq;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
-    using static MooVC.Architecture.Resources;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
 
     public sealed class DomainEventPropagator

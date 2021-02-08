@@ -1,8 +1,11 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using System.Runtime.Serialization;
+    using MooVC.Serialization;
     using static System.String;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Ensure;
 
     [Serializable]
     public sealed class AggregateDoesNotExistException<TAggregate>
@@ -12,9 +15,24 @@
         public AggregateDoesNotExistException(Message context)
             : base(Format(AggregateDoesNotExistExceptionMessage, typeof(TAggregate).Name))
         {
+            ArgumentNotNull(context, nameof(context), AggregateDoesNotExistExceptionContextRequired);
+
             Context = context;
         }
 
+        private AggregateDoesNotExistException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Context = info.GetValue<Message>(nameof(Context));
+        }
+
         public Message Context { get; }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue(nameof(Context), Context);
+        }
     }
 }

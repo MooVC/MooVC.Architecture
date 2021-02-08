@@ -5,9 +5,8 @@
     using System.Linq;
     using MooVC.Architecture.Ddd;
     using MooVC.Collections.Generic;
-    using MooVC.Linq;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class DefaultAggregateReconciler
         : AggregateReconciler
@@ -21,7 +20,7 @@
             bool ignorePreviousVersions = true,
             TimeSpan? timeout = default)
         {
-            ArgumentNotNull(factory, nameof(factory), AggregateReconcilerFactoryRequired);
+            ArgumentNotNull(factory, nameof(factory), DefaultAggregateReconcilerFactoryRequired);
 
             this.factory = factory;
             this.ignorePreviousVersions = ignorePreviousVersions;
@@ -30,7 +29,7 @@
 
         public override void Reconcile(params EventCentricAggregateRoot[] aggregates)
         {
-            if (aggregates.SafeAny())
+            if (aggregates.Any())
             {
                 foreach (IGrouping<Type, EventCentricAggregateRoot> aggregateTypes in aggregates.GroupBy(aggregate => aggregate.GetType()))
                 {
@@ -48,9 +47,9 @@
             }
         }
 
-        public override void Reconcile(IEnumerable<DomainEvent> events)
+        public override void Reconcile(params DomainEvent[] events)
         {
-            if (events.SafeAny())
+            if (events.Any())
             {
                 foreach (IGrouping<Type, DomainEvent> aggregateTypes in events.GroupBy(@event => @event.Aggregate.Type))
                 {

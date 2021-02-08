@@ -24,7 +24,7 @@
             var aggregateId = Guid.NewGuid();
             var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
-            Assert.False(condition: reference.IsMatch(null));
+            Assert.False(condition: reference.IsMatch(default!));
         }
 
         [Fact]

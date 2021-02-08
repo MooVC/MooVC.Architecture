@@ -6,7 +6,6 @@
     using System.Runtime.Serialization;
     using MooVC.Architecture.Ddd;
     using MooVC.Collections.Generic;
-    using MooVC.Linq;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;

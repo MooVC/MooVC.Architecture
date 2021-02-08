@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Resources;

@@ -13,7 +13,7 @@
         {
             Aggregate = info.GetValue<VersionedReference>(nameof(Aggregate));
             Context = info.GetValue<Message>(nameof(Context));
-            TimeStamp = info.GetDateTime(nameof(TimeStamp));
+            TimeStamp = info.GetValue<DateTimeOffset>(nameof(TimeStamp));
         }
 
         private protected DomainException(Message context, VersionedReference aggregate, string message)
@@ -27,7 +27,7 @@
 
         public Message Context { get; }
 
-        public DateTime TimeStamp { get; } = DateTime.UtcNow;
+        public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

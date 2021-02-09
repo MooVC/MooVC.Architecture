@@ -17,12 +17,13 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 ## Enhancements
 
 - Added async variants of the various Coordinate extensions.
+- Changed to target version 3.x of MooVC (**Breaking Change**).
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
 - Changed Value so that it now implements IEquatable<Value>.
-- Changed MooVC.Architecture to target version 3.x of MooVC (**Breaking Change**).
 - Changed constructors for Ddd.DomainException to private protected (**Breaking Change**).
 - Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).
+- Changed data type for TimeStamp properties of Message, Ddd.DomainException and Ddd.Services.Reconciliation.IEventSequence to DateTimeOffset (**Breaking Change**).
 - Changed all exceptions to properly implement ISerializable.
 - Changed Ddd.Services.AggregateNotFoundException property AggregateId of type Guid to Aggregate of type Reference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.AggregateVersionNotFoundException property Aggregate of type VersionedReference to type VersionedReference<TAggregate> (**Breaking Change**).

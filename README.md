@@ -16,6 +16,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 
 ## Enhancements
 
+- Added async variants of the various Coordinate extensions.
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
 - Changed Value so that it now implements IEquatable<Value>.

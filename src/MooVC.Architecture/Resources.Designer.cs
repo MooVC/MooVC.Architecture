@@ -117,9 +117,9 @@ namespace MooVC.Architecture {
         /// <summary>
         ///   Looks up a localized string similar to The type that serves as the context for coordination must be provided..
         /// </summary>
-        internal static string TypeExtensionsCoordinateTypeRequired {
+        internal static string TypeExtensionsGenerateContextTypeRequired {
             get {
-                return ResourceManager.GetString("TypeExtensionsCoordinateTypeRequired", resourceCulture);
+                return ResourceManager.GetString("TypeExtensionsGenerateContextTypeRequired", resourceCulture);
             }
         }
     }

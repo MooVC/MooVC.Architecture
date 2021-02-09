@@ -16,7 +16,7 @@
                 .Coordinate(operation, timeout: timeout);
         }
 
-        public static async Task Coordinate(this object target, Func<Task> operation, TimeSpan? timeout = default)
+        public static async Task CoordinateAsync(this object target, Func<Task> operation, TimeSpan? timeout = default)
         {
             ArgumentNotNull(target, nameof(target), ObjectExtensionsCoordinateObjectRequired);
 

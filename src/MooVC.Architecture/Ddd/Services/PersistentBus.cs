@@ -23,30 +23,35 @@
 
         public event DiagnosticsEmittedEventHandler? DiagnosticsEmitted;
 
-        protected override void PerformPublish(DomainEvent[] events)
+        // TODO: Change from async VOID
+
+        protected override async void PerformPublish(DomainEvent[] events)
         {
             var unit = new AtomicUnit(events);
 
-            void Persist()
+            async Task PersistAsync()
             {
-                PerformPersist(unit);
+                await PerformPersistAsync(unit)
+                    .ConfigureAwait(false);
             }
 
             try
             {
-                Persist();
+                await PersistAsync();
             }
             catch
             {
-                OnUnhandled(() => Task.Run(Persist), events);
+                OnUnhandled(() => PersistAsync(), events);
             }
         }
 
-        private void PerformPersist(AtomicUnit unit)
+        private async Task PerformPersistAsync(AtomicUnit unit)
         {
             try
             {
-                _ = store.Create(unit);
+                _ = await store
+                    .CreateAsync(unit)
+                    .ConfigureAwait(false);
             }
             catch (Exception ex)
             {

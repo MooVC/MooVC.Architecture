@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Persistence;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
@@ -31,40 +32,41 @@
             this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
         }
 
-        protected override IEnumerable<DomainEvent> GetEvents(
+        protected override async Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
             ulong? previous,
-            out ulong? lastSequence,
             ulong? target = default)
         {
+            ulong? lastSequence = previous;
+            IEnumerable<DomainEvent> events = Enumerable.Empty<DomainEvent>();
+
             if (ShouldReadEvents(previous, target, out ushort numberToRead, out ulong start))
             {
-                IEnumerable<TSequencedEvents> sequences = eventStore.Read(
-                    start,
-                    numberToRead: numberToRead);
+                IEnumerable<TSequencedEvents> sequences = await eventStore
+                    .ReadAsync(start, numberToRead: numberToRead)
+                    .ConfigureAwait(false);
 
                 lastSequence = sequences
                     .Select(sequence => sequence.Sequence)
                     .DefaultIfEmpty()
                     .Max();
 
-                return sequences
+                events = sequences
                     .SelectMany(sequence => sequence.Events)
                     .ToArray();
             }
 
-            lastSequence = previous;
-
-            return Enumerable.Empty<DomainEvent>();
+            return (lastSequence, events);
         }
 
-        protected override void Reconcile(IEnumerable<DomainEvent> events)
+        protected override async Task ReconcileAsync(IEnumerable<DomainEvent> events)
         {
             foreach (IGrouping<Type, DomainEvent> type in events
                 .GroupBy(@event => @event.Aggregate.Type))
             {
                 foreach (IGrouping<Guid, DomainEvent> aggregate in type.GroupBy(type => type.Aggregate.Id))
                 {
-                    PerformReconciliation(aggregate);
+                    await PerformReconciliationAsync(aggregate)
+                        .ConfigureAwait(false);
                 }
             }
         }
@@ -89,11 +91,13 @@
             return true;
         }
 
-        private void PerformReconciliation(IEnumerable<DomainEvent> events)
+        private async Task PerformReconciliationAsync(IEnumerable<DomainEvent> events)
         {
             OnEventsReconciling(events);
 
-            reconciler.Reconcile(events.ToArray());
+            await reconciler
+                .ReconcileAsync(events.ToArray())
+                .ConfigureAwait(false);
 
             OnEventsReconciled(events);
         }

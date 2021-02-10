@@ -2,21 +2,22 @@
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services.Snapshots;
     using MooVC.Linq;
     using Moq;
     using Xunit;
 
-    public sealed class WhenReconcileIsCalled
+    public sealed class WhenReconcileAsyncIsCalled
         : DefaultReconciliationOrchestratorTests
     {
         [Fact]
-        public void GivenAPreviousSequenceThenSnapshotRecoveryIsNotTriggered()
+        public async Task GivenAPreviousSequenceThenSnapshotRecoveryIsNotTriggeredAsync()
         {
             _ = SequenceStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new[] { new EventSequence(1) });
+                .Setup(store => store.GetAsync(It.IsAny<Paging>()))
+                .ReturnsAsync(new[] { new EventSequence(1) });
 
             bool wasSnapshotRestorationCommencingInvoked = false;
             bool wasSnapshotRestorationCompletedInvoked = false;
@@ -34,47 +35,47 @@
             instance.SnapshotRestorationCommencing += (_, __) => wasSnapshotRestorationCommencingInvoked = true;
             instance.SnapshotRestorationCompleted += (_, __) => wasSnapshotRestorationCompletedInvoked = true;
 
-            instance.Reconcile();
+            await instance.ReconcileAsync();
 
             Assert.False(wasSnapshotRestorationCommencingInvoked);
             Assert.False(wasSnapshotRestorationCompletedInvoked);
             Assert.False(wasTriggered);
 
-            SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
+            SequenceStore.Verify(store => store.GetAsync(It.IsAny<Paging>()), times: Times.Once);
         }
 
         [Fact]
-        public void GivenAPreviousSequenceThenEventReconciliationIsTriggeredFromThatSequence()
+        public async Task GivenAPreviousSequenceThenEventReconciliationIsTriggeredFromThatSequenceAsync()
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             var sequence = new EventSequence(10);
 
             _ = SequenceStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new[] { sequence });
+                .Setup(store => store.GetAsync(It.IsAny<Paging>()))
+                .ReturnsAsync(new[] { sequence });
 
             DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler();
 
-            instance.Reconcile();
+            await instance.ReconcileAsync();
 
             EventReconciler.Verify(
-                reconciler => reconciler.Reconcile(It.IsAny<ulong?>(), It.IsAny<ulong?>()),
+                reconciler => reconciler.ReconcileAsync(It.IsAny<ulong?>(), It.IsAny<ulong?>()),
                 times: Times.Once);
 
             EventReconciler.Verify(
-                reconciler => reconciler.Reconcile(
+                reconciler => reconciler.ReconcileAsync(
                     It.Is<ulong?>(previous => previous == sequence.Sequence), It.IsAny<ulong?>()),
                 times: Times.Once);
 
-            SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
+            SequenceStore.Verify(store => store.GetAsync(It.IsAny<Paging>()), times: Times.Once);
         }
 
         [Fact]
-        public void GivenNoPreviousSequenceThenSnapshotRecoveryIsTriggered()
+        public async Task GivenNoPreviousSequenceThenSnapshotRecoveryIsTriggeredAsync()
         {
             _ = SequenceStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new EventSequence[0]);
+                .Setup(store => store.GetAsync(It.IsAny<Paging>()))
+                .ReturnsAsync(Enumerable.Empty<EventSequence>());
 
             bool wasTriggered = false;
 
@@ -87,23 +88,23 @@
 
             DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
-            instance.Reconcile();
+            await instance.ReconcileAsync();
 
             Assert.True(wasTriggered);
 
-            SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
+            SequenceStore.Verify(store => store.GetAsync(It.IsAny<Paging>()), times: Times.Once);
         }
 
         [Fact]
-        public void GivenNoPreviousSequenceAndASnapshotThenTheSnapshotIsRestored()
+        public async Task GivenNoPreviousSequenceAndASnapshotThenTheSnapshotIsRestoredAsync()
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             var sequence = new EventSequence(10);
             var snapshot = new Snapshot(new[] { aggregate }, sequence);
 
             _ = SequenceStore
-                .Setup(store => store.Get(It.IsAny<Paging>()))
-                .Returns(new EventSequence[0]);
+                .Setup(store => store.GetAsync(It.IsAny<Paging>()))
+                .ReturnsAsync(Enumerable.Empty<EventSequence>());
 
             bool wasSnapshotRestorationCommencingInvoked = false;
             bool wasSnapshotRestorationCompletedInvoked = false;
@@ -121,22 +122,30 @@
             instance.SnapshotRestorationCommencing += (_, __) => wasSnapshotRestorationCommencingInvoked = true;
             instance.SnapshotRestorationCompleted += (_, __) => wasSnapshotRestorationCompletedInvoked = true;
 
-            instance.Reconcile();
+            await instance.ReconcileAsync();
 
             Assert.True(wasSnapshotRestorationCommencingInvoked);
             Assert.True(wasSnapshotRestorationCompletedInvoked);
             Assert.True(wasTriggered);
 
-            AggregateReconciler.Verify(reconciler => reconciler.Reconcile(It.IsAny<EventCentricAggregateRoot[]>()), times: Times.Once);
+            AggregateReconciler.Verify(
+                reconciler => reconciler.ReconcileAsync(It.IsAny<EventCentricAggregateRoot[]>()),
+                times: Times.Once);
 
             AggregateReconciler.Verify(
-                reconciler => reconciler.Reconcile(It.Is<EventCentricAggregateRoot[]>(
+                reconciler => reconciler.ReconcileAsync(It.Is<EventCentricAggregateRoot[]>(
                     aggregates => aggregates.SequenceEqual(snapshot.Aggregates))),
                 times: Times.Once);
 
-            SequenceStore.Verify(store => store.Get(It.IsAny<Paging>()), times: Times.Once);
-            SequenceStore.Verify(store => store.Create(It.IsAny<EventSequence>()), times: Times.Once);
-            SequenceStore.Verify(store => store.Create(It.Is<EventSequence>(updated => updated.Sequence == sequence.Sequence)), times: Times.Once);
+            SequenceStore.Verify(store => store.GetAsync(It.IsAny<Paging>()), times: Times.Once);
+
+            SequenceStore.Verify(
+                store => store.CreateAsync(It.IsAny<EventSequence>()),
+                times: Times.Once);
+
+            SequenceStore.Verify(
+                store => store.CreateAsync(It.Is<EventSequence>(updated => updated.Sequence == sequence.Sequence)),
+                times: Times.Once);
         }
 
         private DefaultReconciliationOrchestrator<EventSequence> CreateReconciler(Func<Snapshot>? snapshotSource = default)

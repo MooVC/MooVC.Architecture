@@ -101,7 +101,9 @@
 
             @event();
 
-            _ = store.Setup(store => store.Create(It.IsAny<AtomicUnit>())).Throws<InvalidOperationException>();
+            _ = store
+                .Setup(store => store.CreateAsync(It.IsAny<AtomicUnit>()))
+                .Throws<InvalidOperationException>();
 
             bus.Publish(new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate));
 
@@ -136,7 +138,9 @@
         {
             const int ExpectedInvocationCount = 1;
 
-            _ = store.Setup(store => store.Create(It.IsAny<AtomicUnit>())).Callback(() => invocationCounter++);
+            _ = store
+                .Setup(store => store.CreateAsync(It.IsAny<AtomicUnit>()))
+                .Callback(() => invocationCounter++);
 
             bus.Publish(events);
 

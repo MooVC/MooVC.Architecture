@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd;
-    using MooVC.Collections.Generic;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
 
@@ -27,11 +27,12 @@
             this.timeout = timeout;
         }
 
-        public override void Reconcile(params EventCentricAggregateRoot[] aggregates)
+        public override async Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates)
         {
             if (aggregates.Any())
             {
-                foreach (IGrouping<Type, EventCentricAggregateRoot> aggregateTypes in aggregates.GroupBy(aggregate => aggregate.GetType()))
+                foreach (IGrouping<Type, EventCentricAggregateRoot> aggregateTypes in aggregates
+                    .GroupBy(aggregate => aggregate.GetType()))
                 {
                     IAggregateReconciliationProxy? proxy = factory(aggregateTypes.Key);
 
@@ -41,17 +42,22 @@
                     }
                     else
                     {
-                        aggregateTypes.ForEach(aggregate => Reconcile(aggregate, proxy));
+                        foreach (EventCentricAggregateRoot aggregate in aggregateTypes)
+                        {
+                            await ReconcileAsync(aggregate, proxy)
+                                .ConfigureAwait(false);
+                        }
                     }
                 }
             }
         }
 
-        public override void Reconcile(params DomainEvent[] events)
+        public override async Task ReconcileAsync(params DomainEvent[] events)
         {
             if (events.Any())
             {
-                foreach (IGrouping<Type, DomainEvent> aggregateTypes in events.GroupBy(@event => @event.Aggregate.Type))
+                foreach (IGrouping<Type, DomainEvent> aggregateTypes in events
+                    .GroupBy(@event => @event.Aggregate.Type))
                 {
                     IAggregateReconciliationProxy? proxy = factory(aggregateTypes.Key);
 
@@ -61,11 +67,13 @@
                     }
                     else
                     {
-                        foreach (IGrouping<VersionedReference, DomainEvent> aggregateEvents in aggregateTypes.GroupBy(@event => @event.Aggregate))
+                        foreach (IGrouping<VersionedReference, DomainEvent> aggregateEvents in aggregateTypes
+                            .GroupBy(@event => @event.Aggregate))
                         {
                             if (EventsAreNonConflicting(aggregateEvents.Key, aggregateEvents, out _))
                             {
-                                Reconcile(aggregateEvents.Key, aggregateEvents, proxy);
+                                await ReconcileAsync(aggregateEvents.Key, aggregateEvents, proxy)
+                                    .ConfigureAwait(false);
                             }
                         }
                     }
@@ -73,45 +81,60 @@
             }
         }
 
-        private void PerformCoordinatedReconcile(EventCentricAggregateRoot aggregate, IAggregateReconciliationProxy proxy)
+        private async Task PerformCoordinatedReconcileAsync(
+            EventCentricAggregateRoot aggregate,
+            IAggregateReconciliationProxy proxy)
         {
-            proxy.Overwrite(aggregate);
+            await proxy
+                .OverwriteAsync(aggregate)
+                .ConfigureAwait(false);
         }
 
-        private void PerformCoordinatedReconcile(
+        private async Task PerformCoordinatedReconcileAsync(
            Reference aggregate,
            IEnumerable<DomainEvent> events,
            IAggregateReconciliationProxy proxy)
         {
-            EventCentricAggregateRoot existing = proxy.Get(aggregate);
+            EventCentricAggregateRoot? existing = await proxy
+                .GetAsync(aggregate)
+                .ConfigureAwait(false);
 
             if (existing is null)
             {
-                existing = proxy.Create(aggregate);
+                existing = await proxy
+                    .CreateAsync(aggregate)
+                    .ConfigureAwait(false);
             }
             else if (ignorePreviousVersions)
             {
                 events = RemovePreviousVersions(events, existing.Version);
             }
 
-            Apply(existing, events, proxy, aggregate);
+            await ApplyAsync(existing, events, proxy, aggregate)
+                .ConfigureAwait(false);
         }
 
-        private void Reconcile(
+        private async Task ReconcileAsync(
             Reference aggregate,
             IEnumerable<DomainEvent> events,
             IAggregateReconciliationProxy proxy)
         {
-            aggregate.Coordinate(
-                () => PerformCoordinatedReconcile(aggregate, events, proxy),
-                timeout: timeout);
+            await aggregate
+                .CoordinateAsync(
+                    () => PerformCoordinatedReconcileAsync(aggregate, events, proxy),
+                    timeout: timeout)
+                .ConfigureAwait(false);
         }
 
-        private void Reconcile(EventCentricAggregateRoot aggregate, IAggregateReconciliationProxy proxy)
+        private async Task ReconcileAsync(
+            EventCentricAggregateRoot aggregate,
+            IAggregateReconciliationProxy proxy)
         {
-            aggregate.Coordinate(
-                () => PerformCoordinatedReconcile(aggregate, proxy),
-                timeout: timeout);
+            await aggregate
+                .CoordinateAsync(
+                    () => PerformCoordinatedReconcileAsync(aggregate, proxy),
+                    timeout: timeout)
+                .ConfigureAwait(false);
         }
     }
 }

@@ -1,19 +1,20 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public interface IAggregateReconciliationProxy
     {
-        EventCentricAggregateRoot Get(Reference aggregate);
+        Task<EventCentricAggregateRoot?> GetAsync(Reference aggregate);
 
-        IEnumerable<EventCentricAggregateRoot> GetAll();
+        Task<IEnumerable<EventCentricAggregateRoot>> GetAllAsync();
 
-        EventCentricAggregateRoot Create(Reference aggregate);
+        Task<EventCentricAggregateRoot> CreateAsync(Reference aggregate);
 
-        void Purge(Reference aggregate);
+        Task PurgeAsync(Reference aggregate);
 
-        void Save(EventCentricAggregateRoot aggregate);
+        Task SaveAsync(EventCentricAggregateRoot aggregate);
 
-        void Overwrite(EventCentricAggregateRoot aggregate);
+        Task OverwriteAsync(EventCentricAggregateRoot aggregate);
     }
 }

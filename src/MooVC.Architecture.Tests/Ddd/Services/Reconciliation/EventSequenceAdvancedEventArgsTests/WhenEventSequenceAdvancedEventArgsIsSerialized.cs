@@ -16,7 +16,7 @@
     public sealed class WhenEventSequenceAdvancedEventArgsIsSerialized
     {
         [Fact]
-        public void GivenAnInstanceThenAllPropertiesAreSerialized()
+        public async Task GivenAnInstanceThenAllPropertiesAreSerializedAsync()
         {
             var eventStore = new Mock<IEventStore<SequencedEvents, ulong>>();
             var reconciler = new Mock<IAggregateReconciler>();
@@ -24,19 +24,19 @@
             EventSequenceAdvancedEventArgs? original = default;
 
             _ = eventStore
-                .Setup(store => store.Read(It.Is<ulong>(value => value == ulong.MinValue), It.IsAny<ushort>()))
-                .Returns(new[]
+                .Setup(store => store.ReadAsync(It.Is<ulong>(value => value == ulong.MinValue), It.IsAny<ushort>()))
+                .ReturnsAsync(new[]
                 {
                     new SequencedEvents(1, CreateEvents()),
                 });
 
             _ = eventStore
-                .Setup(store => store.Read(It.Is<ulong>(value => value > ulong.MinValue), It.IsAny<ushort>()))
-                .Returns(new SequencedEvents[0]);
+                .Setup(store => store.ReadAsync(It.Is<ulong>(value => value > ulong.MinValue), It.IsAny<ushort>()))
+                .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
             instance.EventSequenceAdvanced += (sender, e) => original = e;
 
-            ulong? current = instance.Reconcile();
+            ulong? current = await instance.ReconcileAsync();
 
             EventSequenceAdvancedEventArgs deserialized = original!.Clone();
 
@@ -44,7 +44,7 @@
             Assert.Equal(original!.Sequence, deserialized.Sequence);
         }
 
-        private DomainEvent[] CreateEvents()
+        private static DomainEvent[] CreateEvents()
         {
             var aggregate = new SerializableAggregateRoot();
             var context = new SerializableMessage();

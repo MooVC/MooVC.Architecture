@@ -13,7 +13,7 @@
     public sealed class WhenExecuteIsCalled
     {
         [Fact]
-        public void GivenACommandThenTheAggregateIsRetrievedTheSetOperationInvokedAndTheChangesSaved()
+        public async Task GivenACommandThenTheAggregateIsRetrievedTheSetOperationInvokedAndTheChangesSavedAsync()
         {
             var identity = Guid.NewGuid();
             var repository = new Mock<IRepository<SerializableEventCentricAggregateRoot>>();
@@ -27,7 +27,7 @@
                 .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion?>()))
                 .Returns(aggregate);
 
-            handler.Execute(command);
+            await handler.ExecuteAsync(command);
 
             Assert.Equal(identity, aggregate.Value);
 

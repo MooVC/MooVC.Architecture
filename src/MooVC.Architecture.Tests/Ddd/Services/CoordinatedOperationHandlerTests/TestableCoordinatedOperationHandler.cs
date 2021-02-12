@@ -23,7 +23,9 @@
             return identity.ToReference<SerializableEventCentricAggregateRoot>();
         }
 
-        protected override void PerformCoordinatedOperation(SerializableEventCentricAggregateRoot aggregate, TCommand message)
+        protected override void PerformCoordinatedOperation(
+            SerializableEventCentricAggregateRoot aggregate,
+            TCommand message)
         {
             var request = new SetRequest(message, identity);
 

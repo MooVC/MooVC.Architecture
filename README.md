@@ -23,6 +23,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Added Ddd.Services.Reconciliation.SynchronousAggregateReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciler.
 - Added Ddd.Services.Reconciliation.SynchronousEventReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IEventReconciler.
 - Added Ddd.Services.Snapshots.SynchronousSnapshotProvider to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Snapshots.ISnapshotProvider.
+- Added Services.SynchronousHandler to facilitate migration from synchronous to asynchronous implementations of Services.IHandler.
 - Changed to target version 3.x of MooVC (**Breaking Change**).
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
@@ -35,6 +36,8 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed Cqrs.Services.IQueryHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.AggregateNotFoundException property AggregateId of type Guid to Aggregate of type Reference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.AggregateVersionNotFoundException property Aggregate of type VersionedReference to type VersionedReference<TAggregate> (**Breaking Change**).
+- Changed Ddd.Services.CoordinatedGenerateHandler to only support async variants of each operation (**Breaking Change**).
+- Changed Ddd.Services.CoordinatedOperationHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
 - Changed Ddd.Services.MemoryRepository so that it is no longer serializable (**Breaking Change**).
@@ -44,6 +47,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed Ddd.Services.Reconciliation.IEventReconciler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.Reconciliation.IAggregateReconciler.ReconcileAsync to accept a params array instead of an IEnumerable of Domain Events (**Breaking Change**).
 - Changed Ddd.Services.Snapshots.ISnapshotProvider to only support async variants of each operation (**Breaking Change**).
+- Changed Services.IHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Serialization.SerializationInfoExtensions.TryAddReference and its related variants so that they are not type specific. 
 - Deleted Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
 - Deleted unused Ddd.Services.ConcurrentMemoryRepository.PerformRead method that did not appear to serve any purpose (**Breaking Change**).

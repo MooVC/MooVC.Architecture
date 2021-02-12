@@ -23,6 +23,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Added Ddd.Services.Reconciliation.SynchronousAggregateReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciler.
 - Added Ddd.Services.Reconciliation.SynchronousEventReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IEventReconciler.
 - Added Ddd.Services.Snapshots.SynchronousSnapshotProvider to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Snapshots.ISnapshotProvider.
+- Added Services.SynchronousBus to facilitate migration from synchronous to asynchronous implementations of Services.IBus and Services.Bus.
 - Added Services.SynchronousHandler to facilitate migration from synchronous to asynchronous implementations of Services.IHandler.
 - Changed to target version 3.x of MooVC (**Breaking Change**).
 - Created new contextual resource files and migrated resources from centralized resource file.
@@ -47,6 +48,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed Ddd.Services.Reconciliation.IEventReconciler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.Reconciliation.IAggregateReconciler.ReconcileAsync to accept a params array instead of an IEnumerable of Domain Events (**Breaking Change**).
 - Changed Ddd.Services.Snapshots.ISnapshotProvider to only support async variants of each operation (**Breaking Change**).
+- Changed Services.IBus and Services.Bus to only support async variants of each operation (**Breaking Change**).
 - Changed Services.IHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Serialization.SerializationInfoExtensions.TryAddReference and its related variants so that they are not type specific. 
 - Deleted Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).

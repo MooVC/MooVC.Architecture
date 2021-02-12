@@ -1,5 +1,6 @@
 namespace MooVC.Architecture.Services
 {
+    using System.Threading.Tasks;
     using static MooVC.Architecture.Services.Resources;
     using static MooVC.Ensure;
 
@@ -10,17 +11,18 @@ namespace MooVC.Architecture.Services
 
         public event MessageInvokingEventHandler? Invoking;
 
-        public void Invoke(Message message)
+        public virtual async Task InvokeAsync(Message message)
         {
             ArgumentNotNull(message, nameof(message), BusMessageRequired);
 
             Invoking?.Invoke(this, new MessageInvokingEventArgs(message));
 
-            PerformInvoke(message);
+            await PerformInvokeAsync(message)
+                .ConfigureAwait(false);
 
             Invoked?.Invoke(this, new MessageInvokedEventArgs(message));
         }
 
-        protected abstract void PerformInvoke(Message message);
+        protected abstract Task PerformInvokeAsync(Message message);
     }
 }

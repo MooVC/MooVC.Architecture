@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Services.BusTests
 {
     using System;
+    using System.Threading.Tasks;
     using MooVC.Architecture;
 
     public sealed class TestableBus
@@ -13,12 +14,14 @@
             this.@throw = @throw;
         }
 
-        protected override void PerformInvoke(Message message)
+        protected override async Task PerformInvokeAsync(Message message)
         {
             if (@throw)
             {
                 throw new InvalidOperationException();
             }
+
+            await Task.CompletedTask;
         }
     }
 }

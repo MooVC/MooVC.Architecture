@@ -17,6 +17,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 ## Enhancements
 
 - Added async variants of the various Coordinate extensions.
+- Added Cqrs.Services.SynchronousQueryEngine to facilitate migration from synchronous to asynchronous implementations of Cqrs.Services.IQueryEngine.
 - Added Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxy to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciliationProxy.
 - Added Ddd.Services.Reconciliation.SynchronousAggregateReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciler.
 - Added Ddd.Services.Reconciliation.SynchronousEventReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IEventReconciler.
@@ -29,6 +30,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).
 - Changed data type for TimeStamp properties of Message, Ddd.DomainException and Ddd.Services.Reconciliation.IEventSequence to DateTimeOffset (**Breaking Change**).
 - Changed all exceptions to properly implement ISerializable.
+- Changed Cqrs.Services.IQueryEngine to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.AggregateNotFoundException property AggregateId of type Guid to Aggregate of type Reference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.AggregateVersionNotFoundException property Aggregate of type VersionedReference to type VersionedReference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).

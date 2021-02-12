@@ -5,7 +5,7 @@
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenPerformQueryIsCalled
+    public sealed class WhenQueryAsyncIsCalled
     {
         [Fact]
         public async Task GivenNoQueryThenAResultIsReturnedAsync()

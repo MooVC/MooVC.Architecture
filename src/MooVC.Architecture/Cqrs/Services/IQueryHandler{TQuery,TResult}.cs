@@ -1,9 +1,11 @@
 ﻿namespace MooVC.Architecture.Cqrs.Services
 {
+    using System.Threading.Tasks;
+
     public interface IQueryHandler<TQuery, TResult>
         where TQuery : Message
         where TResult : Message
     {
-        TResult Execute(TQuery query);
+        Task<TResult> ExecuteAsync(TQuery query);
     }
 }

@@ -25,7 +25,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var changes = new DomainEvent[0];
 
             _ = bus
-                .Setup(b => b.Publish(It.IsAny<DomainEvent[]>()))
+                .Setup(b => b.PublishAsync(It.IsAny<DomainEvent[]>()))
                 .Callback<DomainEvent[]>(events => changes = events);
 
             aggregate.Set(request);

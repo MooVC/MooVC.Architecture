@@ -23,9 +23,7 @@
 
         public event DiagnosticsEmittedEventHandler? DiagnosticsEmitted;
 
-        // TODO: Change from async VOID
-
-        protected override async void PerformPublish(DomainEvent[] events)
+        protected override async Task PerformPublishAsync(params DomainEvent[] events)
         {
             var unit = new AtomicUnit(events);
 
@@ -37,7 +35,8 @@
 
             try
             {
-                await PersistAsync();
+                await PersistAsync()
+                    .ConfigureAwait(false);
             }
             catch
             {

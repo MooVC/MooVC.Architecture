@@ -8,7 +8,7 @@
     public sealed class WhenInvokeAsyncIsCalled
     {
         [Fact]
-        public async Task GivenAQueryThenAResultIsReturnedAsync()
+        public async Task GivenAMessageThenAResultIsReturnedAsync()
         {
             bool wasInvoked = false;
             var expected = new SerializableMessage();
@@ -26,7 +26,7 @@
         }
 
         [Fact]
-        public async Task GivenAQueryWhenAnExceptionOccursThenTheExceptionIsThrownAsync()
+        public async Task GivenAMessageWhenAnExceptionOccursThenTheExceptionIsThrownAsync()
         {
             var handler = new TestableSynchronousBus();
 

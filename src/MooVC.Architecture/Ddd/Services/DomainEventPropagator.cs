@@ -20,9 +20,11 @@
             this.reconciler.AggregateReconciled += Reconciler_AggregateReconciled;
         }
 
-        private void Reconciler_AggregateReconciled(IAggregateReconciler sender, AggregateReconciledEventArgs e)
+        private async void Reconciler_AggregateReconciled(IAggregateReconciler sender, AggregateReconciledEventArgs e)
         {
-            bus.Publish(e.Events.ToArray());
+            await bus
+                .PublishAsync(e.Events.ToArray())
+                .ConfigureAwait(false);
         }
     }
 }

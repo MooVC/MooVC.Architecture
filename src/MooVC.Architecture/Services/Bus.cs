@@ -15,14 +15,24 @@ namespace MooVC.Architecture.Services
         {
             ArgumentNotNull(message, nameof(message), BusMessageRequired);
 
-            Invoking?.Invoke(this, new MessageInvokingEventArgs(message));
+            OnInvoking(message);
 
             await PerformInvokeAsync(message)
                 .ConfigureAwait(false);
 
-            Invoked?.Invoke(this, new MessageInvokedEventArgs(message));
+            OnInvoked(message);
         }
 
         protected abstract Task PerformInvokeAsync(Message message);
+
+        protected virtual void OnInvoking(Message message)
+        {
+            Invoking?.Invoke(this, new MessageInvokingEventArgs(message));
+        }
+
+        protected virtual void OnInvoked(Message message)
+        {
+            Invoked?.Invoke(this, new MessageInvokedEventArgs(message));
+        }
     }
 }

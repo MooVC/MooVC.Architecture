@@ -13,19 +13,20 @@ namespace MooVC.Architecture.Ddd.Services
 
         public event DomainEventsUnhandledEventHandler? Unhandled;
 
-        public void Publish(params DomainEvent[] events)
+        public virtual async Task PublishAsync(params DomainEvent[] events)
         {
             if (events.Any())
             {
                 OnPublishing(events);
 
-                PerformPublish(events);
+                await PerformPublishAsync(events)
+                    .ConfigureAwait(false);
 
                 OnPublished(events);
             }
         }
 
-        protected abstract void PerformPublish(DomainEvent[] events);
+        protected abstract Task PerformPublishAsync(DomainEvent[] events);
 
         protected virtual void OnPublishing(params DomainEvent[] @events)
         {

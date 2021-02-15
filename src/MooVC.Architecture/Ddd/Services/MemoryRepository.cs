@@ -6,7 +6,7 @@ namespace MooVC.Architecture.Ddd.Services
     using MooVC.Serialization;
 
     public class MemoryRepository<TAggregate>
-        : Repository<TAggregate>
+        : SynchronousRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
         private readonly Func<TAggregate, TAggregate> cloner;
@@ -20,23 +20,6 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected virtual IDictionary<Reference, TAggregate> Store { get; } = new Dictionary<Reference, TAggregate>();
 
-        public override TAggregate? Get(Guid id, SignedVersion? version = default)
-        {
-            Reference key = version is { }
-                ? (Reference)new VersionedReference<TAggregate>(id, version)
-                : new Reference<TAggregate>(id);
-
-            return Get(key);
-        }
-
-        public override IEnumerable<TAggregate> GetAll()
-        {
-            return Store
-                .Where(entry => entry.Key is Reference<TAggregate>)
-                .Select(entry => cloner(entry.Value))
-                .ToArray();
-        }
-
         protected virtual TAggregate? Get(Reference key)
         {
             if (Store.TryGetValue(key, out TAggregate? aggregate))
@@ -47,7 +30,30 @@ namespace MooVC.Architecture.Ddd.Services
             return default;
         }
 
-        protected override VersionedReference? GetCurrentVersion(TAggregate aggregate)
+        protected virtual (Reference NonVersioned, Reference Versioned) GenerateReferences(TAggregate aggregate)
+        {
+            return (new Reference<TAggregate>(aggregate.Id),
+                new VersionedReference<TAggregate>(aggregate.Id, aggregate.Version));
+        }
+
+        protected override TAggregate? PerformGet(Guid id, SignedVersion? version = default)
+        {
+            Reference key = version is { }
+                ? (Reference)new VersionedReference<TAggregate>(id, version)
+                : new Reference<TAggregate>(id);
+
+            return Get(key);
+        }
+
+        protected override IEnumerable<TAggregate> PerformGetAll()
+        {
+            return Store
+                .Where(entry => entry.Key is Reference<TAggregate>)
+                .Select(entry => cloner(entry.Value))
+                .ToArray();
+        }
+
+        protected override VersionedReference? PerformGetCurrentVersion(TAggregate aggregate)
         {
             Reference nonVersioned = aggregate.ToReference();
 
@@ -59,12 +65,7 @@ namespace MooVC.Architecture.Ddd.Services
             return default;
         }
 
-        protected virtual (Reference NonVersioned, Reference Versioned) GenerateReferences(TAggregate aggregate)
-        {
-            return (new Reference<TAggregate>(aggregate.Id), new VersionedReference<TAggregate>(aggregate.Id, aggregate.Version));
-        }
-
-        protected override void UpdateStore(TAggregate aggregate)
+        protected override void PerformUpdateStore(TAggregate aggregate)
         {
             TAggregate copy = cloner(aggregate);
 

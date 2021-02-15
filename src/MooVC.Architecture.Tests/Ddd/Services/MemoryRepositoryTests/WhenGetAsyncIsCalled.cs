@@ -1,29 +1,30 @@
-namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
+namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
 {
     using System;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenGetIsCalled
-        : ConcurrentMemoryRepositoryTests
+    public sealed class WhenGetAsyncIsCalled
+        : MemoryRepositoryTests
     {
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturned(bool useCloner)
+        public async Task GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturnedAsync(bool useCloner)
         {
             var expected = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
 
-            ConcurrentMemoryRepository<SerializableAggregateRoot> repository =
+            MemoryRepository<SerializableAggregateRoot> repository =
                 Create<SerializableAggregateRoot>(useCloner);
 
-            repository.Save(expected);
-            repository.Save(other);
+            await repository.SaveAsync(expected);
+            await repository.SaveAsync(other);
 
-            SerializableAggregateRoot? actual = repository.Get(expected.Id);
+            SerializableAggregateRoot? actual = await repository.GetAsync(expected.Id);
 
             Assert.NotNull(actual);
             Assert.Equal(expected.Id, actual!.Id);
@@ -34,16 +35,16 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturned(bool useCloner)
+        public async Task GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturnedAsync(bool useCloner)
         {
             var other = new SerializableAggregateRoot();
 
-            ConcurrentMemoryRepository<SerializableAggregateRoot> repository =
+            MemoryRepository<SerializableAggregateRoot> repository =
                 Create<SerializableAggregateRoot>(useCloner);
 
-            repository.Save(other);
+            await repository.SaveAsync(other);
 
-            SerializableAggregateRoot? actual = repository.Get(Guid.NewGuid());
+            SerializableAggregateRoot? actual = await repository.GetAsync(Guid.NewGuid());
 
             Assert.Null(actual);
         }
@@ -51,25 +52,28 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturned(bool useCloner)
+        public async Task GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturnedAsync(bool useCloner)
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
-            var other = new SerializableEventCentricAggregateRoot();
 
-            ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot> repository =
+            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
                 Create<SerializableEventCentricAggregateRoot>(useCloner);
 
-            repository.Save(aggregate);
+            await repository.SaveAsync(aggregate);
 
             var context = new SerializableMessage();
 
             aggregate.Set(new SetRequest(context, Guid.NewGuid()));
 
-            repository.Save(aggregate);
-            repository.Save(other);
+            await repository.SaveAsync(aggregate);
 
-            SerializableEventCentricAggregateRoot? actual = repository.Get(aggregate.Id);
+            var other = new SerializableEventCentricAggregateRoot();
 
+            await repository.SaveAsync(other);
+
+            SerializableEventCentricAggregateRoot? actual = await repository.GetAsync(aggregate.Id);
+
+            Assert.NotNull(actual);
             Assert.NotSame(aggregate, actual);
             Assert.Equal(aggregate.Id, actual!.Id);
             Assert.Equal(aggregate.Version, actual.Version);
@@ -78,15 +82,15 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void GivenAVersionWhenTwoVersionedEntriesExistThenTheMatchingVersionedEntryIsReturned(bool useCloner)
+        public async Task GivenAVersionWhenTwoVersionedEntriesExistThenTheMatchingVersionedEntryIsReturnedAsync(bool useCloner)
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             SignedVersion expectedFirst = aggregate.Version;
 
-            ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot> repository =
+            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
                 Create<SerializableEventCentricAggregateRoot>(useCloner);
 
-            repository.Save(aggregate);
+            await repository.SaveAsync(aggregate);
 
             var context = new SerializableMessage();
 
@@ -94,14 +98,14 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
 
             SignedVersion expectedSecond = aggregate.Version;
 
-            repository.Save(aggregate);
+            await repository.SaveAsync(aggregate);
 
             var other = new SerializableEventCentricAggregateRoot();
 
-            repository.Save(other);
+            await repository.SaveAsync(other);
 
-            SerializableEventCentricAggregateRoot? actualFirst = repository.Get(aggregate.Id, version: expectedFirst);
-            SerializableEventCentricAggregateRoot? actualSecond = repository.Get(aggregate.Id, version: expectedSecond);
+            SerializableEventCentricAggregateRoot? actualFirst = await repository.GetAsync(aggregate.Id, version: expectedFirst);
+            SerializableEventCentricAggregateRoot? actualSecond = await repository.GetAsync(aggregate.Id, version: expectedSecond);
 
             Assert.NotNull(actualFirst);
             Assert.NotSame(expectedFirst, actualFirst);
@@ -117,18 +121,18 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void GivenAVersionWhenNoExistingVersionedEntryMatchesThenNullIsReturned(bool useCloner)
+        public async Task GivenAVersionWhenNoExistingVersionedEntryMatchesThenNullIsReturnedAsync(bool useCloner)
         {
             var aggregate = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
 
-            ConcurrentMemoryRepository<SerializableAggregateRoot> repository =
+            MemoryRepository<SerializableAggregateRoot> repository =
                 Create<SerializableAggregateRoot>(useCloner);
 
-            repository.Save(aggregate);
-            repository.Save(other);
+            await repository.SaveAsync(aggregate);
+            await repository.SaveAsync(other);
 
-            SerializableAggregateRoot? actual = repository.Get(aggregate.Id, version: other.Version);
+            SerializableAggregateRoot? actual = await repository.GetAsync(aggregate.Id, version: other.Version);
 
             Assert.Null(actual);
         }

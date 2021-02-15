@@ -2,6 +2,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Serialization;
@@ -11,7 +12,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
     public sealed class WhenAggregateSavedIsRaised
     {
         [Fact]
-        public void GivenAnAggregateWithChangesWhenAggregateSavedIsRaisedThenTheChangesArePropagatedToTheBus()
+        public async Task GivenAnAggregateWithChangesWhenAggregateSavedIsRaisedThenTheChangesArePropagatedToTheBusAsync()
         {
             const int ExpectedTotalChanges = 2;
 
@@ -22,14 +23,15 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var cloner = new BinaryFormatterCloner();
             var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>(cloner);
             var propagator = new DomainEventPropagator<SerializableEventCentricAggregateRoot>(bus.Object, repository);
-            var changes = new DomainEvent[0];
+            DomainEvent[] changes = Array.Empty<DomainEvent>();
 
             _ = bus
                 .Setup(b => b.PublishAsync(It.IsAny<DomainEvent[]>()))
                 .Callback<DomainEvent[]>(events => changes = events);
 
             aggregate.Set(request);
-            repository.Save(aggregate);
+
+            await repository.SaveAsync(aggregate);
 
             _ = Assert.Single(changes.OfType<SerializableCreatedDomainEvent>());
             _ = Assert.Single(changes.OfType<SerializableSetDomainEvent>());

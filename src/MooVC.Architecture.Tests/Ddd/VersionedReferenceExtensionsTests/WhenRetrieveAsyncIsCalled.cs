@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services;
@@ -11,12 +12,12 @@
     using Moq;
     using Xunit;
 
-    public sealed class WhenRetrieveIsCalled
+    public sealed class WhenRetrieveAsyncIsCalled
     {
         private readonly SerializableMessage context;
         private readonly Mock<IRepository<SerializableAggregateRoot>> repository;
 
-        public WhenRetrieveIsCalled()
+        public WhenRetrieveAsyncIsCalled()
         {
             context = new SerializableMessage();
             repository = new Mock<IRepository<SerializableAggregateRoot>>();
@@ -91,87 +92,91 @@
         }
 
         [Fact]
-        public void GivenAnEmptyVersionedReferenceThenAnAggregateDoesNotExistExceptionIsThrown()
+        public async Task GivenAnEmptyVersionedReferenceThenAnAggregateDoesNotExistExceptionIsThrownAsync()
         {
             VersionedReference reference = VersionedReference<SerializableAggregateRoot>.Empty;
 
             AggregateDoesNotExistException<SerializableAggregateRoot> exception =
-                Assert.Throws<AggregateDoesNotExistException<SerializableAggregateRoot>>(
-                    () => reference.Retrieve(context, repository.Object));
+                await Assert.ThrowsAsync<AggregateDoesNotExistException<SerializableAggregateRoot>>(
+                    () => reference.RetrieveAsync(context, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Never);
+            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Never);
 
             Assert.Equal(context, exception.Context);
         }
 
         [Fact]
-        public void GivenAVersionedReferenceThatDoesNotExistsThenAnAggregateVersionNotFoundExceptionIsThrown()
+        public async Task GivenAVersionedReferenceThatDoesNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownAsync()
         {
             _ = repository
-                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
-                .Returns(default(SerializableAggregateRoot));
+                .Setup(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
+                .ReturnsAsync(default(SerializableAggregateRoot));
 
             var aggregate = new SerializableAggregateRoot();
             var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
             AggregateVersionNotFoundException<SerializableAggregateRoot> exception =
-                Assert.Throws<AggregateVersionNotFoundException<SerializableAggregateRoot>>(
-                    () => reference.Retrieve(context, repository.Object));
+                await Assert.ThrowsAsync<AggregateVersionNotFoundException<SerializableAggregateRoot>>(
+                    () => reference.RetrieveAsync(context, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
             Assert.Equal(reference, exception.Aggregate);
             Assert.Equal(context, exception.Context);
         }
 
         [Fact]
-        public void GivenAVersionedReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnArgumentExceptionIsThrown()
+        public async Task GivenAVersionedReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnArgumentExceptionIsThrownAsync()
         {
             _ = repository
-                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
-                .Returns(default(SerializableAggregateRoot));
+                .Setup(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
+                .ReturnsAsync(default(SerializableAggregateRoot));
 
             var aggregate = new SerializableAggregateRoot();
             var reference = new VersionedReference<SerializableEventCentricAggregateRoot>(aggregate.Id, aggregate.Version);
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => reference.Retrieve(context, repository.Object));
+            ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
+                () => reference.RetrieveAsync(context, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Never);
+            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Never);
         }
 
         [Fact]
-        public void GivenAVersionedReferenceThatExistsThenTheAggregateIsReturned()
+        public async Task GivenAVersionedReferenceThatExistsThenTheAggregateIsReturnedAsync()
         {
             var aggregate = new SerializableAggregateRoot();
             var reference = new VersionedReference<SerializableAggregateRoot>(aggregate);
 
             _ = repository
-               .Setup(repo => repo.Get(It.Is<Guid>(id => id == aggregate.Id), It.Is<SignedVersion>(v => v == aggregate.Version)))
-               .Returns(aggregate);
+               .Setup(repo => repo.GetAsync(
+                   It.Is<Guid>(id => id == aggregate.Id),
+                   It.Is<SignedVersion>(v => v == aggregate.Version)))
+               .ReturnsAsync(aggregate);
 
-            SerializableAggregateRoot value = reference.Retrieve(context, repository.Object);
+            SerializableAggregateRoot value = await reference.RetrieveAsync(context, repository.Object);
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
 
             Assert.Equal(aggregate, value);
         }
 
         [Theory]
         [MemberData(nameof(GivenOneOrMoreVersionedReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
-        public void GivenOneOrMoreVersionedReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEach(IEnumerable<VersionedReference> references)
+        public async Task GivenOneOrMoreVersionedReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachAsync(
+            IEnumerable<VersionedReference> references)
         {
             _ = repository
-                .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<SignedVersion>()))
-                .Returns<Guid, SignedVersion>((id, version) => new SerializableAggregateRoot(id));
+                .Setup(repo => repo.GetAsync(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<SignedVersion>()))
+                .ReturnsAsync<Guid, SignedVersion?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
+                    (id, version) => new SerializableAggregateRoot(id));
 
-            AggregateException exception = Assert.Throws<AggregateException>(
-                () => references.Retrieve(context, repository.Object));
+            AggregateException exception = await Assert.ThrowsAsync<AggregateException>(
+                () => references.RetrieveAsync(context, repository.Object));
 
             int expected = references.Count(item => item == VersionedReference<SerializableAggregateRoot>.Empty);
 
             repository.Verify(
-                repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()),
+                repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()),
                 Times.Exactly(references.Count() - expected));
 
             int actual = exception
@@ -184,25 +189,31 @@
 
         [Theory]
         [MemberData(nameof(GivenOneOrMoreVersionedReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
-        public void GivenOneOrMoreVersionedReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturned(IEnumerable<VersionedReference> references)
+        public async Task GivenOneOrMoreVersionedReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturnedAsync(
+            IEnumerable<VersionedReference> references)
         {
             _ = repository
-                .Setup(repo => repo.Get(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<SignedVersion>()))
-                .Returns<Guid, SignedVersion>((id, version) => new SerializableAggregateRoot(id));
+                .Setup(repo => repo.GetAsync(It.Is<Guid>(id => id != Guid.Empty), It.IsAny<SignedVersion>()))
+                .ReturnsAsync<Guid, SignedVersion?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
+                    (id, version) => new SerializableAggregateRoot(id));
 
-            IEnumerable<AggregateRoot> results = references.Retrieve(context, repository.Object, ignoreEmpty: true);
+            IEnumerable<AggregateRoot> results = await references.RetrieveAsync(
+                context,
+                repository.Object,
+                ignoreEmpty: true);
 
             int empties = references.Count(item => item == VersionedReference<SerializableAggregateRoot>.Empty);
             int expected = references.Count() - empties;
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Exactly(expected));
+            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Exactly(expected));
 
             Assert.Equal(expected, results.Count());
         }
 
         [Theory]
         [MemberData(nameof(GivenOneOrMoreVersionedReferencesThatDoNotExistsThenAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissingData))]
-        public void GivenOneOrMoreVersionedReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissing(IDictionary<VersionedReference, bool> references)
+        public async Task GivenOneOrMoreVersionedReferencesThatDoNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownForEachThatIsMissingAsync(
+            IDictionary<VersionedReference, bool> references)
         {
             Expression<Func<Guid, bool>> predicate = id => references
                 .Where(item => item.Key.Id == id)
@@ -210,13 +221,14 @@
                 .Value;
 
             _ = repository
-                .Setup(repo => repo.Get(It.Is(predicate), It.IsAny<SignedVersion>()))
-                .Returns<Guid, SignedVersion>((id, version) => new SerializableAggregateRoot(id));
+                .Setup(repo => repo.GetAsync(It.Is(predicate), It.IsAny<SignedVersion>()))
+                .ReturnsAsync<Guid, SignedVersion?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
+                    (id, version) => new SerializableAggregateRoot(id));
 
-            AggregateException exception = Assert.Throws<AggregateException>(
-                () => references.Keys.Retrieve(context, repository.Object));
+            AggregateException exception = await Assert.ThrowsAsync<AggregateException>(
+                () => references.Keys.RetrieveAsync(context, repository.Object));
 
-            repository.Verify(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Exactly(references.Count));
+            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Exactly(references.Count));
 
             Guid[] expected = references
                 .Where(item => !item.Value)

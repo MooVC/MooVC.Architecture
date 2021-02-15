@@ -39,11 +39,9 @@
         {
             TAggregate aggregate = PerformCoordinatedGenerate(command);
 
-            repository.Save(aggregate);
-
-            // TODO: Await Save
-
-            await Task.CompletedTask;
+            await repository
+                .SaveAsync(aggregate)
+                .ConfigureAwait(false);
         }
     }
 }

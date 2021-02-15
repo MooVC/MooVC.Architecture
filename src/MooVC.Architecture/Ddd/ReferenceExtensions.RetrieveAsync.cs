@@ -1,36 +1,35 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.Services;
     using MooVC.Collections.Generic;
 
     public static partial class ReferenceExtensions
     {
-        public static TAggregate Retrieve<TAggregate>(
+        public static async Task<TAggregate> RetrieveAsync<TAggregate>(
             this Reference reference,
             Message context,
             IRepository<TAggregate> repository)
             where TAggregate : AggregateRoot
         {
-            return repository.Get(context, reference);
+            return await repository
+                .GetAsync(context, reference)
+                .ConfigureAwait(false);
         }
 
-        public static IEnumerable<TAggregate> Retrieve<TAggregate>(
+        public static async Task<IEnumerable<TAggregate>> RetrieveAsync<TAggregate>(
             this IEnumerable<Reference> references,
             Message context,
             IRepository<TAggregate> repository,
             bool ignoreEmpty = false)
             where TAggregate : AggregateRoot
         {
-            var aggregates = new ConcurrentBag<TAggregate>();
-
-            references
+            return await references
                 .Where(reference => !(ignoreEmpty && reference.IsEmpty))
-                .ForAll(reference => aggregates.Add(reference.Retrieve(context, repository)));
-
-            return aggregates.ToArray();
+                .ProcessAllAsync(reference => reference.RetrieveAsync(context, repository))
+                .ConfigureAwait(false);
         }
     }
 }

@@ -3,6 +3,7 @@ namespace MooVC.Architecture.Ddd.Services
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
     using MooVC.Serialization;
 
     public class ConcurrentMemoryRepository<TAggregate>
@@ -17,9 +18,9 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected virtual ReaderWriterLockSlim StoreLock { get; }
 
-        public override IEnumerable<TAggregate> GetAll()
+        protected override IEnumerable<TAggregate> PerformGetAll()
         {
-            return PerformRead(() => base.GetAll());
+            return PerformRead(() => base.PerformGetAll());
         }
 
         protected override TAggregate? Get(Reference key)
@@ -27,15 +28,18 @@ namespace MooVC.Architecture.Ddd.Services
             return PerformRead(() => base.Get(key));
         }
 
-        protected override void PerformSave(TAggregate aggregate)
+        protected override async Task PerformSaveAsync(TAggregate aggregate)
         {
             try
             {
                 StoreLock.EnterUpgradeableReadLock();
 
-                if (CheckForConflicts(aggregate))
+                bool isConflictFree = await CheckForConflictsAsync(aggregate)
+                    .ConfigureAwait(false);
+
+                if (isConflictFree)
                 {
-                    PerformWrite(() => UpdateStore(aggregate));
+                    PerformWrite(() => PerformUpdateStore(aggregate));
                 }
             }
             finally

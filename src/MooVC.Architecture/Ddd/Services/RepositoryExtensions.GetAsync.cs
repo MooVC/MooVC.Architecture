@@ -1,18 +1,21 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Threading.Tasks;
     using static MooVC.Architecture.Ddd.Ensure;
 
     public static partial class RepositoryExtensions
     {
-        public static TAggregate Get<TAggregate>(
+        public static async Task<TAggregate> GetAsync<TAggregate>(
             this IRepository<TAggregate> repository,
             Message context,
             Guid id,
             SignedVersion? version = default)
             where TAggregate : AggregateRoot
         {
-            TAggregate? aggregate = repository.Get(id, version: version);
+            TAggregate? aggregate = await repository
+                .GetAsync(id, version: version)
+                .ConfigureAwait(false);
 
             if (aggregate is null)
             {
@@ -27,7 +30,7 @@
             return aggregate;
         }
 
-        public static TAggregate Get<TAggregate>(
+        public static async Task<TAggregate> GetAsync<TAggregate>(
             this IRepository<TAggregate> repository,
             Message context,
             Reference reference)
@@ -40,10 +43,12 @@
 
             ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
-            return repository.Get(context, reference.Id);
+            return await repository
+                .GetAsync(context, reference.Id)
+                .ConfigureAwait(false);
         }
 
-        public static TAggregate Get<TAggregate>(
+        public static async Task<TAggregate> GetAsync<TAggregate>(
             this IRepository<TAggregate> repository,
             Message context,
             VersionedReference reference)
@@ -56,7 +61,9 @@
 
             ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
-            return repository.Get(context, reference.Id, version: reference.Version);
+            return await repository
+                .GetAsync(context, reference.Id, version: reference.Version)
+                .ConfigureAwait(false);
         }
     }
 }

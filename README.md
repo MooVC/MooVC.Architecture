@@ -39,6 +39,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed Ddd.Services.AggregateNotFoundException property AggregateId of type Guid to Aggregate of type Reference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.AggregateVersionNotFoundException property Aggregate of type VersionedReference to type VersionedReference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.IBus and Ddd.Services.Bus to only support async variants of each operation (**Breaking Change**).
+- Changed Ddd.Services.IRepository and its related extensions to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.CoordinatedGenerateHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.CoordinatedOperationHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).

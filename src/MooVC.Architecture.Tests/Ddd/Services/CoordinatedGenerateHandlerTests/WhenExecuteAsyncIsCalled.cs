@@ -16,7 +16,7 @@
 
             await handler.ExecuteAsync(command);
 
-            repository.Verify(repo => repo.Save(It.IsAny<AggregateRoot>()), Times.Once);
+            repository.Verify(repo => repo.SaveAsync(It.IsAny<AggregateRoot>()), Times.Once);
         }
     }
 }

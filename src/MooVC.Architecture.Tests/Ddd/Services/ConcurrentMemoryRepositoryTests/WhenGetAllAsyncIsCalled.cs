@@ -3,23 +3,24 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenGetAllIsCalled
+    public sealed class WhenGetAllAsyncIsCalled
         : ConcurrentMemoryRepositoryTests
     {
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturned(bool useCloner)
+        public async Task GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturnedAsync(bool useCloner)
         {
             ConcurrentMemoryRepository<SerializableAggregateRoot> repository =
                 Create<SerializableAggregateRoot>(useCloner);
 
-            IEnumerable<SerializableAggregateRoot> results = repository.GetAll();
+            IEnumerable<SerializableAggregateRoot> results = await repository.GetAllAsync();
 
             Assert.Empty(results);
         }
@@ -27,7 +28,7 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void GivenAPopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturned(bool useCloner)
+        public async Task GivenAPopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturnedAsync(bool useCloner)
         {
             const int ExpectedTotal = 2;
 
@@ -37,16 +38,16 @@ namespace MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepositoryTests
             ConcurrentMemoryRepository<SerializableEventCentricAggregateRoot> repository =
                 Create<SerializableEventCentricAggregateRoot>(useCloner);
 
-            repository.Save(first);
-            repository.Save(second);
+            await repository.SaveAsync(first);
+            await repository.SaveAsync(second);
 
             var context = new SerializableMessage();
 
             second.Set(new SetRequest(context, Guid.NewGuid()));
 
-            repository.Save(second);
+            await repository.SaveAsync(second);
 
-            IEnumerable<SerializableEventCentricAggregateRoot> results = repository.GetAll();
+            IEnumerable<SerializableEventCentricAggregateRoot> results = await repository.GetAllAsync();
 
             Assert.Equal(ExpectedTotal, results.Count());
             Assert.Contains(results, result => result.Id == first.Id && result.Version == first.Version);

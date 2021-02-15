@@ -1,13 +1,14 @@
 ﻿namespace MooVC.Architecture.Services.BusTests
 {
     using System;
+    using System.Threading.Tasks;
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenInvokeIsCalled
+    public sealed class WhenInvokeAsyncIsCalled
     {
         [Fact]
-        public void GivenAMessageThenMessageInvokingIsRaisedBeforeTheInvokeIsPerformed()
+        public async Task GivenAMessageThenMessageInvokingIsRaisedBeforeTheInvokeIsPerformedAsync()
         {
             var bus = new TestableBus(true);
             var message = new SerializableMessage();
@@ -15,13 +16,14 @@
 
             bus.Invoking += (_, __) => wasInvoked = true;
 
-            _ = Assert.Throws<InvalidOperationException>(() => bus.Invoke(message));
+            _ = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => bus.InvokeAsync(message));
 
             Assert.True(wasInvoked);
         }
 
         [Fact]
-        public void GivenAMessageThenMessageInvokingIsRaisedAfterTheInvokeIsPerformed()
+        public async Task GivenAMessageThenMessageInvokingIsRaisedAfterTheInvokeIsPerformedAsync()
         {
             var bus = new TestableBus(false);
             var message = new SerializableMessage();
@@ -29,25 +31,25 @@
 
             bus.Invoked += (_, __) => wasInvoked = true;
 
-            bus.Invoke(message);
+            await bus.InvokeAsync(message);
 
             Assert.True(wasInvoked);
         }
 
         [Fact]
-        public void GivenANullMessageThenAnArgumentNullExceptionIsThrown()
+        public async Task GivenANullMessageThenAnArgumentNullExceptionIsThrownAsync()
         {
             var bus = new TestableBus(false);
             Message? message = default;
 
-            ArgumentNullException? exception = Assert.Throws<ArgumentNullException>(
-                () => bus.Invoke(message!));
+            ArgumentNullException? exception = await Assert.ThrowsAsync<ArgumentNullException>(
+                () => bus.InvokeAsync(message!));
 
             Assert.Equal(nameof(message), exception.ParamName);
         }
 
         [Fact]
-        public void GivenANullMessageThenNoEventsAreRaised()
+        public async Task GivenANullMessageThenNoEventsAreRaisedAsync()
         {
             var bus = new TestableBus(false);
             Message? message = default;
@@ -56,8 +58,8 @@
             bus.Invoking += (_, __) => wasInvoked = true;
             bus.Invoked += (_, __) => wasInvoked = true;
 
-            _ = Assert.Throws<ArgumentNullException>(
-                () => bus.Invoke(message!));
+            _ = await Assert.ThrowsAsync<ArgumentNullException>(
+                () => bus.InvokeAsync(message!));
 
             Assert.False(wasInvoked);
         }

@@ -1,5 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
+    using System.Threading.Tasks;
+
     public interface IAggregateReconciler
     {
         event AggregateConflictDetectedEventHandler AggregateConflictDetected;
@@ -8,8 +10,8 @@
 
         event UnsupportedAggregateTypeDetectedEventHandler UnsupportedAggregateTypeDetected;
 
-        void Reconcile(params EventCentricAggregateRoot[] aggregates);
+        Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates);
 
-        void Reconcile(params DomainEvent[] events);
+        Task ReconcileAsync(params DomainEvent[] events);
     }
 }

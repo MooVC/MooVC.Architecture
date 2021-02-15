@@ -135,7 +135,7 @@
   <data name="RequestContextRequired" xml:space="preserve">
     <value>The context of the request must be provided.</value>
   </data>
-  <data name="TypeExtensionsCoordinateTypeRequired" xml:space="preserve">
+  <data name="TypeExtensionsGenerateContextTypeRequired" xml:space="preserve">
     <value>The type that serves as the context for coordination must be provided.</value>
   </data>
 </root>

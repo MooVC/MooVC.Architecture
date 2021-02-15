@@ -1,14 +1,16 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.Services.Snapshots;
     using MooVC.Persistence;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
 
     public sealed class DefaultReconciliationOrchestrator<TEventSequence>
-        : IReconciliationOrchestrator
+        : ReconciliationOrchestrator
         where TEventSequence : class, IEventSequence
     {
         private readonly IAggregateReconciler aggregateReconciler;
@@ -44,45 +46,50 @@
             this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;
         }
 
-        public event SnapshotRestorationCommencingEventHandler? SnapshotRestorationCommencing;
-
-        public event SnapshotRestorationCompletedEventHandler? SnapshotRestorationCompleted;
-
-        public void Reconcile(IEventSequence? target = default)
+        public override async Task ReconcileAsync(IEventSequence? target = default)
         {
-            IEventSequence? previous = GetPreviousSequence();
+            IEventSequence? previous = await GetPreviousSequenceAsync()
+                .ConfigureAwait(false);
 
             if (previous is null || previous.Sequence == 0)
             {
-                previous = RestoreLatestSnapshot();
+                previous = await RestoreLatestSnapshotAsync()
+                    .ConfigureAwait(false);
             }
 
             ReconcileEvents(previous, target);
         }
 
-        private IEventSequence? GetPreviousSequence()
+        private async Task<IEventSequence?> GetPreviousSequenceAsync()
         {
-            return sequenceStore.Get().LastOrDefault();
+            IEnumerable<TEventSequence>? last = await sequenceStore
+                .GetAsync()
+                .ConfigureAwait(false);
+
+            return last.LastOrDefault();
         }
 
         private void ReconcileEvents(IEventSequence? previous, IEventSequence? target)
         {
-            _ = eventReconciler.Reconcile(previous: previous?.Sequence, target: target?.Sequence);
+            _ = eventReconciler.ReconcileAsync(previous: previous?.Sequence, target: target?.Sequence);
         }
 
-        private IEventSequence? RestoreLatestSnapshot()
+        private async Task<IEventSequence?> RestoreLatestSnapshotAsync()
         {
             ISnapshot latest = snapshotSource();
 
             if (latest is { })
             {
-                SnapshotRestorationCommencing?.Invoke(this, EventArgs.Empty);
+                OnSnapshotRestorationCommencing();
 
-                aggregateReconciler.Reconcile(latest.Aggregates.ToArray());
+                await aggregateReconciler
+                    .ReconcileAsync(latest.Aggregates.ToArray())
+                    .ConfigureAwait(false);
 
-                UpdateSequence(latest.Sequence.Sequence);
+                await UpdateSequenceAsync(latest.Sequence.Sequence)
+                    .ConfigureAwait(false);
 
-                SnapshotRestorationCompleted?.Invoke(this, new SnapshotRestorationCompletedEventArgs(latest.Sequence));
+                OnSnapshotRestorationCompleted(latest.Sequence);
 
                 return latest.Sequence;
             }
@@ -90,28 +97,35 @@
             return default;
         }
 
-        private void UpdateSequence(ulong current)
+        private async Task UpdateSequenceAsync(ulong current)
         {
             TEventSequence sequence = sequenceFactory(current);
 
             if (sequence is { })
             {
-                _ = sequenceStore.Create(sequence);
+                _ = await sequenceStore
+                    .CreateAsync(sequence)
+                    .ConfigureAwait(false);
             }
         }
 
-        private void AggregateReconciler_AggregateConflictDetected(
+        private async void AggregateReconciler_AggregateConflictDetected(
             IAggregateReconciler sender,
             AggregateConflictDetectedEventArgs e)
         {
             EventCentricAggregateRoot aggregate = aggregateSource(e.Aggregate);
 
-            sender.Reconcile(aggregate);
+            await sender
+                .ReconcileAsync(aggregate)
+                .ConfigureAwait(false);
         }
 
-        private void EventReconciler_EventSequenceAdvanced(IEventReconciler sender, EventSequenceAdvancedEventArgs e)
+        private async void EventReconciler_EventSequenceAdvanced(
+            IEventReconciler sender,
+            EventSequenceAdvancedEventArgs e)
         {
-            UpdateSequence(e.Sequence);
+            await UpdateSequenceAsync(e.Sequence)
+                .ConfigureAwait(false);
         }
     }
 }

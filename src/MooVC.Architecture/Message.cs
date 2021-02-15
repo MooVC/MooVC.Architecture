@@ -29,14 +29,14 @@
         {
             CausationId = info.TryGetValue<Guid>(nameof(CausationId));
             CorrelationId = info.GetValue<Guid>(nameof(CorrelationId));
-            TimeStamp = info.GetDateTime(nameof(TimeStamp));
+            TimeStamp = info.GetValue<DateTimeOffset>(nameof(TimeStamp));
         }
 
         public Guid CausationId { get; } = Guid.Empty;
 
         public Guid CorrelationId { get; } = Guid.NewGuid();
 
-        public DateTime TimeStamp { get; } = DateTime.UtcNow;
+        public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

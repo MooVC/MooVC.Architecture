@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.CoordinatedGenerateHandlerTests
 {
     using System;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
 
     internal sealed class TestableCoordinatedGenerateHandler<TCommand>

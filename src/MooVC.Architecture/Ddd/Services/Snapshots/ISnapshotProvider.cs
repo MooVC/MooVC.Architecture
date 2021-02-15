@@ -1,7 +1,9 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Snapshots
 {
+    using System.Threading.Tasks;
+
     public interface ISnapshotProvider
     {
-        ISnapshot? Generate(ulong? target = default);
+        Task<ISnapshot?> GenerateAsync(ulong? target = default);
     }
 }

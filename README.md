@@ -16,20 +16,42 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 
 ## Enhancements
 
+- Added async variants of the various Coordinate extensions.
+- Added Cqrs.Services.SynchronousQueryEngine to facilitate migration from synchronous to asynchronous implementations of Cqrs.Services.IQueryEngine.
+- Added Cqrs.Services.SynchronousQueryHandler to facilitate migration from synchronous to asynchronous implementations of Cqrs.Services.IQueryHandler.
+- Added Ddd.Services.SynchronousBus to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.IBus and Ddd.Services.Bus.
+- Added Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxy to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciliationProxy.
+- Added Ddd.Services.Reconciliation.SynchronousAggregateReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciler.
+- Added Ddd.Services.Reconciliation.SynchronousEventReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IEventReconciler.
+- Added Ddd.Services.Snapshots.SynchronousSnapshotProvider to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Snapshots.ISnapshotProvider.
+- Added Services.SynchronousBus to facilitate migration from synchronous to asynchronous implementations of Services.IBus and Services.Bus.
+- Added Services.SynchronousHandler to facilitate migration from synchronous to asynchronous implementations of Services.IHandler.
+- Changed to target version 3.x of MooVC (**Breaking Change**).
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
 - Changed Value so that it now implements IEquatable<Value>.
-- Changed MooVC.Architecture to target version 3.x of MooVC (**Breaking Change**).
 - Changed constructors for Ddd.DomainException to private protected (**Breaking Change**).
 - Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).
+- Changed data type for TimeStamp properties of Message, Ddd.DomainException and Ddd.Services.Reconciliation.IEventSequence to DateTimeOffset (**Breaking Change**).
 - Changed all exceptions to properly implement ISerializable.
+- Changed Cqrs.Services.IQueryEngine to only support async variants of each operation (**Breaking Change**).
+- Changed Cqrs.Services.IQueryHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.AggregateNotFoundException property AggregateId of type Guid to Aggregate of type Reference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.AggregateVersionNotFoundException property Aggregate of type VersionedReference to type VersionedReference<TAggregate> (**Breaking Change**).
+- Changed Ddd.Services.IBus and Ddd.Services.Bus to only support async variants of each operation (**Breaking Change**).
+- Changed Ddd.Services.CoordinatedGenerateHandler to only support async variants of each operation (**Breaking Change**).
+- Changed Ddd.Services.CoordinatedOperationHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
 - Changed Ddd.Services.MemoryRepository so that it is no longer serializable (**Breaking Change**).
 - Changed Ddd.Services.MemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
-- Changed Ddd.Services.Reconciliation.IAggregateReconciler.Reconcile to accept a params array instead of an IEnumerable of Domain Events (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.IAggregateReconciliationProxy to only support async variants of each operation (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.IAggregateReconciler to only support async variants of each operation (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.IEventReconciler to only support async variants of each operation (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.IAggregateReconciler.ReconcileAsync to accept a params array instead of an IEnumerable of Domain Events (**Breaking Change**).
+- Changed Ddd.Services.Snapshots.ISnapshotProvider to only support async variants of each operation (**Breaking Change**).
+- Changed Services.IBus and Services.Bus to only support async variants of each operation (**Breaking Change**).
+- Changed Services.IHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Serialization.SerializationInfoExtensions.TryAddReference and its related variants so that they are not type specific. 
 - Deleted Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
 - Deleted unused Ddd.Services.ConcurrentMemoryRepository.PerformRead method that did not appear to serve any purpose (**Breaking Change**).

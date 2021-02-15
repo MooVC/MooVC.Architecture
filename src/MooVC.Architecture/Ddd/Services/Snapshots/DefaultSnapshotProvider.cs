@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Persistence;
     using static MooVC.Architecture.Ddd.Services.Snapshots.Resources;
@@ -30,22 +31,38 @@
             this.numberToRead = numberToRead;
         }
 
-        public ISnapshot? Generate(ulong? target = default)
+        public async Task<ISnapshot?> GenerateAsync(ulong? target = default)
         {
-            IEventReconciler reconciler = CreateEventReconciler(out Func<IEnumerable<EventCentricAggregateRoot>> aggregates);
-            ulong? current = reconciler.Reconcile(target: target);
+            IEventReconciler reconciler = CreateEventReconciler(
+                out Func<Task<IEnumerable<EventCentricAggregateRoot>>> aggregates);
+
+            ulong? current = await reconciler.ReconcileAsync(target: target);
 
             if (current.HasValue)
             {
                 var sequence = new EventSequence(current.Value);
 
-                return new Snapshot(aggregates(), sequence);
+                IEnumerable<EventCentricAggregateRoot> values = await aggregates()
+                    .ConfigureAwait(false);
+
+                return new Snapshot(values, sequence);
             }
 
             return default;
         }
 
-        private IEventReconciler CreateEventReconciler(out Func<IEnumerable<EventCentricAggregateRoot>> aggregates)
+        private static async Task<IEnumerable<EventCentricAggregateRoot>> RetrieveAllAggregatesAsync(
+            IEnumerable<IAggregateReconciliationProxy> proxies)
+        {
+            IEnumerable<Task<IEnumerable<EventCentricAggregateRoot>>>? aggregates = proxies
+                .Select(async proxy => await proxy.GetAllAsync());
+
+            IEnumerable<EventCentricAggregateRoot>[]? results = await Task.WhenAll(aggregates);
+
+            return results.SelectMany(result => result).ToArray();
+        }
+
+        private IEventReconciler CreateEventReconciler(out Func<Task<IEnumerable<EventCentricAggregateRoot>>> aggregates)
         {
             var proxies = new ConcurrentDictionary<Type, IAggregateReconciliationProxy>();
             Func<Type, IAggregateReconciliationProxy?> external = factory();
@@ -67,10 +84,7 @@
 
             IAggregateReconciler aggregateReconciler = new DefaultAggregateReconciler(ProxyFactory);
 
-            aggregates = () => proxies
-                .Values
-                .SelectMany(proxy => proxy.GetAll())
-                .ToArray();
+            aggregates = () => RetrieveAllAggregatesAsync(proxies.Values);
 
             return new DefaultEventReconciler<TSequencedEvents>(
                 eventStore,

@@ -21,11 +21,13 @@ namespace MooVC.Architecture.Ddd.Services
             this.repository.AggregateSaved += Repository_AggregateSaved;
         }
 
-        private void Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedEventArgs<TAggregate> e)
+        private async void Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedEventArgs<TAggregate> e)
         {
             IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
 
-            bus.Publish(changes.ToArray());
+            await bus
+                .PublishAsync(changes.ToArray())
+                .ConfigureAwait(false);
         }
     }
 }

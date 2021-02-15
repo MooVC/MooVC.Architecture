@@ -1,8 +1,10 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
+    using System.Threading.Tasks;
+
     public interface IStartSaga<T>
         where T : DomainEvent
     {
-        void Start(T @event);
+        Task StartAsync(T @event);
     }
 }

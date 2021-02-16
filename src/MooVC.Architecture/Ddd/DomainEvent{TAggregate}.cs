@@ -9,7 +9,7 @@
         where TAggregate : AggregateRoot
     {
         protected DomainEvent(Message context, TAggregate aggregate)
-            : base(context, aggregate.ToVersionedReference())
+            : base(context, aggregate.ToReference())
         {
         }
 

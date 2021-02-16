@@ -11,7 +11,7 @@
         {
             var aggregate = new SerializableAggregateRoot();
             var instance = new SerializableProjection<SerializableAggregateRoot>(aggregate);
-            var expected = aggregate.ToVersionedReference();
+            var expected = aggregate.ToReference();
 
             Assert.Equal(expected, instance.Aggregate);
         }
@@ -20,7 +20,7 @@
         public void GivenAnAggregateReferenceThenAnInstanceIsReturnedWithTheAggregateReferenceSet()
         {
             var aggregate = new SerializableAggregateRoot();
-            var expected = aggregate.ToVersionedReference();
+            var expected = aggregate.ToReference();
             var instance = new SerializableProjection<SerializableAggregateRoot>(expected);
 
             Assert.Equal(expected, instance.Aggregate);
@@ -29,7 +29,7 @@
         [Fact]
         public void GivenAnEmptyAggregateReferenceThenAnArgumentExceptionIsThrown()
         {
-            VersionedReference<SerializableAggregateRoot> aggregate = VersionedReference<SerializableAggregateRoot>.Empty;
+            Reference<SerializableAggregateRoot> aggregate = Reference<SerializableAggregateRoot>.Empty;
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => new SerializableProjection<SerializableAggregateRoot>(aggregate));
@@ -51,7 +51,7 @@
         [Fact]
         public void GivenAnNullAggregateReferenceThenAnArgumentExceptionIsThrown()
         {
-            VersionedReference<SerializableAggregateRoot>? aggregate = default;
+            Reference<SerializableAggregateRoot>? aggregate = default;
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => new SerializableProjection<SerializableAggregateRoot>(aggregate!));

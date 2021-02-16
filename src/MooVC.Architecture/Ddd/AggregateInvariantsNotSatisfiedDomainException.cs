@@ -15,7 +15,7 @@ namespace MooVC.Architecture.Ddd
     {
         public AggregateInvariantsNotSatisfiedDomainException(
             Request request,
-            VersionedReference aggregate,
+            Reference aggregate,
             IEnumerable<string> explainations)
             : base(
                   request.Context,

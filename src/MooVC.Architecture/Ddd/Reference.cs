@@ -10,14 +10,15 @@ namespace MooVC.Architecture.Ddd
         : Value
     {
         internal Reference(AggregateRoot aggregate)
-            : this(aggregate.Id, aggregate.GetType())
+            : this(aggregate.Id, aggregate.GetType(), version: aggregate.Version)
         {
         }
 
-        internal Reference(Guid id, Type type)
+        internal Reference(Guid id, Type type, SignedVersion? version = default)
         {
             Id = id;
             Type = type;
+            Version = version ?? SignedVersion.Empty;
         }
 
         private protected Reference(SerializationInfo info, StreamingContext context)
@@ -25,13 +26,18 @@ namespace MooVC.Architecture.Ddd
         {
             Id = DeserializeId(info, context);
             Type = DeserializeType(info, context);
+            Version = DeserializeVersion(info, context);
         }
 
         public Guid Id { get; }
 
         public bool IsEmpty => Id == Guid.Empty;
 
-        public Type Type { get; }
+        public bool IsVersioned => !Version.IsEmpty;
+
+        public virtual Type Type { get; }
+
+        public SignedVersion Version { get; } = SignedVersion.Empty;
 
         public static bool operator ==(Reference? first, Reference? second)
         {
@@ -48,17 +54,16 @@ namespace MooVC.Architecture.Ddd
             return EqualOperator(this, other as Reference);
         }
 
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            SerializeId(info, context);
+            SerializeType(info, context);
+            SerializeVersion(info, context);
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();
-        }
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            SerializeId(info, context);
-            SerializeType(info, context);
         }
 
         public virtual bool IsMatch(AggregateRoot aggregate)
@@ -68,7 +73,7 @@ namespace MooVC.Architecture.Ddd
 
         protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)
         {
-            return info.TryGetValue<Guid>(nameof(Id));
+            return info.TryGetValue(nameof(Id), defaultValue: Guid.Empty);
         }
 
         protected virtual Type DeserializeType(SerializationInfo info, StreamingContext context)
@@ -82,15 +87,21 @@ namespace MooVC.Architecture.Ddd
             return type!;
         }
 
+        protected virtual SignedVersion DeserializeVersion(SerializationInfo info, StreamingContext context)
+        {
+            return info.TryGetValue(nameof(Version), defaultValue: SignedVersion.Empty);
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Id;
             yield return Type;
+            yield return Version;
         }
 
         protected virtual void SerializeId(SerializationInfo info, StreamingContext context)
         {
-            _ = info.TryAddValue(nameof(Id), Id);
+            _ = info.TryAddValue(nameof(Id), Id, defaultValue: Guid.Empty);
         }
 
         protected virtual void SerializeType(SerializationInfo info, StreamingContext context)
@@ -98,6 +109,11 @@ namespace MooVC.Architecture.Ddd
             string? typeName = Type.AssemblyQualifiedName;
 
             _ = info.TryAddInternalValue(nameof(typeName), typeName);
+        }
+
+        protected virtual void SerializeVersion(SerializationInfo info, StreamingContext context)
+        {
+            _ = info.TryAddValue(nameof(Version), Version, defaultValue: SignedVersion.Empty);
         }
 
         private static bool EqualOperator(Reference? left, Reference? right)

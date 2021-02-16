@@ -11,7 +11,7 @@
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var subject = new SerializableAggregateRoot();
-            var aggregate = subject.ToVersionedReference();
+            var aggregate = subject.ToReference();
             var context = new SerializableMessage();
             var original = new AggregateVersionNotFoundException<SerializableAggregateRoot>(context, aggregate);
             AggregateVersionNotFoundException<SerializableAggregateRoot> deserialized = original.Clone();

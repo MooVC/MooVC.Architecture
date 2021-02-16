@@ -20,7 +20,7 @@
         public abstract Task ReconcileAsync(params DomainEvent[] events);
 
         protected virtual bool EventsAreNonConflicting(
-            VersionedReference aggregate,
+            Reference aggregate,
             IEnumerable<DomainEvent> events,
             out bool isNew)
         {

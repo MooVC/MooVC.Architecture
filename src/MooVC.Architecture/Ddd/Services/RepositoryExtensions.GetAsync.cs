@@ -19,12 +19,7 @@
 
             if (aggregate is null)
             {
-                if (version is { })
-                {
-                    throw new AggregateVersionNotFoundException<TAggregate>(context, id, version);
-                }
-
-                throw new AggregateNotFoundException<TAggregate>(context, id);
+                throw new AggregateVersionNotFoundException<TAggregate>(context, id, version: version);
             }
 
             return aggregate;
@@ -33,7 +28,8 @@
         public static Task<TAggregate> GetAsync<TAggregate>(
             this IRepository<TAggregate> repository,
             Message context,
-            Reference reference)
+            Reference reference,
+            bool latest = true)
             where TAggregate : AggregateRoot
         {
             if (reference.IsEmpty)
@@ -43,21 +39,10 @@
 
             ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
-            return repository.GetAsync(context, reference.Id);
-        }
-
-        public static Task<TAggregate> GetAsync<TAggregate>(
-            this IRepository<TAggregate> repository,
-            Message context,
-            VersionedReference reference)
-            where TAggregate : AggregateRoot
-        {
-            if (reference.IsEmpty)
+            if (latest || reference.Version.IsEmpty)
             {
-                throw new AggregateDoesNotExistException<TAggregate>(context);
+                return repository.GetAsync(context, reference.Id);
             }
-
-            ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
             return repository.GetAsync(context, reference.Id, version: reference.Version);
         }

@@ -4,12 +4,12 @@
 
     public static partial class GuidExtensions
     {
-        public static Reference<TAggregate> ToReference<TAggregate>(this Guid id)
+        public static Reference<TAggregate> ToReference<TAggregate>(this Guid id, SignedVersion? version = default)
             where TAggregate : AggregateRoot
         {
             return id == Guid.Empty
                 ? Reference<TAggregate>.Empty
-                : new Reference<TAggregate>(id);
+                : new Reference<TAggregate>(id, version: version);
         }
     }
 }

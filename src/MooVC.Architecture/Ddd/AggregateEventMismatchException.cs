@@ -11,7 +11,7 @@
     public sealed class AggregateEventMismatchException
         : ArgumentException
     {
-        public AggregateEventMismatchException(VersionedReference aggregate, VersionedReference eventAggregate)
+        public AggregateEventMismatchException(Reference aggregate, Reference eventAggregate)
             : base(FormatMessage(aggregate, eventAggregate))
         {
             Aggregate = aggregate;
@@ -21,23 +21,23 @@
         private AggregateEventMismatchException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = info.TryGetVersionedReference(nameof(Aggregate));
-            EventAggregate = info.TryGetVersionedReference(nameof(EventAggregate));
+            Aggregate = info.TryGetReference(nameof(Aggregate));
+            EventAggregate = info.TryGetReference(nameof(EventAggregate));
         }
 
-        public VersionedReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
-        public VersionedReference EventAggregate { get; }
+        public Reference EventAggregate { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
-            _ = info.TryAddVersionedReference(nameof(EventAggregate), EventAggregate);
+            _ = info.TryAddReference(nameof(Aggregate), Aggregate);
+            _ = info.TryAddReference(nameof(EventAggregate), EventAggregate);
         }
 
-        private static string FormatMessage(VersionedReference aggregate, VersionedReference eventAggregate)
+        private static string FormatMessage(Reference aggregate, Reference eventAggregate)
         {
             ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventMismatchExceptionAggregateRequired);
             ArgumentNotNull(eventAggregate, nameof(eventAggregate), AggregateEventMismatchExceptionEventAggregateRequired);

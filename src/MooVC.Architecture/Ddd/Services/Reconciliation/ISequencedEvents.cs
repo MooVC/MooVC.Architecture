@@ -4,7 +4,7 @@
 
     public interface ISequencedEvents
     {
-        VersionedReference Aggregate { get; }
+        Reference Aggregate { get; }
 
         public IEnumerable<DomainEvent> Events { get; }
 

@@ -164,7 +164,7 @@
   <data name="AggregateRootExtensionsSaveDestinationRequired" xml:space="preserve">
     <value>The destination must be provided.</value>
   </data>
-  <data name="AggregateRootExtensionsToVersionedReferenceAggregateRequired" xml:space="preserve">
+  <data name="AggregateRootExtensionsToReferenceAggregateRequired" xml:space="preserve">
     <value>The aggregate must be provided.</value>
   </data>
   <data name="AggregateRootIdRequired" xml:space="preserve">

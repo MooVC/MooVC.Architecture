@@ -32,34 +32,30 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected virtual (Reference NonVersioned, Reference Versioned) GenerateReferences(TAggregate aggregate)
         {
-            return (new Reference<TAggregate>(aggregate.Id),
-                new VersionedReference<TAggregate>(aggregate.Id, aggregate.Version));
+            return (new Reference<TAggregate>(aggregate.Id, version: SignedVersion.Empty),
+                new Reference<TAggregate>(aggregate.Id, version: aggregate.Version));
         }
 
         protected override TAggregate? PerformGet(Guid id, SignedVersion? version = default)
         {
-            Reference key = version is { }
-                ? (Reference)new VersionedReference<TAggregate>(id, version)
-                : new Reference<TAggregate>(id);
-
-            return Get(key);
+            return Get(new Reference<TAggregate>(id, version: version));
         }
 
         protected override IEnumerable<TAggregate> PerformGetAll()
         {
             return Store
-                .Where(entry => entry.Key is Reference<TAggregate>)
+                .Where(entry => !entry.Key.IsVersioned)
                 .Select(entry => cloner(entry.Value))
                 .ToArray();
         }
 
-        protected override VersionedReference? PerformGetCurrentVersion(TAggregate aggregate)
+        protected override Reference? PerformGetCurrentVersion(TAggregate aggregate)
         {
-            Reference nonVersioned = aggregate.ToReference();
+            Reference nonVersioned = new Reference<TAggregate>(aggregate.Id);
 
             if (Store.TryGetValue(nonVersioned, out TAggregate? existing))
             {
-                return existing.ToVersionedReference();
+                return existing.ToReference();
             }
 
             return default;

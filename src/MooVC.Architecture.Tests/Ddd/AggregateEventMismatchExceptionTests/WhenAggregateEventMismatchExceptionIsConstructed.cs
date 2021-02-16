@@ -10,8 +10,8 @@
         public void GivenNoAggregateAndTheEventAggregateThenAnArgumentNullExceptionIsThrown()
         {
             var subject = new SerializableAggregateRoot();
-            VersionedReference? aggregate = default;
-            var eventAggregate = subject.ToVersionedReference();
+            Reference? aggregate = default;
+            var eventAggregate = subject.ToReference();
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
                 () => new AggregateEventMismatchException(aggregate!, eventAggregate));
@@ -23,8 +23,8 @@
         public void GivenTheAggregateAndTheEventAggregateThenAnInstanceIsReturnedWithAllPropertiesSet()
         {
             var subject = new SerializableAggregateRoot();
-            var aggregate = subject.ToVersionedReference();
-            var eventAggregate = subject.ToVersionedReference();
+            var aggregate = subject.ToReference();
+            var eventAggregate = subject.ToReference();
             var instance = new AggregateEventMismatchException(aggregate, eventAggregate);
 
             Assert.Equal(aggregate, instance.Aggregate);
@@ -35,8 +35,8 @@
         public void GivenTheAggregateAndNoEventAggregateThenAnArgumentNullExceptionIsThrown()
         {
             var subject = new SerializableAggregateRoot();
-            var aggregate = subject.ToVersionedReference();
-            VersionedReference? eventAggregate = default;
+            var aggregate = subject.ToReference();
+            Reference? eventAggregate = default;
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
                 () => new AggregateEventMismatchException(aggregate, eventAggregate!));

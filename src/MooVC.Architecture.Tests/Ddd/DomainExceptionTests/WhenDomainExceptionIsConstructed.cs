@@ -18,7 +18,7 @@
                 aggregate,
                 Message);
 
-            Assert.Equal(aggregate.ToVersionedReference(), exception.Aggregate);
+            Assert.Equal(aggregate.ToReference(), exception.Aggregate);
             Assert.Equal(context, exception.Context);
             Assert.Equal(Message, exception.Message);
         }

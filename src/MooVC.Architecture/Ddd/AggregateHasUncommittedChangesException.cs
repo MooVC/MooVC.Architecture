@@ -10,7 +10,7 @@
     public sealed class AggregateHasUncommittedChangesException
         : ArgumentException
     {
-        internal AggregateHasUncommittedChangesException(VersionedReference aggregate)
+        internal AggregateHasUncommittedChangesException(Reference aggregate)
             : base(Format(
                 AggregateHasUncommittedChangesExceptionMessage,
                 aggregate.Id,
@@ -23,16 +23,16 @@
         private AggregateHasUncommittedChangesException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = info.TryGetVersionedReference(nameof(Aggregate));
+            Aggregate = info.TryGetReference(nameof(Aggregate));
         }
 
-        public VersionedReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
+            _ = info.TryAddReference(nameof(Aggregate), Aggregate);
         }
     }
 }

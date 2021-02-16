@@ -67,7 +67,7 @@
                     }
                     else
                     {
-                        foreach (IGrouping<VersionedReference, DomainEvent> aggregateEvents in aggregateTypes
+                        foreach (IGrouping<Reference, DomainEvent> aggregateEvents in aggregateTypes
                             .GroupBy(@event => @event.Aggregate))
                         {
                             if (EventsAreNonConflicting(aggregateEvents.Key, aggregateEvents, out _))
@@ -81,7 +81,7 @@
             }
         }
 
-        private Task PerformCoordinatedReconcileAsync(
+        private static Task PerformCoordinatedReconcileAsync(
             EventCentricAggregateRoot aggregate,
             IAggregateReconciliationProxy proxy)
         {

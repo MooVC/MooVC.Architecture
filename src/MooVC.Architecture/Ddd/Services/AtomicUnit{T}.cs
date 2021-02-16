@@ -14,7 +14,7 @@
     public abstract class AtomicUnit<T>
         : ISerializable
     {
-        private readonly Lazy<VersionedReference> aggregate;
+        private readonly Lazy<Reference> aggregate;
 
         protected AtomicUnit(T id, params DomainEvent[] events)
         {
@@ -36,19 +36,19 @@
                 HasSameContext,
                 AtomicUnitDistinctContextRequired);
 
-            aggregate = new Lazy<VersionedReference>(IdentifyAggregate);
+            aggregate = new Lazy<Reference>(IdentifyAggregate);
             Events = events.Snapshot();
             Id = id;
         }
 
         protected AtomicUnit(SerializationInfo info, StreamingContext context)
         {
-            aggregate = new Lazy<VersionedReference>(IdentifyAggregate);
+            aggregate = new Lazy<Reference>(IdentifyAggregate);
             Events = info.GetEnumerable<DomainEvent>(nameof(Events));
             Id = info.GetValue<T>(nameof(Id));
         }
 
-        public VersionedReference Aggregate => aggregate.Value;
+        public Reference Aggregate => aggregate.Value;
 
         public IEnumerable<DomainEvent> Events { get; }
 
@@ -85,7 +85,7 @@
             return HasSame(events, @event => @event.CorrelationId);
         }
 
-        private VersionedReference IdentifyAggregate()
+        private Reference IdentifyAggregate()
         {
             return Events.First().Aggregate;
         }

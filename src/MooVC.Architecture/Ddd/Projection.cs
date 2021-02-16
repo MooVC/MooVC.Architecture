@@ -16,7 +16,7 @@
         {
         }
 
-        protected Projection(VersionedReference<TAggregate> aggregate)
+        protected Projection(Reference<TAggregate> aggregate)
         {
             ReferenceIsNotEmpty(aggregate, nameof(aggregate), ProjectionAggregateRequired);
 
@@ -25,19 +25,19 @@
 
         protected Projection(SerializationInfo info, StreamingContext context)
         {
-            Aggregate = info.TryGetVersionedReference<TAggregate>(nameof(Aggregate));
+            Aggregate = info.TryGetReference<TAggregate>(nameof(Aggregate));
         }
 
-        public VersionedReference<TAggregate> Aggregate { get; }
+        public Reference<TAggregate> Aggregate { get; }
 
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
+            _ = info.TryAddReference(nameof(Aggregate), Aggregate);
         }
 
-        private static VersionedReference<TAggregate> CreateReference(TAggregate aggregate)
+        private static Reference<TAggregate> CreateReference(TAggregate aggregate)
         {
-            return aggregate?.ToVersionedReference() ?? VersionedReference<TAggregate>.Empty;
+            return aggregate?.ToReference() ?? Reference<TAggregate>.Empty;
         }
     }
 }

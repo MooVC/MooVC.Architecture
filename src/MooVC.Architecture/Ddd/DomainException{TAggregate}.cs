@@ -9,7 +9,7 @@
         where TAggregate : AggregateRoot
     {
         protected DomainException(Message context, TAggregate aggregate, string message)
-            : base(context, aggregate.ToVersionedReference(), message)
+            : base(context, aggregate.ToReference(), message)
         {
         }
 

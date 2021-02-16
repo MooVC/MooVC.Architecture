@@ -200,9 +200,9 @@ namespace MooVC.Architecture.Ddd {
         /// <summary>
         ///   Looks up a localized string similar to The aggregate must be provided..
         /// </summary>
-        internal static string AggregateRootExtensionsToVersionedReferenceAggregateRequired {
+        internal static string AggregateRootExtensionsToReferenceAggregateRequired {
             get {
-                return ResourceManager.GetString("AggregateRootExtensionsToVersionedReferenceAggregateRequired", resourceCulture);
+                return ResourceManager.GetString("AggregateRootExtensionsToReferenceAggregateRequired", resourceCulture);
             }
         }
         

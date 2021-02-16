@@ -14,7 +14,7 @@
         : ArgumentException
     {
         internal AggregateHistoryInvalidForStateException(
-            VersionedReference aggregate,
+            Reference aggregate,
             IEnumerable<DomainEvent> events,
             SignedVersion startingVersion)
             : base(Format(
@@ -32,12 +32,12 @@
         private AggregateHistoryInvalidForStateException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = info.TryGetVersionedReference(nameof(Aggregate));
+            Aggregate = info.TryGetReference(nameof(Aggregate));
             Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
             StartingVersion = info.TryGetValue(nameof(StartingVersion), defaultValue: SignedVersion.Empty);
         }
 
-        public VersionedReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         public IEnumerable<DomainEvent> Events { get; }
 
@@ -47,7 +47,7 @@
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
+            _ = info.TryAddReference(nameof(Aggregate), Aggregate);
             _ = info.TryAddEnumerable(nameof(Events), Events);
             _ = info.TryAddValue(nameof(StartingVersion), StartingVersion, defaultValue: SignedVersion.Empty);
         }

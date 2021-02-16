@@ -37,6 +37,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed all exceptions to properly implement ISerializable.
 - Changed Cqrs.Services.IQueryEngine to only support async variants of each operation (**Breaking Change**).
 - Changed Cqrs.Services.IQueryHandler to only support async variants of each operation (**Breaking Change**).
+- Changed Ddd.Reference to include a version property (**Breaking Change**).
 - Changed Ddd.Services.AggregateNotFoundException property AggregateId of type Guid to Aggregate of type Reference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.AggregateVersionNotFoundException property Aggregate of type VersionedReference to type VersionedReference<TAggregate> (**Breaking Change**).
 - Changed Ddd.Services.IBus and Ddd.Services.Bus to only support async variants of each operation (**Breaking Change**).
@@ -57,10 +58,11 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed Services.IBus and Services.Bus to only support async variants of each operation (**Breaking Change**).
 - Changed Services.IHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Serialization.SerializationInfoExtensions.TryAddReference and its related variants so that they are not type specific. 
-- Deleted Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
-- Deleted unused Ddd.Services.ConcurrentMemoryRepository.PerformRead method that did not appear to serve any purpose (**Breaking Change**).
 - Moved Ddd.Entity<T> to the root namespace (**Breaking Change**).
 - Moved Ddd.Value to the root namespace (**Breaking Change**).
+- Removed Ddd.VersionedReference and all associated extensions (**Breaking Change**).
+- Removed Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
+- Removed unused Ddd.Services.ConcurrentMemoryRepository.PerformRead method that did not appear to serve any purpose (**Breaking Change**).
 
 ## Bug Fixes
 

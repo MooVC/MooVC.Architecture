@@ -7,9 +7,9 @@
         where TQuery : Message
         where TResult : Message
     {
-        public virtual async Task<TResult> ExecuteAsync(TQuery query)
+        public virtual Task<TResult> ExecuteAsync(TQuery query)
         {
-            return await Task.FromResult(PerformExecute(query));
+            return Task.FromResult(PerformExecute(query));
         }
 
         protected abstract TResult PerformExecute(TQuery query);

@@ -8,28 +8,25 @@ namespace MooVC.Architecture.Ddd
 
     public static partial class VersionedReferenceExtensions
     {
-        public static async Task<TAggregate> RetrieveAsync<TAggregate>(
+        public static Task<TAggregate> RetrieveAsync<TAggregate>(
             this VersionedReference reference,
             Message context,
             IRepository<TAggregate> repository)
             where TAggregate : AggregateRoot
         {
-            return await repository
-                .GetAsync(context, reference)
-                .ConfigureAwait(false);
+            return repository.GetAsync(context, reference);
         }
 
-        public static async Task<IEnumerable<TAggregate>> RetrieveAsync<TAggregate>(
+        public static Task<IEnumerable<TAggregate>> RetrieveAsync<TAggregate>(
             this IEnumerable<VersionedReference> references,
             Message context,
             IRepository<TAggregate> repository,
             bool ignoreEmpty = false)
             where TAggregate : AggregateRoot
         {
-            return await references
+            return references
                 .Where(reference => !(ignoreEmpty && reference.IsEmpty))
-                .ProcessAllAsync(reference => reference.RetrieveAsync(context, repository))
-                .ConfigureAwait(false);
+                .ProcessAllAsync(reference => reference.RetrieveAsync(context, repository));
         }
     }
 }

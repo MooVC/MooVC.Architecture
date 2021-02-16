@@ -8,9 +8,9 @@
         where TAggregate : AggregateRoot
         where TProjection : Projection<TAggregate>
     {
-        public override async Task<IEnumerable<TProjection>> ProjectAsync(IEnumerable<TAggregate> aggregates)
+        public override Task<IEnumerable<TProjection>> ProjectAsync(IEnumerable<TAggregate> aggregates)
         {
-            return await Task.FromResult(PerformProject(aggregates));
+            return Task.FromResult(PerformProject(aggregates));
         }
 
         protected abstract IEnumerable<TProjection> PerformProject(IEnumerable<TAggregate> aggregates);

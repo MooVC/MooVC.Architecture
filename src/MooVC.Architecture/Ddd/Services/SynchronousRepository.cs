@@ -8,26 +8,26 @@
         : Repository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public override async Task<IEnumerable<TAggregate>> GetAllAsync()
+        public override Task<IEnumerable<TAggregate>> GetAllAsync()
         {
-            return await Task.FromResult(PerformGetAll());
+            return Task.FromResult(PerformGetAll());
         }
 
-        public override async Task<TAggregate?> GetAsync(Guid id, SignedVersion? version = default)
+        public override Task<TAggregate?> GetAsync(Guid id, SignedVersion? version = default)
         {
-            return await Task.FromResult(PerformGet(id, version: version));
+            return Task.FromResult(PerformGet(id, version: version));
         }
 
-        protected override async Task<VersionedReference?> GetCurrentVersionAsync(TAggregate aggregate)
+        protected override Task<VersionedReference?> GetCurrentVersionAsync(TAggregate aggregate)
         {
-            return await Task.FromResult(PerformGetCurrentVersion(aggregate));
+            return Task.FromResult(PerformGetCurrentVersion(aggregate));
         }
 
-        protected override async Task UpdateStoreAsync(TAggregate aggregate)
+        protected override Task UpdateStoreAsync(TAggregate aggregate)
         {
             PerformUpdateStore(aggregate);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected abstract IEnumerable<TAggregate> PerformGetAll();

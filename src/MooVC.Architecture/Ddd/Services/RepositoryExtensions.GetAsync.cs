@@ -30,7 +30,7 @@
             return aggregate;
         }
 
-        public static async Task<TAggregate> GetAsync<TAggregate>(
+        public static Task<TAggregate> GetAsync<TAggregate>(
             this IRepository<TAggregate> repository,
             Message context,
             Reference reference)
@@ -43,12 +43,10 @@
 
             ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
-            return await repository
-                .GetAsync(context, reference.Id)
-                .ConfigureAwait(false);
+            return repository.GetAsync(context, reference.Id);
         }
 
-        public static async Task<TAggregate> GetAsync<TAggregate>(
+        public static Task<TAggregate> GetAsync<TAggregate>(
             this IRepository<TAggregate> repository,
             Message context,
             VersionedReference reference)
@@ -61,9 +59,7 @@
 
             ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
-            return await repository
-                .GetAsync(context, reference.Id, version: reference.Version)
-                .ConfigureAwait(false);
+            return repository.GetAsync(context, reference.Id, version: reference.Version);
         }
     }
 }

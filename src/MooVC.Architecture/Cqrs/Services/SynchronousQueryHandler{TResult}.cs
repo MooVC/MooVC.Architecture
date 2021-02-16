@@ -6,9 +6,9 @@
         : IQueryHandler<TResult>
         where TResult : Message
     {
-        public virtual async Task<TResult> ExecuteAsync()
+        public virtual Task<TResult> ExecuteAsync()
         {
-            return await Task.FromResult(PerformExecute());
+            return Task.FromResult(PerformExecute());
         }
 
         protected abstract TResult PerformExecute();

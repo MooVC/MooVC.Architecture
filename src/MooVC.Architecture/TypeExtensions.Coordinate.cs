@@ -18,16 +18,16 @@
             Coordinator.Apply(context, operation, timeout: timeout);
         }
 
-        public static async Task CoordinateAsync(this Type type, Func<Task> operation, TimeSpan? timeout = default)
+        public static Task CoordinateAsync(this Type type, Func<Task> operation, TimeSpan? timeout = default)
         {
-            await Coordinator.ApplyAsync(type.GenerateContext(), operation, timeout: timeout);
+            return Coordinator.ApplyAsync(type.GenerateContext(), operation, timeout: timeout);
         }
 
-        public static async Task CoordinateAsync(this Type type, Guid id, Func<Task> operation, TimeSpan? timeout = default)
+        public static Task CoordinateAsync(this Type type, Guid id, Func<Task> operation, TimeSpan? timeout = default)
         {
             string context = $"{type.GenerateContext()}-{id:N}";
 
-            await Coordinator.ApplyAsync(context, operation, timeout: timeout);
+            return Coordinator.ApplyAsync(context, operation, timeout: timeout);
         }
     }
 }

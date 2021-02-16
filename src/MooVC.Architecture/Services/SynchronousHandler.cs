@@ -6,11 +6,11 @@
         : IHandler<TMessage>
         where TMessage : Message
     {
-        public virtual async Task ExecuteAsync(TMessage message)
+        public virtual Task ExecuteAsync(TMessage message)
         {
             PerformExecute(message);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected abstract void PerformExecute(TMessage message);

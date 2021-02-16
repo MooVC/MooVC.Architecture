@@ -81,13 +81,11 @@
             }
         }
 
-        private async Task PerformCoordinatedReconcileAsync(
+        private Task PerformCoordinatedReconcileAsync(
             EventCentricAggregateRoot aggregate,
             IAggregateReconciliationProxy proxy)
         {
-            await proxy
-                .OverwriteAsync(aggregate)
-                .ConfigureAwait(false);
+            return proxy.OverwriteAsync(aggregate);
         }
 
         private async Task PerformCoordinatedReconcileAsync(
@@ -114,27 +112,23 @@
                 .ConfigureAwait(false);
         }
 
-        private async Task ReconcileAsync(
+        private Task ReconcileAsync(
             Reference aggregate,
             IEnumerable<DomainEvent> events,
             IAggregateReconciliationProxy proxy)
         {
-            await aggregate
-                .CoordinateAsync(
-                    () => PerformCoordinatedReconcileAsync(aggregate, events, proxy),
-                    timeout: timeout)
-                .ConfigureAwait(false);
+            return aggregate.CoordinateAsync(
+                () => PerformCoordinatedReconcileAsync(aggregate, events, proxy),
+                timeout: timeout);
         }
 
-        private async Task ReconcileAsync(
+        private Task ReconcileAsync(
             EventCentricAggregateRoot aggregate,
             IAggregateReconciliationProxy proxy)
         {
-            await aggregate
-                .CoordinateAsync(
-                    () => PerformCoordinatedReconcileAsync(aggregate, proxy),
-                    timeout: timeout)
-                .ConfigureAwait(false);
+            return aggregate.CoordinateAsync(
+                () => PerformCoordinatedReconcileAsync(aggregate, proxy),
+                timeout: timeout);
         }
     }
 }

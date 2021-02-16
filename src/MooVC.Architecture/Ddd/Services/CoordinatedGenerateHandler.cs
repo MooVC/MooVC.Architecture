@@ -24,24 +24,21 @@
             this.timeout = timeout;
         }
 
-        public virtual async Task ExecuteAsync(TCommand command)
+        public virtual Task ExecuteAsync(TCommand command)
         {
-            await typeof(TAggregate)
+            return typeof(TAggregate)
                 .CoordinateAsync(
                     () => PerformCoordinatedExecuteAsync(command),
-                    timeout: timeout)
-                .ConfigureAwait(false);
+                    timeout: timeout);
         }
 
         protected abstract TAggregate PerformCoordinatedGenerate(TCommand command);
 
-        protected virtual async Task PerformCoordinatedExecuteAsync(TCommand command)
+        protected virtual Task PerformCoordinatedExecuteAsync(TCommand command)
         {
             TAggregate aggregate = PerformCoordinatedGenerate(command);
 
-            await repository
-                .SaveAsync(aggregate)
-                .ConfigureAwait(false);
+            return repository.SaveAsync(aggregate);
         }
     }
 }

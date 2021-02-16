@@ -13,11 +13,11 @@ namespace MooVC.Architecture.Ddd.Services
         {
         }
 
-        public async Task StartAsync(T @event)
+        public Task StartAsync(T @event)
         {
             Enqueue(@event);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
     }
 }

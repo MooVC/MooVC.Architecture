@@ -272,9 +272,9 @@ namespace MooVC.Architecture.Ddd {
         /// <summary>
         ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
         /// </summary>
-        internal static string ReferenceExtensionsCoordinateReferenceeRequired {
+        internal static string ReferenceExtensionsCoordinateReferenceRequired {
             get {
-                return ResourceManager.GetString("ReferenceExtensionsCoordinateReferenceeRequired", resourceCulture);
+                return ResourceManager.GetString("ReferenceExtensionsCoordinateReferenceRequired", resourceCulture);
             }
         }
         

@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture
 {
     using System;
-    using System.Threading.Tasks;
     using static MooVC.Architecture.Resources;
     using static MooVC.Ensure;
 
@@ -14,15 +13,6 @@
             target
                 .GetType()
                 .Coordinate(operation, timeout: timeout);
-        }
-
-        public static async Task CoordinateAsync(this object target, Func<Task> operation, TimeSpan? timeout = default)
-        {
-            ArgumentNotNull(target, nameof(target), ObjectExtensionsCoordinateObjectRequired);
-
-            await target
-                .GetType()
-                .CoordinateAsync(operation, timeout: timeout);
         }
     }
 }

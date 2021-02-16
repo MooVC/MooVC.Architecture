@@ -68,7 +68,16 @@ namespace MooVC.Architecture.Ddd
 
         public virtual bool IsMatch(AggregateRoot aggregate)
         {
-            return Type == aggregate?.GetType() && Id == aggregate.Id;
+            if (aggregate is null)
+            {
+                return false;
+            }
+
+            Type type = aggregate.GetType();
+
+            return Id == aggregate.Id
+                && (Type.IsAssignableFrom(type) || type.IsAssignableFrom(Type))
+                && (Version.IsEmpty || Version == aggregate.Version);
         }
 
         protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)
@@ -128,7 +137,9 @@ namespace MooVC.Architecture.Ddd
                 return Equals(left, right);
             }
 
-            return left.Id == right!.Id && left.Type == right.Type;
+            return left.Id == right!.Id
+                && (left.Type.IsAssignableFrom(right.Type) || right.Type.IsAssignableFrom(left.Type))
+                && (left.Version == SignedVersion.Empty || right.Version == SignedVersion.Empty || left.Version == right.Version);
         }
 
         private static bool NotEqualOperator(Reference? left, Reference? right)

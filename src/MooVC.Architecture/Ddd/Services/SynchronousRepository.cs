@@ -18,7 +18,7 @@
             return Task.FromResult(PerformGet(id, version: version));
         }
 
-        protected override Task<Reference?> GetCurrentVersionAsync(TAggregate aggregate)
+        protected override Task<Reference<TAggregate>?> GetCurrentVersionAsync(TAggregate aggregate)
         {
             return Task.FromResult(PerformGetCurrentVersion(aggregate));
         }
@@ -34,7 +34,7 @@
 
         protected abstract TAggregate? PerformGet(Guid id, SignedVersion? version = default);
 
-        protected abstract Reference? PerformGetCurrentVersion(TAggregate aggregate);
+        protected abstract Reference<TAggregate>? PerformGetCurrentVersion(TAggregate aggregate);
 
         protected abstract void PerformUpdateStore(TAggregate aggregate);
     }

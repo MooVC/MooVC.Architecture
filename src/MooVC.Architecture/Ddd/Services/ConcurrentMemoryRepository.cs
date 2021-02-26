@@ -1,79 +1,52 @@
 namespace MooVC.Architecture.Ddd.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
+    using System.Collections.Concurrent;
     using System.Threading.Tasks;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Services.Ensure;
 
-    public class ConcurrentMemoryRepository<TAggregate>
-        : MemoryRepository<TAggregate>
+    public abstract class ConcurrentMemoryRepository<TAggregate>
+        : MemoryRepository<TAggregate, ConcurrentDictionary<Reference<TAggregate>, TAggregate>>
         where TAggregate : AggregateRoot
     {
-        public ConcurrentMemoryRepository(ICloner? cloner = default)
+        protected ConcurrentMemoryRepository(ICloner? cloner = default)
             : base(cloner: cloner)
         {
-            StoreLock = new ReaderWriterLockSlim();
         }
 
-        protected virtual ReaderWriterLockSlim StoreLock { get; }
-
-        protected override IEnumerable<TAggregate> PerformGetAll()
+        protected virtual TAggregate PerformAdd(Reference<TAggregate> key, TAggregate proposed)
         {
-            return PerformRead(() => base.PerformGetAll());
+            AggregateDoesNotConflict(proposed);
+
+            return proposed;
         }
 
-        protected override TAggregate? Get(Reference key)
+        protected override Task PerformSaveAsync(TAggregate aggregate)
         {
-            return PerformRead(() => base.Get(key));
+            PerformUpdateStore(aggregate);
+
+            return Task.CompletedTask;
         }
 
-        protected override async Task PerformSaveAsync(TAggregate aggregate)
+        protected virtual TAggregate PerformUpdate(TAggregate existing, Reference<TAggregate> key, TAggregate proposed)
         {
-            try
-            {
-                StoreLock.EnterUpgradeableReadLock();
+            AggregateDoesNotConflict(proposed, currentVersion: existing.Version);
 
-                bool isConflictFree = await CheckForConflictsAsync(aggregate)
-                    .ConfigureAwait(false);
-
-                if (isConflictFree)
-                {
-                    PerformWrite(() => PerformUpdateStore(aggregate));
-                }
-            }
-            finally
-            {
-                StoreLock.ExitUpgradeableReadLock();
-            }
+            return proposed;
         }
 
-        protected virtual T PerformRead<T>(Func<T> read)
+        protected override void PerformUpdateStore(TAggregate aggregate)
         {
-            try
-            {
-                StoreLock.EnterReadLock();
+            TAggregate copy = Cloner(aggregate);
 
-                return read();
-            }
-            finally
-            {
-                StoreLock.ExitReadLock();
-            }
-        }
+            copy.MarkChangesAsCommitted();
 
-        protected virtual void PerformWrite(Action write)
-        {
-            try
-            {
-                StoreLock.EnterWriteLock();
+            Reference<TAggregate> key = GetKey(copy);
 
-                write();
-            }
-            finally
-            {
-                StoreLock.ExitWriteLock();
-            }
+            _ = Store.AddOrUpdate(
+                key,
+                _ => PerformAdd(key, copy),
+                (_, existing) => PerformUpdate(existing, key, copy));
         }
     }
 }

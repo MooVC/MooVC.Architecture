@@ -21,7 +21,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var request = new SetRequest(context, Guid.NewGuid());
             var bus = new Mock<IBus>();
             var cloner = new BinaryFormatterCloner();
-            var repository = new MemoryRepository<SerializableEventCentricAggregateRoot>(cloner);
+            var repository = new UnversionedMemoryRepository<SerializableEventCentricAggregateRoot>(cloner);
             var propagator = new DomainEventPropagator<SerializableEventCentricAggregateRoot>(bus.Object, repository);
             DomainEvent[] changes = Array.Empty<DomainEvent>();
 

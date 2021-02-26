@@ -1,4 +1,4 @@
-namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
+namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
 {
     using System;
     using System.Collections.Generic;
@@ -9,15 +9,15 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenGetAllAsyncIsCalled
-        : MemoryRepositoryTests
+    public class WhenGetAllAsyncIsCalled
+        : UnversionedMemoryRepositoryTests
     {
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public async Task GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturnedAsync(bool useCloner)
         {
-            MemoryRepository<SerializableAggregateRoot> repository = Create<SerializableAggregateRoot>(useCloner);
+            IRepository<SerializableAggregateRoot> repository = Create<SerializableAggregateRoot>(useCloner);
             IEnumerable<SerializableAggregateRoot> results = await repository.GetAllAsync();
 
             Assert.Empty(results);
@@ -26,14 +26,14 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task GivenApopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturnedAsync(bool useCloner)
+        public async Task GivenAPopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturnedAsync(bool useCloner)
         {
             const int ExpectedTotal = 2;
 
             var first = new SerializableEventCentricAggregateRoot();
             var second = new SerializableEventCentricAggregateRoot();
 
-            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
+            IRepository<SerializableEventCentricAggregateRoot> repository =
                 Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             await repository.SaveAsync(first);

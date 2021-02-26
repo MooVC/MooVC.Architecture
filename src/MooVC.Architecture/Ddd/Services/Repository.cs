@@ -31,7 +31,7 @@
 
         protected virtual async Task<bool> CheckForConflictsAsync(TAggregate aggregate)
         {
-            Reference? currentVersion = await GetCurrentVersionAsync(aggregate)
+            Reference<TAggregate>? currentVersion = await GetCurrentVersionAsync(aggregate)
                 .ConfigureAwait(false);
 
             if (aggregate.Version == currentVersion?.Version)
@@ -44,7 +44,7 @@
             return true;
         }
 
-        protected abstract Task<Reference?> GetCurrentVersionAsync(TAggregate aggregate);
+        protected abstract Task<Reference<TAggregate>?> GetCurrentVersionAsync(TAggregate aggregate);
 
         protected void OnAggregateSaved(TAggregate aggregate)
         {

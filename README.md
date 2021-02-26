@@ -16,7 +16,6 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 
 ## Enhancements
 
-- Added async variants of the various Coordinate extensions.
 - Added Cqrs.Services.SynchronousQueryEngine to facilitate migration from synchronous to asynchronous implementations of Cqrs.Services.IQueryEngine.
 - Added Cqrs.Services.SynchronousQueryHandler to facilitate migration from synchronous to asynchronous implementations of Cqrs.Services.IQueryHandler.
 - Added Ddd.Services.SynchronousBus to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.IBus and Ddd.Services.Bus.
@@ -25,6 +24,10 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Added Ddd.Services.Reconciliation.SynchronousAggregateReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciler.
 - Added Ddd.Services.Reconciliation.SynchronousEventReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IEventReconciler.
 - Added Ddd.Services.Snapshots.SynchronousSnapshotProvider to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Snapshots.ISnapshotProvider.
+- Added Ddd.Services.UnversionedConcurrentMemoryRepository to support in-memory un-versioned storage of aggregates.
+- Added Ddd.Services.VersionedConcurrentMemoryRepository to support in-memory versioned storage of aggregates.
+- Added Ddd.Services.UnversionedMemoryRepository to support in-memory un-versioned storage of aggregates.
+- Added Ddd.Services.VersionedMemoryRepository to support in-memory versioned storage of aggregates.
 - Added Services.SynchronousBus to facilitate migration from synchronous to asynchronous implementations of Services.IBus and Services.Bus.
 - Added Services.SynchronousHandler to facilitate migration from synchronous to asynchronous implementations of Services.IHandler.
 - Changed to target version 3.x of MooVC (**Breaking Change**).
@@ -47,8 +50,10 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Changed Ddd.Services.CoordinatedGenerateHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.CoordinatedOperationHandler to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).
+- Changed Ddd.Services.ConcurrentMemoryRepository so that it is now abstract (**Breaking Change**).
 - Changed Ddd.Services.ConcurrentMemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
 - Changed Ddd.Services.MemoryRepository so that it is no longer serializable (**Breaking Change**).
+- Changed Ddd.Services.MemoryRepository so that it is now abstract (**Breaking Change**).
 - Changed Ddd.Services.MemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
 - Changed Ddd.Services.Reconciliation.IAggregateReconciliationProxy to only support async variants of each operation (**Breaking Change**).
 - Changed Ddd.Services.Reconciliation.IAggregateReconciler to only support async variants of each operation (**Breaking Change**).
@@ -62,6 +67,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Moved Ddd.Value to the root namespace (**Breaking Change**).
 - Removed Ddd.VersionedReference and all associated extensions (**Breaking Change**).
 - Removed Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
+- Removed the sync variants of the various Coordinate extensions in favour of async variants (**Breaking Change**).
 - Removed unused Ddd.Services.ConcurrentMemoryRepository.PerformRead method that did not appear to serve any purpose (**Breaking Change**).
 
 ## Bug Fixes
@@ -74,11 +80,15 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 
 # End-User Impact
 
+- Ddd.Services.ConcurrentMemoryRepository & Ddd.Services.MemoryRepository (Impact: High)
+
+Due to the addition of the ICloner to the constructor, it is now no longer possible to clone these classes. It is recommended that consumers use the GetAll method to implement serialization if required.  Additionally, the dual function of versioned and unversioned persistance was resulting in unexpected behavior on consumption.  Each class now has a versioned and unversioned derivitive to provide a dependable implementation for the target use-case.
+
 - Ddd.Entity<T> Namespace (Impact: High)
 
 Entity was moved to facilitate a new inheritance change involving Message that would facilitate a greater degree of reuse and consistency accross the framework.  This resulted in a namespace change that would result in compilation failures for any consumer that utilized Ddd.Entity<T>.  While the solution is straightforward, every reference would need to be changed from MooVC.Architecture.Ddd to MooVC.Architecture.
 
-- Ddd.Value Namespace  (Impact: High)
+- Ddd.Value Namespace (Impact: High)
 
 Value was moved to for consistency with Entity<T>.  This resulted in a namespace change that would result in compilation failures for any consumer that utilized Ddd.Value.  While the solution is straightforward, every reference would need to be changed from MooVC.Architecture.Ddd to MooVC.Architecture.
 
@@ -89,10 +99,6 @@ This change was applied to force consumption of the types variant Ddd.DomainEven
 - Ddd.DomainException Constructor (Impact: Medium)
 
 This change was applied to force consumption of the types variant Ddd.DomainException<TAggregate> which will always result in an instance that correctly refers to the aggregate type to which it relates.
-
-- Ddd.Services.ConcurrentMemoryRepository & Ddd.Services.MemoryRepository (Impact: Medium)
-
-Due to the addition of the ICloner to the constructor, it is now no longer possible to clone these classes. It is recommended that consumers use the GetAll method to implement serialization if required.
 
 - Entity<T>, Message and Value Equality (Impact: Low)
 

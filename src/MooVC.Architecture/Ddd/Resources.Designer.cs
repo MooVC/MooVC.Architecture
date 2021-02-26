@@ -182,9 +182,9 @@ namespace MooVC.Architecture.Ddd {
         /// <summary>
         ///   Looks up a localized string similar to The aggregate that serves as the context for coordination must be provided..
         /// </summary>
-        internal static string AggregateRootExtensionsCoordinateAggregateRequired {
+        internal static string AggregateRootExtensionsCoordinateAsyncAggregateRequired {
             get {
-                return ResourceManager.GetString("AggregateRootExtensionsCoordinateAggregateRequired", resourceCulture);
+                return ResourceManager.GetString("AggregateRootExtensionsCoordinateAsyncAggregateRequired", resourceCulture);
             }
         }
         
@@ -272,9 +272,9 @@ namespace MooVC.Architecture.Ddd {
         /// <summary>
         ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
         /// </summary>
-        internal static string ReferenceExtensionsCoordinateReferenceRequired {
+        internal static string ReferenceExtensionsCoordinateAsyncReferenceRequired {
             get {
-                return ResourceManager.GetString("ReferenceExtensionsCoordinateReferenceRequired", resourceCulture);
+                return ResourceManager.GetString("ReferenceExtensionsCoordinateAsyncReferenceRequired", resourceCulture);
             }
         }
         

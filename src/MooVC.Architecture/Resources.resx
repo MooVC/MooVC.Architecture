@@ -126,10 +126,10 @@
   <data name="MessageContextRequired" xml:space="preserve">
     <value>The context of the message must be provided.</value>
   </data>
-  <data name="MessageExtensionsCoordinateMessageRequired" xml:space="preserve">
+  <data name="MessageExtensionsCoordinateAsyncMessageRequired" xml:space="preserve">
     <value>The message that serves as the context for coordination must be provided.</value>
   </data>
-  <data name="ObjectExtensionsCoordinateObjectRequired" xml:space="preserve">
+  <data name="ObjectExtensionsCoordinateAsyncObjectRequired" xml:space="preserve">
     <value>The object that serves as the context for coordination must be provided.</value>
   </data>
   <data name="RequestContextRequired" xml:space="preserve">

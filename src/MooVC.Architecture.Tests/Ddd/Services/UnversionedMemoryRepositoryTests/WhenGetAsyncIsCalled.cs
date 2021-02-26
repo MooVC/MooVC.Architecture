@@ -1,4 +1,4 @@
-namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
+namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
 {
     using System;
     using System.Threading.Tasks;
@@ -7,8 +7,8 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenGetAsyncIsCalled
-        : MemoryRepositoryTests
+    public class WhenGetAsyncIsCalled
+        : UnversionedMemoryRepositoryTests
     {
         [Theory]
         [InlineData(true)]
@@ -18,7 +18,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             var expected = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
 
-            MemoryRepository<SerializableAggregateRoot> repository =
+            IRepository<SerializableAggregateRoot> repository =
                 Create<SerializableAggregateRoot>(useCloner);
 
             await repository.SaveAsync(expected);
@@ -35,11 +35,11 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task GivenAnIdWhenNoExistingEntryExistsThenTheNullIsReturnedAsync(bool useCloner)
+        public async Task GivenAnIdWhenNoExistingEntryExistsThenANullValueIsReturnedAsync(bool useCloner)
         {
             var other = new SerializableAggregateRoot();
 
-            MemoryRepository<SerializableAggregateRoot> repository =
+            IRepository<SerializableAggregateRoot> repository =
                 Create<SerializableAggregateRoot>(useCloner);
 
             await repository.SaveAsync(other);
@@ -56,7 +56,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
 
-            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
+            IRepository<SerializableEventCentricAggregateRoot> repository =
                 Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             await repository.SaveAsync(aggregate);
@@ -82,12 +82,12 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task GivenAVersionWhenTwoVersionedEntriesExistThenTheMatchingVersionedEntryIsReturnedAsync(bool useCloner)
+        public async Task GivenAVersionThatIsNotTheCurrentVersionThenANullValueIsReturnedAsync(bool useCloner)
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             SignedVersion expectedFirst = aggregate.Version;
 
-            MemoryRepository<SerializableEventCentricAggregateRoot> repository =
+            IRepository<SerializableEventCentricAggregateRoot> repository =
                 Create<SerializableEventCentricAggregateRoot>(useCloner);
 
             await repository.SaveAsync(aggregate);
@@ -107,10 +107,7 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
             SerializableEventCentricAggregateRoot? actualFirst = await repository.GetAsync(aggregate.Id, version: expectedFirst);
             SerializableEventCentricAggregateRoot? actualSecond = await repository.GetAsync(aggregate.Id, version: expectedSecond);
 
-            Assert.NotNull(actualFirst);
-            Assert.NotSame(expectedFirst, actualFirst);
-            Assert.Equal(aggregate.Id, actualFirst!.Id);
-            Assert.Equal(expectedFirst, actualFirst.Version);
+            Assert.Null(actualFirst);
 
             Assert.NotNull(actualSecond);
             Assert.NotSame(expectedSecond, actualSecond);
@@ -121,12 +118,12 @@ namespace MooVC.Architecture.Ddd.Services.MemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task GivenAVersionWhenNoExistingVersionedEntryMatchesThenNullIsReturnedAsync(bool useCloner)
+        public async Task GivenAVersionWhenNoExistingVersionedEntryMatchesThenANullValueIsReturnedAsync(bool useCloner)
         {
             var aggregate = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
 
-            MemoryRepository<SerializableAggregateRoot> repository =
+            IRepository<SerializableAggregateRoot> repository =
                 Create<SerializableAggregateRoot>(useCloner);
 
             await repository.SaveAsync(aggregate);

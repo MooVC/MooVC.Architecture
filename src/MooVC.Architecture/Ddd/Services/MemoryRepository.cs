@@ -2,60 +2,41 @@ namespace MooVC.Architecture.Ddd.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using MooVC.Serialization;
 
-    public class MemoryRepository<TAggregate>
+    public abstract class MemoryRepository<TAggregate, TStore>
         : SynchronousRepository<TAggregate>
         where TAggregate : AggregateRoot
+        where TStore : IDictionary<Reference<TAggregate>, TAggregate>, new()
     {
-        private readonly Func<TAggregate, TAggregate> cloner;
-
-        public MemoryRepository(ICloner? cloner = default)
+        protected MemoryRepository(ICloner? cloner = default)
         {
-            this.cloner = cloner is { }
+            Cloner = cloner is { }
                 ? cloner.Clone
                 : SerializableExtensions.Clone;
         }
 
-        protected virtual IDictionary<Reference, TAggregate> Store { get; } = new Dictionary<Reference, TAggregate>();
+        protected Func<TAggregate, TAggregate> Cloner { get; }
 
-        protected virtual TAggregate? Get(Reference key)
+        protected TStore Store { get; } = new TStore();
+
+        protected virtual Reference<TAggregate> GetKey(TAggregate aggregate)
         {
-            if (Store.TryGetValue(key, out TAggregate? aggregate))
-            {
-                return cloner(aggregate);
-            }
-
-            return default;
+            return GetKey(aggregate.Id, aggregate.Version);
         }
 
-        protected virtual (Reference NonVersioned, Reference Versioned) GenerateReferences(TAggregate aggregate)
-        {
-            return (new Reference<TAggregate>(aggregate.Id, version: SignedVersion.Empty),
-                new Reference<TAggregate>(aggregate.Id, version: aggregate.Version));
-        }
+        protected abstract Reference<TAggregate> GetKey(Guid id, SignedVersion? version);
 
         protected override TAggregate? PerformGet(Guid id, SignedVersion? version = default)
         {
-            return Get(new Reference<TAggregate>(id, version: version));
-        }
+            Reference<TAggregate>? key = GetKey(id, version);
 
-        protected override IEnumerable<TAggregate> PerformGetAll()
-        {
-            return Store
-                .Where(entry => !entry.Key.IsVersioned)
-                .Select(entry => cloner(entry.Value))
-                .ToArray();
-        }
-
-        protected override Reference? PerformGetCurrentVersion(TAggregate aggregate)
-        {
-            Reference nonVersioned = new Reference<TAggregate>(aggregate.Id);
-
-            if (Store.TryGetValue(nonVersioned, out TAggregate? existing))
+            if (Store.TryGetValue(key, out TAggregate? aggregate))
             {
-                return existing.ToReference();
+                if (version is null || version.IsEmpty || version == aggregate.Version)
+                {
+                    return Cloner(aggregate);
+                }
             }
 
             return default;
@@ -63,14 +44,13 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected override void PerformUpdateStore(TAggregate aggregate)
         {
-            TAggregate copy = cloner(aggregate);
+            TAggregate copy = Cloner(aggregate);
 
             copy.MarkChangesAsCommitted();
 
-            (Reference nonVersioned, Reference versioned) = GenerateReferences(copy);
+            Reference<TAggregate> key = GetKey(copy);
 
-            _ = Store[nonVersioned] = copy;
-            _ = Store[versioned] = copy;
+            _ = Store[key] = copy;
         }
     }
 }

@@ -8,8 +8,6 @@
 
         event DomainEventsPublishingEventHandler Publishing;
 
-        event DomainEventsUnhandledEventHandler Unhandled;
-
         Task PublishAsync(params DomainEvent[] events);
     }
 }

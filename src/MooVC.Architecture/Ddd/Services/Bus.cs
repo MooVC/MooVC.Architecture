@@ -1,6 +1,5 @@
 namespace MooVC.Architecture.Ddd.Services
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -10,8 +9,6 @@ namespace MooVC.Architecture.Ddd.Services
         public event DomainEventsPublishedEventHandler? Published;
 
         public event DomainEventsPublishingEventHandler? Publishing;
-
-        public event DomainEventsUnhandledEventHandler? Unhandled;
 
         public virtual async Task PublishAsync(params DomainEvent[] events)
         {
@@ -36,11 +33,6 @@ namespace MooVC.Architecture.Ddd.Services
         protected virtual void OnPublished(params DomainEvent[] @events)
         {
             Published?.Invoke(this, new DomainEventsPublishedEventArgs(@events));
-        }
-
-        protected virtual void OnUnhandled(Func<Task> handler, params DomainEvent[] @events)
-        {
-            Unhandled?.Invoke(this, new DomainEventsUnhandledEventArgs(@events, handler));
         }
     }
 }

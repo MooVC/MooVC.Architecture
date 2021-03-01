@@ -66,6 +66,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Moved Ddd.Entity<T> to the root namespace (**Breaking Change**).
 - Moved Ddd.Value to the root namespace (**Breaking Change**).
 - Removed Ddd.VersionedReference and all associated extensions (**Breaking Change**).
+- Removed Ddd.Services.IBus.Unhandled event (**Breaking Change**).
 - Removed Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
 - Removed the sync variants of the various Coordinate extensions in favour of async variants (**Breaking Change**).
 - Removed unused Ddd.Services.ConcurrentMemoryRepository.PerformRead method that did not appear to serve any purpose (**Breaking Change**).
@@ -99,6 +100,10 @@ This change was applied to force consumption of the types variant Ddd.DomainEven
 - Ddd.DomainException Constructor (Impact: Medium)
 
 This change was applied to force consumption of the types variant Ddd.DomainException<TAggregate> which will always result in an instance that correctly refers to the aggregate type to which it relates.
+
+- Ddd.Services.IBus.Unhandled Event Removal (Impact: Medium)
+
+The unhandled domain event proved to be problematic, particularily for adaptors that themselves did not throw exceptions, or for situations where recovery required that the handler be persisted. It is recommended that each Bus derivation implement its own recovery strategy.
 
 - Entity<T>, Message and Value Equality (Impact: Low)
 

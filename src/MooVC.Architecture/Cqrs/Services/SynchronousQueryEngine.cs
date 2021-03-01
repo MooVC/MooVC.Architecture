@@ -5,17 +5,17 @@
     public abstract class SynchronousQueryEngine
         : IQueryEngine
     {
-        public virtual async Task<TResult> QueryAsync<TResult>()
+        public virtual Task<TResult> QueryAsync<TResult>()
             where TResult : Message
         {
-            return await Task.FromResult(PerformQuery<TResult>());
+            return Task.FromResult(PerformQuery<TResult>());
         }
 
-        public virtual async Task<TResult> QueryAsync<TQuery, TResult>(TQuery query)
+        public virtual Task<TResult> QueryAsync<TQuery, TResult>(TQuery query)
             where TQuery : Message
             where TResult : Message
         {
-            return await Task.FromResult(PerformQuery<TQuery, TResult>(query));
+            return Task.FromResult(PerformQuery<TQuery, TResult>(query));
         }
 
         protected abstract TResult PerformQuery<TResult>()

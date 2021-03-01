@@ -5,11 +5,11 @@ namespace MooVC.Architecture.Ddd.Services
     public abstract class SynchronousBus
         : Bus
     {
-        protected override async Task PerformPublishAsync(params DomainEvent[] events)
+        protected override Task PerformPublishAsync(params DomainEvent[] events)
         {
             PerformPublish(events);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected abstract void PerformPublish(params DomainEvent[] events);

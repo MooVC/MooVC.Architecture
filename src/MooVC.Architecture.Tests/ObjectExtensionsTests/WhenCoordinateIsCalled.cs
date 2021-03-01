@@ -2,17 +2,11 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Base = MooVC.Architecture.WhenCoordinateAsyncIsCalled;
 
     public sealed class WhenCoordinateIsCalled
-        : WhenCoordinateIsCalledBase
+        : Base
     {
-        protected override void Coordinate(Action operation, TimeSpan? timeout = default)
-        {
-            object @object = new object();
-
-            @object.Coordinate(operation, timeout: timeout);
-        }
-
         protected override Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default)
         {
             object @object = new object();

@@ -27,17 +27,14 @@
         }
 
         [Fact]
-        public async Task GivenAFailureOnPublishThenUnhandledIsRaisedOnceAsync()
+        public async Task GivenAFailureOnPublishThenTheFailureIsThrownAsync()
         {
-            await GivenAFailureOnPublishThenEventIsRaisedOnceAsync(
-                () => bus.Unhandled += (sender, e) => invocationCounter++);
-        }
+            _ = store
+                .Setup(store => store.CreateAsync(It.IsAny<AtomicUnit>()))
+                .Throws<InvalidOperationException>();
 
-        [Fact]
-        public async Task GivenAFailureOnPublishThenPublishedIsRaisedOnceAsync()
-        {
-            await GivenAFailureOnPublishThenEventIsRaisedOnceAsync(
-                () => bus.Published += (sender, e) => invocationCounter++);
+            _ = await Assert.ThrowsAsync<InvalidOperationException>(() => bus.PublishAsync(
+                new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate)));
         }
 
         [Fact]
@@ -46,13 +43,6 @@
             await GivenOneOrMoreEventsThenCreateIsCalledOnceAsync(
                 new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
                 new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate));
-        }
-
-        [Fact]
-        public async Task GivenAFailureOnPublishThenPublishingIsRaisedOnceAsync()
-        {
-            await GivenAFailureOnPublishThenEventIsRaisedOnceAsync(
-                () => bus.Publishing += (sender, e) => invocationCounter++);
         }
 
         [Fact]
@@ -101,22 +91,6 @@
         {
             await GivenOneEventThenEventIsRaisedOnceAsync(
                 () => bus.Publishing += (sender, e) => invocationCounter++);
-        }
-
-        private async Task GivenAFailureOnPublishThenEventIsRaisedOnceAsync(Action @event)
-        {
-            const int ExpectedInvocationCount = 1;
-
-            @event();
-
-            _ = store
-                .Setup(store => store.CreateAsync(It.IsAny<AtomicUnit>()))
-                .Throws<InvalidOperationException>();
-
-            await bus.PublishAsync(
-                new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate));
-
-            Assert.Equal(ExpectedInvocationCount, invocationCounter);
         }
 
         private async Task GivenMultipleEventsThenEventIsRaisedOnceAsync(Action @event)

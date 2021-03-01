@@ -5,11 +5,11 @@ namespace MooVC.Architecture.Services
     public abstract class SynchronousBus
         : Bus
     {
-        protected override async Task PerformInvokeAsync(Message message)
+        protected override Task PerformInvokeAsync(Message message)
         {
             PerformInvoke(message);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected abstract void PerformInvoke(Message message);

@@ -12,8 +12,8 @@
         {
             var aggregate = new SerializableAggregateRoot();
 
-            var first = new Reference<SerializableAggregateRoot>(aggregate);
-            var second = new VersionedReference<SerializableAggregateRoot>(aggregate);
+            var first = new Reference<SerializableAggregateRoot>(aggregate.Id);
+            var second = new Reference<SerializableAggregateRoot>(aggregate);
 
             Assert.True(first == second);
         }

@@ -10,8 +10,8 @@
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var subject = new SerializableAggregateRoot();
-            VersionedReference aggregate = subject.ToVersionedReference();
-            VersionedReference eventAggregate = subject.ToVersionedReference();
+            Reference aggregate = subject.ToReference();
+            Reference eventAggregate = subject.ToReference();
             var original = new AggregateEventMismatchException(aggregate, eventAggregate);
             AggregateEventMismatchException deserialized = original.Clone();
 

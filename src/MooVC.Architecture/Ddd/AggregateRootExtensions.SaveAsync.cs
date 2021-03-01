@@ -1,0 +1,26 @@
+﻿namespace MooVC.Architecture.Ddd
+{
+    using System.Threading.Tasks;
+    using MooVC.Architecture.Ddd.Services;
+    using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Ensure;
+
+    public static partial class AggregateRootExtensions
+    {
+        public static async Task SaveAsync<TAggregate>(this TAggregate aggregate, IRepository<TAggregate> destination)
+            where TAggregate : AggregateRoot
+        {
+            if (aggregate is { } && aggregate.HasUncommittedChanges)
+            {
+                ArgumentNotNull(
+                    destination,
+                    nameof(destination),
+                    AggregateRootExtensionsSaveDestinationRequired);
+
+                await destination
+                    .SaveAsync(aggregate)
+                    .ConfigureAwait(false);
+            }
+        }
+    }
+}

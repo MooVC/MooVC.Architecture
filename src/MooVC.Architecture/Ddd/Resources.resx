@@ -158,13 +158,13 @@
   <data name="AggregateReferenceMismatchExceptionReferenceRequired" xml:space="preserve">
     <value>The reference that serves as the subject of the conversion must be provided.</value>
   </data>
-  <data name="AggregateRootExtensionsCoordinateAggregateRequired" xml:space="preserve">
+  <data name="AggregateRootExtensionsCoordinateAsyncAggregateRequired" xml:space="preserve">
     <value>The aggregate that serves as the context for coordination must be provided.</value>
   </data>
   <data name="AggregateRootExtensionsSaveDestinationRequired" xml:space="preserve">
     <value>The destination must be provided.</value>
   </data>
-  <data name="AggregateRootExtensionsToVersionedReferenceAggregateRequired" xml:space="preserve">
+  <data name="AggregateRootExtensionsToReferenceAggregateRequired" xml:space="preserve">
     <value>The aggregate must be provided.</value>
   </data>
   <data name="AggregateRootIdRequired" xml:space="preserve">
@@ -188,7 +188,7 @@
   <data name="ProjectionAggregateRequired" xml:space="preserve">
     <value>A reference to the aggregate must be provided.</value>
   </data>
-  <data name="ReferenceExtensionsCoordinateReferenceeRequired" xml:space="preserve">
+  <data name="ReferenceExtensionsCoordinateAsyncReferenceRequired" xml:space="preserve">
     <value>The reference that serves as the context for coordination must be provided.</value>
   </data>
   <data name="ReferenceIdRequired" xml:space="preserve">

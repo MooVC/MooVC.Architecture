@@ -182,9 +182,9 @@ namespace MooVC.Architecture.Ddd {
         /// <summary>
         ///   Looks up a localized string similar to The aggregate that serves as the context for coordination must be provided..
         /// </summary>
-        internal static string AggregateRootExtensionsCoordinateAggregateRequired {
+        internal static string AggregateRootExtensionsCoordinateAsyncAggregateRequired {
             get {
-                return ResourceManager.GetString("AggregateRootExtensionsCoordinateAggregateRequired", resourceCulture);
+                return ResourceManager.GetString("AggregateRootExtensionsCoordinateAsyncAggregateRequired", resourceCulture);
             }
         }
         
@@ -200,9 +200,9 @@ namespace MooVC.Architecture.Ddd {
         /// <summary>
         ///   Looks up a localized string similar to The aggregate must be provided..
         /// </summary>
-        internal static string AggregateRootExtensionsToVersionedReferenceAggregateRequired {
+        internal static string AggregateRootExtensionsToReferenceAggregateRequired {
             get {
-                return ResourceManager.GetString("AggregateRootExtensionsToVersionedReferenceAggregateRequired", resourceCulture);
+                return ResourceManager.GetString("AggregateRootExtensionsToReferenceAggregateRequired", resourceCulture);
             }
         }
         
@@ -272,9 +272,9 @@ namespace MooVC.Architecture.Ddd {
         /// <summary>
         ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
         /// </summary>
-        internal static string ReferenceExtensionsCoordinateReferenceeRequired {
+        internal static string ReferenceExtensionsCoordinateAsyncReferenceRequired {
             get {
-                return ResourceManager.GetString("ReferenceExtensionsCoordinateReferenceeRequired", resourceCulture);
+                return ResourceManager.GetString("ReferenceExtensionsCoordinateAsyncReferenceRequired", resourceCulture);
             }
         }
         

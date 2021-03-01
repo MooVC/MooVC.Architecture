@@ -13,7 +13,7 @@
         {
         }
 
-        public SerializableProjection(VersionedReference<TAggregate> aggregate)
+        public SerializableProjection(Reference<TAggregate> aggregate)
             : base(aggregate)
         {
         }

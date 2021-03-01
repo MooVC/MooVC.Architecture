@@ -27,21 +27,8 @@
         {
             var unit = new AtomicUnit(events);
 
-            async Task PersistAsync()
-            {
-                await PerformPersistAsync(unit)
-                    .ConfigureAwait(false);
-            }
-
-            try
-            {
-                await PersistAsync()
-                    .ConfigureAwait(false);
-            }
-            catch
-            {
-                OnUnhandled(() => PersistAsync(), events);
-            }
+            await PerformPersistAsync(unit)
+                .ConfigureAwait(false);
         }
 
         private async Task PerformPersistAsync(AtomicUnit unit)

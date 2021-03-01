@@ -5,11 +5,11 @@
     public abstract class SynchronousReconciliationOrchestrator
         : ReconciliationOrchestrator
     {
-        public override async Task ReconcileAsync(IEventSequence? target = default)
+        public override Task ReconcileAsync(IEventSequence? target = default)
         {
             PerformReconcile(target: target);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected abstract void PerformReconcile(IEventSequence? target = default);

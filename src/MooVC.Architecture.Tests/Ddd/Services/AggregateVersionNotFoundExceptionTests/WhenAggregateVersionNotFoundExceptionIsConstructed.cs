@@ -11,7 +11,7 @@
         public void GivenAnAggregateAndAContextThenAnInstanceIsReturnedWithAllPropertiesSet()
         {
             var subject = new SerializableAggregateRoot();
-            var aggregate = subject.ToVersionedReference();
+            var aggregate = subject.ToReference();
             var context = new SerializableMessage();
             var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(context, aggregate);
 
@@ -22,7 +22,7 @@
         [Fact]
         public void GivenAnEmptyAggregateAndAContextThenAnArgumentExceptionIsThrown()
         {
-            VersionedReference<AggregateRoot> aggregate = VersionedReference<AggregateRoot>.Empty;
+            Reference<AggregateRoot> aggregate = Reference<AggregateRoot>.Empty;
             var context = new SerializableMessage();
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
@@ -34,7 +34,7 @@
         [Fact]
         public void GivenAnNullAggregateAndAContextThenAnArgumentExceptionIsThrown()
         {
-            VersionedReference<AggregateRoot>? aggregate = default;
+            Reference<AggregateRoot>? aggregate = default;
             var context = new SerializableMessage();
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
@@ -47,7 +47,7 @@
         public void GivenAnAggregateAndANullContextThenAnArgumentNullExceptionIsThrown()
         {
             var subject = new SerializableAggregateRoot();
-            var aggregate = subject.ToVersionedReference();
+            var aggregate = subject.ToReference();
             Message? context = default;
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
@@ -63,7 +63,11 @@
             Guid aggregateId = subject.Id;
             var context = new SerializableMessage();
             SignedVersion version = subject.Version;
-            var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(context, aggregateId, version);
+
+            var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(
+                context,
+                aggregateId,
+                version: version);
 
             Assert.Equal(aggregateId, instance.Aggregate.Id);
             Assert.Equal(context, instance.Context);
@@ -79,7 +83,7 @@
             SignedVersion version = subject.Version;
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => new AggregateVersionNotFoundException<AggregateRoot>(context, id, version));
+                () => new AggregateVersionNotFoundException<AggregateRoot>(context, id, version: version));
 
             Assert.Equal(nameof(id), exception.ParamName);
         }
@@ -93,23 +97,21 @@
             SignedVersion version = subject.Version;
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new AggregateVersionNotFoundException<SerializableAggregateRoot>(context!, aggregateId, version));
+                () => new AggregateVersionNotFoundException<SerializableAggregateRoot>(context!, aggregateId, version: version));
 
             Assert.Equal(nameof(context), exception.ParamName);
         }
 
         [Fact]
-        public void GivenAnAggregateIdAContextAndANullVersionThenAnArgumentNullExceptionIsThrown()
+        public void GivenAnAggregateIdAContextAndANullVersionThenAnInstanceIsReturnedWithAnEmptyVersion()
         {
             var subject = new SerializableAggregateRoot();
             Guid aggregateId = subject.Id;
             var context = new SerializableMessage();
             SignedVersion? version = default;
+            var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(context, aggregateId, version: version);
 
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new AggregateVersionNotFoundException<SerializableAggregateRoot>(context, aggregateId, version!));
-
-            Assert.Equal(nameof(version), exception.ParamName);
+            Assert.False(instance.Aggregate.IsVersioned);
         }
     }
 }

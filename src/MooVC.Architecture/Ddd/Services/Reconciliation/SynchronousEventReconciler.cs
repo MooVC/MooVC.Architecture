@@ -6,11 +6,11 @@
     public abstract class SynchronousEventReconciler
         : EventReconciler
     {
-        protected override async Task ReconcileAsync(IEnumerable<DomainEvent> events)
+        protected override Task ReconcileAsync(IEnumerable<DomainEvent> events)
         {
             PerformReconcile(events);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected abstract void PerformReconcile(IEnumerable<DomainEvent> events);

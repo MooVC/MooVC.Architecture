@@ -2,17 +2,21 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     public abstract class Projector<TAggregate, TProjection>
         : IProjector<TAggregate, TProjection>
         where TAggregate : AggregateRoot
         where TProjection : Projection<TAggregate>
     {
-        public TProjection Project(TAggregate aggregate)
+        public async Task<TProjection> ProjectAsync(TAggregate aggregate)
         {
-            return Project(new[] { aggregate }).Single();
+            IEnumerable<TProjection> projections = await ProjectAsync(new[] { aggregate })
+                .ConfigureAwait(false);
+
+            return projections.Single();
         }
 
-        public abstract IEnumerable<TProjection> Project(IEnumerable<TAggregate> aggregates);
+        public abstract Task<IEnumerable<TProjection>> ProjectAsync(IEnumerable<TAggregate> aggregates);
     }
 }

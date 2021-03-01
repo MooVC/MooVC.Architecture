@@ -13,18 +13,18 @@
 
         public event UnsupportedAggregateTypeDetectedEventHandler? UnsupportedAggregateTypeDetected;
 
-        public virtual async Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates)
+        public virtual Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates)
         {
             PerformReconcile(aggregates);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
-        public virtual async Task ReconcileAsync(params DomainEvent[] events)
+        public virtual Task ReconcileAsync(params DomainEvent[] events)
         {
             PerformReconcile(events);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected abstract void PerformReconcile(EventCentricAggregateRoot[] aggregates);

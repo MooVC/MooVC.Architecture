@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.Serialization;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
 
     [Serializable]
@@ -11,19 +12,19 @@
         protected DomainException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = info.GetValue<VersionedReference>(nameof(Aggregate));
+            Aggregate = info.TryGetReference(nameof(Aggregate));
             Context = info.GetValue<Message>(nameof(Context));
             TimeStamp = info.GetValue<DateTimeOffset>(nameof(TimeStamp));
         }
 
-        private protected DomainException(Message context, VersionedReference aggregate, string message)
+        private protected DomainException(Message context, Reference aggregate, string message)
             : base(message)
         {
             Aggregate = aggregate;
             Context = context;
         }
 
-        public VersionedReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         public Message Context { get; }
 
@@ -33,7 +34,7 @@
         {
             base.GetObjectData(info, context);
 
-            info.AddValue(nameof(Aggregate), Aggregate);
+            _ = info.TryAddReference(nameof(Aggregate), Aggregate);
             info.AddValue(nameof(Context), Context);
             info.AddValue(nameof(TimeStamp), TimeStamp);
         }

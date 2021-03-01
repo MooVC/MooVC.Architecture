@@ -5,9 +5,9 @@
     public abstract class SynchronousSnapshotProvider
         : ISnapshotProvider
     {
-        public virtual async Task<ISnapshot?> GenerateAsync(ulong? target = default)
+        public virtual Task<ISnapshot?> GenerateAsync(ulong? target = default)
         {
-            return await Task.FromResult(PerformGenerate(target: target));
+            return Task.FromResult(PerformGenerate(target: target));
         }
 
         protected abstract ISnapshot? PerformGenerate(ulong? target);

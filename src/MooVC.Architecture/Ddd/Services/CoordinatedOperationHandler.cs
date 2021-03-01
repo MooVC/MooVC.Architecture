@@ -43,15 +43,15 @@
 
         protected virtual async Task PerformCoordinatedExecuteAsync(TMessage message, Reference<TAggregate> reference)
         {
-            TAggregate aggregate = reference.Retrieve(message, repository);
+            TAggregate aggregate = await reference
+                .RetrieveAsync(message, repository)
+                .ConfigureAwait(false);
 
             PerformCoordinatedOperation(aggregate, message);
 
-            aggregate.Save(repository);
-
-            // TODO: Await Save
-
-            await Task.CompletedTask;
+            await aggregate
+                .SaveAsync(repository)
+                .ConfigureAwait(false);
         }
 
         protected abstract void PerformCoordinatedOperation(TAggregate aggregate, TMessage message);

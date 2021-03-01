@@ -6,40 +6,40 @@
     public abstract class SynchronousAggregateReconciliationProxy
         : IAggregateReconciliationProxy
     {
-        public virtual async Task<EventCentricAggregateRoot> CreateAsync(Reference aggregate)
+        public virtual Task<EventCentricAggregateRoot> CreateAsync(Reference aggregate)
         {
-            return await Task.FromResult(PerformCreate(aggregate));
+            return Task.FromResult(PerformCreate(aggregate));
         }
 
-        public virtual async Task<IEnumerable<EventCentricAggregateRoot>> GetAllAsync()
+        public virtual Task<IEnumerable<EventCentricAggregateRoot>> GetAllAsync()
         {
-            return await Task.FromResult(PerformGetAll());
+            return Task.FromResult(PerformGetAll());
         }
 
-        public virtual async Task<EventCentricAggregateRoot?> GetAsync(Reference aggregate)
+        public virtual Task<EventCentricAggregateRoot?> GetAsync(Reference aggregate)
         {
-            return await Task.FromResult(PerformGet(aggregate));
+            return Task.FromResult(PerformGet(aggregate));
         }
 
-        public virtual async Task OverwriteAsync(EventCentricAggregateRoot aggregate)
+        public virtual Task OverwriteAsync(EventCentricAggregateRoot aggregate)
         {
             PerformOverwrite(aggregate);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
-        public virtual async Task PurgeAsync(Reference aggregate)
+        public virtual Task PurgeAsync(Reference aggregate)
         {
             PerformPurge(aggregate);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
-        public virtual async Task SaveAsync(EventCentricAggregateRoot aggregate)
+        public virtual Task SaveAsync(EventCentricAggregateRoot aggregate)
         {
             PerformSave(aggregate);
 
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected abstract EventCentricAggregateRoot PerformCreate(Reference aggregate);

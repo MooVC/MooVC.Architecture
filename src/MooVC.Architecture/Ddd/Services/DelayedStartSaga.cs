@@ -1,5 +1,6 @@
 namespace MooVC.Architecture.Ddd.Services
 {
+    using System.Threading.Tasks;
     using MooVC.Processing;
 
     public abstract class DelayedStartSaga<T>
@@ -12,9 +13,11 @@ namespace MooVC.Architecture.Ddd.Services
         {
         }
 
-        public void Start(T @event)
+        public Task StartAsync(T @event)
         {
             Enqueue(@event);
+
+            return Task.CompletedTask;
         }
     }
 }

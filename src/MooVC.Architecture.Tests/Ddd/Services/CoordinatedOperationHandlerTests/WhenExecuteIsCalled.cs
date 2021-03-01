@@ -24,19 +24,19 @@
             Assert.NotEqual(identity, aggregate.Value);
 
             _ = repository
-                .Setup(repo => repo.Get(It.IsAny<Guid>(), It.IsAny<SignedVersion?>()))
-                .Returns(aggregate);
+                .Setup(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion?>()))
+                .ReturnsAsync(aggregate);
 
             await handler.ExecuteAsync(command);
 
             Assert.Equal(identity, aggregate.Value);
 
             repository.Verify(
-                repo => repo.Save(It.IsAny<SerializableEventCentricAggregateRoot>()),
+                repo => repo.SaveAsync(It.IsAny<SerializableEventCentricAggregateRoot>()),
                 Times.Once);
 
             repository.Verify(
-                repo => repo.Save(It.Is<SerializableEventCentricAggregateRoot>(source => source == aggregate)),
+                repo => repo.SaveAsync(It.Is<SerializableEventCentricAggregateRoot>(source => source == aggregate)),
                 Times.Once);
         }
     }

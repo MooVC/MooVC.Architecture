@@ -14,7 +14,7 @@
     public sealed class AggregateEventSequenceUnorderedException
         : ArgumentException
     {
-        internal AggregateEventSequenceUnorderedException(VersionedReference aggregate, IEnumerable<DomainEvent> events)
+        internal AggregateEventSequenceUnorderedException(Reference aggregate, IEnumerable<DomainEvent> events)
             : base(FormatMessage(aggregate, events))
         {
             Aggregate = aggregate;
@@ -24,11 +24,11 @@
         private AggregateEventSequenceUnorderedException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = info.TryGetVersionedReference(nameof(Aggregate));
+            Aggregate = info.TryGetReference(nameof(Aggregate));
             Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
         }
 
-        public VersionedReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         public IEnumerable<DomainEvent> Events { get; }
 
@@ -36,11 +36,11 @@
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddVersionedReference(nameof(Aggregate), Aggregate);
+            _ = info.TryAddReference(nameof(Aggregate), Aggregate);
             _ = info.TryAddEnumerable(nameof(Events), Events);
         }
 
-        private static string FormatMessage(VersionedReference aggregate, IEnumerable<DomainEvent> events)
+        private static string FormatMessage(Reference aggregate, IEnumerable<DomainEvent> events)
         {
             ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventSequenceUnorderedExceptionAggregateRequired);
             ArgumentNotNull(events, nameof(events), AggregateEventSequenceUnorderedExceptionEventsRequired);

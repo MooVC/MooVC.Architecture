@@ -90,18 +90,18 @@ namespace MooVC.Architecture {
         /// <summary>
         ///   Looks up a localized string similar to The message that serves as the context for coordination must be provided..
         /// </summary>
-        internal static string MessageExtensionsCoordinateMessageRequired {
+        internal static string MessageExtensionsCoordinateAsyncMessageRequired {
             get {
-                return ResourceManager.GetString("MessageExtensionsCoordinateMessageRequired", resourceCulture);
+                return ResourceManager.GetString("MessageExtensionsCoordinateAsyncMessageRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The object that serves as the context for coordination must be provided..
         /// </summary>
-        internal static string ObjectExtensionsCoordinateObjectRequired {
+        internal static string ObjectExtensionsCoordinateAsyncObjectRequired {
             get {
-                return ResourceManager.GetString("ObjectExtensionsCoordinateObjectRequired", resourceCulture);
+                return ResourceManager.GetString("ObjectExtensionsCoordinateAsyncObjectRequired", resourceCulture);
             }
         }
         

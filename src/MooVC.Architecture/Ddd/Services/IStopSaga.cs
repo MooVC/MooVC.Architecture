@@ -1,8 +1,10 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
+    using System.Threading.Tasks;
+
     public interface IStopSaga<T>
         where T : DomainEvent
     {
-        void Stop(T @event);
+        Task StopAsync(T @event);
     }
 }

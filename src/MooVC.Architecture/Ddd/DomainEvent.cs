@@ -13,10 +13,10 @@
         protected DomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Aggregate = info.GetValue<VersionedReference>(nameof(Aggregate));
+            Aggregate = info.GetValue<Reference>(nameof(Aggregate));
         }
 
-        private protected DomainEvent(Message context, VersionedReference aggregate)
+        private protected DomainEvent(Message context, Reference aggregate)
             : base(context)
         {
             ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);
@@ -24,7 +24,7 @@
             Aggregate = aggregate;
         }
 
-        public VersionedReference Aggregate { get; }
+        public Reference Aggregate { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

@@ -9,6 +9,11 @@
         : DomainException<TAggregate>
         where TAggregate : AggregateRoot
     {
+        public SerializableDomainException(Message context, Reference<TAggregate> aggregate, string message)
+            : base(context, aggregate, message)
+        {
+        }
+
         public SerializableDomainException(Message context, TAggregate aggregate, string message)
             : base(context, aggregate, message)
         {

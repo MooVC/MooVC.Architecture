@@ -10,10 +10,15 @@
     {
         private readonly Lazy<Reference<TAggregate>> aggregate;
 
-        protected DomainException(Message context, TAggregate aggregate, string message)
-            : base(context, aggregate.ToReference(), message)
+        protected DomainException(Message context, Reference<TAggregate> aggregate, string message)
+            : base(context, aggregate, message)
         {
-            this.aggregate = new Lazy<Reference<TAggregate>>(aggregate.ToReference());
+            this.aggregate = new Lazy<Reference<TAggregate>>(aggregate);
+        }
+
+        protected DomainException(Message context, TAggregate aggregate, string message)
+            : this(context, aggregate.ToReference(), message)
+        {
         }
 
         protected DomainException(SerializationInfo info, StreamingContext context)

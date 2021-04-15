@@ -22,5 +22,23 @@
             Assert.Equal(context, exception.Context);
             Assert.Equal(Message, exception.Message);
         }
+
+        [Fact]
+        public void GivenAnAggregateReferenceAContextAndAMessageInstanceIsReturnedWithAllPropertiesPropagated()
+        {
+            var aggregate = new SerializableEventCentricAggregateRoot();
+            var reference = aggregate.ToReference();
+            var context = new SerializableMessage();
+            const string Message = "Something something dark side.";
+
+            var exception = new SerializableDomainException<SerializableEventCentricAggregateRoot>(
+                context,
+                reference,
+                Message);
+
+            Assert.Equal(reference, exception.Aggregate);
+            Assert.Equal(context, exception.Context);
+            Assert.Equal(Message, exception.Message);
+        }
     }
 }

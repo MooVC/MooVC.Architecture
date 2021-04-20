@@ -30,6 +30,7 @@ MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, t
 - Added Ddd.Services.VersionedMemoryRepository to support in-memory versioned storage of aggregates.
 - Added Services.SynchronousBus to facilitate migration from synchronous to asynchronous implementations of Services.IBus and Services.Bus.
 - Added Services.SynchronousHandler to facilitate migration from synchronous to asynchronous implementations of Services.IHandler.
+- Added the ability to create an aggregate reference from a type name via Ddd.Reference.Create.
 - Changed to target version 3.x of MooVC (**Breaking Change**).
 - Created new contextual resource files and migrated resources from centralized resource file.
 - Changed Entity<T> so that it now implements IEquatable<Entity<T>>.

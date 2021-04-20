@@ -49,6 +49,15 @@ namespace MooVC.Architecture.Ddd
             return NotEqualOperator(first, second);
         }
 
+        public static Reference Create(string typeName, Guid id, SignedVersion? version = default)
+        {
+            var aggregate = Type.GetType(typeName, true);
+            Type reference = typeof(Reference<>);
+            Type typed = reference.MakeGenericType(aggregate);
+
+            return (Reference)Activator.CreateInstance(typed, id, version);
+        }
+
         public override bool Equals(object? other)
         {
             return EqualOperator(this, other as Reference);

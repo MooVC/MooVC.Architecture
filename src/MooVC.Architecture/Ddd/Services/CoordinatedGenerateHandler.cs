@@ -38,7 +38,7 @@
         {
             TAggregate aggregate = PerformCoordinatedGenerate(command);
 
-            await PerformSupplementalActivitiesAsync(aggregate)
+            await PerformSupplementalActivitiesAsync(aggregate, command)
                 .ConfigureAwait(false);
 
             await repository
@@ -46,7 +46,7 @@
                 .ConfigureAwait(false);
         }
 
-        protected virtual Task PerformSupplementalActivitiesAsync(TAggregate aggregate)
+        protected virtual Task PerformSupplementalActivitiesAsync(TAggregate aggregate, TCommand context)
         {
             return Task.CompletedTask;
         }

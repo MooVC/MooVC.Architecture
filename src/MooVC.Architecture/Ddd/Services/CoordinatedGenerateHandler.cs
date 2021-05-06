@@ -34,11 +34,21 @@
 
         protected abstract TAggregate PerformCoordinatedGenerate(TCommand command);
 
-        protected virtual Task PerformCoordinatedExecuteAsync(TCommand command)
+        protected virtual async Task PerformCoordinatedExecuteAsync(TCommand command)
         {
             TAggregate aggregate = PerformCoordinatedGenerate(command);
 
-            return repository.SaveAsync(aggregate);
+            await PerformSupplementalActivitiesAsync(aggregate, command)
+                .ConfigureAwait(false);
+
+            await repository
+                .SaveAsync(aggregate)
+                .ConfigureAwait(false);
+        }
+
+        protected virtual Task PerformSupplementalActivitiesAsync(TAggregate aggregate, TCommand context)
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -411,6 +411,7 @@
         }
 
         private IEnumerable<Entity<TKey>> GenerateEntities<TKey>(IEnumerable<TKey> ids)
+            where TKey : notnull
         {
             foreach (TKey id in ids)
             {

@@ -16,13 +16,13 @@ namespace MooVC.Architecture
             where TAggregate : AggregateRoot
         {
             request.Satisfies(
-                aggregate.ToVersionedReference(),
+                aggregate.ToReference(),
                 invariants);
         }
 
         public static void Satisfies<T>(
             this T request,
-            VersionedReference aggregate,
+            Reference aggregate,
             params (Func<T, bool> IsSatisfied, string Explaination)[] invariants)
             where T : Request
         {

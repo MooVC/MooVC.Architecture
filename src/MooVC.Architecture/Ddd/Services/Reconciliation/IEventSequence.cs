@@ -6,6 +6,6 @@
     {
         public ulong Sequence { get; }
 
-        public DateTime TimeStamp { get; }
+        public DateTimeOffset TimeStamp { get; }
     }
 }

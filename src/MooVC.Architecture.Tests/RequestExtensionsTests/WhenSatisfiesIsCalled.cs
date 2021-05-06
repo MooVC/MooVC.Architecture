@@ -71,7 +71,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
             {
                 wasInvoked = true;
 
-                return default;
+                return default!;
             }
 
             request.Satisfies(Factory);
@@ -90,7 +90,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
             {
                 wasInvoked = true;
 
-                return default;
+                return default!;
             }
 
             request.Satisfies(
@@ -112,7 +112,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
             var context = new SerializableMessage();
             var request = new TestableRequest(context);
             var aggregate = new SerializableAggregateRoot();
-            var expected = new Mock<DomainException>(context, aggregate, string.Empty);
+            var expected = new Mock<DomainException<SerializableAggregateRoot>>(context, aggregate, string.Empty);
 
             bool wasInvoked = false;
 
@@ -148,7 +148,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
             var request = new TestableRequest(context);
             var aggregate = new SerializableAggregateRoot();
 
-            request.Satisfies(aggregate.ToVersionedReference());
+            request.Satisfies(aggregate.ToReference());
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
             var aggregate = new SerializableAggregateRoot();
 
             request.Satisfies(
-                aggregate.ToVersionedReference(),
+                aggregate.ToReference(),
                 (request => true, "Irrelevant #1"),
                 (request => true, "Irrelevant #2"));
         }
@@ -178,7 +178,7 @@ namespace MooVC.Architecture.RequestExtensionsTests
 
             AggregateInvariantsNotSatisfiedDomainException exception = Assert.Throws<AggregateInvariantsNotSatisfiedDomainException>(
                 () => request.Satisfies(
-                    aggregate.ToVersionedReference(),
+                    aggregate.ToReference(),
                     (request => false, ExpectedMessage1),
                     (request => true, IrrelevantMessage1),
                     (request => false, ExpectedMessage2),

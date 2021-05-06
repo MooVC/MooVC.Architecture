@@ -43,7 +43,7 @@
             const int ExpectedValue = 1;
 
             SignedVersion version = aggregate.Version;
-            int actualValue = version.CompareTo(null);
+            int actualValue = version.CompareTo(default);
 
             Assert.Equal(ExpectedValue, actualValue);
         }

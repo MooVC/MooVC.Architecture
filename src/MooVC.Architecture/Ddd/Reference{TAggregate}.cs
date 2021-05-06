@@ -2,8 +2,8 @@
 {
     using System;
     using System.Runtime.Serialization;
+    using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public sealed class Reference<TAggregate>
@@ -13,23 +13,23 @@
         private static readonly Lazy<Reference<TAggregate>> empty =
             new Lazy<Reference<TAggregate>>(() => new Reference<TAggregate>());
 
-        public Reference(Guid id)
-            : base(id, typeof(TAggregate))
+        public Reference(Guid id, SignedVersion? version = default)
+            : base(id, typeof(TAggregate), version: version)
         {
             ArgumentIsAcceptable(
                 id,
                 nameof(id),
                 value => value != Guid.Empty,
-                GenericIdInvalid);
+                ReferenceIdRequired);
         }
 
         public Reference(TAggregate aggregate)
-            : this(aggregate.Id)
+            : base(aggregate)
         {
         }
 
         private Reference()
-            : base(Guid.Empty, typeof(TAggregate))
+            : base(Guid.Empty, typeof(TAggregate), SignedVersion.Empty)
         {
         }
 
@@ -40,6 +40,8 @@
 
         public static Reference<TAggregate> Empty => empty.Value;
 
+        public override Type Type => typeof(TAggregate);
+
         protected override Type DeserializeType(SerializationInfo info, StreamingContext context)
         {
             return typeof(TAggregate);
@@ -47,7 +49,6 @@
 
         protected override void SerializeType(SerializationInfo info, StreamingContext context)
         {
-            // Do nothing - The Type is already known
         }
     }
 }

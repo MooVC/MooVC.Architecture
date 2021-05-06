@@ -2,30 +2,29 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
+    using MooVC.Serialization;
 
     [Serializable]
     public sealed class EventSequence
         : IEventSequence,
           ISerializable
     {
-        public EventSequence(ulong sequence, DateTime? timeStamp = default)
+        public EventSequence(ulong sequence, DateTimeOffset? timeStamp = default)
         {
             Sequence = sequence;
-            TimeStamp = timeStamp.GetValueOrDefault(DateTime.UtcNow);
+            TimeStamp = timeStamp.GetValueOrDefault(DateTimeOffset.UtcNow);
         }
 
         private EventSequence(SerializationInfo info, StreamingContext context)
         {
             Sequence = info.GetUInt64(nameof(Sequence));
-            TimeStamp = info.GetDateTime(nameof(TimeStamp));
+            TimeStamp = info.GetValue<DateTimeOffset>(nameof(TimeStamp));
         }
 
         public ulong Sequence { get; }
 
-        public DateTime TimeStamp { get; }
+        public DateTimeOffset TimeStamp { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(Sequence), Sequence);

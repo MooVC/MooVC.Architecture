@@ -1,99 +1,52 @@
 namespace MooVC.Architecture.Ddd.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-    using System.Security.Permissions;
-    using System.Threading;
+    using System.Collections.Concurrent;
+    using System.Threading.Tasks;
+    using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Services.Ensure;
 
-    [Serializable]
-    public class ConcurrentMemoryRepository<TAggregate>
-        : MemoryRepository<TAggregate>
+    public abstract class ConcurrentMemoryRepository<TAggregate>
+        : MemoryRepository<TAggregate, ConcurrentDictionary<Reference<TAggregate>, TAggregate>>
         where TAggregate : AggregateRoot
     {
-        public ConcurrentMemoryRepository()
-            : base()
+        protected ConcurrentMemoryRepository(ICloner? cloner = default)
+            : base(cloner: cloner)
         {
-            StoreLock = new ReaderWriterLockSlim();
         }
 
-        protected ConcurrentMemoryRepository(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        protected virtual TAggregate PerformAdd(Reference<TAggregate> key, TAggregate proposed)
         {
-            StoreLock = new ReaderWriterLockSlim();
+            AggregateDoesNotConflict(proposed);
+
+            return proposed;
         }
 
-        protected virtual ReaderWriterLockSlim StoreLock { get; }
-
-        public override IEnumerable<TAggregate> GetAll()
+        protected override Task PerformSaveAsync(TAggregate aggregate)
         {
-            return PerformRead(() => base.GetAll());
+            PerformUpdateStore(aggregate);
+
+            return Task.CompletedTask;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        protected virtual TAggregate PerformUpdate(TAggregate existing, Reference<TAggregate> key, TAggregate proposed)
         {
-            PerformRead(() => base.GetObjectData(info, context));
+            AggregateDoesNotConflict(proposed, currentVersion: existing.Version);
+
+            return proposed;
         }
 
-        protected override TAggregate? Get(Reference key)
+        protected override void PerformUpdateStore(TAggregate aggregate)
         {
-            return PerformRead(() => base.Get(key));
-        }
+            TAggregate copy = Cloner(aggregate);
 
-        protected override void PerformSave(TAggregate aggregate)
-        {
-            try
-            {
-                StoreLock.EnterUpgradeableReadLock();
+            copy.MarkChangesAsCommitted();
 
-                if (CheckForConflicts(aggregate))
-                {
-                    PerformWrite(() => UpdateStore(aggregate));
-                }
-            }
-            finally
-            {
-                StoreLock.ExitUpgradeableReadLock();
-            }
-        }
+            Reference<TAggregate> key = GetKey(copy);
 
-        protected virtual void PerformRead(Action read)
-        {
-            _ = PerformRead(() =>
-              {
-                  read();
-
-                  return 0;
-              });
-        }
-
-        protected virtual T PerformRead<T>(Func<T> read)
-        {
-            try
-            {
-                StoreLock.EnterReadLock();
-
-                return read();
-            }
-            finally
-            {
-                StoreLock.ExitReadLock();
-            }
-        }
-
-        protected virtual void PerformWrite(Action write)
-        {
-            try
-            {
-                StoreLock.EnterWriteLock();
-
-                write();
-            }
-            finally
-            {
-                StoreLock.ExitWriteLock();
-            }
+            _ = Store.AddOrUpdate(
+                key,
+                _ => PerformAdd(key, copy),
+                (_, existing) => PerformUpdate(existing, key, copy));
         }
     }
 }

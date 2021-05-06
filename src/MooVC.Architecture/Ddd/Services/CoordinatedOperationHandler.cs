@@ -1,9 +1,10 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Services;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public abstract class CoordinatedOperationHandler<TAggregate, TMessage>
         : IHandler<TMessage>
@@ -21,7 +22,7 @@
             this.timeout = timeout;
         }
 
-        public virtual void Execute(TMessage message)
+        public virtual async Task ExecuteAsync(TMessage message)
         {
             if (message is { })
             {
@@ -29,22 +30,28 @@
 
                 if (reference is { } && !reference.IsEmpty)
                 {
-                    reference.Coordinate(
-                        () => PerformCoordinatedExecute(message, reference),
-                        timeout: timeout);
+                    await reference
+                        .CoordinateAsync(
+                            () => PerformCoordinatedExecuteAsync(message, reference),
+                            timeout: timeout)
+                        .ConfigureAwait(false);
                 }
             }
         }
 
         protected abstract Reference<TAggregate> IdentifyTarget(TMessage message);
 
-        protected virtual void PerformCoordinatedExecute(TMessage message, Reference<TAggregate> reference)
+        protected virtual async Task PerformCoordinatedExecuteAsync(TMessage message, Reference<TAggregate> reference)
         {
-            TAggregate aggregate = reference.Retrieve(message, repository);
+            TAggregate aggregate = await reference
+                .RetrieveAsync(message, repository)
+                .ConfigureAwait(false);
 
             PerformCoordinatedOperation(aggregate, message);
 
-            aggregate.Save(repository);
+            await aggregate
+                .SaveAsync(repository)
+                .ConfigureAwait(false);
         }
 
         protected abstract void PerformCoordinatedOperation(TAggregate aggregate, TMessage message);

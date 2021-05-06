@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public interface IRepository<TAggregate>
         where TAggregate : AggregateRoot
@@ -10,10 +11,10 @@
 
         event AggregateSavingEventHandler<TAggregate> AggregateSaving;
 
-        TAggregate? Get(Guid id, SignedVersion? version = default);
+        Task<IEnumerable<TAggregate>> GetAllAsync();
 
-        IEnumerable<TAggregate> GetAll();
+        Task<TAggregate?> GetAsync(Guid id, SignedVersion? version = default);
 
-        void Save(TAggregate aggregate);
+        Task SaveAsync(TAggregate aggregate);
     }
 }

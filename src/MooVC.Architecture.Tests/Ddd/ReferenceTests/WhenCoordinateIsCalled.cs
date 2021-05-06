@@ -1,10 +1,12 @@
 ﻿namespace MooVC.Architecture.Ddd.ReferenceTests
 {
     using System;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
+    using Base = MooVC.Architecture.WhenCoordinateAsyncIsCalled;
 
     public sealed class WhenCoordinateIsCalled
-        : WhenCoordinateIsCalledBase
+        : Base
     {
         private readonly Reference reference;
 
@@ -13,9 +15,9 @@
             reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
         }
 
-        protected override void Coordinate(Action operation, TimeSpan? timeout = null)
+        protected override Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default)
         {
-            reference.Coordinate(operation, timeout: timeout);
+            return reference.CoordinateAsync(operation, timeout: timeout);
         }
     }
 }

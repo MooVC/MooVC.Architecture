@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using MooVC.Architecture.Ddd;
 
     public abstract class AggregateReconciler
@@ -14,13 +15,19 @@
 
         public event UnsupportedAggregateTypeDetectedEventHandler? UnsupportedAggregateTypeDetected;
 
-        public abstract void Reconcile(params EventCentricAggregateRoot[] aggregates);
+        public abstract Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates);
 
-        public abstract void Reconcile(IEnumerable<DomainEvent> events);
+        public abstract Task ReconcileAsync(params DomainEvent[] events);
 
-        protected virtual bool EventsAreNonConflicting(VersionedReference aggregate, IEnumerable<DomainEvent> events, out bool isNew)
+        protected virtual bool EventsAreNonConflicting(
+            Reference aggregate,
+            IEnumerable<DomainEvent> events,
+            out bool isNew)
         {
-            IEnumerable<SignedVersion> versions = events.Select(@event => @event.Aggregate.Version).Distinct();
+            IEnumerable<SignedVersion> versions = events
+                .Select(@event => @event.Aggregate.Version)
+                .Distinct();
+
             SignedVersion previous = versions.First();
 
             isNew = previous.IsNew;
@@ -44,27 +51,39 @@
             SignedVersion next,
             SignedVersion previous)
         {
-            AggregateConflictDetected?.Invoke(this, new AggregateConflictDetectedEventArgs(aggregate, events, next, previous));
+            AggregateConflictDetected?.Invoke(
+                this,
+                new AggregateConflictDetectedEventArgs(
+                    aggregate,
+                    events,
+                    next,
+                    previous));
         }
 
         protected void OnAggregateReconciled(Reference aggregate, IEnumerable<DomainEvent> events)
         {
-            AggregateReconciled?.Invoke(this, new AggregateReconciledEventArgs(aggregate, events));
+            AggregateReconciled?.Invoke(
+                this,
+                new AggregateReconciledEventArgs(aggregate, events));
         }
 
         protected void OnUnsupportedAggregateTypeDetected(Type type)
         {
-            UnsupportedAggregateTypeDetected?.Invoke(this, new UnsupportedAggregateTypeDetectedEventArgs(type));
+            UnsupportedAggregateTypeDetected?.Invoke(
+                this,
+                new UnsupportedAggregateTypeDetectedEventArgs(type));
         }
 
-        protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(IEnumerable<DomainEvent> events, SignedVersion version)
+        protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(
+            IEnumerable<DomainEvent> events,
+            SignedVersion version)
         {
             return events
                 .Where(@event => @event.Aggregate.Version.CompareTo(version) > 0)
                 .ToArray();
         }
 
-        protected virtual void Apply(
+        protected virtual async Task ApplyAsync(
             EventCentricAggregateRoot aggregate,
             IEnumerable<DomainEvent> events,
             IAggregateReconciliationProxy proxy,
@@ -76,7 +95,9 @@
                 {
                     aggregate.LoadFromHistory(events);
 
-                    proxy.Save(aggregate);
+                    await proxy
+                        .SaveAsync(aggregate)
+                        .ConfigureAwait(false);
 
                     OnAggregateReconciled(reference, events);
                 }
@@ -93,8 +114,8 @@
                     OnAggregateConflictDetected(
                         reference,
                         events,
-                        conflict.ReceivedVersion,
-                        conflict.PersistedVersion);
+                        conflict.Received,
+                        conflict.Persisted);
                 }
             }
         }

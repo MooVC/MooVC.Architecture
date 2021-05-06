@@ -1,11 +1,12 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Threading.Tasks;
     using MooVC.Architecture;
     using MooVC.Architecture.Ddd;
     using MooVC.Architecture.Services;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public abstract class CoordinatedGenerateHandler<TAggregate, TCommand>
         : IHandler<TCommand>
@@ -23,20 +24,31 @@
             this.timeout = timeout;
         }
 
-        public virtual void Execute(TCommand command)
+        public virtual Task ExecuteAsync(TCommand command)
         {
-            typeof(TAggregate).Coordinate(
-                () => PerformCoordinatedExecute(command),
-                timeout: timeout);
+            return typeof(TAggregate)
+                .CoordinateAsync(
+                    () => PerformCoordinatedExecuteAsync(command),
+                    timeout: timeout);
         }
 
         protected abstract TAggregate PerformCoordinatedGenerate(TCommand command);
 
-        protected virtual void PerformCoordinatedExecute(TCommand command)
+        protected virtual async Task PerformCoordinatedExecuteAsync(TCommand command)
         {
             TAggregate aggregate = PerformCoordinatedGenerate(command);
 
-            repository.Save(aggregate);
+            await PerformSupplementalActivitiesAsync(aggregate, command)
+                .ConfigureAwait(false);
+
+            await repository
+                .SaveAsync(aggregate)
+                .ConfigureAwait(false);
+        }
+
+        protected virtual Task PerformSupplementalActivitiesAsync(TAggregate aggregate, TCommand context)
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var bus = new Mock<IBus>();
 
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DomainEventPropagator<EventCentricAggregateRoot>(bus.Object, null));
+                () => new DomainEventPropagator<EventCentricAggregateRoot>(bus.Object, default!));
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var repository = new Mock<IRepository<EventCentricAggregateRoot>>();
 
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DomainEventPropagator<EventCentricAggregateRoot>(null, repository.Object));
+                () => new DomainEventPropagator<EventCentricAggregateRoot>(default!, repository.Object));
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var bus = new Mock<IBus>();
 
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DomainEventPropagator(bus.Object, null));
+                () => new DomainEventPropagator(bus.Object, default!));
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var reconciler = new Mock<IAggregateReconciler>();
 
             _ = Assert.Throws<ArgumentNullException>(
-                () => new DomainEventPropagator(null, reconciler.Object));
+                () => new DomainEventPropagator(default!, reconciler.Object));
         }
     }
 }

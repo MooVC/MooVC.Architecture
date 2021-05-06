@@ -2,8 +2,8 @@ namespace MooVC.Architecture.Ddd.Services
 {
     using System.Collections.Generic;
     using System.Linq;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class DomainEventPropagator<TAggregate>
         where TAggregate : EventCentricAggregateRoot
@@ -21,11 +21,13 @@ namespace MooVC.Architecture.Ddd.Services
             this.repository.AggregateSaved += Repository_AggregateSaved;
         }
 
-        private void Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedEventArgs<TAggregate> e)
+        private async void Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedEventArgs<TAggregate> e)
         {
             IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
 
-            bus.Publish(changes.ToArray());
+            await bus
+                .PublishAsync(changes.ToArray())
+                .ConfigureAwait(false);
         }
     }
 }

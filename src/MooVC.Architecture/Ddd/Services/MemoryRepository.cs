@@ -2,83 +2,55 @@ namespace MooVC.Architecture.Ddd.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
 
-    [Serializable]
-    public class MemoryRepository<TAggregate>
-        : Repository<TAggregate>,
-          ISerializable
+    public abstract class MemoryRepository<TAggregate, TStore>
+        : SynchronousRepository<TAggregate>
         where TAggregate : AggregateRoot
+        where TStore : IDictionary<Reference<TAggregate>, TAggregate>, new()
     {
-        public MemoryRepository()
+        protected MemoryRepository(ICloner? cloner = default)
         {
-            Store = new Dictionary<Reference, TAggregate>();
+            Cloner = cloner is { }
+                ? cloner.Clone
+                : SerializableExtensions.Clone;
         }
 
-        protected MemoryRepository(SerializationInfo info, StreamingContext context)
+        protected Func<TAggregate, TAggregate> Cloner { get; }
+
+        protected TStore Store { get; } = new TStore();
+
+        protected virtual Reference<TAggregate> GetKey(TAggregate aggregate)
         {
-            Store = info.TryGetInternalValue(nameof(Store), defaultValue: new Dictionary<Reference, TAggregate>());
+            return GetKey(aggregate.Id, aggregate.Version);
         }
 
-        protected virtual IDictionary<Reference, TAggregate> Store { get; }
+        protected abstract Reference<TAggregate> GetKey(Guid id, SignedVersion? version);
 
-        public override TAggregate? Get(Guid id, SignedVersion? version = default)
+        protected override TAggregate? PerformGet(Guid id, SignedVersion? version = default)
         {
-            Reference key = version is { }
-                ? (Reference)new VersionedReference<TAggregate>(id, version)
-                : new Reference<TAggregate>(id);
+            Reference<TAggregate>? key = GetKey(id, version);
 
-            return Get(key);
+            if (Store.TryGetValue(key, out TAggregate? aggregate))
+            {
+                if (version is null || version.IsEmpty || version == aggregate.Version)
+                {
+                    return Cloner(aggregate);
+                }
+            }
+
+            return default;
         }
 
-        public override IEnumerable<TAggregate> GetAll()
+        protected override void PerformUpdateStore(TAggregate aggregate)
         {
-            return Store
-                .Where(entry => entry.Key is Reference<TAggregate>)
-                .Select(entry => entry.Value.Clone())
-                .ToArray();
-        }
-
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            _ = info.TryAddInternalValue(nameof(Store), Store, predicate: _ => Store.Any());
-        }
-
-        protected virtual TAggregate? Get(Reference key)
-        {
-            _ = Store.TryGetValue(key, out TAggregate aggregate);
-
-            return aggregate?.Clone();
-        }
-
-        protected override VersionedReference? GetCurrentVersion(TAggregate aggregate)
-        {
-            Reference nonVersioned = aggregate.ToReference();
-
-            _ = Store.TryGetValue(nonVersioned, out TAggregate existing);
-
-            return existing?.ToVersionedReference();
-        }
-
-        protected virtual (Reference NonVersioned, Reference Versioned) GenerateReferences(TAggregate aggregate)
-        {
-            return (new Reference<TAggregate>(aggregate.Id), new VersionedReference<TAggregate>(aggregate.Id, aggregate.Version));
-        }
-
-        protected override void UpdateStore(TAggregate aggregate)
-        {
-            TAggregate copy = aggregate.Clone();
+            TAggregate copy = Cloner(aggregate);
 
             copy.MarkChangesAsCommitted();
 
-            (Reference nonVersioned, Reference versioned) = GenerateReferences(copy);
+            Reference<TAggregate> key = GetKey(copy);
 
-            _ = Store[nonVersioned] = copy;
-            _ = Store[versioned] = copy;
+            _ = Store[key] = copy;
         }
     }
 }

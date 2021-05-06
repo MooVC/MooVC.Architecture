@@ -3,13 +3,18 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.Serialization;
     using MooVC.Architecture.Ddd;
+    using MooVC.Architecture.Serialization;
+    using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
+    [Serializable]
     public sealed class AggregateReconciledEventArgs
-        : EventArgs
+        : EventArgs,
+          ISerializable
     {
         internal AggregateReconciledEventArgs(
             Reference aggregate,
@@ -22,8 +27,20 @@
             Events = events;
         }
 
+        private AggregateReconciledEventArgs(SerializationInfo info, StreamingContext context)
+        {
+            Aggregate = info.TryGetReference(nameof(Aggregate));
+            Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
+        }
+
         public Reference Aggregate { get; }
 
         public IEnumerable<DomainEvent> Events { get; }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            _ = info.TryAddValue(nameof(Aggregate), Aggregate);
+            _ = info.TryAddEnumerable(nameof(Events), Events);
+        }
     }
 }

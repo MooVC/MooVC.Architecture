@@ -12,8 +12,8 @@
         {
             var aggregate = new SerializableAggregateRoot();
 
-            var first = new Reference<SerializableAggregateRoot>(aggregate);
-            var second = new VersionedReference<SerializableAggregateRoot>(aggregate);
+            var first = new Reference<SerializableAggregateRoot>(aggregate.Id);
+            var second = new Reference<SerializableAggregateRoot>(aggregate);
 
             Assert.True(first == second);
         }
@@ -47,6 +47,33 @@
             var second = new Reference<SerializableEventCentricAggregateRoot>(aggregateId);
 
             Assert.False(first == second);
+        }
+
+        [Fact]
+        public void GivenAnInstanceAndANullReferenceThenBothAreNotConsideredEqual()
+        {
+            var first = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference<SerializableAggregateRoot>? second = default;
+
+            Assert.False(first == second);
+        }
+
+        [Fact]
+        public void GivenANullInstanceAndAnInstanceThenBothAreNotConsideredEqual()
+        {
+            Reference<SerializableAggregateRoot>? first = default;
+            var second = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+
+            Assert.False(first == second);
+        }
+
+        [Fact]
+        public void GivenANullInstancesThenBothAreNotConsideredEqual()
+        {
+            Reference<SerializableAggregateRoot>? first = default;
+            Reference<SerializableAggregateRoot>? second = default;
+
+            Assert.True(first == second);
         }
     }
 }

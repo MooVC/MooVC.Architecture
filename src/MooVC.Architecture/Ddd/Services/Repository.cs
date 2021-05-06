@@ -2,7 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using static Ensure;
+    using System.Threading.Tasks;
+    using static MooVC.Architecture.Ddd.Services.Ensure;
 
     public abstract class Repository<TAggregate>
         : IRepository<TAggregate>
@@ -12,34 +13,38 @@
 
         public event AggregateSavingEventHandler<TAggregate>? AggregateSaving;
 
-        public abstract TAggregate? Get(Guid id, SignedVersion? version = default);
+        public abstract Task<IEnumerable<TAggregate>> GetAllAsync();
 
-        public abstract IEnumerable<TAggregate> GetAll();
+        public abstract Task<TAggregate?> GetAsync(Guid id, SignedVersion? version = default);
 
-        public virtual void Save(TAggregate aggregate)
+        public virtual async Task SaveAsync(TAggregate aggregate)
         {
             OnAggregateSaving(aggregate);
-            PerformSave(aggregate);
+
+            await PerformSaveAsync(aggregate)
+                .ConfigureAwait(false);
+
             OnAggregateSaved(aggregate);
 
             aggregate.MarkChangesAsCommitted();
         }
 
-        protected virtual bool CheckForConflicts(TAggregate aggregate)
+        protected virtual async Task<bool> CheckForConflictsAsync(TAggregate aggregate)
         {
-            VersionedReference? currentVersion = GetCurrentVersion(aggregate);
+            Reference<TAggregate>? currentVersion = await GetCurrentVersionAsync(aggregate)
+                .ConfigureAwait(false);
 
             if (aggregate.Version == currentVersion?.Version)
             {
                 return false;
             }
 
-            AggregateDoesNotConflict<TAggregate>(aggregate, currentVersion: currentVersion?.Version);
+            AggregateDoesNotConflict(aggregate, currentVersion: currentVersion?.Version);
 
             return true;
         }
 
-        protected abstract VersionedReference? GetCurrentVersion(TAggregate aggregate);
+        protected abstract Task<Reference<TAggregate>?> GetCurrentVersionAsync(TAggregate aggregate);
 
         protected void OnAggregateSaved(TAggregate aggregate)
         {
@@ -51,14 +56,18 @@
             AggregateSaving?.Invoke(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
         }
 
-        protected virtual void PerformSave(TAggregate aggregate)
+        protected virtual async Task PerformSaveAsync(TAggregate aggregate)
         {
-            if (CheckForConflicts(aggregate))
+            bool isConflictFree = await CheckForConflictsAsync(aggregate)
+                .ConfigureAwait(false);
+
+            if (isConflictFree)
             {
-                UpdateStore(aggregate);
+                await UpdateStoreAsync(aggregate)
+                    .ConfigureAwait(false);
             }
         }
 
-        protected abstract void UpdateStore(TAggregate aggregate);
+        protected abstract Task UpdateStoreAsync(TAggregate aggregate);
     }
 }

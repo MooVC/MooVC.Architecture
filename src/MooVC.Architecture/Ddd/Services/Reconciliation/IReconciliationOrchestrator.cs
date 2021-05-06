@@ -1,11 +1,13 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
+    using System.Threading.Tasks;
+
     public interface IReconciliationOrchestrator
     {
         event SnapshotRestorationCommencingEventHandler SnapshotRestorationCommencing;
 
         event SnapshotRestorationCompletedEventHandler SnapshotRestorationCompleted;
 
-        void Reconcile(IEventSequence? target = default);
+        Task ReconcileAsync(IEventSequence? target = default);
     }
 }

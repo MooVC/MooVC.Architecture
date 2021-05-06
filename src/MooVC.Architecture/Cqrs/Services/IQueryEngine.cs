@@ -1,11 +1,13 @@
 ﻿namespace MooVC.Architecture.Cqrs.Services
 {
+    using System.Threading.Tasks;
+
     public interface IQueryEngine
     {
-        TResult Query<TResult>()
+        Task<TResult> QueryAsync<TResult>()
             where TResult : Message;
 
-        TResult Query<TQuery, TResult>(TQuery query)
+        Task<TResult> QueryAsync<TQuery, TResult>(TQuery query)
             where TQuery : Message
             where TResult : Message;
     }

@@ -4,12 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
     using static System.String;
+    using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public sealed class SignedVersion
@@ -84,7 +83,6 @@
                 : 1;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -97,8 +95,9 @@
         public bool IsNext(SignedVersion? previous)
         {
             return previous is { }
-                ? !IsNew && (Number - previous.Number) == 1 && Header.SequenceEqual(previous.Footer)
-                : false;
+                && !IsNew
+                && (Number - previous.Number) == 1
+                && Header.SequenceEqual(previous.Footer);
         }
 
         public SignedVersion Next()

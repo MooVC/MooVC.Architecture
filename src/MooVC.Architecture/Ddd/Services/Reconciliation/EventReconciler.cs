@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     public abstract class EventReconciler
         : IEventReconciler
@@ -12,19 +13,24 @@
 
         public event EventSequenceAdvancedEventHandler? EventSequenceAdvanced;
 
-        public ulong? Reconcile(ulong? previous = default, ulong? target = default)
+        public async Task<ulong?> ReconcileAsync(ulong? previous = default, ulong? target = default)
         {
             bool hasEvents;
 
             do
             {
-                IEnumerable<DomainEvent> events = GetEvents(previous, out ulong? lastSequence, target: target);
+                (ulong? lastSequence, IEnumerable<DomainEvent> events) = await
+                    GetEventsAsync(
+                        previous,
+                        target: target)
+                    .ConfigureAwait(false);
 
                 hasEvents = events.Any();
 
                 if (hasEvents)
                 {
-                    Reconcile(events);
+                    await ReconcileAsync(events)
+                        .ConfigureAwait(false);
 
                     OnEventSequenceAdvanced(lastSequence!.Value);
 
@@ -36,12 +42,11 @@
             return previous;
         }
 
-        protected abstract IEnumerable<DomainEvent> GetEvents(
+        protected abstract Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
             ulong? previous,
-            out ulong? lastSequence,
             ulong? target = default);
 
-        protected abstract void Reconcile(IEnumerable<DomainEvent> events);
+        protected abstract Task ReconcileAsync(IEnumerable<DomainEvent> events);
 
         protected void OnEventsReconciled(IEnumerable<DomainEvent> events)
         {

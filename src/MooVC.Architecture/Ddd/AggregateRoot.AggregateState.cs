@@ -2,7 +2,6 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
 
     public abstract partial class AggregateRoot
@@ -32,8 +31,6 @@
 
             public bool HasUncommittedChanges => !(Current.IsEmpty || Current == Persisted);
 
-            public bool IsPersisted => !Persisted.IsEmpty;
-
             public SignedVersion Persisted { get; }
 
             public AggregateState Commit()
@@ -41,7 +38,6 @@
                 return new AggregateState(Current);
             }
 
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
             public void GetObjectData(SerializationInfo info, StreamingContext context)
             {
                 _ = info.TryAddValue(nameof(Current), Current, defaultValue: Persisted);

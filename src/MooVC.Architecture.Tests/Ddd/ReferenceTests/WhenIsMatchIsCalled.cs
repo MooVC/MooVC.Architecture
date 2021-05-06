@@ -24,27 +24,27 @@
             var aggregateId = Guid.NewGuid();
             var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
-            Assert.False(condition: reference.IsMatch(null));
+            Assert.False(condition: reference.IsMatch(default!));
         }
 
         [Fact]
-        public void GivenAReferenceForABaseTypeThenFalseIsReturned()
+        public void GivenAReferenceForABaseTypeThenTrueIsReturned()
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new DerivedAggregateRoot(aggregateId);
             var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
-            Assert.False(condition: reference.IsMatch(aggregate));
+            Assert.True(condition: reference.IsMatch(aggregate));
         }
 
         [Fact]
-        public void GivenAReferenceForADerivedTypeThenFalseIsReturned()
+        public void GivenAReferenceForADerivedTypeThenTrueIsReturned()
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new SerializableAggregateRoot(aggregateId);
             var reference = new Reference<DerivedAggregateRoot>(aggregateId);
 
-            Assert.False(condition: reference.IsMatch(aggregate));
+            Assert.True(condition: reference.IsMatch(aggregate));
         }
 
         [Fact]

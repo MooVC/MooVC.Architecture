@@ -2,18 +2,20 @@ namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using MooVC.Collections.Generic;
+    using MooVC.Serialization;
+    using static System.Environment;
     using static System.String;
-    using static Resources;
+    using static MooVC.Architecture.Ddd.Resources;
 
     [Serializable]
     public sealed class AggregateInvariantsNotSatisfiedDomainException
         : DomainException
     {
-        private const string Separator = "\r\n";
-
         public AggregateInvariantsNotSatisfiedDomainException(
             Request request,
-            VersionedReference aggregate,
+            Reference aggregate,
             IEnumerable<string> explainations)
             : base(
                   request.Context,
@@ -22,8 +24,24 @@ namespace MooVC.Architecture.Ddd
                       AggregateInvariantsNotSatisfiedDomainExceptionMessage,
                       request.GetType().Name,
                       aggregate.Type.Name,
-                      Join(Separator, explainations)))
+                      Join(NewLine, explainations)))
         {
+            Explainations = explainations.Snapshot();
+        }
+
+        private AggregateInvariantsNotSatisfiedDomainException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Explainations = info.TryGetEnumerable<string>(nameof(Explainations));
+        }
+
+        public IEnumerable<string> Explainations { get; }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            _ = info.TryAddEnumerable(nameof(Explainations), Explainations);
         }
     }
 }

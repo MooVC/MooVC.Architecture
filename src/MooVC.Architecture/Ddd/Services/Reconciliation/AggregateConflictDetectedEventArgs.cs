@@ -3,13 +3,18 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.Serialization;
     using MooVC.Architecture.Ddd;
+    using MooVC.Architecture.Serialization;
+    using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
+    [Serializable]
     public sealed class AggregateConflictDetectedEventArgs
-        : EventArgs
+        : EventArgs,
+          ISerializable
     {
         internal AggregateConflictDetectedEventArgs(
             Reference aggregate,
@@ -28,6 +33,14 @@
             Previous = previous;
         }
 
+        private AggregateConflictDetectedEventArgs(SerializationInfo info, StreamingContext context)
+        {
+            Aggregate = info.TryGetReference(nameof(Aggregate));
+            Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
+            Next = info.GetValue<SignedVersion>(nameof(Next));
+            Previous = info.GetValue<SignedVersion>(nameof(Previous));
+        }
+
         public Reference Aggregate { get; }
 
         public IEnumerable<DomainEvent> Events { get; }
@@ -35,5 +48,13 @@
         public SignedVersion Next { get; }
 
         public SignedVersion Previous { get; }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            _ = info.TryAddValue(nameof(Aggregate), Aggregate);
+            _ = info.TryAddEnumerable(nameof(Events), Events);
+            info.AddValue(nameof(Next), Next);
+            info.AddValue(nameof(Previous), Previous);
+        }
     }
 }

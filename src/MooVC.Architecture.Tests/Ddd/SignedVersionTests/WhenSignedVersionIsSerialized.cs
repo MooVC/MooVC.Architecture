@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.SignedVersionTests
 {
     using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 
@@ -10,11 +11,11 @@
         public void GivenASignedVersionThenAllPropertiesArePropagated()
         {
             var aggregate = new SerializableAggregateRoot();
-            SignedVersion version = aggregate.Version;
-            SignedVersion clone = version.Clone();
+            SignedVersion original = aggregate.Version;
+            SignedVersion deserialized = original.Clone();
 
-            Assert.NotSame(version, clone);
-            Assert.Equal(version, clone);
+            Assert.NotSame(original, deserialized);
+            Assert.Equal(original, deserialized);
         }
     }
 }

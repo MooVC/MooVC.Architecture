@@ -2,60 +2,48 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class Message
-        : ISerializable
+        : Entity<Guid>
     {
         protected Message()
+            : base(Guid.NewGuid())
         {
         }
 
         protected Message(Message context)
+            : this()
         {
-            ArgumentNotNull(context, nameof(context), GenericContextRequired);
+            ArgumentNotNull(context, nameof(context), MessageContextRequired);
 
             CausationId = context.Id;
             CorrelationId = context.CorrelationId;
         }
 
         protected Message(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
             CausationId = info.TryGetValue<Guid>(nameof(CausationId));
             CorrelationId = info.GetValue<Guid>(nameof(CorrelationId));
-            Id = info.GetValue<Guid>(nameof(Id));
-            TimeStamp = info.GetDateTime(nameof(TimeStamp));
+            TimeStamp = info.GetValue<DateTimeOffset>(nameof(TimeStamp));
         }
 
         public Guid CausationId { get; } = Guid.Empty;
 
         public Guid CorrelationId { get; } = Guid.NewGuid();
 
-        public Guid Id { get; } = Guid.NewGuid();
+        public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
 
-        public DateTime TimeStamp { get; } = DateTime.UtcNow;
-
-        public override bool Equals(object other)
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            return other is Message message
-                && Id == message.Id;
-        }
+            base.GetObjectData(info, context);
 
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
             _ = info.TryAddValue(nameof(CausationId), CausationId);
             info.AddValue(nameof(CorrelationId), CorrelationId);
-            info.AddValue(nameof(Id), Id);
             info.AddValue(nameof(TimeStamp), TimeStamp);
         }
     }

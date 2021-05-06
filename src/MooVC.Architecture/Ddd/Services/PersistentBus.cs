@@ -2,15 +2,15 @@
 {
     using System;
     using System.Threading.Tasks;
-    using MooVC.Logging;
+    using MooVC.Diagnostics;
     using MooVC.Persistence;
     using static System.String;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class PersistentBus
         : Bus,
-          IEmitFailures
+          IEmitDiagnostics
     {
         private readonly IStore<AtomicUnit, Guid> store;
 
@@ -21,46 +21,43 @@
             this.store = store;
         }
 
-        public event PassiveExceptionEventHandler? FailureEmitted;
+        public event DiagnosticsEmittedEventHandler? DiagnosticsEmitted;
 
-        protected override void PerformPublish(DomainEvent[] events)
+        protected override async Task PerformPublishAsync(params DomainEvent[] events)
         {
             var unit = new AtomicUnit(events);
 
-            void Persist()
-            {
-                PerformPersist(unit);
-            }
-
-            try
-            {
-                Persist();
-            }
-            catch
-            {
-                OnUnhandled(() => Task.Run(Persist), events);
-            }
+            await PerformPersistAsync(unit)
+                .ConfigureAwait(false);
         }
 
-        private void PerformPersist(AtomicUnit unit)
+        private async Task PerformPersistAsync(AtomicUnit unit)
         {
             try
             {
-                _ = store.Create(unit);
+                _ = await store
+                    .CreateAsync(unit)
+                    .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                OnFailureEncountered(Format(PersistentBusPublishFailure, unit.Id), ex);
+                OnDiagnosticsEmitted(
+                    Level.Error,
+                    cause: ex,
+                    message: Format(PersistentBusPublishFailure, unit.Id));
 
                 throw;
             }
         }
 
-        private void OnFailureEncountered(string message, Exception failure)
+        private void OnDiagnosticsEmitted(Level level, Exception? cause = default, string? message = default)
         {
-            FailureEmitted?.Invoke(
+            DiagnosticsEmitted?.Invoke(
                 this,
-                new PassiveExceptionEventArgs(message, exception: failure));
+                new DiagnosticsEmittedEventArgs(
+                    cause: cause,
+                    level: level,
+                    message: message));
         }
     }
 }

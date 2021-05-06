@@ -8,14 +8,20 @@
         : DomainEvent
         where TAggregate : AggregateRoot
     {
+        private readonly Lazy<Reference<TAggregate>> aggregate;
+
         protected DomainEvent(Message context, TAggregate aggregate)
-            : base(context, aggregate.ToVersionedReference())
+            : base(context, aggregate.ToReference())
         {
+            this.aggregate = new Lazy<Reference<TAggregate>>(aggregate.ToReference());
         }
 
         protected DomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+            aggregate = new Lazy<Reference<TAggregate>>(() => base.Aggregate.ToTypedReference<TAggregate>());
         }
+
+        public new Reference<TAggregate> Aggregate => aggregate.Value;
     }
 }

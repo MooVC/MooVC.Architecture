@@ -4,23 +4,25 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Architecture.Ddd;
     using MooVC.Collections.Generic;
-    using MooVC.Linq;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public abstract class AtomicUnit<T>
         : ISerializable
     {
-        private readonly Lazy<VersionedReference> aggregate;
+        private readonly Lazy<Reference> aggregate;
 
         protected AtomicUnit(T id, params DomainEvent[] events)
         {
-            ArgumentIsAcceptable(events, nameof(events), value => value.SafeAny(), AtomicUnitEventsRequired);
+            ArgumentIsAcceptable(
+                events,
+                nameof(events),
+                value => value.Any(),
+                AtomicUnitEventsRequired);
 
             ArgumentIsAcceptable(
                 events,
@@ -34,25 +36,24 @@
                 HasSameContext,
                 AtomicUnitDistinctContextRequired);
 
-            aggregate = new Lazy<VersionedReference>(IdentifyAggregate);
+            aggregate = new Lazy<Reference>(IdentifyAggregate);
             Events = events.Snapshot();
             Id = id;
         }
 
         protected AtomicUnit(SerializationInfo info, StreamingContext context)
         {
-            aggregate = new Lazy<VersionedReference>(IdentifyAggregate);
+            aggregate = new Lazy<Reference>(IdentifyAggregate);
             Events = info.GetEnumerable<DomainEvent>(nameof(Events));
             Id = info.GetValue<T>(nameof(Id));
         }
 
-        public VersionedReference Aggregate => aggregate.Value;
+        public Reference Aggregate => aggregate.Value;
 
         public IEnumerable<DomainEvent> Events { get; }
 
         public T Id { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddEnumerable(nameof(Events), Events);
@@ -84,7 +85,7 @@
             return HasSame(events, @event => @event.CorrelationId);
         }
 
-        private VersionedReference IdentifyAggregate()
+        private Reference IdentifyAggregate()
         {
             return Events.First().Aggregate;
         }

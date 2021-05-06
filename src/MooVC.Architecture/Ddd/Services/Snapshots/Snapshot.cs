@@ -3,12 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Services.Snapshots.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     [Serializable]
     public sealed class Snapshot
@@ -33,7 +32,6 @@
 
         public IEventSequence Sequence { get; }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(Sequence), Sequence);

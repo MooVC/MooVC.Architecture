@@ -1,6 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
-    using MooVC.Logging;
+    using System.Threading.Tasks;
 
     public interface IBus
     {
@@ -8,8 +8,6 @@
 
         event DomainEventsPublishingEventHandler Publishing;
 
-        event DomainEventsUnhandledEventHandler Unhandled;
-
-        void Publish(params DomainEvent[] events);
+        Task PublishAsync(params DomainEvent[] events);
     }
 }

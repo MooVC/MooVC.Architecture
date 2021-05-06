@@ -1,8 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
     using System;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
-    using static Resources;
 
     public sealed class UnsupportedAggregateTypeDetectedEventArgs
         : EventArgs

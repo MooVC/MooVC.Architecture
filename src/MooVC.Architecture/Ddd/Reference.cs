@@ -53,9 +53,9 @@ namespace MooVC.Architecture.Ddd
         {
             var aggregate = Type.GetType(typeName, true);
             Type reference = typeof(Reference<>);
-            Type typed = reference.MakeGenericType(aggregate);
+            Type typed = reference.MakeGenericType(aggregate!);
 
-            return (Reference)Activator.CreateInstance(typed, id, version);
+            return (Reference)Activator.CreateInstance(typed, id, version)!;
         }
 
         public override bool Equals(object? other)

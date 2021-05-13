@@ -1,17 +1,23 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using MooVC.Diagnostics;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
 
     public abstract class EventReconciler
-        : IEventReconciler
+        : IEventReconciler,
+          IEmitDiagnostics
     {
-        public event EventsReconciledEventHandler? EventsReconciled;
+        public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
 
-        public event EventsReconcilingEventHandler? EventsReconciling;
+        public event EventsReconciledAsyncEventHandler? EventsReconciled;
 
-        public event EventSequenceAdvancedEventHandler? EventSequenceAdvanced;
+        public event EventsReconcilingAsyncEventHandler? EventsReconciling;
+
+        public event EventSequenceAdvancedAsyncEventHandler? EventSequenceAdvanced;
 
         public async Task<ulong?> ReconcileAsync(ulong? previous = default, ulong? target = default)
         {
@@ -32,7 +38,8 @@
                     await ReconcileAsync(events)
                         .ConfigureAwait(false);
 
-                    OnEventSequenceAdvanced(lastSequence!.Value);
+                    await OnEventSequenceAdvancedAsync(lastSequence!.Value)
+                        .ConfigureAwait(false);
 
                     previous = lastSequence;
                 }
@@ -48,19 +55,44 @@
 
         protected abstract Task ReconcileAsync(IEnumerable<DomainEvent> events);
 
-        protected void OnEventsReconciled(IEnumerable<DomainEvent> events)
+        protected virtual Task OnDiagnosticsEmittedAsync(
+            Level level,
+            Exception? cause = default,
+            string? message = default)
         {
-            EventsReconciled?.Invoke(this, new EventReconciliationEventArgs(events));
+            return DiagnosticsEmitted.PassiveInvokeAsync(
+                this,
+                new DiagnosticsEmittedEventArgs(
+                    cause: cause,
+                    level: level,
+                    message: message));
         }
 
-        protected void OnEventsReconciling(IEnumerable<DomainEvent> events)
+        protected virtual Task OnEventsReconciledAsync(IEnumerable<DomainEvent> events)
         {
-            EventsReconciling?.Invoke(this, new EventReconciliationEventArgs(events));
+            return EventsReconciled.PassiveInvokeAsync(
+                this,
+                new EventReconciliationEventArgs(events),
+                onFailure: failure => OnDiagnosticsEmittedAsync(
+                    Level.Warning,
+                    cause: failure,
+                    message: EventReconcilerOnEventsReconciledAsyncFailure));
         }
 
-        protected void OnEventSequenceAdvanced(ulong current)
+        protected virtual Task OnEventsReconcilingAsync(IEnumerable<DomainEvent> events)
         {
-            EventSequenceAdvanced?.Invoke(this, new EventSequenceAdvancedEventArgs(current));
+            return EventsReconciling.InvokeAsync(this, new EventReconciliationEventArgs(events));
+        }
+
+        protected virtual Task OnEventSequenceAdvancedAsync(ulong current)
+        {
+            return EventSequenceAdvanced.PassiveInvokeAsync(
+                this,
+                new EventSequenceAdvancedEventArgs(current),
+                onFailure: failure => OnDiagnosticsEmittedAsync(
+                    Level.Warning,
+                    cause: failure,
+                    message: EventReconcilerOnEventSequenceAdvancedAsyncFailure));
         }
     }
 }

@@ -165,6 +165,12 @@
   <data name="DefaultReconciliationOrchestratorSnapshotSourceRequired" xml:space="preserve">
     <value>The source responsible for providing the snapshots must be provided.</value>
   </data>
+  <data name="EventReconcilerOnEventSequenceAdvancedAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for sequence advancement from successfully handling a notification.</value>
+  </data>
+  <data name="EventReconcilerOnEventsReconciledAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification.</value>
+  </data>
   <data name="EventReconciliationEventArgsEventsRequired" xml:space="preserve">
     <value>The events must be provided.</value>
   </data>

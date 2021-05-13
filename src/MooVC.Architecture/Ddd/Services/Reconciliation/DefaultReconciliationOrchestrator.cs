@@ -120,7 +120,7 @@
                 .ConfigureAwait(false);
         }
 
-        private async void EventReconciler_EventSequenceAdvanced(
+        private async Task EventReconciler_EventSequenceAdvanced(
             IEventReconciler sender,
             EventSequenceAdvancedEventArgs e)
         {

@@ -93,13 +93,15 @@
 
         private async Task PerformReconciliationAsync(IEnumerable<DomainEvent> events)
         {
-            OnEventsReconciling(events);
+            await OnEventsReconcilingAsync(events)
+                .ConfigureAwait(false);
 
             await reconciler
                 .ReconcileAsync(events.ToArray())
                 .ConfigureAwait(false);
 
-            OnEventsReconciled(events);
+            await OnEventsReconciledAsync(events)
+                .ConfigureAwait(false);
         }
     }
 }

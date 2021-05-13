@@ -12,7 +12,7 @@ While the original MooVC PHP based framework has long since been deprecated, man
 
 ## Overview
 
-Applied asynchonrous event handling and cancellation.
+Custom event handlers have been changed to use the asynchonrous variant.  This is seen as a positive step forward as more libraries adopt the asynchonrous programming paradigm.  By utilizng asynchonrous handlers, observers can avoid utilizing async void implementations whereever a need for asynchonrous exists.  Clarity has also been provided on cancellations, which in the past, where supported for every event, even if this was not the original intention.
 
 ## Enhancements
 
@@ -20,15 +20,28 @@ Applied asynchonrous event handling and cancellation.
 - Changed Architecture.Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.DomainEventsPublishedEventHandler to an async variant named DomainEventsPublishedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.DomainEventsPublishingEventHandler to an async variant named DomainEventsPublishingAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Reconciliation.AggregateConflictDetectedEventHandler to an async variant named AggregateConflictDetectedAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Reconciliation.AggregateReconciledEventHandler to an async variant named AggregateReconciledAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Reconciliation.EventsReconciledEventHandler to an async variant named EventsReconciledAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Reconciliation.EventsReconcilingEventHandler to an async variant named EventsReconcilingAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Reconciliation.EventSequenceAdvancedEventHandler to an async variant named EventSequenceAdvancedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Repository so that it now implements IEmitDiagnostics.
 - Changed Architecture.Services.Bus so that it now implements IEmitDiagnostics.
 - Changed Architecture.Services.MessageInvokedEventHandler to an async variant named MessageInvokedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Services.MessageInvokingEventHandler to an async variant named MessageInvokingAsyncEventHandler (**Breaking Change**).
-- Changed the invocation of the AggregatedSaved event handler of Architecture.Ddd.Services.Repository to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the AggregateReconciled event handler of Architecture.Ddd.Services.AggregateReconciler to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the AggregateSaved event handler of Architecture.Ddd.Services.Repository to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the EventsReconciled event handler of Architecture.Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
 - Changed the invocation of the Published event handler of Architecture.Ddd.Services.Bus to utilize the passive implementation (**Breaking Change**).
 - Changed the invocation of the Invoked event handler of Architecture.Services.Bus to utilize the passive implementation (**Breaking Change**).
-
-- Changed MooVC.Architecture.Ddd.Services.Reconciliation.AggregateConflictDetectedEventHandler to an async variant named AggregateConflictDetectedAsyncEventHandler (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.Reconciliation.AggregateReconciledEventHandler to an async variant named AggregateReconciledAsyncEventHandler (**Breaking Change**).
-- Changed the invocation of the AggregateReconciled event handler of Architecture.Ddd.Services.AggregateReconciler to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the SequenceAdvanced event handler of Architecture.Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
 - Removed Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciler due to inherrant challenges presented by the event driven feedback model (**Breaking Change**).
+
+## End-User Impact
+
+In many cases, it is expected that event handlers can be updated by simply:
+
+1. Changing the return type from void to Task.
+2. Returning Task.CompletedTask.
+
+Passive handlers will no longer require that the observer handle exceptions.

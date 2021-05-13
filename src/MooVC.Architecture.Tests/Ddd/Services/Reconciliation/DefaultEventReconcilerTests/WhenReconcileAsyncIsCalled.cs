@@ -79,7 +79,7 @@
                 .Setup(store => store.ReadAsync(It.Is<ulong>(value => value > ulong.MinValue), It.IsAny<ushort>()))
                 .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-            instance.EventSequenceAdvanced += (sender, e) => wasInvoked = true;
+            instance.EventSequenceAdvanced += (sender, e) => Task.FromResult(wasInvoked = true);
 
             ulong? current = await instance.ReconcileAsync();
 
@@ -115,8 +115,8 @@
                .Setup(reconciler => reconciler.ReconcileAsync(It.IsAny<DomainEvent[]>()))
                .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
 
-            instance.EventsReconciling += (sender, e) => eventsReconciling++;
-            instance.EventsReconciled += (sender, e) => eventsReconciled++;
+            instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+            instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
             _ = await instance.ReconcileAsync();
 
@@ -162,8 +162,8 @@
                .Setup(reconciler => reconciler.ReconcileAsync(It.IsAny<DomainEvent[]>()))
                .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
 
-            instance.EventsReconciling += (sender, e) => eventsReconciling++;
-            instance.EventsReconciled += (sender, e) => eventsReconciled++;
+            instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+            instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
             _ = await instance.ReconcileAsync(previous: previous, target: target);
 
@@ -207,8 +207,8 @@
                .Setup(reconciler => reconciler.ReconcileAsync(It.IsAny<DomainEvent[]>()))
                .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
 
-            instance.EventsReconciling += (sender, e) => eventsReconciling++;
-            instance.EventsReconciled += (sender, e) => eventsReconciled++;
+            instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+            instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
             _ = await instance.ReconcileAsync(previous: previous);
 
@@ -252,8 +252,8 @@
                .Setup(reconciler => reconciler.ReconcileAsync(It.IsAny<DomainEvent[]>()))
                .Callback<IEnumerable<DomainEvent>>(value => aggregates[value.First().Aggregate]++);
 
-            instance.EventsReconciling += (sender, e) => eventsReconciling++;
-            instance.EventsReconciled += (sender, e) => eventsReconciled++;
+            instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+            instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
             _ = await instance.ReconcileAsync(target: target);
 

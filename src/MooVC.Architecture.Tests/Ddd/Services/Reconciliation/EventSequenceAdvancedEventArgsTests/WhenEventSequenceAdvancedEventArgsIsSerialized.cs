@@ -34,7 +34,7 @@
                 .Setup(store => store.ReadAsync(It.Is<ulong>(value => value > ulong.MinValue), It.IsAny<ushort>()))
                 .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-            instance.EventSequenceAdvanced += (sender, e) => original = e;
+            instance.EventSequenceAdvanced += (sender, e) => Task.FromResult(original = e);
 
             ulong? current = await instance.ReconcileAsync();
 

@@ -205,6 +205,24 @@ namespace MooVC.Architecture.Ddd.Services.Reconciliation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for sequence advancement from successfully handling a notification..
+        /// </summary>
+        internal static string EventReconcilerOnEventSequenceAdvancedAsyncFailure {
+            get {
+                return ResourceManager.GetString("EventReconcilerOnEventSequenceAdvancedAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification..
+        /// </summary>
+        internal static string EventReconcilerOnEventsReconciledAsyncFailure {
+            get {
+                return ResourceManager.GetString("EventReconcilerOnEventsReconciledAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The events must be provided..
         /// </summary>
         internal static string EventReconciliationEventArgsEventsRequired {

@@ -196,7 +196,7 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A failure has prevented one or more listeners for publications from successfully handling a change..
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for publications from successfully handling a notification..
         /// </summary>
         internal static string BusOnPublishedAsyncFailure {
             get {
@@ -277,11 +277,11 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A failure has prevented the successful reprocessing of unhandled domain events..
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for persistence completion from successfully handling a notification..
         /// </summary>
-        internal static string UnhandledDomainEventManagerProcessFailure {
+        internal static string RepositoryOnAggregateSavedAsyncFailure {
             get {
-                return ResourceManager.GetString("UnhandledDomainEventManagerProcessFailure", resourceCulture);
+                return ResourceManager.GetString("RepositoryOnAggregateSavedAsyncFailure", resourceCulture);
             }
         }
     }

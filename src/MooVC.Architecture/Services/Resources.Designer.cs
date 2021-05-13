@@ -70,7 +70,7 @@ namespace MooVC.Architecture.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A failure has prevented one or more listeners for invocations from successfully handling a change..
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for invocations from successfully handling a notification..
         /// </summary>
         internal static string BusOnInvokedAsyncFailure {
             get {

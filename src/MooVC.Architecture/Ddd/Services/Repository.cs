@@ -3,15 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using MooVC.Diagnostics;
     using static MooVC.Architecture.Ddd.Services.Ensure;
+    using static MooVC.Architecture.Ddd.Services.Resources;
 
     public abstract class Repository<TAggregate>
-        : IRepository<TAggregate>
+        : IRepository<TAggregate>,
+          IEmitDiagnostics
         where TAggregate : AggregateRoot
     {
-        public event AggregateSavedEventHandler<TAggregate>? AggregateSaved;
+        public event AggregateSavedAsyncEventHandler<TAggregate>? AggregateSaved;
 
-        public event AggregateSavingEventHandler<TAggregate>? AggregateSaving;
+        public event AggregateSavingAsyncEventHandler<TAggregate>? AggregateSaving;
+
+        public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
 
         public abstract Task<IEnumerable<TAggregate>> GetAllAsync();
 
@@ -19,12 +24,14 @@
 
         public virtual async Task SaveAsync(TAggregate aggregate)
         {
-            OnAggregateSaving(aggregate);
+            await OnAggregateSavingAsync(aggregate)
+                .ConfigureAwait(false);
 
             await PerformSaveAsync(aggregate)
                 .ConfigureAwait(false);
 
-            OnAggregateSaved(aggregate);
+            await OnAggregateSavedAsync(aggregate)
+                .ConfigureAwait(false);
 
             aggregate.MarkChangesAsCommitted();
         }
@@ -46,14 +53,33 @@
 
         protected abstract Task<Reference<TAggregate>?> GetCurrentVersionAsync(TAggregate aggregate);
 
-        protected void OnAggregateSaved(TAggregate aggregate)
+        protected virtual Task OnAggregateSavedAsync(TAggregate aggregate)
         {
-            AggregateSaved?.Invoke(this, new AggregateSavedEventArgs<TAggregate>(aggregate));
+            return AggregateSaved.PassiveInvokeAsync(
+                this,
+                new AggregateSavedEventArgs<TAggregate>(aggregate),
+                onFailure: failure => OnDiagnosticsEmittedAsync(
+                    Level.Warning,
+                    cause: failure,
+                    message: RepositoryOnAggregateSavedAsyncFailure));
         }
 
-        protected void OnAggregateSaving(TAggregate aggregate)
+        protected virtual Task OnAggregateSavingAsync(TAggregate aggregate)
         {
-            AggregateSaving?.Invoke(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
+            return AggregateSaving.InvokeAsync(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
+        }
+
+        protected virtual Task OnDiagnosticsEmittedAsync(
+            Level level,
+            Exception? cause = default,
+            string? message = default)
+        {
+            return DiagnosticsEmitted.PassiveInvokeAsync(
+                this,
+                new DiagnosticsEmittedEventArgs(
+                    cause: cause,
+                    level: level,
+                    message: message));
         }
 
         protected virtual async Task PerformSaveAsync(TAggregate aggregate)

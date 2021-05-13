@@ -7,9 +7,9 @@
     public interface IRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        event AggregateSavedEventHandler<TAggregate> AggregateSaved;
+        event AggregateSavedAsyncEventHandler<TAggregate> AggregateSaved;
 
-        event AggregateSavingEventHandler<TAggregate> AggregateSaving;
+        event AggregateSavingAsyncEventHandler<TAggregate> AggregateSaving;
 
         Task<IEnumerable<TAggregate>> GetAllAsync();
 

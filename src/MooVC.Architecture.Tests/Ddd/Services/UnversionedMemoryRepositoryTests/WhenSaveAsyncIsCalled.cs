@@ -125,7 +125,8 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavedEventIsRaisedPriorToTheVersionIncrementAsync(bool useCloner)
+        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavedEventIsRaisedPriorToTheVersionIncrementAsync(
+            bool useCloner)
         {
             var expectedAggregate = new SerializableAggregateRoot();
             bool wasInvoked = false;
@@ -133,7 +134,7 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             IRepository<SerializableAggregateRoot> expectedRepository =
                 Create<SerializableAggregateRoot>(useCloner);
 
-            void Aggregate_Saved(
+            Task Aggregate_Saved(
                 IRepository<SerializableAggregateRoot> actualRepository,
                 AggregateSavedEventArgs<SerializableAggregateRoot> e)
             {
@@ -142,7 +143,7 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
                 Assert.Same(expectedAggregate, e.Aggregate);
                 Assert.True(e.Aggregate.Version.IsNew);
 
-                wasInvoked = true;
+                return Task.FromResult(wasInvoked = true);
             }
 
             expectedRepository.AggregateSaved += Aggregate_Saved;
@@ -155,7 +156,8 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavingEventIsRaisedPriorToTheVersionIncrementAsync(bool useCloner)
+        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavingEventIsRaisedPriorToTheVersionIncrementAsync(
+            bool useCloner)
         {
             var expectedAggregate = new SerializableAggregateRoot();
             bool wasInvoked = false;
@@ -163,7 +165,7 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             IRepository<SerializableAggregateRoot> expectedRepository =
                 Create<SerializableAggregateRoot>(useCloner);
 
-            void Aggregate_Saving(
+            Task Aggregate_Saving(
                 IRepository<SerializableAggregateRoot> actualRepository,
                 AggregateSavingEventArgs<SerializableAggregateRoot> e)
             {
@@ -172,7 +174,7 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
                 Assert.Same(expectedAggregate, e.Aggregate);
                 Assert.True(e.Aggregate.Version.IsNew);
 
-                wasInvoked = true;
+                return Task.FromResult(wasInvoked = true);
             }
 
             expectedRepository.AggregateSaving += Aggregate_Saving;

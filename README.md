@@ -16,10 +16,14 @@ Applied asynchonrous event handling and cancellation.
 
 ## Enhancements
 
+- Changed Architecture.Ddd.Services.AggregateSavedEventHandler to an async variant named AggregateSavedAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.DomainEventsPublishedEventHandler to an async variant named DomainEventsPublishedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.DomainEventsPublishingEventHandler to an async variant named DomainEventsPublishingAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Repository so that it now implements IEmitDiagnostics.
 - Changed Architecture.Services.Bus so that it now implements IEmitDiagnostics.
 - Changed Architecture.Services.MessageInvokedEventHandler to an async variant named MessageInvokedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Services.MessageInvokingEventHandler to an async variant named MessageInvokingAsyncEventHandler (**Breaking Change**).
+- Changed the invocation of the AggregatedSaved event handler of Architecture.Ddd.Services.Repository to utilize the passive implementation (**Breaking Change**).
 - Changed the invocation of the Published event handler of Architecture.Ddd.Services.Bus to utilize the passive implementation (**Breaking Change**).
 - Changed the invocation of the Invoked event handler of Architecture.Services.Bus to utilize the passive implementation (**Breaking Change**).

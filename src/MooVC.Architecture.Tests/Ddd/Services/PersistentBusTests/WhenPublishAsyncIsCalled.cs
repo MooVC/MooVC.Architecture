@@ -49,14 +49,14 @@
         public async Task GivenMultipleEventsThenPublishedIsRaisedOnceAsync()
         {
             await GivenMultipleEventsThenEventIsRaisedOnceAsync(
-                () => bus.Published += (sender, e) => invocationCounter++);
+                () => bus.Published += (sender, e) => Task.FromResult(invocationCounter++));
         }
 
         [Fact]
         public async Task GivenMultipleEventsThenPublishingIsRaisedOnceAsync()
         {
             await GivenMultipleEventsThenEventIsRaisedOnceAsync(
-                () => bus.Publishing += (sender, e) => invocationCounter++);
+                () => bus.Publishing += (sender, e) => Task.FromResult(invocationCounter++));
         }
 
         [Fact]
@@ -64,8 +64,8 @@
         {
             bool wasInvoked = false;
 
-            bus.Published += (sender, e) => wasInvoked = true;
-            bus.Publishing += (sender, e) => wasInvoked = true;
+            bus.Published += (sender, e) => Task.FromResult(wasInvoked = true);
+            bus.Publishing += (sender, e) => Task.FromResult(wasInvoked = true);
 
             await bus.PublishAsync();
 
@@ -83,14 +83,14 @@
         public async Task GivenOneEventThenPublishedIsRaisedOnceAsync()
         {
             await GivenOneEventThenEventIsRaisedOnceAsync(
-                () => bus.Published += (sender, e) => invocationCounter++);
+                () => bus.Published += (sender, e) => Task.FromResult(invocationCounter++));
         }
 
         [Fact]
         public async Task GivenOneEventThenPublishingIsRaisedOnceAsync()
         {
             await GivenOneEventThenEventIsRaisedOnceAsync(
-                () => bus.Publishing += (sender, e) => invocationCounter++);
+                () => bus.Publishing += (sender, e) => Task.FromResult(invocationCounter++));
         }
 
         private async Task GivenMultipleEventsThenEventIsRaisedOnceAsync(Action @event)

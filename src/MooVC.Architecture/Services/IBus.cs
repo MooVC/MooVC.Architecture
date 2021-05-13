@@ -4,9 +4,9 @@
 
     public interface IBus
     {
-        event MessageInvokedEventHandler Invoked;
+        event MessageInvokedAsyncEventHandler Invoked;
 
-        event MessageInvokingEventHandler Invoking;
+        event MessageInvokingAsyncEventHandler Invoking;
 
         Task InvokeAsync(Message message);
     }

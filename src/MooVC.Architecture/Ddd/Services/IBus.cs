@@ -4,9 +4,9 @@
 
     public interface IBus
     {
-        event DomainEventsPublishedEventHandler Published;
+        event DomainEventsPublishedAsyncEventHandler Published;
 
-        event DomainEventsPublishingEventHandler Publishing;
+        event DomainEventsPublishingAsyncEventHandler Publishing;
 
         Task PublishAsync(params DomainEvent[] events);
     }

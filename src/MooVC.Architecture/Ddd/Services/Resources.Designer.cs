@@ -196,6 +196,15 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for publications from successfully handling a change..
+        /// </summary>
+        internal static string BusOnPublishedAsyncFailure {
+            get {
+                return ResourceManager.GetString("BusOnPublishedAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The repository must be provided..
         /// </summary>
         internal static string CoordinatedGenerateHandlerRepositoryRequired {

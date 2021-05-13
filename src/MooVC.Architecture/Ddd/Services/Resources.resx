@@ -162,6 +162,9 @@
   <data name="AtomicUnitEventsRequired" xml:space="preserve">
     <value>The atomic unit must contain one or more domain events.</value>
   </data>
+  <data name="BusOnPublishedAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for publications from successfully handling a change.</value>
+  </data>
   <data name="CoordinatedGenerateHandlerRepositoryRequired" xml:space="preserve">
     <value>The repository must be provided.</value>
   </data>

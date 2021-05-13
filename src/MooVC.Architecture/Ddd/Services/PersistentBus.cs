@@ -9,8 +9,7 @@
     using static MooVC.Ensure;
 
     public sealed class PersistentBus
-        : Bus,
-          IEmitDiagnostics
+        : Bus
     {
         private readonly IStore<AtomicUnit, Guid> store;
 
@@ -20,8 +19,6 @@
 
             this.store = store;
         }
-
-        public event DiagnosticsEmittedEventHandler? DiagnosticsEmitted;
 
         protected override async Task PerformPublishAsync(params DomainEvent[] events)
         {
@@ -41,23 +38,15 @@
             }
             catch (Exception ex)
             {
-                OnDiagnosticsEmitted(
-                    Level.Error,
-                    cause: ex,
-                    message: Format(PersistentBusPublishFailure, unit.Id));
+                await
+                    OnDiagnosticsEmittedAsync(
+                        Level.Error,
+                        cause: ex,
+                        message: Format(PersistentBusPublishFailure, unit.Id))
+                    .ConfigureAwait(false);
 
                 throw;
             }
-        }
-
-        private void OnDiagnosticsEmitted(Level level, Exception? cause = default, string? message = default)
-        {
-            DiagnosticsEmitted?.Invoke(
-                this,
-                new DiagnosticsEmittedEventArgs(
-                    cause: cause,
-                    level: level,
-                    message: message));
         }
     }
 }

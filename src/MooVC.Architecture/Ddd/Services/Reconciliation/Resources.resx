@@ -135,6 +135,9 @@
   <data name="AggregateReconciledEventArgsEventsRequired" xml:space="preserve">
     <value>The events that were successfully reconciled must be provided.</value>
   </data>
+  <data name="AggregateReconcilerOnAggregateReconciledAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification.</value>
+  </data>
   <data name="DefaultAggregateReconcilerFactoryRequired" xml:space="preserve">
     <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
   </data>

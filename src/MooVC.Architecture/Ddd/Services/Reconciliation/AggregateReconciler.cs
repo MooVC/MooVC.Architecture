@@ -5,24 +5,28 @@
     using System.Linq;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd;
+    using MooVC.Diagnostics;
+    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
 
     public abstract class AggregateReconciler
-        : IAggregateReconciler
+        : IAggregateReconciler,
+          IEmitDiagnostics
     {
-        public event AggregateConflictDetectedEventHandler? AggregateConflictDetected;
+        public event AggregateConflictDetectedAsyncEventHandler? AggregateConflictDetected;
 
-        public event AggregateReconciledEventHandler? AggregateReconciled;
+        public event AggregateReconciledAsyncEventHandler? AggregateReconciled;
 
-        public event UnsupportedAggregateTypeDetectedEventHandler? UnsupportedAggregateTypeDetected;
+        public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
+
+        public event UnsupportedAggregateTypeDetectedAsyncEventHandler? UnsupportedAggregateTypeDetected;
 
         public abstract Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates);
 
         public abstract Task ReconcileAsync(params DomainEvent[] events);
 
-        protected virtual bool EventsAreNonConflicting(
+        protected virtual async Task<bool> EventsAreNonConflictingAsync(
             Reference aggregate,
-            IEnumerable<DomainEvent> events,
-            out bool isNew)
+            IEnumerable<DomainEvent> events)
         {
             IEnumerable<SignedVersion> versions = events
                 .Select(@event => @event.Aggregate.Version)
@@ -30,13 +34,12 @@
 
             SignedVersion previous = versions.First();
 
-            isNew = previous.IsNew;
-
             foreach (SignedVersion next in versions.Skip(1))
             {
                 if (!next.IsNext(previous))
                 {
-                    OnAggregateConflictDetected(aggregate, events, next, previous);
+                    await OnAggregateConflictDetectedAsync(aggregate, events, next, previous)
+                        .ConfigureAwait(false);
 
                     return false;
                 }
@@ -45,13 +48,13 @@
             return true;
         }
 
-        protected void OnAggregateConflictDetected(
+        protected virtual Task OnAggregateConflictDetectedAsync(
             Reference aggregate,
             IEnumerable<DomainEvent> events,
             SignedVersion next,
             SignedVersion previous)
         {
-            AggregateConflictDetected?.Invoke(
+            return AggregateConflictDetected.InvokeAsync(
                 this,
                 new AggregateConflictDetectedEventArgs(
                     aggregate,
@@ -60,16 +63,33 @@
                     previous));
         }
 
-        protected void OnAggregateReconciled(Reference aggregate, IEnumerable<DomainEvent> events)
+        protected virtual Task OnAggregateReconciledAsync(Reference aggregate, IEnumerable<DomainEvent> events)
         {
-            AggregateReconciled?.Invoke(
+            return AggregateReconciled.PassiveInvokeAsync(
                 this,
-                new AggregateReconciledEventArgs(aggregate, events));
+                new AggregateReconciledEventArgs(aggregate, events),
+                onFailure: failure => OnDiagnosticsEmittedAsync(
+                    Level.Warning,
+                    cause: failure,
+                    message: AggregateReconcilerOnAggregateReconciledAsyncFailure));
         }
 
-        protected void OnUnsupportedAggregateTypeDetected(Type type)
+        protected virtual Task OnDiagnosticsEmittedAsync(
+            Level level,
+            Exception? cause = default,
+            string? message = default)
         {
-            UnsupportedAggregateTypeDetected?.Invoke(
+            return DiagnosticsEmitted.PassiveInvokeAsync(
+                this,
+                new DiagnosticsEmittedEventArgs(
+                    cause: cause,
+                    level: level,
+                    message: message));
+        }
+
+        protected virtual Task OnUnsupportedAggregateTypeDetectedAsync(Type type)
+        {
+            return UnsupportedAggregateTypeDetected.InvokeAsync(
                 this,
                 new UnsupportedAggregateTypeDetectedEventArgs(type));
         }
@@ -99,23 +119,28 @@
                         .SaveAsync(aggregate)
                         .ConfigureAwait(false);
 
-                    OnAggregateReconciled(reference, events);
+                    await OnAggregateReconciledAsync(reference, events)
+                        .ConfigureAwait(false);
                 }
                 catch (AggregateHistoryInvalidForStateException invalid)
                 {
-                    OnAggregateConflictDetected(
-                        invalid.Aggregate,
-                        events,
-                        invalid.StartingVersion,
-                        invalid.Aggregate.Version);
+                    await
+                        OnAggregateConflictDetectedAsync(
+                            invalid.Aggregate,
+                            events,
+                            invalid.StartingVersion,
+                            invalid.Aggregate.Version)
+                        .ConfigureAwait(false);
                 }
                 catch (AggregateConflictDetectedException conflict)
                 {
-                    OnAggregateConflictDetected(
-                        reference,
-                        events,
-                        conflict.Received,
-                        conflict.Persisted);
+                    await
+                        OnAggregateConflictDetectedAsync(
+                            reference,
+                            events,
+                            conflict.Received,
+                            conflict.Persisted)
+                        .ConfigureAwait(false);
                 }
             }
         }

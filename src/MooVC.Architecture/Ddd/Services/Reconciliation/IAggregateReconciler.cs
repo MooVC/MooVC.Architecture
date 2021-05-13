@@ -4,11 +4,11 @@
 
     public interface IAggregateReconciler
     {
-        event AggregateConflictDetectedEventHandler AggregateConflictDetected;
+        event AggregateConflictDetectedAsyncEventHandler AggregateConflictDetected;
 
-        event AggregateReconciledEventHandler AggregateReconciled;
+        event AggregateReconciledAsyncEventHandler AggregateReconciled;
 
-        event UnsupportedAggregateTypeDetectedEventHandler UnsupportedAggregateTypeDetected;
+        event UnsupportedAggregateTypeDetectedAsyncEventHandler UnsupportedAggregateTypeDetected;
 
         Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates);
 

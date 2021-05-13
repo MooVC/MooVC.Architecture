@@ -38,7 +38,8 @@
 
                     if (proxy is null)
                     {
-                        OnUnsupportedAggregateTypeDetected(aggregateTypes.Key);
+                        await OnUnsupportedAggregateTypeDetectedAsync(aggregateTypes.Key)
+                            .ConfigureAwait(false);
                     }
                     else
                     {
@@ -63,14 +64,18 @@
 
                     if (proxy is null)
                     {
-                        OnUnsupportedAggregateTypeDetected(aggregateTypes.Key);
+                        await OnUnsupportedAggregateTypeDetectedAsync(aggregateTypes.Key)
+                            .ConfigureAwait(false);
                     }
                     else
                     {
                         foreach (IGrouping<Reference, DomainEvent> aggregateEvents in aggregateTypes
                             .GroupBy(@event => @event.Aggregate))
                         {
-                            if (EventsAreNonConflicting(aggregateEvents.Key, aggregateEvents, out _))
+                            bool isHarmonious = await EventsAreNonConflictingAsync(aggregateEvents.Key, aggregateEvents)
+                                .ConfigureAwait(false);
+
+                            if (isHarmonious)
                             {
                                 await ReconcileAsync(aggregateEvents.Key, aggregateEvents, proxy)
                                     .ConfigureAwait(false);

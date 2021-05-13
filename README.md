@@ -27,3 +27,8 @@ Applied asynchonrous event handling and cancellation.
 - Changed the invocation of the AggregatedSaved event handler of Architecture.Ddd.Services.Repository to utilize the passive implementation (**Breaking Change**).
 - Changed the invocation of the Published event handler of Architecture.Ddd.Services.Bus to utilize the passive implementation (**Breaking Change**).
 - Changed the invocation of the Invoked event handler of Architecture.Services.Bus to utilize the passive implementation (**Breaking Change**).
+
+- Changed MooVC.Architecture.Ddd.Services.Reconciliation.AggregateConflictDetectedEventHandler to an async variant named AggregateConflictDetectedAsyncEventHandler (**Breaking Change**).
+- Changed MooVC.Architecture.Ddd.Services.Reconciliation.AggregateReconciledEventHandler to an async variant named AggregateReconciledAsyncEventHandler (**Breaking Change**).
+- Changed the invocation of the AggregateReconciled event handler of Architecture.Ddd.Services.AggregateReconciler to utilize the passive implementation (**Breaking Change**).
+- Removed Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciler due to inherrant challenges presented by the event driven feedback model (**Breaking Change**).

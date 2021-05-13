@@ -115,6 +115,15 @@ namespace MooVC.Architecture.Ddd.Services.Reconciliation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification..
+        /// </summary>
+        internal static string AggregateReconcilerOnAggregateReconciledAsyncFailure {
+            get {
+                return ResourceManager.GetString("AggregateReconcilerOnAggregateReconciledAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
         /// </summary>
         internal static string DefaultAggregateReconcilerFactoryRequired {

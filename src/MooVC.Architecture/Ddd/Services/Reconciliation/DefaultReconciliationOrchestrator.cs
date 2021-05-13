@@ -109,7 +109,7 @@
             }
         }
 
-        private async void AggregateReconciler_AggregateConflictDetected(
+        private async Task AggregateReconciler_AggregateConflictDetected(
             IAggregateReconciler sender,
             AggregateConflictDetectedEventArgs e)
         {

@@ -4,9 +4,9 @@
 
     public interface IReconciliationOrchestrator
     {
-        event SnapshotRestorationCommencingEventHandler SnapshotRestorationCommencing;
+        event SnapshotRestorationCommencingAsyncEventHandler SnapshotRestorationCommencing;
 
-        event SnapshotRestorationCompletedEventHandler SnapshotRestorationCompleted;
+        event SnapshotRestorationCompletedAsyncEventHandler SnapshotRestorationCompleted;
 
         Task ReconcileAsync(IEventSequence? target = default);
     }

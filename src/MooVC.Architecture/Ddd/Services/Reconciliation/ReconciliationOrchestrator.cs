@@ -2,24 +2,25 @@
 {
     using System;
     using System.Threading.Tasks;
+    using MooVC.Diagnostics;
 
     public abstract class ReconciliationOrchestrator
         : IReconciliationOrchestrator
     {
-        public event SnapshotRestorationCommencingEventHandler? SnapshotRestorationCommencing;
+        public event SnapshotRestorationCommencingAsyncEventHandler? SnapshotRestorationCommencing;
 
-        public event SnapshotRestorationCompletedEventHandler? SnapshotRestorationCompleted;
+        public event SnapshotRestorationCompletedAsyncEventHandler? SnapshotRestorationCompleted;
 
         public abstract Task ReconcileAsync(IEventSequence? target = default);
 
-        protected virtual void OnSnapshotRestorationCommencing()
+        protected virtual Task OnSnapshotRestorationCommencingAsync()
         {
-            SnapshotRestorationCommencing?.Invoke(this, EventArgs.Empty);
+            return SnapshotRestorationCommencing.InvokeAsync(this, EventArgs.Empty);
         }
 
-        protected virtual void OnSnapshotRestorationCompleted(IEventSequence sequence)
+        protected virtual Task OnSnapshotRestorationCompletedAsync(IEventSequence sequence)
         {
-            SnapshotRestorationCompleted?.Invoke(
+            return SnapshotRestorationCompleted.InvokeAsync(
                 this,
                 new SnapshotRestorationCompletedEventArgs(sequence));
         }

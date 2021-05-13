@@ -1,6 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
-    public delegate void SnapshotRestorationCompletedEventHandler(
+    using System.Threading.Tasks;
+
+    public delegate Task SnapshotRestorationCompletedAsyncEventHandler(
         IReconciliationOrchestrator orchestrator,
         SnapshotRestorationCompletedEventArgs e);
 }

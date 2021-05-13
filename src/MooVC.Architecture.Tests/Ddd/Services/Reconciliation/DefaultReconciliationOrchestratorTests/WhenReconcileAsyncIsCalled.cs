@@ -32,8 +32,8 @@
 
             DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
-            instance.SnapshotRestorationCommencing += (_, _) => wasSnapshotRestorationCommencingInvoked = true;
-            instance.SnapshotRestorationCompleted += (_, _) => wasSnapshotRestorationCompletedInvoked = true;
+            instance.SnapshotRestorationCommencing += (_, _) => Task.FromResult(wasSnapshotRestorationCommencingInvoked = true);
+            instance.SnapshotRestorationCompleted += (_, _) => Task.FromResult(wasSnapshotRestorationCompletedInvoked = true);
 
             await instance.ReconcileAsync();
 
@@ -119,8 +119,8 @@
 
             DefaultReconciliationOrchestrator<EventSequence> instance = CreateReconciler(snapshotSource: SnapshotSource);
 
-            instance.SnapshotRestorationCommencing += (_, _) => wasSnapshotRestorationCommencingInvoked = true;
-            instance.SnapshotRestorationCompleted += (_, _) => wasSnapshotRestorationCompletedInvoked = true;
+            instance.SnapshotRestorationCommencing += (_, _) => Task.FromResult(wasSnapshotRestorationCommencingInvoked = true);
+            instance.SnapshotRestorationCompleted += (_, _) => Task.FromResult(wasSnapshotRestorationCompletedInvoked = true);
 
             await instance.ReconcileAsync();
 

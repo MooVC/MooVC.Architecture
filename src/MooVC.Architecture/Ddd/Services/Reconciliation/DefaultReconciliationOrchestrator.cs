@@ -80,7 +80,8 @@
 
             if (latest is { })
             {
-                OnSnapshotRestorationCommencing();
+                await OnSnapshotRestorationCommencingAsync()
+                    .ConfigureAwait(false);
 
                 await aggregateReconciler
                     .ReconcileAsync(latest.Aggregates.ToArray())
@@ -89,7 +90,8 @@
                 await UpdateSequenceAsync(latest.Sequence.Sequence)
                     .ConfigureAwait(false);
 
-                OnSnapshotRestorationCompleted(latest.Sequence);
+                await OnSnapshotRestorationCompletedAsync(latest.Sequence)
+                    .ConfigureAwait(false);
 
                 return latest.Sequence;
             }

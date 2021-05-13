@@ -25,6 +25,8 @@ Custom event handlers have been changed to use the asynchonrous variant.  This i
 - Changed Architecture.Ddd.Services.Reconciliation.EventsReconciledEventHandler to an async variant named EventsReconciledAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Reconciliation.EventsReconcilingEventHandler to an async variant named EventsReconcilingAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Reconciliation.EventSequenceAdvancedEventHandler to an async variant named EventSequenceAdvancedAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Reconciliation.SnapshotRestorationCompletedEventHandler to an async variant named SnapshotRestorationCompletedAsyncEventHandler (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Reconciliation.SnapshotRestorationCommencingEventHandler to an async variant named SnapshotRestorationCommencingAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Repository so that it now implements IEmitDiagnostics.
 - Changed Architecture.Services.Bus so that it now implements IEmitDiagnostics.
 - Changed Architecture.Services.MessageInvokedEventHandler to an async variant named MessageInvokedAsyncEventHandler (**Breaking Change**).

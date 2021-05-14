@@ -16,6 +16,7 @@ Custom event handlers have been changed to use the asynchonrous variant.  This i
 
 ## Enhancements
 
+- Added a new ToGuid method to MooVC.Architecture.Ddd.SignedVersion, enabling the caller to produce a GUID based on the Header and Footer of the version.
 - Changed Architecture.Ddd.Services.AggregateSavedEventHandler to an async variant named AggregateSavedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.DomainEventsPublishedEventHandler to an async variant named DomainEventsPublishedAsyncEventHandler (**Breaking Change**).

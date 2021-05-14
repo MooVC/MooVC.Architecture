@@ -19,8 +19,7 @@
         private const int SplicePortion = 8;
 
         private static readonly byte[] emptySegment = new byte[SplicePortion];
-        private static readonly Lazy<SignedVersion> empty = new Lazy<SignedVersion>(
-            () => new SignedVersion(emptySegment, emptySegment, 0));
+        private static readonly Lazy<SignedVersion> empty = new(() => new SignedVersion(emptySegment, emptySegment, 0));
 
         private readonly Lazy<Guid> signature;
 
@@ -103,6 +102,20 @@
         public SignedVersion Next()
         {
             return new SignedVersion(this);
+        }
+
+        public Guid ToGuid()
+        {
+            if (IsEmpty)
+            {
+                return Guid.Empty;
+            }
+
+            var id = new List<byte>(Header);
+
+            id.AddRange(Footer);
+
+            return new(id.ToArray());
         }
 
         public override string ToString()

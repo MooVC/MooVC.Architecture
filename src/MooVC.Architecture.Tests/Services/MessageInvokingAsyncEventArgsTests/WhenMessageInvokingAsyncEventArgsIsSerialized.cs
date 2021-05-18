@@ -1,17 +1,16 @@
-﻿namespace MooVC.Architecture.Services.MessageInvokingEventArgsTests
+﻿namespace MooVC.Architecture.Services.MessageInvokingAsyncEventArgsTests
 {
     using MooVC.Architecture.MessageTests;
-    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 
-    public sealed class WhenMessageInvokingEventArgsIsSerialized
+    public sealed class WhenMessageInvokingAsyncEventArgsIsSerialized
     {
         [Fact]
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var message = new SerializableMessage();
-            var @event = new MessageInvokingEventArgs(message);
+            var @event = new MessageInvokingAsyncEventArgs(message);
 
             MessageInvokingAsyncEventArgs deserialized = @event.Clone();
 

@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.PersistentBusTests
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.DomainEventTests;
@@ -30,7 +31,9 @@
         public async Task GivenAFailureOnPublishThenTheFailureIsThrownAsync()
         {
             _ = store
-                .Setup(store => store.CreateAsync(It.IsAny<AtomicUnit>()))
+                .Setup(store => store.CreateAsync(
+                    It.IsAny<AtomicUnit>(),
+                    It.IsAny<CancellationToken?>()))
                 .Throws<InvalidOperationException>();
 
             _ = await Assert.ThrowsAsync<InvalidOperationException>(() => bus.PublishAsync(
@@ -60,6 +63,32 @@
         }
 
         [Fact]
+        public async Task GivenANullEventThenNothingHappensAsync()
+        {
+            bool wasInvoked = false;
+
+            bus.Published += (sender, e) => Task.FromResult(wasInvoked = true);
+            bus.Publishing += (sender, e) => Task.FromResult(wasInvoked = true);
+
+            await bus.PublishAsync(default(DomainEvent)!);
+
+            Assert.False(wasInvoked);
+        }
+
+        [Fact]
+        public async Task GivenNullEventsThenNothingHappensAsync()
+        {
+            bool wasInvoked = false;
+
+            bus.Published += (sender, e) => Task.FromResult(wasInvoked = true);
+            bus.Publishing += (sender, e) => Task.FromResult(wasInvoked = true);
+
+            await bus.PublishAsync(default(DomainEvent[])!);
+
+            Assert.False(wasInvoked);
+        }
+
+        [Fact]
         public async Task GivenNoEventsThenNothingHappensAsync()
         {
             bool wasInvoked = false;
@@ -67,7 +96,7 @@
             bus.Published += (sender, e) => Task.FromResult(wasInvoked = true);
             bus.Publishing += (sender, e) => Task.FromResult(wasInvoked = true);
 
-            await bus.PublishAsync();
+            await bus.PublishAsync(Array.Empty<DomainEvent>());
 
             Assert.False(wasInvoked);
         }
@@ -99,9 +128,11 @@
 
             @event();
 
-            await bus.PublishAsync(
+            await bus.PublishAsync(new[]
+            {
                 new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
-                new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate));
+                new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
+            });
 
             Assert.Equal(ExpectedInvocationCount, invocationCounter);
         }
@@ -124,7 +155,9 @@
             const int ExpectedInvocationCount = 1;
 
             _ = store
-                .Setup(store => store.CreateAsync(It.IsAny<AtomicUnit>()))
+                .Setup(store => store.CreateAsync(
+                    It.IsAny<AtomicUnit>(),
+                    It.IsAny<CancellationToken?>()))
                 .Callback(() => invocationCounter++);
 
             await bus.PublishAsync(events);

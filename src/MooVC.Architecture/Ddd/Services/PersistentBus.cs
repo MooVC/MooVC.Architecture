@@ -48,6 +48,7 @@
                 await
                     OnDiagnosticsEmittedAsync(
                         Level.Error,
+                        cancellationToken: cancellationToken,
                         cause: ex,
                         message: Format(PersistentBusPublishFailure, unit.Id))
                     .ConfigureAwait(false);

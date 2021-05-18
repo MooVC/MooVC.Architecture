@@ -1,7 +1,9 @@
 namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
@@ -23,11 +25,13 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
             var cloner = new BinaryFormatterCloner();
             var repository = new UnversionedMemoryRepository<SerializableEventCentricAggregateRoot>(cloner);
             var propagator = new DomainEventPropagator<SerializableEventCentricAggregateRoot>(bus.Object, repository);
-            DomainEvent[] changes = Array.Empty<DomainEvent>();
+            IEnumerable<DomainEvent> changes = Enumerable.Empty<DomainEvent>();
 
             _ = bus
-                .Setup(b => b.PublishAsync(It.IsAny<DomainEvent[]>()))
-                .Callback<DomainEvent[]>(events => changes = events);
+                .Setup(b => b.PublishAsync(
+                    It.IsAny<IEnumerable<DomainEvent>>(),
+                    It.IsAny<CancellationToken?>()))
+                .Callback<IEnumerable<DomainEvent>, CancellationToken?>((events, _) => changes = events);
 
             aggregate.Set(request);
 
@@ -35,7 +39,7 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
 
             _ = Assert.Single(changes.OfType<SerializableCreatedDomainEvent>());
             _ = Assert.Single(changes.OfType<SerializableSetDomainEvent>());
-            Assert.Equal(ExpectedTotalChanges, changes.Length);
+            Assert.Equal(ExpectedTotalChanges, changes.Count());
         }
     }
 }

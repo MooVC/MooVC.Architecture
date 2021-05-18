@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsAsyncEventArgsTests
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -6,7 +6,7 @@
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
 
-    public abstract class DomainEventsEventArgsBase
+    public abstract class DomainEventsAsyncEventArgsBase
     {
         protected IEnumerable<DomainEvent> CreateEvents(int count)
         {

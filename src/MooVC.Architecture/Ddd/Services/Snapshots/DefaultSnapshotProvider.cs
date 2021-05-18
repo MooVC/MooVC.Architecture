@@ -39,7 +39,11 @@
             IEventReconciler reconciler = CreateEventReconciler(
                 out Func<Task<IEnumerable<EventCentricAggregateRoot>>> aggregates);
 
-            ulong? current = await reconciler.ReconcileAsync(target: target);
+            ulong? current = await reconciler
+                .ReconcileAsync(
+                    cancellationToken: cancellationToken,
+                    target: target)
+                .ConfigureAwait(false);
 
             if (current.HasValue)
             {

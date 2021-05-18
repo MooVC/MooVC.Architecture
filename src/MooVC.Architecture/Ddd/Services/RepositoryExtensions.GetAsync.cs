@@ -44,7 +44,10 @@
 
             if (latest || reference.Version.IsEmpty)
             {
-                return repository.GetAsync(context, reference.Id, cancellationToken: cancellationToken);
+                return repository.GetAsync(
+                    context,
+                    reference.Id,
+                    cancellationToken: cancellationToken);
             }
 
             return repository.GetAsync(

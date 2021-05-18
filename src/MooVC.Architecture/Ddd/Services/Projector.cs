@@ -14,7 +14,10 @@
             TAggregate aggregate,
             CancellationToken? cancellationToken = default)
         {
-            IEnumerable<TProjection> projections = await ProjectAsync(new[] { aggregate })
+            IEnumerable<TProjection> projections = await
+                ProjectAsync(
+                    new[] { aggregate },
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             return projections.Single();

@@ -1,15 +1,15 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SnapshotRestorationCompletedEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SnapshotRestorationCompletedAsyncEventArgsTests
 {
     using System;
     using Xunit;
 
-    public sealed class WhenSnapshotRestorationCompletedEventArgsIsConstructed
+    public sealed class WhenSnapshotRestorationCompletedAsyncEventArgsIsConstructed
     {
         [Fact]
         public void GivenAnEventSequenceThenAnInstanceIsReturnedWithTheSequencePropagated()
         {
             var sequence = new EventSequence(10);
-            var @event = new SnapshotRestorationCompletedEventArgs(sequence);
+            var @event = new SnapshotRestorationCompletedAsyncEventArgs(sequence);
 
             Assert.Equal(sequence, @event.Sequence);
         }
@@ -20,7 +20,7 @@
             IEventSequence? sequence = default;
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new SnapshotRestorationCompletedEventArgs(sequence!));
+                () => new SnapshotRestorationCompletedAsyncEventArgs(sequence!));
 
             Assert.Equal(nameof(sequence), exception.ParamName);
         }

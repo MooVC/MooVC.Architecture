@@ -5,7 +5,9 @@ namespace MooVC.Architecture.Ddd.Services
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using MooVC.Collections.Generic;
     using MooVC.Diagnostics;
+    using MooVC.Linq;
     using static MooVC.Architecture.Ddd.Services.Resources;
 
     public abstract class Bus
@@ -29,6 +31,8 @@ namespace MooVC.Architecture.Ddd.Services
             IEnumerable<DomainEvent> events,
             CancellationToken? cancellationToken = default)
         {
+            events = events.Snapshot(predicate: value => value is { });
+
             if (events.Any())
             {
                 await OnPublishingAsync(events, cancellationToken: cancellationToken)

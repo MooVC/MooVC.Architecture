@@ -1,16 +1,16 @@
-﻿namespace MooVC.Architecture.Services.MessageInvokingEventArgsTests
+﻿namespace MooVC.Architecture.Services.MessageInvokingAsyncEventArgsTests
 {
     using System;
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenMessageInvokingEventArgsIsConstructed
+    public sealed class WhenMessageInvokingAsyncEventArgsIsConstructed
     {
         [Fact]
         public void GivenAnAggregateThenAnInstanceIsCreated()
         {
             var message = new SerializableMessage();
-            var @event = new MessageInvokingEventArgs(message);
+            var @event = new MessageInvokingAsyncEventArgs(message);
 
             Assert.Equal(message, @event.Message);
             Assert.Same(message, @event.Message);
@@ -22,7 +22,7 @@
             SerializableMessage? message = default;
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new MessageInvokingEventArgs(message!));
+                () => new MessageInvokingAsyncEventArgs(message!));
 
             Assert.Equal(nameof(message), exception.ParamName);
         }

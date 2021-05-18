@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Persistence;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
@@ -34,6 +35,7 @@
 
         protected override async Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
             ulong? previous,
+            CancellationToken? cancellationToken = default,
             ulong? target = default)
         {
             ulong? lastSequence = previous;
@@ -42,7 +44,10 @@
             if (ShouldReadEvents(previous, target, out ushort numberToRead, out ulong start))
             {
                 IEnumerable<TSequencedEvents> sequences = await eventStore
-                    .ReadAsync(start, numberToRead: numberToRead)
+                    .ReadAsync(
+                        start,
+                        cancellationToken: cancellationToken,
+                        numberToRead: numberToRead)
                     .ConfigureAwait(false);
 
                 lastSequence = sequences
@@ -58,14 +63,16 @@
             return (lastSequence, events);
         }
 
-        protected override async Task ReconcileAsync(IEnumerable<DomainEvent> events)
+        protected override async Task ReconcileAsync(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default)
         {
             foreach (IGrouping<Type, DomainEvent> type in events
                 .GroupBy(@event => @event.Aggregate.Type))
             {
                 foreach (IGrouping<Guid, DomainEvent> aggregate in type.GroupBy(type => type.Aggregate.Id))
                 {
-                    await PerformReconciliationAsync(aggregate)
+                    await PerformReconciliationAsync(aggregate, cancellationToken)
                         .ConfigureAwait(false);
                 }
             }
@@ -91,16 +98,18 @@
             return true;
         }
 
-        private async Task PerformReconciliationAsync(IEnumerable<DomainEvent> events)
+        private async Task PerformReconciliationAsync(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken)
         {
-            await OnEventsReconcilingAsync(events)
+            await OnEventsReconcilingAsync(events, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             await reconciler
-                .ReconcileAsync(events.ToArray())
+                .ReconcileAsync(events, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
-            await OnEventsReconciledAsync(events)
+            await OnEventsReconciledAsync(events, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
     }

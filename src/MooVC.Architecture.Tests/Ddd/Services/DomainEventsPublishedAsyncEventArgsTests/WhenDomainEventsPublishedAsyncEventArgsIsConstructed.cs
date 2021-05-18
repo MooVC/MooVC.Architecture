@@ -1,16 +1,16 @@
-﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsPublishedEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsPublishedAsyncEventArgsTests
 {
     using System.Collections.Generic;
-    using MooVC.Architecture.Ddd.Services.DomainEventsEventArgsTests;
+    using MooVC.Architecture.Ddd.Services.DomainEventsAsyncEventArgsTests;
     using Xunit;
 
-    public sealed class WhenDomainEventsPublishedEventArgsIsConstructed
-        : DomainEventsEventArgsBase
+    public sealed class WhenDomainEventsPublishedAsyncEventArgsIsConstructed
+        : DomainEventsAsyncEventArgsBase
     {
         [Fact]
         public void GivenNullEventsThenAnInstanceIsCreated()
         {
-            var @event = new DomainEventsPublishedEventArgs(default!);
+            var @event = new DomainEventsPublishedAsyncEventArgs(default!);
 
             Assert.Empty(@event.Events);
         }
@@ -22,7 +22,7 @@
         public void GivenEventsThenAnInstanceIsCreated(int count)
         {
             IEnumerable<DomainEvent> events = CreateEvents(count);
-            var @event = new DomainEventsPublishedEventArgs(events);
+            var @event = new DomainEventsPublishedAsyncEventArgs(events);
 
             Assert.NotSame(events, @event.Events);
         }

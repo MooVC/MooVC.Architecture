@@ -29,7 +29,7 @@ namespace MooVC.Architecture.Services
             await PerformInvokeAsync(message, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
-            await OnInvokedAsync(message)
+            await OnInvokedAsync(message, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 

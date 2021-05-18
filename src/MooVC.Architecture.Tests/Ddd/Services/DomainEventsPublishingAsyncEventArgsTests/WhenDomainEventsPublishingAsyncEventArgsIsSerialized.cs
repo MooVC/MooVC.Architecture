@@ -1,17 +1,17 @@
-﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsPublishingEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsPublishingAsyncEventArgsTests
 {
     using System.Collections.Generic;
-    using MooVC.Architecture.Ddd.Services.DomainEventsEventArgsTests;
+    using MooVC.Architecture.Ddd.Services.DomainEventsAsyncEventArgsTests;
     using MooVC.Serialization;
     using Xunit;
 
-    public sealed class WhenDomainEventsPublishingEventArgsIsSerialized
-        : DomainEventsEventArgsBase
+    public sealed class WhenDomainEventsPublishingAsyncEventArgsIsSerialized
+        : DomainEventsAsyncEventArgsBase
     {
         [Fact]
         public void GivenNullEventsThenAllPropertiesAreSerialized()
         {
-            var @event = new DomainEventsPublishingEventArgs(default!);
+            var @event = new DomainEventsPublishingAsyncEventArgs(default!);
             DomainEventsPublishingAsyncEventArgs deserialized = @event.Clone();
 
             Assert.NotSame(@event, deserialized);
@@ -24,7 +24,7 @@
         public void GivenEventsThenAllPropertiesAreSerialized(int count)
         {
             IEnumerable<DomainEvent> events = CreateEvents(count);
-            var @event = new DomainEventsPublishingEventArgs(events);
+            var @event = new DomainEventsPublishingAsyncEventArgs(events);
 
             DomainEventsPublishingAsyncEventArgs deserialized = @event.Clone();
 

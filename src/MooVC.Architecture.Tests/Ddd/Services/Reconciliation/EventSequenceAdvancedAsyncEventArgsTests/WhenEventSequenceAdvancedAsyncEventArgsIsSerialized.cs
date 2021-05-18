@@ -1,9 +1,7 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.EventSequenceAdvancedEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.EventSequenceAdvancedAsyncEventArgsTests
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.DomainEventTests;
@@ -13,7 +11,7 @@
     using Moq;
     using Xunit;
 
-    public sealed class WhenEventSequenceAdvancedEventArgsIsSerialized
+    public sealed class WhenEventSequenceAdvancedAsyncEventArgsIsSerialized
     {
         [Fact]
         public async Task GivenAnInstanceThenAllPropertiesAreSerializedAsync()
@@ -24,14 +22,20 @@
             EventSequenceAdvancedAsyncEventArgs? original = default;
 
             _ = eventStore
-                .Setup(store => store.ReadAsync(It.Is<ulong>(value => value == ulong.MinValue), It.IsAny<ushort>()))
+                .Setup(store => store.ReadAsync(
+                    It.Is<ulong>(value => value == ulong.MinValue),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<ushort>()))
                 .ReturnsAsync(new[]
                 {
                     new SequencedEvents(1, CreateEvents()),
                 });
 
             _ = eventStore
-                .Setup(store => store.ReadAsync(It.Is<ulong>(value => value > ulong.MinValue), It.IsAny<ushort>()))
+                .Setup(store => store.ReadAsync(
+                    It.Is<ulong>(value => value > ulong.MinValue),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<ushort>()))
                 .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
             instance.EventSequenceAdvanced += (sender, e) => Task.FromResult(original = e);

@@ -26,7 +26,7 @@
             ArgumentIsAcceptable(
                 events,
                 nameof(events),
-                value => value.Any(),
+                value => value.Any() && value.All(@event => @event is { }),
                 AtomicUnitEventsRequired);
 
             ArgumentIsAcceptable(

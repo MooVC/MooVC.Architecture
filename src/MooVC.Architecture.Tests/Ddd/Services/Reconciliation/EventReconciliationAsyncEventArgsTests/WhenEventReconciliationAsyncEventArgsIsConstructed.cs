@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.EventReconciliationEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.EventReconciliationAsyncEventArgsTests
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenEventReconciliationEventArgsIsConstructed
+    public sealed class WhenEventReconciliationAsyncEventArgsIsConstructed
     {
         [Fact]
         public void GivenEventsThenAnInstanceIsReturnedWithTheEventsSet()
@@ -15,7 +15,7 @@
             var aggregate = new SerializableEventCentricAggregateRoot();
             var context = new SerializableMessage();
             SerializableCreatedDomainEvent[] events = new[] { new SerializableCreatedDomainEvent(context, aggregate) };
-            var @event = new EventReconciliationEventArgs(events);
+            var @event = new EventReconciliationAsyncEventArgs(events);
 
             Assert.Equal(events, @event.Events);
         }
@@ -26,7 +26,7 @@
             IEnumerable<SerializableCreatedDomainEvent> events = Enumerable.Empty<SerializableCreatedDomainEvent>();
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => new EventReconciliationEventArgs(events));
+                () => new EventReconciliationAsyncEventArgs(events));
 
             Assert.Equal(nameof(events), exception.ParamName);
         }
@@ -37,7 +37,7 @@
             IEnumerable<SerializableCreatedDomainEvent>? events = default;
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new EventReconciliationEventArgs(events!));
+                () => new EventReconciliationAsyncEventArgs(events!));
 
             Assert.Equal(nameof(events), exception.ParamName);
         }

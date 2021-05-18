@@ -108,12 +108,18 @@
             TAggregate aggregate,
             CancellationToken? cancellationToken = default)
         {
-            bool isConflictFree = await CheckForConflictsAsync(aggregate, cancellationToken: cancellationToken)
+            bool isConflictFree = await
+                CheckForConflictsAsync(
+                    aggregate,
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             if (isConflictFree)
             {
-                await UpdateStoreAsync(aggregate, cancellationToken: cancellationToken)
+                await
+                    UpdateStoreAsync(
+                        aggregate,
+                        cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }
         }

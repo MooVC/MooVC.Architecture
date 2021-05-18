@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Services.SynchronousHandlerTests
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.MessageTests;
     using Xunit;
@@ -20,7 +21,7 @@
                 Assert.Equal(expected, actual);
             });
 
-            await handler.ExecuteAsync(expected);
+            await handler.ExecuteAsync(expected, CancellationToken.None);
 
             Assert.True(wasInvoked);
         }
@@ -31,7 +32,7 @@
             var handler = new TestableSynchronousHandler<Message>();
 
             _ = await Assert.ThrowsAsync<NotImplementedException>(
-                () => handler.ExecuteAsync(new SerializableMessage()));
+                () => handler.ExecuteAsync(new SerializableMessage(), CancellationToken.None));
         }
     }
 }

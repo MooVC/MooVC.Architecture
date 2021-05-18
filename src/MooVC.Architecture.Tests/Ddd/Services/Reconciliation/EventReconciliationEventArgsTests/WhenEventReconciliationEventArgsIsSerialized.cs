@@ -14,7 +14,7 @@
             var context = new SerializableMessage();
             SerializableCreatedDomainEvent[] events = new[] { new SerializableCreatedDomainEvent(context, aggregate) };
             var original = new EventReconciliationEventArgs(events);
-            EventReconciliationEventArgs deserialized = original.Clone();
+            EventReconciliationAsyncEventArgs deserialized = original.Clone();
 
             Assert.NotSame(original, deserialized);
             Assert.Equal(original.Events, deserialized.Events);

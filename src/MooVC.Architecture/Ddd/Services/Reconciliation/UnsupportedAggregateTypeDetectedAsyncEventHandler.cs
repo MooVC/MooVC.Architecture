@@ -4,5 +4,5 @@
 
     public delegate Task UnsupportedAggregateTypeDetectedAsyncEventHandler(
         object sender,
-        UnsupportedAggregateTypeDetectedEventArgs e);
+        UnsupportedAggregateTypeDetectedAsyncEventArgs e);
 }

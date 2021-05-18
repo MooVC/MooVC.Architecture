@@ -13,7 +13,7 @@
             var message = new SerializableMessage();
             var @event = new MessageInvokedEventArgs(message);
 
-            MessageInvokedEventArgs deserialized = @event.Clone();
+            MessageInvokedAsyncEventArgs deserialized = @event.Clone();
 
             Assert.Equal(@event.Message, deserialized.Message);
             Assert.NotSame(@event.Message, deserialized.Message);

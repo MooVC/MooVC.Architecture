@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Diagnostics;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
@@ -19,7 +20,10 @@
 
         public event EventSequenceAdvancedAsyncEventHandler? EventSequenceAdvanced;
 
-        public async Task<ulong?> ReconcileAsync(ulong? previous = default, ulong? target = default)
+        public async Task<ulong?> ReconcileAsync(
+            CancellationToken? cancellationToken = default,
+            ulong? previous = default,
+            ulong? target = default)
         {
             bool hasEvents;
 
@@ -57,12 +61,14 @@
 
         protected virtual Task OnDiagnosticsEmittedAsync(
             Level level,
+            CancellationToken? cancellationToken = default,
             Exception? cause = default,
             string? message = default)
         {
             return DiagnosticsEmitted.PassiveInvokeAsync(
                 this,
-                new DiagnosticsEmittedEventArgs(
+                new DiagnosticsEmittedAsyncEventArgs(
+                    cancellationToken: cancellationToken,
                     cause: cause,
                     level: level,
                     message: message));
@@ -72,7 +78,7 @@
         {
             return EventsReconciled.PassiveInvokeAsync(
                 this,
-                new EventReconciliationEventArgs(events),
+                new EventReconciliationAsyncEventArgs(events),
                 onFailure: failure => OnDiagnosticsEmittedAsync(
                     Level.Warning,
                     cause: failure,
@@ -81,14 +87,14 @@
 
         protected virtual Task OnEventsReconcilingAsync(IEnumerable<DomainEvent> events)
         {
-            return EventsReconciling.InvokeAsync(this, new EventReconciliationEventArgs(events));
+            return EventsReconciling.InvokeAsync(this, new EventReconciliationAsyncEventArgs(events));
         }
 
         protected virtual Task OnEventSequenceAdvancedAsync(ulong current)
         {
             return EventSequenceAdvanced.PassiveInvokeAsync(
                 this,
-                new EventSequenceAdvancedEventArgs(current),
+                new EventSequenceAdvancedAsyncEventArgs(current),
                 onFailure: failure => OnDiagnosticsEmittedAsync(
                     Level.Warning,
                     cause: failure,

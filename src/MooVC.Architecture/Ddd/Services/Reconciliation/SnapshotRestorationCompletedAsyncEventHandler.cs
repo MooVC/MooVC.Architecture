@@ -4,5 +4,5 @@
 
     public delegate Task SnapshotRestorationCompletedAsyncEventHandler(
         IReconciliationOrchestrator orchestrator,
-        SnapshotRestorationCompletedEventArgs e);
+        SnapshotRestorationCompletedAsyncEventArgs e);
 }

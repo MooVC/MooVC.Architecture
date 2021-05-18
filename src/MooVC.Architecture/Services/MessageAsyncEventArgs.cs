@@ -2,23 +2,27 @@ namespace MooVC.Architecture.Services
 {
     using System;
     using System.Runtime.Serialization;
+    using System.Threading;
     using MooVC.Serialization;
     using static MooVC.Architecture.Services.Resources;
     using static MooVC.Ensure;
 
     [Serializable]
-    public abstract class MessageEventArgs
-        : EventArgs,
+    public abstract class MessageAsyncEventArgs
+        : AsyncEventArgs,
           ISerializable
     {
-        protected MessageEventArgs(Message message)
+        protected MessageAsyncEventArgs(
+            Message message,
+            CancellationToken? cancellationToken = default)
+            : base(cancellationToken: cancellationToken)
         {
             ArgumentNotNull(message, nameof(message), MessageEventArgsMessageRequired);
 
             Message = message;
         }
 
-        protected MessageEventArgs(SerializationInfo info, StreamingContext context)
+        protected MessageAsyncEventArgs(SerializationInfo info, StreamingContext context)
         {
             Message = info.GetValue<Message>(nameof(Message));
         }

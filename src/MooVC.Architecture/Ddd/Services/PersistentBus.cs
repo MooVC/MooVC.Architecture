@@ -1,6 +1,9 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Diagnostics;
     using MooVC.Persistence;
@@ -20,20 +23,24 @@
             this.store = store;
         }
 
-        protected override async Task PerformPublishAsync(params DomainEvent[] events)
+        protected override async Task PerformPublishAsync(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default)
         {
             var unit = new AtomicUnit(events);
 
-            await PerformPersistAsync(unit)
+            await PerformPersistAsync(unit, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        private async Task PerformPersistAsync(AtomicUnit unit)
+        private async Task PerformPersistAsync(
+            AtomicUnit unit,
+            CancellationToken? cancellationToken = default)
         {
             try
             {
                 _ = await store
-                    .CreateAsync(unit)
+                    .CreateAsync(unit, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (Exception ex)

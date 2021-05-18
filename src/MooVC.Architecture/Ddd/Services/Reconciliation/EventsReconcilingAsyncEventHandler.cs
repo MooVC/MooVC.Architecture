@@ -4,5 +4,5 @@
 
     public delegate Task EventsReconcilingAsyncEventHandler(
         IEventReconciler sender,
-        EventReconciliationEventArgs e);
+        EventReconciliationAsyncEventArgs e);
 }

@@ -1,6 +1,7 @@
 namespace MooVC.Architecture.Services
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Diagnostics;
     using static MooVC.Architecture.Services.Resources;
@@ -16,47 +17,60 @@ namespace MooVC.Architecture.Services
 
         public event MessageInvokingAsyncEventHandler? Invoking;
 
-        public virtual async Task InvokeAsync(Message message)
+        public virtual async Task InvokeAsync(
+            Message message,
+            CancellationToken? cancellationToken = default)
         {
             ArgumentNotNull(message, nameof(message), BusMessageRequired);
 
-            await OnInvokingAsync(message)
+            await OnInvokingAsync(message, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
-            await PerformInvokeAsync(message)
+            await PerformInvokeAsync(message, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             await OnInvokedAsync(message)
                 .ConfigureAwait(false);
         }
 
-        protected abstract Task PerformInvokeAsync(Message message);
+        protected abstract Task PerformInvokeAsync(
+            Message message,
+            CancellationToken? cancellationToken = default);
 
         protected virtual Task OnDiagnosticsEmittedAsync(
             Level level,
+            CancellationToken? cancellationToken = default,
             Exception? cause = default,
             string? message = default)
         {
             return DiagnosticsEmitted.PassiveInvokeAsync(
                 this,
-                new DiagnosticsEmittedEventArgs(
+                new DiagnosticsEmittedAsyncEventArgs(
+                    cancellationToken: cancellationToken,
                     cause: cause,
                     level: level,
                     message: message));
         }
 
-        protected virtual Task OnInvokingAsync(Message message)
+        protected virtual Task OnInvokingAsync(
+            Message message,
+            CancellationToken? cancellationToken = default)
         {
-            return Invoking.InvokeAsync(this, new MessageInvokingEventArgs(message));
+            return Invoking.InvokeAsync(
+                this,
+                new MessageInvokingAsyncEventArgs(message, cancellationToken: cancellationToken));
         }
 
-        protected virtual Task OnInvokedAsync(Message message)
+        protected virtual Task OnInvokedAsync(
+            Message message,
+            CancellationToken? cancellationToken = default)
         {
             return Invoked.PassiveInvokeAsync(
                 this,
-                new MessageInvokedEventArgs(message),
+                new MessageInvokedAsyncEventArgs(message, cancellationToken: cancellationToken),
                 onFailure: failure => OnDiagnosticsEmittedAsync(
                     Level.Warning,
+                    cancellationToken: cancellationToken,
                     cause: failure,
                     message: BusOnInvokedAsyncFailure));
         }

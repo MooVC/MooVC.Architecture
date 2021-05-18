@@ -136,7 +136,7 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
 
             Task Aggregate_Saved(
                 IRepository<SerializableAggregateRoot> actualRepository,
-                AggregateSavedEventArgs<SerializableAggregateRoot> e)
+                AggregateSavedAsyncEventArgs<SerializableAggregateRoot> e)
             {
                 Assert.Equal(expectedRepository, actualRepository);
                 Assert.Equal(expectedAggregate, e.Aggregate);
@@ -167,7 +167,7 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
 
             Task Aggregate_Saving(
                 IRepository<SerializableAggregateRoot> actualRepository,
-                AggregateSavingEventArgs<SerializableAggregateRoot> e)
+                AggregateSavingAsyncEventArgs<SerializableAggregateRoot> e)
             {
                 Assert.Equal(expectedRepository, actualRepository);
                 Assert.Equal(expectedAggregate, e.Aggregate);

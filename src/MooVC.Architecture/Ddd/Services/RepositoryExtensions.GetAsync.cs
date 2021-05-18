@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using static MooVC.Architecture.Ddd.Ensure;
 
@@ -10,11 +11,12 @@
             this IRepository<TAggregate> repository,
             Message context,
             Guid id,
+            CancellationToken? cancellationToken = default,
             SignedVersion? version = default)
             where TAggregate : AggregateRoot
         {
             TAggregate? aggregate = await repository
-                .GetAsync(id, version: version)
+                .GetAsync(id, cancellationToken: cancellationToken, version: version)
                 .ConfigureAwait(false);
 
             if (aggregate is null)
@@ -29,6 +31,7 @@
             this IRepository<TAggregate> repository,
             Message context,
             Reference reference,
+            CancellationToken? cancellationToken = default,
             bool latest = true)
             where TAggregate : AggregateRoot
         {
@@ -41,10 +44,14 @@
 
             if (latest || reference.Version.IsEmpty)
             {
-                return repository.GetAsync(context, reference.Id);
+                return repository.GetAsync(context, reference.Id, cancellationToken: cancellationToken);
             }
 
-            return repository.GetAsync(context, reference.Id, version: reference.Version);
+            return repository.GetAsync(
+                context,
+                reference.Id,
+                cancellationToken: cancellationToken,
+                version: reference.Version);
         }
     }
 }

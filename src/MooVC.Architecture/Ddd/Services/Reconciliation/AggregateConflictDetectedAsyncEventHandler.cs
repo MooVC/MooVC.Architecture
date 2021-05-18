@@ -4,5 +4,5 @@
 
     public delegate Task AggregateConflictDetectedAsyncEventHandler(
         IAggregateReconciler sender,
-        AggregateConflictDetectedEventArgs e);
+        AggregateConflictDetectedAsyncEventArgs e);
 }

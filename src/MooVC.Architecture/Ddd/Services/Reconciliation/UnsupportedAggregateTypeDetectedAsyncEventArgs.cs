@@ -1,13 +1,17 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
     using System;
+    using System.Threading;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
 
-    public sealed class UnsupportedAggregateTypeDetectedEventArgs
-        : EventArgs
+    public sealed class UnsupportedAggregateTypeDetectedAsyncEventArgs
+        : AsyncEventArgs
     {
-        internal UnsupportedAggregateTypeDetectedEventArgs(Type type)
+        internal UnsupportedAggregateTypeDetectedAsyncEventArgs(
+            Type type,
+            CancellationToken? cancellationToken = default)
+            : base(cancellationToken: cancellationToken)
         {
             ArgumentNotNull(type, nameof(type), UnsupportedAggregateTypeDetectedEventArgsTypeRequired);
 

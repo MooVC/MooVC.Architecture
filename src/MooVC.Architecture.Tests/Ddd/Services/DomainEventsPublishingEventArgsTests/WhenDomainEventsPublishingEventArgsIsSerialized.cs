@@ -12,7 +12,7 @@
         public void GivenNullEventsThenAllPropertiesAreSerialized()
         {
             var @event = new DomainEventsPublishingEventArgs(default!);
-            DomainEventsPublishingEventArgs deserialized = @event.Clone();
+            DomainEventsPublishingAsyncEventArgs deserialized = @event.Clone();
 
             Assert.NotSame(@event, deserialized);
         }
@@ -26,7 +26,7 @@
             IEnumerable<DomainEvent> events = CreateEvents(count);
             var @event = new DomainEventsPublishingEventArgs(events);
 
-            DomainEventsPublishingEventArgs deserialized = @event.Clone();
+            DomainEventsPublishingAsyncEventArgs deserialized = @event.Clone();
 
             Assert.NotSame(@event, deserialized);
         }

@@ -2,18 +2,22 @@
 {
     using System;
     using System.Runtime.Serialization;
+    using System.Threading;
 
     [Serializable]
-    public sealed class EventSequenceAdvancedEventArgs
-        : EventArgs,
+    public sealed class EventSequenceAdvancedAsyncEventArgs
+        : AsyncEventArgs,
           ISerializable
     {
-        internal EventSequenceAdvancedEventArgs(ulong sequence)
+        internal EventSequenceAdvancedAsyncEventArgs(
+            ulong sequence,
+            CancellationToken? cancellationToken = default)
+            : base(cancellationToken: cancellationToken)
         {
             Sequence = sequence;
         }
 
-        private EventSequenceAdvancedEventArgs(SerializationInfo info, StreamingContext context)
+        private EventSequenceAdvancedAsyncEventArgs(SerializationInfo info, StreamingContext context)
         {
             Sequence = info.GetUInt64(nameof(Sequence));
         }

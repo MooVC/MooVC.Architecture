@@ -4,5 +4,5 @@
 
     public delegate Task EventSequenceAdvancedAsyncEventHandler(
         IEventReconciler sender,
-        EventSequenceAdvancedEventArgs e);
+        EventSequenceAdvancedAsyncEventArgs e);
 }

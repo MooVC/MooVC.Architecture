@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.Services.Snapshots;
     using MooVC.Persistence;
@@ -46,7 +47,9 @@
             this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;
         }
 
-        public override async Task ReconcileAsync(IEventSequence? target = default)
+        public override async Task ReconcileAsync(
+            CancellationToken? cancellationToken = default,
+            IEventSequence? target = default)
         {
             IEventSequence? previous = await GetPreviousSequenceAsync()
                 .ConfigureAwait(false);
@@ -113,7 +116,7 @@
 
         private async Task AggregateReconciler_AggregateConflictDetected(
             IAggregateReconciler sender,
-            AggregateConflictDetectedEventArgs e)
+            AggregateConflictDetectedAsyncEventArgs e)
         {
             EventCentricAggregateRoot aggregate = aggregateSource(e.Aggregate);
 
@@ -124,7 +127,7 @@
 
         private async Task EventReconciler_EventSequenceAdvanced(
             IEventReconciler sender,
-            EventSequenceAdvancedEventArgs e)
+            EventSequenceAdvancedAsyncEventArgs e)
         {
             await UpdateSequenceAsync(e.Sequence)
                 .ConfigureAwait(false);

@@ -21,7 +21,7 @@
             var eventStore = new Mock<IEventStore<SequencedEvents, ulong>>();
             var reconciler = new Mock<IAggregateReconciler>();
             var instance = new DefaultEventReconciler<SequencedEvents>(eventStore.Object, reconciler.Object);
-            EventSequenceAdvancedEventArgs? original = default;
+            EventSequenceAdvancedAsyncEventArgs? original = default;
 
             _ = eventStore
                 .Setup(store => store.ReadAsync(It.Is<ulong>(value => value == ulong.MinValue), It.IsAny<ushort>()))
@@ -38,7 +38,7 @@
 
             ulong? current = await instance.ReconcileAsync();
 
-            EventSequenceAdvancedEventArgs deserialized = original!.Clone();
+            EventSequenceAdvancedAsyncEventArgs deserialized = original!.Clone();
 
             Assert.NotSame(original, deserialized);
             Assert.Equal(original!.Sequence, deserialized.Sequence);

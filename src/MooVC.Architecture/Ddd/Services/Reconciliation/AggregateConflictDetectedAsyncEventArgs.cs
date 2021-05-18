@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Threading;
     using MooVC.Architecture.Ddd;
     using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
@@ -12,15 +13,17 @@
     using static MooVC.Ensure;
 
     [Serializable]
-    public sealed class AggregateConflictDetectedEventArgs
-        : EventArgs,
+    public sealed class AggregateConflictDetectedAsyncEventArgs
+        : AsyncEventArgs,
           ISerializable
     {
-        internal AggregateConflictDetectedEventArgs(
+        internal AggregateConflictDetectedAsyncEventArgs(
             Reference aggregate,
             IEnumerable<DomainEvent> events,
             SignedVersion next,
-            SignedVersion previous)
+            SignedVersion previous,
+            CancellationToken? cancellationToken = default)
+            : base(cancellationToken: cancellationToken)
         {
             ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedEventArgsAggregateRequired);
             ArgumentIsAcceptable(events, nameof(events), value => value.Any(), AggregateConflictDetectedEventArgsEventsRequired);
@@ -33,7 +36,7 @@
             Previous = previous;
         }
 
-        private AggregateConflictDetectedEventArgs(SerializationInfo info, StreamingContext context)
+        private AggregateConflictDetectedAsyncEventArgs(SerializationInfo info, StreamingContext context)
         {
             Aggregate = info.TryGetReference(nameof(Aggregate));
             Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));

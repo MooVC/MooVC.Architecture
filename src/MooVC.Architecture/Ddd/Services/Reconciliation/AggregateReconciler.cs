@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd;
     using MooVC.Diagnostics;
@@ -20,13 +21,32 @@
 
         public event UnsupportedAggregateTypeDetectedAsyncEventHandler? UnsupportedAggregateTypeDetected;
 
-        public abstract Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates);
+        public virtual Task ReconcileAsync(
+            EventCentricAggregateRoot aggregate,
+            CancellationToken? cancellationToken = default)
+        {
+            return ReconcileAsync(new[] { aggregate }, cancellationToken: cancellationToken);
+        }
 
-        public abstract Task ReconcileAsync(params DomainEvent[] events);
+        public abstract Task ReconcileAsync(
+            IEnumerable<EventCentricAggregateRoot> aggregates,
+            CancellationToken? cancellationToken = default);
+
+        public virtual Task ReconcileAsync(
+            DomainEvent @event,
+            CancellationToken? cancellationToken = default)
+        {
+            return ReconcileAsync(new[] { @event }, cancellationToken: cancellationToken);
+        }
+
+        public abstract Task ReconcileAsync(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default);
 
         protected virtual async Task<bool> EventsAreNonConflictingAsync(
             Reference aggregate,
-            IEnumerable<DomainEvent> events)
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default)
         {
             IEnumerable<SignedVersion> versions = events
                 .Select(@event => @event.Aggregate.Version)
@@ -38,7 +58,13 @@
             {
                 if (!next.IsNext(previous))
                 {
-                    await OnAggregateConflictDetectedAsync(aggregate, events, next, previous)
+                    await
+                        OnAggregateConflictDetectedAsync(
+                            aggregate,
+                            events,
+                            next,
+                            previous,
+                            cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
 
                     return false;
@@ -52,46 +78,56 @@
             Reference aggregate,
             IEnumerable<DomainEvent> events,
             SignedVersion next,
-            SignedVersion previous)
+            SignedVersion previous,
+            CancellationToken? cancellationToken = default)
         {
             return AggregateConflictDetected.InvokeAsync(
                 this,
-                new AggregateConflictDetectedEventArgs(
+                new AggregateConflictDetectedAsyncEventArgs(
                     aggregate,
                     events,
                     next,
-                    previous));
+                    previous,
+                    cancellationToken: cancellationToken));
         }
 
-        protected virtual Task OnAggregateReconciledAsync(Reference aggregate, IEnumerable<DomainEvent> events)
+        protected virtual Task OnAggregateReconciledAsync(
+            Reference aggregate,
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default)
         {
             return AggregateReconciled.PassiveInvokeAsync(
                 this,
-                new AggregateReconciledEventArgs(aggregate, events),
+                new AggregateReconciledAsyncEventArgs(aggregate, events, cancellationToken: cancellationToken),
                 onFailure: failure => OnDiagnosticsEmittedAsync(
                     Level.Warning,
+                    cancellationToken: cancellationToken,
                     cause: failure,
                     message: AggregateReconcilerOnAggregateReconciledAsyncFailure));
         }
 
         protected virtual Task OnDiagnosticsEmittedAsync(
             Level level,
+            CancellationToken? cancellationToken = default,
             Exception? cause = default,
             string? message = default)
         {
             return DiagnosticsEmitted.PassiveInvokeAsync(
                 this,
-                new DiagnosticsEmittedEventArgs(
+                new DiagnosticsEmittedAsyncEventArgs(
+                    cancellationToken: cancellationToken,
                     cause: cause,
                     level: level,
                     message: message));
         }
 
-        protected virtual Task OnUnsupportedAggregateTypeDetectedAsync(Type type)
+        protected virtual Task OnUnsupportedAggregateTypeDetectedAsync(
+            Type type,
+            CancellationToken? cancellationToken = default)
         {
             return UnsupportedAggregateTypeDetected.InvokeAsync(
                 this,
-                new UnsupportedAggregateTypeDetectedEventArgs(type));
+                new UnsupportedAggregateTypeDetectedAsyncEventArgs(type, cancellationToken: cancellationToken));
         }
 
         protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(
@@ -107,7 +143,8 @@
             EventCentricAggregateRoot aggregate,
             IEnumerable<DomainEvent> events,
             IAggregateReconciliationProxy proxy,
-            Reference reference)
+            Reference reference,
+            CancellationToken? cancellationToken = default)
         {
             if (events.Any())
             {
@@ -116,10 +153,10 @@
                     aggregate.LoadFromHistory(events);
 
                     await proxy
-                        .SaveAsync(aggregate)
+                        .SaveAsync(aggregate, cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
 
-                    await OnAggregateReconciledAsync(reference, events)
+                    await OnAggregateReconciledAsync(reference, events, cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
                 }
                 catch (AggregateHistoryInvalidForStateException invalid)
@@ -129,7 +166,8 @@
                             invalid.Aggregate,
                             events,
                             invalid.StartingVersion,
-                            invalid.Aggregate.Version)
+                            invalid.Aggregate.Version,
+                            cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
                 }
                 catch (AggregateConflictDetectedException conflict)
@@ -139,7 +177,8 @@
                             reference,
                             events,
                             conflict.Received,
-                            conflict.Persisted)
+                            conflict.Persisted,
+                            cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
                 }
             }

@@ -3,20 +3,24 @@ namespace MooVC.Architecture.Ddd.Services
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
+    using System.Threading;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
 
     [Serializable]
-    public abstract class DomainEventsEventArgs
-        : EventArgs,
+    public abstract class DomainEventsAsyncEventArgs
+        : AsyncEventArgs,
           ISerializable
     {
-        protected DomainEventsEventArgs(IEnumerable<DomainEvent> events)
+        protected DomainEventsAsyncEventArgs(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default)
+            : base(cancellationToken: cancellationToken)
         {
             Events = events.Snapshot();
         }
 
-        protected DomainEventsEventArgs(SerializationInfo info, StreamingContext context)
+        protected DomainEventsAsyncEventArgs(SerializationInfo info, StreamingContext context)
         {
             Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
         }

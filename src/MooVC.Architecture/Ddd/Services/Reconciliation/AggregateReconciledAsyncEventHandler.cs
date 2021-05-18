@@ -4,5 +4,5 @@
 
     public delegate Task AggregateReconciledAsyncEventHandler(
         IAggregateReconciler sender,
-        AggregateReconciledEventArgs e);
+        AggregateReconciledAsyncEventArgs e);
 }

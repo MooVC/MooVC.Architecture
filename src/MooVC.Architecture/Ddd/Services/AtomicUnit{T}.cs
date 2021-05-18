@@ -16,7 +16,12 @@
     {
         private readonly Lazy<Reference> aggregate;
 
-        protected AtomicUnit(T id, params DomainEvent[] events)
+        protected AtomicUnit(T id, DomainEvent @event)
+            : this(id, new[] { @event })
+        {
+        }
+
+        protected AtomicUnit(T id, IEnumerable<DomainEvent> events)
         {
             ArgumentIsAcceptable(
                 events,
@@ -60,27 +65,27 @@
             info.AddValue(nameof(Id), Id);
         }
 
-        private static bool HasSame<TValue>(DomainEvent[] events, Func<DomainEvent, TValue> selector)
+        private static bool HasSame<TValue>(IEnumerable<DomainEvent> events, Func<DomainEvent, TValue> selector)
         {
             return events.Select(selector).Distinct().Count() == 1;
         }
 
-        private static bool HasSameAggregate(DomainEvent[] events)
+        private static bool HasSameAggregate(IEnumerable<DomainEvent> events)
         {
             return HasSame(events, @event => @event.Aggregate);
         }
 
-        private static bool HasSameCausationId(DomainEvent[] events)
+        private static bool HasSameCausationId(IEnumerable<DomainEvent> events)
         {
             return HasSame(events, @event => @event.CausationId);
         }
 
-        private static bool HasSameContext(DomainEvent[] events)
+        private static bool HasSameContext(IEnumerable<DomainEvent> events)
         {
             return HasSameCausationId(events) && HasSameCorrelationId(events);
         }
 
-        private static bool HasSameCorrelationId(DomainEvent[] events)
+        private static bool HasSameCorrelationId(IEnumerable<DomainEvent> events)
         {
             return HasSame(events, @event => @event.CorrelationId);
         }

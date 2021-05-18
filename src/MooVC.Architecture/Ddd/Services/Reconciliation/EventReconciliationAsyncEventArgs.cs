@@ -4,17 +4,21 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Threading;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
     using static MooVC.Ensure;
 
     [Serializable]
-    public sealed class EventReconciliationEventArgs
-        : EventArgs,
+    public sealed class EventReconciliationAsyncEventArgs
+        : AsyncEventArgs,
           ISerializable
     {
-        public EventReconciliationEventArgs(IEnumerable<DomainEvent> events)
+        public EventReconciliationAsyncEventArgs(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default)
+            : base(cancellationToken: cancellationToken)
         {
             ArgumentIsAcceptable(
                 events,
@@ -25,7 +29,7 @@
             Events = events.Snapshot();
         }
 
-        private EventReconciliationEventArgs(SerializationInfo info, StreamingContext context)
+        private EventReconciliationAsyncEventArgs(SerializationInfo info, StreamingContext context)
         {
             Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
         }

@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Persistence;
@@ -31,7 +32,9 @@
             this.numberToRead = numberToRead;
         }
 
-        public async Task<ISnapshot?> GenerateAsync(ulong? target = default)
+        public async Task<ISnapshot?> GenerateAsync(
+            CancellationToken? cancellationToken = default,
+            ulong? target = default)
         {
             IEventReconciler reconciler = CreateEventReconciler(
                 out Func<Task<IEnumerable<EventCentricAggregateRoot>>> aggregates);

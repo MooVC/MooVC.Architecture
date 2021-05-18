@@ -12,11 +12,12 @@ While the original MooVC PHP based framework has long since been deprecated, man
 
 ## Overview
 
-Custom event handlers have been changed to use the asynchonrous variant.  This is seen as a positive step forward as more libraries adopt the asynchonrous programming paradigm.  By utilizng asynchonrous handlers, observers can avoid utilizing async void implementations whereever a need for asynchonrous exists.  Clarity has also been provided on cancellations, which in the past, where supported for every event, even if this was not the original intention.
+Custom event handlers have been changed to use the asynchonrous variant.  This is seen as a positive step forward as more libraries adopt the asynchonrous programming paradigm.  By utilizng asynchonrous handlers, observers can avoid utilizing async void implementations whereever a need for asynchonrous exists.  Clarity has also been provided on cancellations, which in the past, where supported for every event, even if this was not the original intention.  Cancellation tokens have also been added as optional parameters to every public and protected method, facilitating top level cancellation by allowing the token to be propagated throughout the solution.
 
 ## Enhancements
 
 - Added a new ToGuid method to MooVC.Architecture.Ddd.SignedVersion, enabling the caller to produce a GUID based on the Header and Footer of the version.
+- Applied optional cancellation tokens to every public and protected async method, thereby facilitating propagation of cancellation tokens (**Breaking Change**).
 - Changed Architecture.Ddd.Services.AggregateSavedEventHandler to an async variant named AggregateSavedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.DomainEventsPublishedEventHandler to an async variant named DomainEventsPublishedAsyncEventHandler (**Breaking Change**).

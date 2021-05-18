@@ -22,7 +22,7 @@ namespace MooVC.Architecture.Ddd.Services
             this.repository.AggregateSaved += Repository_AggregateSaved;
         }
 
-        private async Task Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedEventArgs<TAggregate> e)
+        private async Task Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedAsyncEventArgs<TAggregate> e)
         {
             IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
 

@@ -1,5 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
+    using System.Threading;
     using System.Threading.Tasks;
 
     public interface IEventReconciler
@@ -10,6 +11,9 @@
 
         public event EventSequenceAdvancedAsyncEventHandler EventSequenceAdvanced;
 
-        Task<ulong?> ReconcileAsync(ulong? previous = default, ulong? target = default);
+        Task<ulong?> ReconcileAsync(
+            CancellationToken? cancellationToken = default,
+            ulong? previous = default,
+            ulong? target = default);
     }
 }

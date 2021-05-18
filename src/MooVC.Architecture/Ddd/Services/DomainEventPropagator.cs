@@ -21,7 +21,7 @@
             this.reconciler.AggregateReconciled += Reconciler_AggregateReconciled;
         }
 
-        private async Task Reconciler_AggregateReconciled(IAggregateReconciler sender, AggregateReconciledEventArgs e)
+        private async Task Reconciler_AggregateReconciled(IAggregateReconciler sender, AggregateReconciledAsyncEventArgs e)
         {
             await bus
                 .PublishAsync(e.Events.ToArray())

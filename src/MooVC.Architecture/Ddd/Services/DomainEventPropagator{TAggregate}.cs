@@ -1,7 +1,6 @@
 namespace MooVC.Architecture.Ddd.Services
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
@@ -27,7 +26,7 @@ namespace MooVC.Architecture.Ddd.Services
             IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
 
             await bus
-                .PublishAsync(changes.ToArray())
+                .PublishAsync(changes, cancellationToken: e.CancellationToken)
                 .ConfigureAwait(false);
         }
     }

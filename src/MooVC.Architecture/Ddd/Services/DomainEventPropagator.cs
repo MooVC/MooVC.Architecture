@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
-    using System.Linq;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using static MooVC.Architecture.Ddd.Services.Resources;
@@ -24,7 +23,7 @@
         private async Task Reconciler_AggregateReconciled(IAggregateReconciler sender, AggregateReconciledAsyncEventArgs e)
         {
             await bus
-                .PublishAsync(e.Events.ToArray())
+                .PublishAsync(e.Events, cancellationToken: e.CancellationToken)
                 .ConfigureAwait(false);
         }
     }

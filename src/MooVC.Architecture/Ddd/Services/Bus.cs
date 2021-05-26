@@ -7,7 +7,6 @@ namespace MooVC.Architecture.Ddd.Services
     using System.Threading.Tasks;
     using MooVC.Collections.Generic;
     using MooVC.Diagnostics;
-    using MooVC.Linq;
     using static MooVC.Architecture.Ddd.Services.Resources;
 
     public abstract class Bus

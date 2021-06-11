@@ -14,11 +14,13 @@
 
     public sealed class WhenGenerateIsCalled
     {
+        private readonly Mock<IAggregateFactory> factory;
         private readonly Mock<IAggregateReconciliationProxy> proxy;
         private readonly Mock<IEventStore<SequencedEvents, ulong>> store;
 
         public WhenGenerateIsCalled()
         {
+            factory = new Mock<IAggregateFactory>();
             proxy = new Mock<IAggregateReconciliationProxy>();
             store = new Mock<IEventStore<SequencedEvents, ulong>>();
         }
@@ -29,8 +31,8 @@
             SerializableEventCentricAggregateRoot expected = CreateAggregate(out IEnumerable<DomainEvent> events);
             var other = new SerializableEventCentricAggregateRoot(expected.Id);
 
-            _ = proxy
-                .Setup(proxy => proxy.CreateAsync(
+            _ = factory
+                .Setup(factory => factory.CreateAsync(
                     It.IsAny<Reference>(),
                     It.IsAny<CancellationToken?>()))
                 .ReturnsAsync(other);
@@ -59,7 +61,11 @@
                     It.IsAny<ushort>()))
                 .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-            var instance = new DefaultSnapshotProvider<SequencedEvents>(store.Object, () => type => proxy.Object);
+            var instance = new DefaultSnapshotProvider<SequencedEvents>(
+                store.Object,
+                factory.Object,
+                () => type => proxy.Object);
+
             ISnapshot? snapshot = await instance.GenerateAsync();
 
             Assert.NotNull(snapshot);
@@ -67,14 +73,14 @@
             EventCentricAggregateRoot actual = Assert.Single(snapshot!.Aggregates);
             Assert.Equal(expected, actual);
 
-            proxy.Verify(
-                proxy => proxy.CreateAsync(
+            factory.Verify(
+                factory => factory.CreateAsync(
                     It.IsAny<Reference>(),
                     It.IsAny<CancellationToken?>()),
                 times: Times.Once);
 
-            proxy.Verify(
-                proxy => proxy.CreateAsync(
+            factory.Verify(
+                factory => factory.CreateAsync(
                     It.Is<Reference>(reference => reference.Id == expected.Id),
                     It.IsAny<CancellationToken?>()),
                 times: Times.Once);
@@ -108,11 +114,11 @@
                 { third.Id, (thirdEvents.ToArray(), third, thirdSnapshot) },
             };
 
-            _ = proxy
-                .Setup(proxy => proxy.CreateAsync(
+            _ = factory
+                .Setup(factory => factory.CreateAsync(
                     It.IsAny<Reference>(),
                     It.IsAny<CancellationToken?>()))
-                .ReturnsAsync<Reference, CancellationToken?, IAggregateReconciliationProxy, EventCentricAggregateRoot>(
+                .ReturnsAsync<Reference, CancellationToken?, IAggregateFactory, EventCentricAggregateRoot>(
                     (reference, _) => aggregates[reference.Id].Snapshot);
 
             _ = proxy
@@ -138,6 +144,7 @@
 
             var instance = new DefaultSnapshotProvider<SequencedEvents>(
                 store.Object,
+                factory.Object,
                 () => type => proxy.Object,
                 numberToRead: 1);
 

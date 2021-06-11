@@ -139,6 +139,9 @@
     <value>A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification.</value>
   </data>
   <data name="DefaultAggregateReconcilerFactoryRequired" xml:space="preserve">
+    <value>The factory from which aggregate are produced must be provided.</value>
+  </data>
+  <data name="DefaultAggregateReconcilerProxiesRequired" xml:space="preserve">
     <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
   </data>
   <data name="DefaultEventReconcilerEventStoreRequired" xml:space="preserve">

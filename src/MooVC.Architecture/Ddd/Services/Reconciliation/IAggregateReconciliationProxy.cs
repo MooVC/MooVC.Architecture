@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
 
     public interface IAggregateReconciliationProxy
-        : IAggregateFactory
     {
         Task<EventCentricAggregateRoot?> GetAsync(
             Reference aggregate,

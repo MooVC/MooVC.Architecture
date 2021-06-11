@@ -26,7 +26,7 @@ Custom event handlers have been changed to use the asynchonrous variant.  This i
 - Changed Architecture.Ddd.Services.DomainEventsPublishingEventHandler to an async variant named DomainEventsPublishingAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Reconciliation.AggregateConflictDetectedEventHandler to an async variant named AggregateConflictDetectedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Reconciliation.AggregateReconciledEventHandler to an async variant named AggregateReconciledAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.IAggregateReconciliationProxy to implement IAggregateFactory (**Breaking Change**).
+- Changed Architecture.Ddd.Services.Reconciliation.IAggregateReconciliationProxy so that it no longer implements CreateAsync (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Reconciliation.EventsReconciledEventHandler to an async variant named EventsReconciledAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Reconciliation.EventsReconcilingEventHandler to an async variant named EventsReconcilingAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Reconciliation.EventSequenceAdvancedEventHandler to an async variant named EventSequenceAdvancedAsyncEventHandler (**Breaking Change**).

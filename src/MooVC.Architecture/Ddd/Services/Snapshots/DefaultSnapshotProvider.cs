@@ -16,19 +16,23 @@
         where TSequencedEvents : class, ISequencedEvents
     {
         private readonly IEventStore<TSequencedEvents, ulong> eventStore;
-        private readonly Func<Func<Type, IAggregateReconciliationProxy?>> factory;
+        private readonly IAggregateFactory factory;
+        private readonly Func<Func<Type, IAggregateReconciliationProxy?>> proxies;
         private readonly ushort numberToRead;
 
         public DefaultSnapshotProvider(
             IEventStore<TSequencedEvents, ulong> eventStore,
-            Func<Func<Type, IAggregateReconciliationProxy?>> factory,
+            IAggregateFactory factory,
+            Func<Func<Type, IAggregateReconciliationProxy?>> proxies,
             ushort numberToRead = DefaultEventReconciler<TSequencedEvents>.DefaultNumberToRead)
         {
-            ArgumentNotNull(eventStore, nameof(eventStore), DefaultSnapshotProviderEventStoreRequired);
             ArgumentNotNull(factory, nameof(factory), DefaultSnapshotProviderFactoryRequired);
+            ArgumentNotNull(eventStore, nameof(eventStore), DefaultSnapshotProviderEventStoreRequired);
+            ArgumentNotNull(proxies, nameof(proxies), DefaultSnapshotProviderProxiesRequired);
 
             this.eventStore = eventStore;
             this.factory = factory;
+            this.proxies = proxies;
             this.numberToRead = numberToRead;
         }
 
@@ -72,7 +76,7 @@
         private IEventReconciler CreateEventReconciler(out Func<Task<IEnumerable<EventCentricAggregateRoot>>> aggregates)
         {
             var proxies = new ConcurrentDictionary<Type, IAggregateReconciliationProxy>();
-            Func<Type, IAggregateReconciliationProxy?> external = factory();
+            Func<Type, IAggregateReconciliationProxy?> external = this.proxies();
 
             IAggregateReconciliationProxy? ProxyFactory(Type aggregate)
             {
@@ -89,7 +93,7 @@
                 return proxy;
             }
 
-            IAggregateReconciler aggregateReconciler = new DefaultAggregateReconciler(ProxyFactory);
+            IAggregateReconciler aggregateReconciler = new DefaultAggregateReconciler(factory, ProxyFactory);
 
             aggregates = () => RetrieveAllAggregatesAsync(proxies.Values);
 

@@ -124,11 +124,20 @@ namespace MooVC.Architecture.Ddd.Services.Reconciliation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
+        ///   Looks up a localized string similar to The factory from which aggregate are produced must be provided..
         /// </summary>
         internal static string DefaultAggregateReconcilerFactoryRequired {
             get {
                 return ResourceManager.GetString("DefaultAggregateReconcilerFactoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
+        /// </summary>
+        internal static string DefaultAggregateReconcilerProxiesRequired {
+            get {
+                return ResourceManager.GetString("DefaultAggregateReconcilerProxiesRequired", resourceCulture);
             }
         }
         

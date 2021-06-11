@@ -12,18 +12,22 @@
     public sealed class DefaultAggregateReconciler
         : AggregateReconciler
     {
-        private readonly Func<Type, IAggregateReconciliationProxy?> factory;
+        private readonly IAggregateFactory factory;
+        private readonly Func<Type, IAggregateReconciliationProxy?> proxies;
         private readonly bool ignorePreviousVersions;
         private readonly TimeSpan? timeout;
 
         public DefaultAggregateReconciler(
-            Func<Type, IAggregateReconciliationProxy?> factory,
+            IAggregateFactory factory,
+            Func<Type, IAggregateReconciliationProxy?> proxies,
             bool ignorePreviousVersions = true,
             TimeSpan? timeout = default)
         {
             ArgumentNotNull(factory, nameof(factory), DefaultAggregateReconcilerFactoryRequired);
+            ArgumentNotNull(proxies, nameof(proxies), DefaultAggregateReconcilerProxiesRequired);
 
             this.factory = factory;
+            this.proxies = proxies;
             this.ignorePreviousVersions = ignorePreviousVersions;
             this.timeout = timeout;
         }
@@ -37,7 +41,7 @@
                 foreach (IGrouping<Type, EventCentricAggregateRoot> aggregateTypes in aggregates
                     .GroupBy(aggregate => aggregate.GetType()))
                 {
-                    IAggregateReconciliationProxy? proxy = factory(aggregateTypes.Key);
+                    IAggregateReconciliationProxy? proxy = proxies(aggregateTypes.Key);
 
                     if (proxy is null)
                     {
@@ -68,7 +72,7 @@
                 foreach (IGrouping<Type, DomainEvent> aggregateTypes in events
                     .GroupBy(@event => @event.Aggregate.Type))
                 {
-                    IAggregateReconciliationProxy? proxy = factory(aggregateTypes.Key);
+                    IAggregateReconciliationProxy? proxy = proxies(aggregateTypes.Key);
 
                     if (proxy is null)
                     {
@@ -126,7 +130,7 @@
 
             if (existing is null)
             {
-                existing = await proxy
+                existing = await factory
                     .CreateAsync(aggregate, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }

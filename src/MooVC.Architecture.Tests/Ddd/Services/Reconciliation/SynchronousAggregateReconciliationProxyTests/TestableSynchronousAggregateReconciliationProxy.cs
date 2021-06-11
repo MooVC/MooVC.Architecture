@@ -7,7 +7,6 @@
     public sealed class TestableSynchronousAggregateReconciliationProxy
         : SynchronousAggregateReconciliationProxy
     {
-        private readonly Func<Reference, EventCentricAggregateRoot>? create;
         private readonly Func<Reference, EventCentricAggregateRoot?>? get;
         private readonly Func<IEnumerable<EventCentricAggregateRoot>>? getAll;
         private readonly Action<EventCentricAggregateRoot>? overwrite;
@@ -15,29 +14,17 @@
         private readonly Action<EventCentricAggregateRoot>? save;
 
         public TestableSynchronousAggregateReconciliationProxy(
-            Func<Reference, EventCentricAggregateRoot>? create = default,
             Func<Reference, EventCentricAggregateRoot?>? get = default,
             Func<IEnumerable<EventCentricAggregateRoot>>? getAll = default,
             Action<EventCentricAggregateRoot>? overwrite = default,
             Action<Reference>? purge = default,
             Action<EventCentricAggregateRoot>? save = default)
         {
-            this.create = create;
             this.get = get;
             this.getAll = getAll;
             this.overwrite = overwrite;
             this.purge = purge;
             this.save = save;
-        }
-
-        protected override EventCentricAggregateRoot PerformCreate(Reference aggregate)
-        {
-            if (create is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            return create(aggregate);
         }
 
         protected override EventCentricAggregateRoot? PerformGet(Reference aggregate)

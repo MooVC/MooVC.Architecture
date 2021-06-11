@@ -5,9 +5,10 @@
     using System.Threading.Tasks;
 
     public abstract class SynchronousAggregateReconciliationProxy
-        : IAggregateReconciliationProxy
+        : DefaultAggregateFactory,
+          IAggregateReconciliationProxy
     {
-        public virtual Task<EventCentricAggregateRoot> CreateAsync(
+        public override Task<EventCentricAggregateRoot> CreateAsync(
             Reference aggregate,
             CancellationToken? cancellationToken = default)
         {

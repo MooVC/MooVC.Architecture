@@ -180,6 +180,9 @@
   <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
     <value>The repository from which the events are to be propagated must be provided.</value>
   </data>
+  <data name="DomainEventsMissingExceptionMessage" xml:space="preserve">
+    <value>The domain events that form the basis of the aggregate must be provided.</value>
+  </data>
   <data name="DomainEventsUnhandledEventArgsHandlerRequired" xml:space="preserve">
     <value>The handler for the unhandled events must be provided.</value>
   </data>

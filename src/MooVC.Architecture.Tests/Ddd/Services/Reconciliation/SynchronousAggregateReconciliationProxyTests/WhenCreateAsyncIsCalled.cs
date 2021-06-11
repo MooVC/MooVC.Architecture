@@ -1,6 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
@@ -30,12 +32,30 @@
         }
 
         [Fact]
-        public async Task GivenAnExceptionThenTheExceptionIsThrownAsync()
+        public async Task GivenNoAggregateThenTheExceptionIsThrownAsync()
         {
             var reconciler = new TestableSynchronousAggregateReconciliationProxy();
 
             _ = await Assert.ThrowsAsync<NotImplementedException>(
-                () => reconciler.CreateAsync(default!));
+                () => reconciler.CreateAsync(default(Reference)!));
+        }
+
+        [Fact]
+        public async Task GivenNoDomainEventsThenAnExceptionIsThrownAsync()
+        {
+            var reconciler = new TestableSynchronousAggregateReconciliationProxy();
+
+            _ = await Assert.ThrowsAsync<DomainEventsMissingException>(
+                () => reconciler.CreateAsync(Enumerable.Empty<DomainEvent>()));
+        }
+
+        [Fact]
+        public async Task GivenNullDomainEventsThenAnExceptionIsThrownAsync()
+        {
+            var reconciler = new TestableSynchronousAggregateReconciliationProxy();
+
+            _ = await Assert.ThrowsAsync<DomainEventsMissingException>(
+                () => reconciler.CreateAsync(default(IEnumerable<DomainEvent>)!));
         }
     }
 }

@@ -250,6 +250,15 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The domain events that form the basis of the aggregate must be provided..
+        /// </summary>
+        internal static string DomainEventsMissingExceptionMessage {
+            get {
+                return ResourceManager.GetString("DomainEventsMissingExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The handler for the unhandled events must be provided..
         /// </summary>
         internal static string DomainEventsUnhandledEventArgsHandlerRequired {

@@ -5,16 +5,13 @@
     using System.Threading.Tasks;
 
     public interface IAggregateReconciliationProxy
+        : IAggregateFactory
     {
         Task<EventCentricAggregateRoot?> GetAsync(
             Reference aggregate,
             CancellationToken? cancellationToken = default);
 
         Task<IEnumerable<EventCentricAggregateRoot>> GetAllAsync(
-            CancellationToken? cancellationToken = default);
-
-        Task<EventCentricAggregateRoot> CreateAsync(
-            Reference aggregate,
             CancellationToken? cancellationToken = default);
 
         Task PurgeAsync(

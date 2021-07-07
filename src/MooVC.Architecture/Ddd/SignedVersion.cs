@@ -59,6 +59,7 @@
             Header = info.TryGetEnumerable(nameof(Header), emptySegment);
             Number = info.TryGetValue<ulong>(nameof(Number));
             signature = Combine();
+            TimeStamp = info.TryGetValue(nameof(TimeStamp), defaultValue: DateTimeOffset.MinValue);
         }
 
         public static SignedVersion Empty => empty.Value;
@@ -75,6 +76,8 @@
 
         public Guid Signature => signature.Value;
 
+        public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
+
         public int CompareTo(SignedVersion? other)
         {
             return other is { }
@@ -89,6 +92,7 @@
             _ = info.TryAddEnumerable(nameof(Footer), Footer, predicate: IsNotEmptySegment);
             _ = info.TryAddEnumerable(nameof(Header), Header, predicate: IsNotEmptySegment);
             _ = info.TryAddValue(nameof(Number), Number);
+            info.AddValue(nameof(TimeStamp), TimeStamp);
         }
 
         public bool IsNext(SignedVersion? previous)

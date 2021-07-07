@@ -19,6 +19,7 @@ Custom event handlers have been changed to use the asynchonrous variant.  This i
 - Added a new ToGuid method to MooVC.Architecture.Ddd.SignedVersion, enabling the caller to produce a GUID based on the Header and Footer of the version.
 - Added a new Ddd.Services.IAggregateFactory to support aggregate creation when the explicit type is not known.
 - Added a new Ddd.Services.DefaultAggregateFactory to provide a default implementation for aggregate creation when the explicit type is not known.
+- Added a TimeStamp to Ddd.SignedVersion which defaults to MinValue if no value was previously serialized.
 - Applied optional cancellation tokens to every public and protected async method, thereby facilitating propagation of cancellation tokens (**Breaking Change**).
 - Changed Architecture.Ddd.Services.AggregateSavedEventHandler to an async variant named AggregateSavedAsyncEventHandler (**Breaking Change**).
 - Changed Architecture.Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).

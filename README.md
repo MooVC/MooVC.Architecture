@@ -16,34 +16,36 @@ Custom event handlers have been changed to use the asynchonrous variant.  This i
 
 ## Enhancements
 
-- Added a new ToGuid method to MooVC.Architecture.Ddd.SignedVersion, enabling the caller to produce a GUID based on the Header and Footer of the version.
+- Added a new ToGuid method to Ddd.SignedVersion, enabling the caller to produce a GUID based on the Header and Footer of the version.
 - Added a new Ddd.Services.IAggregateFactory to support aggregate creation when the explicit type is not known.
+- Added a new Ddd.Services.CoordinatedHandler to support coordinated handling of generic operations in the context of an aggregate type.
 - Added a new Ddd.Services.DefaultAggregateFactory to provide a default implementation for aggregate creation when the explicit type is not known.
 - Added a TimeStamp to Ddd.SignedVersion which defaults to MinValue if no value was previously serialized.
 - Applied optional cancellation tokens to every public and protected async method, thereby facilitating propagation of cancellation tokens (**Breaking Change**).
-- Changed Architecture.Ddd.Services.AggregateSavedEventHandler to an async variant named AggregateSavedAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.DomainEventsPublishedEventHandler to an async variant named DomainEventsPublishedAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.DomainEventsPublishingEventHandler to an async variant named DomainEventsPublishingAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.AggregateConflictDetectedEventHandler to an async variant named AggregateConflictDetectedAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.AggregateReconciledEventHandler to an async variant named AggregateReconciledAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.IAggregateReconciliationProxy so that it no longer implements CreateAsync (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.EventsReconciledEventHandler to an async variant named EventsReconciledAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.EventsReconcilingEventHandler to an async variant named EventsReconcilingAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.EventSequenceAdvancedEventHandler to an async variant named EventSequenceAdvancedAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.SnapshotRestorationCompletedEventHandler to an async variant named SnapshotRestorationCompletedAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Reconciliation.SnapshotRestorationCommencingEventHandler to an async variant named SnapshotRestorationCommencingAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Ddd.Services.Repository so that it now implements IEmitDiagnostics.
-- Changed Architecture.Services.Bus so that it now implements IEmitDiagnostics.
-- Changed Architecture.Services.MessageInvokedEventHandler to an async variant named MessageInvokedAsyncEventHandler (**Breaking Change**).
-- Changed Architecture.Services.MessageInvokingEventHandler to an async variant named MessageInvokingAsyncEventHandler (**Breaking Change**).
-- Changed the invocation of the AggregateReconciled event handler of Architecture.Ddd.Services.AggregateReconciler to utilize the passive implementation (**Breaking Change**).
-- Changed the invocation of the AggregateSaved event handler of Architecture.Ddd.Services.Repository to utilize the passive implementation (**Breaking Change**).
-- Changed the invocation of the EventsReconciled event handler of Architecture.Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
-- Changed the invocation of the Published event handler of Architecture.Ddd.Services.Bus to utilize the passive implementation (**Breaking Change**).
-- Changed the invocation of the Invoked event handler of Architecture.Services.Bus to utilize the passive implementation (**Breaking Change**).
-- Changed the invocation of the SequenceAdvanced event handler of Architecture.Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
-- Removed Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciler due to inherrant challenges presented by the event driven feedback model (**Breaking Change**).
+- Changed Ddd.Services.AggregateSavedEventHandler to an async variant named AggregateSavedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).
+- Changes Ddd.Services.CoordinatedGenerateHandler to inherit from Ddd.Services.CoordinatedHandler.
+- Changed Ddd.Services.DomainEventsPublishedEventHandler to an async variant named DomainEventsPublishedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.DomainEventsPublishingEventHandler to an async variant named DomainEventsPublishingAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.AggregateConflictDetectedEventHandler to an async variant named AggregateConflictDetectedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.AggregateReconciledEventHandler to an async variant named AggregateReconciledAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.IAggregateReconciliationProxy so that it no longer implements CreateAsync (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.EventsReconciledEventHandler to an async variant named EventsReconciledAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.EventsReconcilingEventHandler to an async variant named EventsReconcilingAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.EventSequenceAdvancedEventHandler to an async variant named EventSequenceAdvancedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.SnapshotRestorationCompletedEventHandler to an async variant named SnapshotRestorationCompletedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.SnapshotRestorationCommencingEventHandler to an async variant named SnapshotRestorationCommencingAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Repository so that it now implements IEmitDiagnostics.
+- Changed Services.Bus so that it now implements IEmitDiagnostics.
+- Changed Services.MessageInvokedEventHandler to an async variant named MessageInvokedAsyncEventHandler (**Breaking Change**).
+- Changed Services.MessageInvokingEventHandler to an async variant named MessageInvokingAsyncEventHandler (**Breaking Change**).
+- Changed the invocation of the AggregateReconciled event handler of Ddd.Services.AggregateReconciler to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the AggregateSaved event handler of Ddd.Services.Repository to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the EventsReconciled event handler of Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the Published event handler of Ddd.Services.Bus to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the Invoked event handler of Services.Bus to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the SequenceAdvanced event handler of Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
+- Removed Ddd.Services.Reconciliation.SynchronousAggregateReconciler due to inherrant challenges presented by the event driven feedback model (**Breaking Change**).
 
 ## End-User Impact
 

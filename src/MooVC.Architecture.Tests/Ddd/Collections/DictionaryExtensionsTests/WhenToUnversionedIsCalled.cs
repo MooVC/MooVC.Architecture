@@ -24,11 +24,9 @@
             IDictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot> unversioned
                 = versioned.ToUnversioned();
 
-            versioned.For((index, entry) =>
-            {
-                Assert.Equal(entry.Key, unversioned.Keys.ElementAt(index));
-                Assert.Equal(entry.Value, unversioned.Values.ElementAt(index));
-            });
+            Assert.Equal(versioned.Count, unversioned.Count);
+            Assert.Contains(versioned, entry => unversioned.Contains(entry));
+            Assert.DoesNotContain(unversioned, element => element.Key.IsVersioned);
         }
 
         [Fact]
@@ -46,11 +44,9 @@
             IDictionary<Reference<SerializableAggregateRoot>, SerializableProjection<SerializableAggregateRoot>> unversioned
                 = versioned.ToUnversioned();
 
-            versioned.For((index, entry) =>
-            {
-                Assert.Equal(entry.Key, unversioned.Keys.ElementAt(index));
-                Assert.Equal(entry.Value, unversioned.Values.ElementAt(index));
-            });
+            Assert.Equal(versioned.Count, unversioned.Count);
+            Assert.Contains(versioned, entry => unversioned.Contains(entry));
+            Assert.DoesNotContain(unversioned, element => element.Key.IsVersioned);
         }
     }
 }

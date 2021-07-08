@@ -18,6 +18,8 @@ Custom event handlers have been changed to use the asynchonrous variant.  This i
 
 - Added a new ToGuid method to Ddd.SignedVersion, enabling the caller to produce a GUID based on the Header and Footer of the version.
 - Added a new Ddd.Collections.UnversionedReferenceDictionary to simplify lookups based on reference when aggregate versioning does not apply.
+- Added a new Ddd.Collections.DictionaryExtensions.ToUnversioned to simplify conversion of an existing dictionary into an unversioned variant.
+- Added a new Ddd.Collections.EnumerableExtensions.ToUnversionedDictionary to simplify conversion of an existing collection of aggregates or projections into an unversioned index of the same.
 - Added a new Ddd.ReferenceExtensions.ToUnversioned extension to facilitate the creation of an unversioned reference based on the reference supplied if that reference was versioned, otherwise it will return the same reference.
 - Added a new Ddd.Services.IAggregateFactory to support aggregate creation when the explicit type is not known.
 - Added a new Ddd.Services.CoordinatedHandler to support coordinated handling of generic operations in the context of an aggregate type.

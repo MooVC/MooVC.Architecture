@@ -3,6 +3,7 @@
     using System.Collections;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using MooVC.Collections.Generic;
 
     public sealed class UnversionedReferenceDictionary<TAggregate, T>
@@ -78,7 +79,7 @@
             return @internal.Remove(item.ToUnversioned());
         }
 
-        public bool TryGetValue(Reference<TAggregate> key, out T value)
+        public bool TryGetValue(Reference<TAggregate> key, [MaybeNullWhen(false)] out T value)
         {
             return @internal.TryGetValue(key.ToUnversioned(), out value);
         }

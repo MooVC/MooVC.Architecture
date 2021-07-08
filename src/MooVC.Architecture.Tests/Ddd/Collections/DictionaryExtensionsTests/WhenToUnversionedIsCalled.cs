@@ -1,0 +1,56 @@
+﻿namespace MooVC.Architecture.Ddd.Collections.DictionaryExtensionsTests
+{
+    using System.Collections.Generic;
+    using System.Linq;
+    using MooVC.Architecture.Ddd.AggregateRootTests;
+    using MooVC.Architecture.Ddd.ProjectionTests;
+    using MooVC.Collections.Generic;
+    using Xunit;
+
+    public sealed class WhenToUnversionedIsCalled
+    {
+        [Fact]
+        public void GivenAnAggregateDictionaryThenAnUnversionedIsReturned()
+        {
+            var first = new SerializableAggregateRoot();
+            var second = new SerializableAggregateRoot();
+
+            var versioned = new Dictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>
+            {
+                { first.ToReference(), first },
+                { second.ToReference(), second },
+            };
+
+            IDictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot> unversioned
+                = versioned.ToUnversioned();
+
+            versioned.For((index, entry) =>
+            {
+                Assert.Equal(entry.Key, unversioned.Keys.ElementAt(index));
+                Assert.Equal(entry.Value, unversioned.Values.ElementAt(index));
+            });
+        }
+
+        [Fact]
+        public void GivenAProjectionDictionaryThenAnUnversionedIsReturned()
+        {
+            var first = new SerializableAggregateRoot();
+            var second = new SerializableAggregateRoot();
+
+            var versioned = new Dictionary<Reference<SerializableAggregateRoot>, SerializableProjection<SerializableAggregateRoot>>
+            {
+                { first.ToReference(), new SerializableProjection<SerializableAggregateRoot>(first) },
+                { second.ToReference(), new SerializableProjection<SerializableAggregateRoot>(second) },
+            };
+
+            IDictionary<Reference<SerializableAggregateRoot>, SerializableProjection<SerializableAggregateRoot>> unversioned
+                = versioned.ToUnversioned();
+
+            versioned.For((index, entry) =>
+            {
+                Assert.Equal(entry.Key, unversioned.Keys.ElementAt(index));
+                Assert.Equal(entry.Value, unversioned.Values.ElementAt(index));
+            });
+        }
+    }
+}

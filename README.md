@@ -17,11 +17,13 @@ Custom event handlers have been changed to use the asynchonrous variant.  This i
 ## Enhancements
 
 - Added a new ToGuid method to Ddd.SignedVersion, enabling the caller to produce a GUID based on the Header and Footer of the version.
+- Added a new Ddd.ReferenceExtensions.ToUnversioned extension to facilitate the creation of an unversioned reference based on the reference supplied if that reference was versioned, otherwise it will return the same reference.
 - Added a new Ddd.Services.IAggregateFactory to support aggregate creation when the explicit type is not known.
 - Added a new Ddd.Services.CoordinatedHandler to support coordinated handling of generic operations in the context of an aggregate type.
 - Added a new Ddd.Services.DefaultAggregateFactory to provide a default implementation for aggregate creation when the explicit type is not known.
 - Added a TimeStamp to Ddd.SignedVersion which defaults to MinValue if no value was previously serialized.
 - Applied optional cancellation tokens to every public and protected async method, thereby facilitating propagation of cancellation tokens (**Breaking Change**).
+- Changed Ddd.AggregateRootExtensions.ToReference to include an optional switch to facilitate creation of an unversioned reference for the aggregate supplied.
 - Changed Ddd.Services.AggregateSavedEventHandler to an async variant named AggregateSavedAsyncEventHandler (**Breaking Change**).
 - Changed Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).
 - Changes Ddd.Services.CoordinatedGenerateHandler to inherit from Ddd.Services.CoordinatedHandler.
@@ -46,6 +48,7 @@ Custom event handlers have been changed to use the asynchonrous variant.  This i
 - Changed the invocation of the Invoked event handler of Services.Bus to utilize the passive implementation (**Breaking Change**).
 - Changed the invocation of the SequenceAdvanced event handler of Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
 - Removed Ddd.Services.Reconciliation.SynchronousAggregateReconciler due to inherrant challenges presented by the event driven feedback model (**Breaking Change**).
+- Renamed Ddd.ReferenceExtensions.ToTypedReference to Ddd.ReferenceExtensions.ToTyped (**Breaking Change**).
 
 ## End-User Impact
 

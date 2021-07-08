@@ -3,12 +3,21 @@
     using System.Collections;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using MooVC.Collections.Generic;
 
     public sealed class UnversionedReferenceDictionary<TAggregate, T>
         : IDictionary<Reference<TAggregate>, T>
         where TAggregate : AggregateRoot
     {
         private readonly IDictionary<Reference<TAggregate>, T> @internal = new ConcurrentDictionary<Reference<TAggregate>, T>();
+
+        public UnversionedReferenceDictionary(IDictionary<Reference<TAggregate>, T>? existing = default)
+        {
+            if (existing is { })
+            {
+                existing.ForEach(Add);
+            }
+        }
 
         public ICollection<Reference<TAggregate>> Keys => @internal.Keys;
 

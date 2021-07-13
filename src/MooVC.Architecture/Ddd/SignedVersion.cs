@@ -92,7 +92,7 @@
             _ = info.TryAddEnumerable(nameof(Footer), Footer, predicate: IsNotEmptySegment);
             _ = info.TryAddEnumerable(nameof(Header), Header, predicate: IsNotEmptySegment);
             _ = info.TryAddValue(nameof(Number), Number);
-            info.AddValue(nameof(TimeStamp), TimeStamp);
+            _ = info.TryAddValue(nameof(TimeStamp), TimeStamp, defaultValue: DateTimeOffset.MinValue);
         }
 
         public bool IsNext(SignedVersion? previous)

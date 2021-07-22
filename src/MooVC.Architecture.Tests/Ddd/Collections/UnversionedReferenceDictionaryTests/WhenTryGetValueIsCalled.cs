@@ -9,7 +9,7 @@
         [Fact]
         public void GivenAVersionedReferenceThatExistsThenTheEntryIsReturned()
         {
-            bool exists = Dictionary.TryGetValue(SecondReference, out SerializableAggregateRoot actual);
+            bool exists = Dictionary.TryGetValue(SecondReference, out SerializableAggregateRoot? actual);
 
             Assert.True(exists);
             Assert.Same(SecondAggregate, actual);

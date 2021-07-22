@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.RepositoryExtensionsTests
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
@@ -28,12 +29,20 @@
             var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
             _ = repository
-               .Setup(repo => repo.GetAsync(It.Is<Guid>(id => id == aggregateId), It.Is<SignedVersion>(v => v == default)))
+               .Setup(repo => repo.GetAsync(
+                   It.Is<Guid>(id => id == aggregateId),
+                   It.IsAny<CancellationToken?>(),
+                   It.Is<SignedVersion>(v => v == default)))
                .ReturnsAsync(secondVersion);
 
             SerializableAggregateRoot value = await repository.Object.GetAsync(context, reference);
 
-            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(
+                repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()),
+                Times.Once);
 
             Assert.Equal(secondVersion, value);
         }
@@ -54,12 +63,18 @@
             _ = repository
                .Setup(repo => repo.GetAsync(
                    It.Is<Guid>(id => id == aggregate.Id),
+                   It.IsAny<CancellationToken?>(),
                    It.Is<SignedVersion>(v => v == firstVersion)))
                .ReturnsAsync(aggregate);
 
             AggregateRoot value = await repository.Object.GetAsync(context, reference, latest: false);
 
-            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(
+                repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()),
+                Times.Once);
 
             Assert.Equal(aggregate, value);
         }
@@ -68,7 +83,10 @@
         public async Task GivenAnIdThatDoesNotExistsThenAnAggregateNotFoundExceptionIsThrownAsync()
         {
             _ = repository
-                .Setup(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
+                .Setup(repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()))
                 .ReturnsAsync(default(SerializableAggregateRoot));
 
             var aggregateId = Guid.NewGuid();
@@ -77,7 +95,12 @@
                 await Assert.ThrowsAsync<AggregateVersionNotFoundException<SerializableAggregateRoot>>(
                     () => repository.Object.GetAsync(context, aggregateId));
 
-            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(
+                repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()),
+                Times.Once);
 
             Assert.Equal(aggregateId, exception.Aggregate.Id);
             Assert.Equal(context, exception.Context);
@@ -89,12 +112,23 @@
             var aggregate = new SerializableAggregateRoot();
 
             _ = repository
-               .Setup(repo => repo.GetAsync(It.Is<Guid>(id => id == aggregate.Id), It.Is<SignedVersion>(v => v == aggregate.Version)))
+               .Setup(repo => repo.GetAsync(
+                   It.Is<Guid>(id => id == aggregate.Id),
+                   It.IsAny<CancellationToken?>(),
+                   It.Is<SignedVersion>(v => v == aggregate.Version)))
                .ReturnsAsync(aggregate);
 
-            AggregateRoot value = await repository.Object.GetAsync(context, aggregate.Id, version: aggregate.Version);
+            AggregateRoot value = await repository.Object.GetAsync(
+                context,
+                aggregate.Id,
+                version: aggregate.Version);
 
-            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(
+                repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()),
+                Times.Once);
 
             Assert.Equal(aggregate, value);
         }
@@ -103,7 +137,10 @@
         public async Task GivenAReferenceThatDoesNotExistsThenAnAggregateNotFoundExceptionIsThrownAsync()
         {
             _ = repository
-                .Setup(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
+                .Setup(repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()))
                 .ReturnsAsync(default(SerializableAggregateRoot));
 
             var reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
@@ -112,7 +149,12 @@
                 await Assert.ThrowsAsync<AggregateVersionNotFoundException<SerializableAggregateRoot>>(
                     () => repository.Object.GetAsync(context, reference));
 
-            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(
+                repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()),
+                Times.Once);
 
             Assert.Equal(reference, exception.Aggregate);
             Assert.Equal(context, exception.Context);
@@ -122,7 +164,10 @@
         public async Task GivenAVersionedReferenceThatDoesNotExistsThenAnAggregateVersionNotFoundExceptionIsThrownAsync()
         {
             _ = repository
-                .Setup(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
+                .Setup(repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()))
                 .ReturnsAsync(default(SerializableAggregateRoot));
 
             var aggregate = new SerializableAggregateRoot();
@@ -132,7 +177,12 @@
                 await Assert.ThrowsAsync<AggregateVersionNotFoundException<SerializableAggregateRoot>>(
                     () => repository.Object.GetAsync(context, reference, latest: false));
 
-            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(
+                repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()),
+                Times.Once);
 
             Assert.Equal(reference, exception.Aggregate);
             Assert.Equal(context, exception.Context);
@@ -142,7 +192,10 @@
         public async Task GivenAReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnArgumentExceptionIsThrownAsync()
         {
             _ = repository
-                .Setup(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()))
+                .Setup(repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()))
                 .ReturnsAsync(default(SerializableAggregateRoot));
 
             var reference = new Reference<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
@@ -150,7 +203,12 @@
             ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
                 () => repository.Object.GetAsync(context, reference));
 
-            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Never);
+            repository.Verify(
+                repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()),
+                Times.Never);
         }
 
         [Fact]
@@ -161,12 +219,20 @@
             var reference = new Reference<SerializableAggregateRoot>(aggregateId);
 
             _ = repository
-               .Setup(repo => repo.GetAsync(It.Is<Guid>(id => id == aggregateId), It.Is<SignedVersion>(v => v == default)))
+               .Setup(repo => repo.GetAsync(
+                   It.Is<Guid>(id => id == aggregateId),
+                   It.IsAny<CancellationToken?>(),
+                   It.Is<SignedVersion>(v => v == default)))
                .ReturnsAsync(aggregate);
 
             AggregateRoot value = await repository.Object.GetAsync(context, reference);
 
-            repository.Verify(repo => repo.GetAsync(It.IsAny<Guid>(), It.IsAny<SignedVersion>()), Times.Once);
+            repository.Verify(
+                repo => repo.GetAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken?>(),
+                    It.IsAny<SignedVersion>()),
+                Times.Once);
 
             Assert.Equal(aggregate, value);
         }

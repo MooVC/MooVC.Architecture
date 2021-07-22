@@ -1,7 +1,7 @@
 namespace MooVC.Architecture.Ddd.Services
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Tasks;
     using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
 
@@ -21,12 +21,12 @@ namespace MooVC.Architecture.Ddd.Services
             this.repository.AggregateSaved += Repository_AggregateSaved;
         }
 
-        private async void Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedEventArgs<TAggregate> e)
+        private async Task Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedAsyncEventArgs<TAggregate> e)
         {
             IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
 
             await bus
-                .PublishAsync(changes.ToArray())
+                .PublishAsync(changes, cancellationToken: e.CancellationToken)
                 .ConfigureAwait(false);
         }
     }

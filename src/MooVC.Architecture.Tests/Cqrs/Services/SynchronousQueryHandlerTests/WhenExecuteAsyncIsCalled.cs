@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Cqrs.Services.SynchronousQueryHandlerTests
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.MessageTests;
     using Xunit;
@@ -20,7 +21,7 @@
                 return expected;
             });
 
-            SerializableMessage? actual = await handler.ExecuteAsync();
+            SerializableMessage? actual = await handler.ExecuteAsync(CancellationToken.None);
 
             Assert.True(wasInvoked);
             Assert.Equal(expected, actual);
@@ -42,7 +43,7 @@
                 return expectedResult;
             });
 
-            SerializableMessage? actualResult = await handler.ExecuteAsync(expectedQuery);
+            SerializableMessage? actualResult = await handler.ExecuteAsync(expectedQuery, CancellationToken.None);
 
             Assert.True(wasInvoked);
             Assert.Equal(expectedResult, actualResult);
@@ -54,7 +55,7 @@
             var handler = new TestableSynchronousQueryHandler<SerializableMessage>();
 
             _ = await Assert.ThrowsAsync<NotImplementedException>(
-                () => handler.ExecuteAsync());
+                () => handler.ExecuteAsync(CancellationToken.None));
         }
 
         [Fact]
@@ -63,7 +64,7 @@
             var handler = new TestableSynchronousQueryHandler<Message, SerializableMessage>();
 
             _ = await Assert.ThrowsAsync<NotImplementedException>(
-                () => handler.ExecuteAsync(new SerializableMessage()));
+                () => handler.ExecuteAsync(new SerializableMessage(), CancellationToken.None));
         }
     }
 }

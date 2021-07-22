@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
@@ -11,40 +12,50 @@
     public sealed class DefaultAggregateReconciler
         : AggregateReconciler
     {
-        private readonly Func<Type, IAggregateReconciliationProxy?> factory;
+        private readonly IAggregateFactory factory;
+        private readonly Func<Type, IAggregateReconciliationProxy?> proxies;
         private readonly bool ignorePreviousVersions;
         private readonly TimeSpan? timeout;
 
         public DefaultAggregateReconciler(
-            Func<Type, IAggregateReconciliationProxy?> factory,
+            IAggregateFactory factory,
+            Func<Type, IAggregateReconciliationProxy?> proxies,
             bool ignorePreviousVersions = true,
             TimeSpan? timeout = default)
         {
             ArgumentNotNull(factory, nameof(factory), DefaultAggregateReconcilerFactoryRequired);
+            ArgumentNotNull(proxies, nameof(proxies), DefaultAggregateReconcilerProxiesRequired);
 
             this.factory = factory;
+            this.proxies = proxies;
             this.ignorePreviousVersions = ignorePreviousVersions;
             this.timeout = timeout;
         }
 
-        public override async Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates)
+        public override async Task ReconcileAsync(
+            IEnumerable<EventCentricAggregateRoot> aggregates,
+            CancellationToken? cancellationToken = default)
         {
             if (aggregates.Any())
             {
                 foreach (IGrouping<Type, EventCentricAggregateRoot> aggregateTypes in aggregates
                     .GroupBy(aggregate => aggregate.GetType()))
                 {
-                    IAggregateReconciliationProxy? proxy = factory(aggregateTypes.Key);
+                    IAggregateReconciliationProxy? proxy = proxies(aggregateTypes.Key);
 
                     if (proxy is null)
                     {
-                        OnUnsupportedAggregateTypeDetected(aggregateTypes.Key);
+                        await
+                            OnUnsupportedAggregateTypeDetectedAsync(
+                                aggregateTypes.Key,
+                                cancellationToken: cancellationToken)
+                            .ConfigureAwait(false);
                     }
                     else
                     {
                         foreach (EventCentricAggregateRoot aggregate in aggregateTypes)
                         {
-                            await ReconcileAsync(aggregate, proxy)
+                            await ReconcileAsync(aggregate, proxy, cancellationToken)
                                 .ConfigureAwait(false);
                         }
                     }
@@ -52,27 +63,45 @@
             }
         }
 
-        public override async Task ReconcileAsync(params DomainEvent[] events)
+        public override async Task ReconcileAsync(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default)
         {
             if (events.Any())
             {
                 foreach (IGrouping<Type, DomainEvent> aggregateTypes in events
                     .GroupBy(@event => @event.Aggregate.Type))
                 {
-                    IAggregateReconciliationProxy? proxy = factory(aggregateTypes.Key);
+                    IAggregateReconciliationProxy? proxy = proxies(aggregateTypes.Key);
 
                     if (proxy is null)
                     {
-                        OnUnsupportedAggregateTypeDetected(aggregateTypes.Key);
+                        await
+                            OnUnsupportedAggregateTypeDetectedAsync(
+                                aggregateTypes.Key,
+                                cancellationToken: cancellationToken)
+                            .ConfigureAwait(false);
                     }
                     else
                     {
                         foreach (IGrouping<Reference, DomainEvent> aggregateEvents in aggregateTypes
                             .GroupBy(@event => @event.Aggregate))
                         {
-                            if (EventsAreNonConflicting(aggregateEvents.Key, aggregateEvents, out _))
+                            bool isHarmonious = await
+                                EventsAreNonConflictingAsync(
+                                    aggregateEvents.Key,
+                                    aggregateEvents,
+                                    cancellationToken: cancellationToken)
+                                .ConfigureAwait(false);
+
+                            if (isHarmonious)
                             {
-                                await ReconcileAsync(aggregateEvents.Key, aggregateEvents, proxy)
+                                await
+                                    ReconcileAsync(
+                                        aggregateEvents.Key,
+                                        aggregateEvents,
+                                        proxy,
+                                        cancellationToken)
                                     .ConfigureAwait(false);
                             }
                         }
@@ -83,24 +112,26 @@
 
         private static Task PerformCoordinatedReconcileAsync(
             EventCentricAggregateRoot aggregate,
-            IAggregateReconciliationProxy proxy)
+            IAggregateReconciliationProxy proxy,
+            CancellationToken? cancellationToken)
         {
-            return proxy.OverwriteAsync(aggregate);
+            return proxy.OverwriteAsync(aggregate, cancellationToken: cancellationToken);
         }
 
         private async Task PerformCoordinatedReconcileAsync(
            Reference aggregate,
            IEnumerable<DomainEvent> events,
-           IAggregateReconciliationProxy proxy)
+           IAggregateReconciliationProxy proxy,
+           CancellationToken? cancellationToken)
         {
             EventCentricAggregateRoot? existing = await proxy
-                .GetAsync(aggregate)
+                .GetAsync(aggregate, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             if (existing is null)
             {
-                existing = await proxy
-                    .CreateAsync(aggregate)
+                existing = await factory
+                    .CreateAsync(aggregate, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }
             else if (ignorePreviousVersions)
@@ -108,26 +139,36 @@
                 events = RemovePreviousVersions(events, existing.Version);
             }
 
-            await ApplyAsync(existing, events, proxy, aggregate)
+            await
+                ApplyAsync(
+                    existing,
+                    events,
+                    proxy,
+                    aggregate,
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
         private Task ReconcileAsync(
             Reference aggregate,
             IEnumerable<DomainEvent> events,
-            IAggregateReconciliationProxy proxy)
+            IAggregateReconciliationProxy proxy,
+            CancellationToken? cancellationToken)
         {
             return aggregate.CoordinateAsync(
-                () => PerformCoordinatedReconcileAsync(aggregate, events, proxy),
+                () => PerformCoordinatedReconcileAsync(aggregate, events, proxy, cancellationToken),
+                cancellationToken: cancellationToken,
                 timeout: timeout);
         }
 
         private Task ReconcileAsync(
             EventCentricAggregateRoot aggregate,
-            IAggregateReconciliationProxy proxy)
+            IAggregateReconciliationProxy proxy,
+            CancellationToken? cancellationToken)
         {
             return aggregate.CoordinateAsync(
-                () => PerformCoordinatedReconcileAsync(aggregate, proxy),
+                () => PerformCoordinatedReconcileAsync(aggregate, proxy, cancellationToken),
+                cancellationToken: cancellationToken,
                 timeout: timeout);
         }
     }

@@ -12,9 +12,21 @@
     public sealed class WhenAtomicUnitIsConstructed
     {
         [Fact]
+        public void GivenANullEventThenAnArgumentExceptionIsThrown()
+        {
+            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(default(DomainEvent)!));
+        }
+
+        [Fact]
+        public void GivenNullEventsThenAnArgumentNullExceptionIsThrown()
+        {
+            _ = Assert.Throws<ArgumentNullException>(() => new AtomicUnit(default(DomainEvent[])!));
+        }
+
+        [Fact]
         public void GivenNoEventsThenAnArgumentExceptionIsThrown()
         {
-            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit());
+            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(Array.Empty<DomainEvent>()));
         }
 
         [Fact]
@@ -27,7 +39,7 @@
             var first = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
             var second = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
 
-            var unit = new AtomicUnit(first, second);
+            var unit = new AtomicUnit(new[] { first, second });
 
             Assert.Equal(ExpectedCount, unit.Events.Count());
             Assert.Contains(first, unit.Events);
@@ -43,7 +55,7 @@
             var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(firstContext, aggregate);
             var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(secondContext, aggregate);
 
-            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(firstEvent, secondEvent));
+            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(new[] { firstEvent, secondEvent }));
         }
 
         [Fact]
@@ -55,7 +67,7 @@
             var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, firstAggregate);
             var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, secondAggregate);
 
-            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(firstEvent, secondEvent));
+            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(new[] { firstEvent, secondEvent }));
         }
 
         [Fact]
@@ -70,7 +82,7 @@
 
             var secondEvent = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(context, aggregate);
 
-            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(firstEvent, secondEvent));
+            _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(new[] { firstEvent, secondEvent }));
         }
     }
 }

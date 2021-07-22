@@ -1,17 +1,31 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
+    using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public interface IAggregateReconciler
     {
-        event AggregateConflictDetectedEventHandler AggregateConflictDetected;
+        event AggregateConflictDetectedAsyncEventHandler AggregateConflictDetected;
 
-        event AggregateReconciledEventHandler AggregateReconciled;
+        event AggregateReconciledAsyncEventHandler AggregateReconciled;
 
-        event UnsupportedAggregateTypeDetectedEventHandler UnsupportedAggregateTypeDetected;
+        event UnsupportedAggregateTypeDetectedAsyncEventHandler UnsupportedAggregateTypeDetected;
 
-        Task ReconcileAsync(params EventCentricAggregateRoot[] aggregates);
+        Task ReconcileAsync(
+            EventCentricAggregateRoot aggregate,
+            CancellationToken? cancellationToken = default);
 
-        Task ReconcileAsync(params DomainEvent[] events);
+        Task ReconcileAsync(
+            IEnumerable<EventCentricAggregateRoot> aggregates,
+            CancellationToken? cancellationToken = default);
+
+        Task ReconcileAsync(
+            DomainEvent @event,
+            CancellationToken? cancellationToken = default);
+
+        Task ReconcileAsync(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default);
     }
 }

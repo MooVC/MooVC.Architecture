@@ -162,6 +162,9 @@
   <data name="AtomicUnitEventsRequired" xml:space="preserve">
     <value>The atomic unit must contain one or more domain events.</value>
   </data>
+  <data name="BusOnPublishedAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for publications from successfully handling a notification.</value>
+  </data>
   <data name="CoordinatedGenerateHandlerRepositoryRequired" xml:space="preserve">
     <value>The repository must be provided.</value>
   </data>
@@ -177,6 +180,9 @@
   <data name="DomainEventPropagatorRepositoryRequired" xml:space="preserve">
     <value>The repository from which the events are to be propagated must be provided.</value>
   </data>
+  <data name="DomainEventsMissingExceptionMessage" xml:space="preserve">
+    <value>The domain events that form the basis of the aggregate must be provided.</value>
+  </data>
   <data name="DomainEventsUnhandledEventArgsHandlerRequired" xml:space="preserve">
     <value>The handler for the unhandled events must be provided.</value>
   </data>
@@ -186,7 +192,7 @@
   <data name="PersistentBusStoreRequired" xml:space="preserve">
     <value>The storage that support persistence of domain events published via the bus must be provided.</value>
   </data>
-  <data name="UnhandledDomainEventManagerProcessFailure" xml:space="preserve">
-    <value>A failure has prevented the successful reprocessing of unhandled domain events.</value>
+  <data name="RepositoryOnAggregateSavedAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for persistence completion from successfully handling a notification.</value>
   </data>
 </root>

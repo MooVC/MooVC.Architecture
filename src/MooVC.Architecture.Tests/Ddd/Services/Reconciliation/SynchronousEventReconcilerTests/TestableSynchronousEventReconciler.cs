@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd;
     using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
@@ -20,6 +21,7 @@
 
         protected override async Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
             ulong? previous,
+            CancellationToken? cancellationToken = default,
             ulong? target = default)
         {
             if (previous.GetValueOrDefault() == 0)

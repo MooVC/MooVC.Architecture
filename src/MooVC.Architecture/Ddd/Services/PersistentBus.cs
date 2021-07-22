@@ -1,6 +1,9 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Diagnostics;
     using MooVC.Persistence;
@@ -9,8 +12,7 @@
     using static MooVC.Ensure;
 
     public sealed class PersistentBus
-        : Bus,
-          IEmitDiagnostics
+        : Bus
     {
         private readonly IStore<AtomicUnit, Guid> store;
 
@@ -21,43 +23,38 @@
             this.store = store;
         }
 
-        public event DiagnosticsEmittedEventHandler? DiagnosticsEmitted;
-
-        protected override async Task PerformPublishAsync(params DomainEvent[] events)
+        protected override async Task PerformPublishAsync(
+            IEnumerable<DomainEvent> events,
+            CancellationToken? cancellationToken = default)
         {
             var unit = new AtomicUnit(events);
 
-            await PerformPersistAsync(unit)
+            await PerformPersistAsync(unit, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        private async Task PerformPersistAsync(AtomicUnit unit)
+        private async Task PerformPersistAsync(
+            AtomicUnit unit,
+            CancellationToken? cancellationToken = default)
         {
             try
             {
                 _ = await store
-                    .CreateAsync(unit)
+                    .CreateAsync(unit, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                OnDiagnosticsEmitted(
-                    Level.Error,
-                    cause: ex,
-                    message: Format(PersistentBusPublishFailure, unit.Id));
+                await
+                    OnDiagnosticsEmittedAsync(
+                        Level.Error,
+                        cancellationToken: cancellationToken,
+                        cause: ex,
+                        message: Format(PersistentBusPublishFailure, unit.Id))
+                    .ConfigureAwait(false);
 
                 throw;
             }
-        }
-
-        private void OnDiagnosticsEmitted(Level level, Exception? cause = default, string? message = default)
-        {
-            DiagnosticsEmitted?.Invoke(
-                this,
-                new DiagnosticsEmittedEventArgs(
-                    cause: cause,
-                    level: level,
-                    message: message));
         }
     }
 }

@@ -196,6 +196,15 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for publications from successfully handling a notification..
+        /// </summary>
+        internal static string BusOnPublishedAsyncFailure {
+            get {
+                return ResourceManager.GetString("BusOnPublishedAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The repository must be provided..
         /// </summary>
         internal static string CoordinatedGenerateHandlerRepositoryRequired {
@@ -241,6 +250,15 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The domain events that form the basis of the aggregate must be provided..
+        /// </summary>
+        internal static string DomainEventsMissingExceptionMessage {
+            get {
+                return ResourceManager.GetString("DomainEventsMissingExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The handler for the unhandled events must be provided..
         /// </summary>
         internal static string DomainEventsUnhandledEventArgsHandlerRequired {
@@ -268,11 +286,11 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A failure has prevented the successful reprocessing of unhandled domain events..
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for persistence completion from successfully handling a notification..
         /// </summary>
-        internal static string UnhandledDomainEventManagerProcessFailure {
+        internal static string RepositoryOnAggregateSavedAsyncFailure {
             get {
-                return ResourceManager.GetString("UnhandledDomainEventManagerProcessFailure", resourceCulture);
+                return ResourceManager.GetString("RepositoryOnAggregateSavedAsyncFailure", resourceCulture);
             }
         }
     }

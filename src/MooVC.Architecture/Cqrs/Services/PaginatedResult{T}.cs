@@ -13,7 +13,11 @@ namespace MooVC.Architecture.Cqrs.Services
     public abstract class PaginatedResult<T>
         : Message
     {
-        protected PaginatedResult(Message context, Paging paging, IEnumerable<T> results, ulong totalResults)
+        protected PaginatedResult(
+            Message context,
+            Paging paging,
+            IEnumerable<T> results,
+            ulong totalResults)
             : base(context)
         {
             Results = results.Snapshot();

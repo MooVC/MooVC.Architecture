@@ -1,5 +1,6 @@
 namespace MooVC.Architecture.Ddd.Services
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Processing;
 
@@ -13,7 +14,7 @@ namespace MooVC.Architecture.Ddd.Services
         {
         }
 
-        public Task StartAsync(T @event)
+        public Task StartAsync(T @event, CancellationToken cancellationToken)
         {
             Enqueue(@event);
 

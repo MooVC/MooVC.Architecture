@@ -70,6 +70,15 @@ namespace MooVC.Architecture.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for invocations from successfully handling a notification..
+        /// </summary>
+        internal static string BusOnInvokedAsyncFailure {
+            get {
+                return ResourceManager.GetString("BusOnInvokedAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The message that is the subject of this event must be provided..
         /// </summary>
         internal static string MessageEventArgsMessageRequired {

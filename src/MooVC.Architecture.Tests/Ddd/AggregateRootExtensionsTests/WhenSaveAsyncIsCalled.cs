@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.AggregateRootExtensionsTests
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.Services;
@@ -17,7 +18,11 @@
 
             await aggregate.SaveAsync(repository.Object);
 
-            repository.Verify(repo => repo.SaveAsync(It.IsAny<SerializableAggregateRoot>()), Times.Once);
+            repository.Verify(
+                repo => repo.SaveAsync(
+                    It.IsAny<SerializableAggregateRoot>(),
+                    It.IsAny<CancellationToken?>()),
+                Times.Once);
         }
 
         [Fact]
@@ -39,7 +44,11 @@
 
             await aggregate.SaveAsync(repository.Object);
 
-            repository.Verify(repo => repo.SaveAsync(It.IsAny<SerializableAggregateRoot>()), Times.Never);
+            repository.Verify(
+                repo => repo.SaveAsync(
+                    It.IsAny<SerializableAggregateRoot>(),
+                    It.IsAny<CancellationToken?>()),
+                Times.Never);
         }
 
         [Fact]
@@ -60,7 +69,11 @@
 
             await aggregate!.SaveAsync(repository.Object);
 
-            repository.Verify(repo => repo.SaveAsync(It.IsAny<SerializableAggregateRoot>()), Times.Never);
+            repository.Verify(
+                repo => repo.SaveAsync(
+                    It.IsAny<SerializableAggregateRoot>(),
+                    It.IsAny<CancellationToken?>()),
+                Times.Never);
         }
     }
 }

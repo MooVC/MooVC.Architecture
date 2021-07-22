@@ -1,13 +1,14 @@
 ﻿namespace MooVC.Architecture.Services
 {
+    using System.Threading;
     using System.Threading.Tasks;
 
     public interface IBus
     {
-        event MessageInvokedEventHandler Invoked;
+        event MessageInvokedAsyncEventHandler Invoked;
 
-        event MessageInvokingEventHandler Invoking;
+        event MessageInvokingAsyncEventHandler Invoking;
 
-        Task InvokeAsync(Message message);
+        Task InvokeAsync(Message message, CancellationToken? cancellationToken = default);
     }
 }

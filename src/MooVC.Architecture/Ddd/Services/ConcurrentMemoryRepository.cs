@@ -1,6 +1,7 @@
 namespace MooVC.Architecture.Ddd.Services
 {
     using System.Collections.Concurrent;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Services.Ensure;
@@ -21,14 +22,19 @@ namespace MooVC.Architecture.Ddd.Services
             return proposed;
         }
 
-        protected override Task PerformSaveAsync(TAggregate aggregate)
+        protected override Task PerformSaveAsync(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default)
         {
             PerformUpdateStore(aggregate);
 
             return Task.CompletedTask;
         }
 
-        protected virtual TAggregate PerformUpdate(TAggregate existing, Reference<TAggregate> key, TAggregate proposed)
+        protected virtual TAggregate PerformUpdate(
+            TAggregate existing,
+            Reference<TAggregate> key,
+            TAggregate proposed)
         {
             AggregateDoesNotConflict(proposed, currentVersion: existing.Version);
 

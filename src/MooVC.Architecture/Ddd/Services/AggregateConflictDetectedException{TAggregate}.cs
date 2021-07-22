@@ -33,6 +33,6 @@
         {
         }
 
-        public new Reference<TAggregate> Aggregate => base.Aggregate.ToTypedReference<TAggregate>();
+        public new Reference<TAggregate> Aggregate => base.Aggregate.ToTyped<TAggregate>();
     }
 }

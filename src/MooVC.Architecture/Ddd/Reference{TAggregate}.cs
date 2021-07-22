@@ -11,7 +11,7 @@
         where TAggregate : AggregateRoot
     {
         private static readonly Lazy<Reference<TAggregate>> empty =
-            new Lazy<Reference<TAggregate>>(() => new Reference<TAggregate>());
+            new(() => new Reference<TAggregate>());
 
         public Reference(Guid id, SignedVersion? version = default)
             : base(id, typeof(TAggregate), version: version)

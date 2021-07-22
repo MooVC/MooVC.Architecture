@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.Services.Snapshots;
     using MooVC.Persistence;
@@ -46,24 +47,26 @@
             this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;
         }
 
-        public override async Task ReconcileAsync(IEventSequence? target = default)
+        public override async Task ReconcileAsync(
+            CancellationToken? cancellationToken = default,
+            IEventSequence? target = default)
         {
-            IEventSequence? previous = await GetPreviousSequenceAsync()
+            IEventSequence? previous = await GetPreviousSequenceAsync(cancellationToken)
                 .ConfigureAwait(false);
 
             if (previous is null || previous.Sequence == 0)
             {
-                previous = await RestoreLatestSnapshotAsync()
+                previous = await RestoreLatestSnapshotAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
 
             ReconcileEvents(previous, target);
         }
 
-        private async Task<IEventSequence?> GetPreviousSequenceAsync()
+        private async Task<IEventSequence?> GetPreviousSequenceAsync(CancellationToken? cancellationToken)
         {
             IEnumerable<TEventSequence>? last = await sequenceStore
-                .GetAsync()
+                .GetAsync(cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             return last.LastOrDefault();
@@ -74,22 +77,24 @@
             _ = eventReconciler.ReconcileAsync(previous: previous?.Sequence, target: target?.Sequence);
         }
 
-        private async Task<IEventSequence?> RestoreLatestSnapshotAsync()
+        private async Task<IEventSequence?> RestoreLatestSnapshotAsync(CancellationToken? cancellationToken)
         {
             ISnapshot latest = snapshotSource();
 
             if (latest is { })
             {
-                OnSnapshotRestorationCommencing();
+                await OnSnapshotRestorationCommencingAsync(cancellationToken: cancellationToken)
+                    .ConfigureAwait(false);
 
                 await aggregateReconciler
-                    .ReconcileAsync(latest.Aggregates.ToArray())
+                    .ReconcileAsync(latest.Aggregates, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
 
-                await UpdateSequenceAsync(latest.Sequence.Sequence)
+                await UpdateSequenceAsync(latest.Sequence.Sequence, cancellationToken)
                     .ConfigureAwait(false);
 
-                OnSnapshotRestorationCompleted(latest.Sequence);
+                await OnSnapshotRestorationCompletedAsync(latest.Sequence, cancellationToken: cancellationToken)
+                    .ConfigureAwait(false);
 
                 return latest.Sequence;
             }
@@ -97,21 +102,21 @@
             return default;
         }
 
-        private async Task UpdateSequenceAsync(ulong current)
+        private async Task UpdateSequenceAsync(ulong current, CancellationToken? cancellationToken)
         {
             TEventSequence sequence = sequenceFactory(current);
 
             if (sequence is { })
             {
                 _ = await sequenceStore
-                    .CreateAsync(sequence)
+                    .CreateAsync(sequence, cancellationToken)
                     .ConfigureAwait(false);
             }
         }
 
-        private async void AggregateReconciler_AggregateConflictDetected(
+        private async Task AggregateReconciler_AggregateConflictDetected(
             IAggregateReconciler sender,
-            AggregateConflictDetectedEventArgs e)
+            AggregateConflictDetectedAsyncEventArgs e)
         {
             EventCentricAggregateRoot aggregate = aggregateSource(e.Aggregate);
 
@@ -120,11 +125,11 @@
                 .ConfigureAwait(false);
         }
 
-        private async void EventReconciler_EventSequenceAdvanced(
+        private async Task EventReconciler_EventSequenceAdvanced(
             IEventReconciler sender,
-            EventSequenceAdvancedEventArgs e)
+            EventSequenceAdvancedAsyncEventArgs e)
         {
-            await UpdateSequenceAsync(e.Sequence)
+            await UpdateSequenceAsync(e.Sequence, e.CancellationToken)
                 .ConfigureAwait(false);
         }
     }

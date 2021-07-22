@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
     using MooVC.Architecture.Ddd;
 
@@ -8,7 +9,12 @@
     public sealed class AtomicUnit
         : AtomicUnit<Guid>
     {
-        public AtomicUnit(params DomainEvent[] events)
+        public AtomicUnit(DomainEvent @event)
+            : base(Guid.NewGuid(), @event)
+        {
+        }
+
+        public AtomicUnit(IEnumerable<DomainEvent> events)
             : base(Guid.NewGuid(), events)
         {
         }

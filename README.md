@@ -8,108 +8,56 @@ MooVC was originally created as a PHP based framework back in 2009, intended to 
 
 While the original MooVC PHP based framework has long since been deprecated, many of the lessons learned from it have formed the basis of solutions the author has since developed.  This library, and those related to it, are all intended to support the rapid development of high quality software that addresses a variety of use-cases.
 
-# Upcoming Release v6.0.0
+# Upcoming Release v7.0.0
 
 ## Overview
 
-MooVC.Architecture has been upgraded to target .Net Standard 2.1 and .Net 5.0, taking advantage of the many new language features which can be found [here](https://docs.microsoft.com/en-us/dotnet/core/dotnet-five).
+Custom event handlers have been changed to use the asynchonrous variant.  This is seen as a positive step forward as more libraries adopt the asynchonrous programming paradigm.  By utilizng asynchonrous handlers, observers can avoid utilizing async void implementations whereever a need for asynchonrous exists.  Clarity has also been provided on cancellations, which in the past, where supported for every event, even if this was not the original intention.  Cancellation tokens have also been added as optional parameters to every public and protected method, facilitating top level cancellation by allowing the token to be propagated throughout the solution.
 
 ## Enhancements
 
-- Added Cqrs.Services.SynchronousQueryEngine to facilitate migration from synchronous to asynchronous implementations of Cqrs.Services.IQueryEngine.
-- Added Cqrs.Services.SynchronousQueryHandler to facilitate migration from synchronous to asynchronous implementations of Cqrs.Services.IQueryHandler.
-- Added Ddd.Services.SynchronousBus to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.IBus and Ddd.Services.Bus.
-- Added Ddd.Services.SynchronousProjector to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.IProjector.
-- Added Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxy to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciliationProxy.
-- Added Ddd.Services.Reconciliation.SynchronousAggregateReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IAggregateReconciler.
-- Added Ddd.Services.Reconciliation.SynchronousEventReconciler to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Reconciliation.IEventReconciler.
-- Added Ddd.Services.Snapshots.SynchronousSnapshotProvider to facilitate migration from synchronous to asynchronous implementations of Ddd.Services.Snapshots.ISnapshotProvider.
-- Added Ddd.Services.UnversionedConcurrentMemoryRepository to support in-memory un-versioned storage of aggregates.
-- Added Ddd.Services.VersionedConcurrentMemoryRepository to support in-memory versioned storage of aggregates.
-- Added Ddd.Services.UnversionedMemoryRepository to support in-memory un-versioned storage of aggregates.
-- Added Ddd.Services.VersionedMemoryRepository to support in-memory versioned storage of aggregates.
-- Added Services.SynchronousBus to facilitate migration from synchronous to asynchronous implementations of Services.IBus and Services.Bus.
-- Added Services.SynchronousHandler to facilitate migration from synchronous to asynchronous implementations of Services.IHandler.
-- Added the ability to create an aggregate reference from a type name via Ddd.Reference.Create.
-- Changed to target version 3.x of MooVC (**Breaking Change**).
-- Created new contextual resource files and migrated resources from centralized resource file.
-- Changed Entity<T> so that it now implements IEquatable<Entity<T>>.
-- Changed Value so that it now implements IEquatable<Value>.
-- Changed constructors for Ddd.DomainException to private protected (**Breaking Change**).
-- Changed constructors for Ddd.DomainEvent to private protected (**Breaking Change**).
-- Changed data type for TimeStamp properties of Message, Ddd.DomainException and Ddd.Services.Reconciliation.IEventSequence to DateTimeOffset (**Breaking Change**).
-- Changed all exceptions to properly implement ISerializable.
-- Changed Cqrs.Services.IQueryEngine to only support async variants of each operation (**Breaking Change**).
-- Changed Cqrs.Services.IQueryHandler to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Reference to include a version property (**Breaking Change**).
-- Changed Ddd.Services.AggregateNotFoundException property AggregateId of type Guid to Aggregate of type Reference<TAggregate> (**Breaking Change**).
-- Changed Ddd.Services.AggregateVersionNotFoundException property Aggregate of type VersionedReference to type VersionedReference<TAggregate> (**Breaking Change**).
-- Changed Ddd.Services.IBus and Ddd.Services.Bus to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.IProjector to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.IRepository and its related extensions to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.StartSaga and Ddd.Services.StopSaga to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.CoordinatedGenerateHandler to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.CoordinatedOperationHandler to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.ConcurrentMemoryRepository so that it is no longer serializable (**Breaking Change**).
-- Changed Ddd.Services.ConcurrentMemoryRepository so that it is now abstract (**Breaking Change**).
-- Changed Ddd.Services.ConcurrentMemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
-- Changed Ddd.Services.MemoryRepository so that it is no longer serializable (**Breaking Change**).
-- Changed Ddd.Services.MemoryRepository so that it is now abstract (**Breaking Change**).
-- Changed Ddd.Services.MemoryRepository so that an instance of MooVC.Serialization.ICloner can be supplied to provide object immutability guarantee (**Breaking Change**).
-- Changed Ddd.Services.Reconciliation.IAggregateReconciliationProxy to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.Reconciliation.IAggregateReconciler to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.Reconciliation.IEventReconciler to only support async variants of each operation (**Breaking Change**).
-- Changed Ddd.Services.Reconciliation.IAggregateReconciler.ReconcileAsync to accept a params array instead of an IEnumerable of Domain Events (**Breaking Change**).
-- Changed Ddd.Services.Snapshots.ISnapshotProvider to only support async variants of each operation (**Breaking Change**).
-- Changed Services.IBus and Services.Bus to only support async variants of each operation (**Breaking Change**).
-- Changed Services.IHandler to only support async variants of each operation (**Breaking Change**).
-- Changed Serialization.SerializationInfoExtensions.TryAddReference and its related variants so that they are not type specific. 
-- Moved Ddd.Entity<T> to the root namespace (**Breaking Change**).
-- Moved Ddd.Value to the root namespace (**Breaking Change**).
-- Removed Ddd.VersionedReference and all associated extensions (**Breaking Change**).
-- Removed Ddd.Services.IBus.Unhandled event (**Breaking Change**).
-- Removed Services.Handler and Services.HandlerExecutionFailureException (**Breaking Change**).
-- Removed the sync variants of the various Coordinate extensions in favour of async variants (**Breaking Change**).
-- Removed unused Ddd.Services.ConcurrentMemoryRepository.PerformRead method that did not appear to serve any purpose (**Breaking Change**).
+- Added a new ToGuid method to Ddd.SignedVersion, enabling the caller to produce a GUID based on the Header and Footer of the version.
+- Added a new Ddd.Collections.UnversionedReferenceDictionary to simplify lookups based on reference when aggregate versioning does not apply.
+- Added a new Ddd.Collections.DictionaryExtensions.ToUnversioned to simplify conversion of an existing dictionary into an unversioned variant.
+- Added a new Ddd.Collections.EnumerableExtensions.ToUnversionedDictionary to simplify conversion of an existing collection of aggregates or projections into an unversioned index of the same.
+- Added a new Ddd.ReferenceExtensions.ToUnversioned extension to facilitate the creation of an unversioned reference based on the reference supplied if that reference was versioned, otherwise it will return the same reference.
+- Added a new Ddd.Services.IAggregateFactory to support aggregate creation when the explicit type is not known.
+- Added a new Ddd.Services.CoordinatedHandler to support coordinated handling of generic operations in the context of an aggregate type.
+- Added a new Ddd.Services.DefaultAggregateFactory to provide a default implementation for aggregate creation when the explicit type is not known.
+- Added a TimeStamp to Ddd.SignedVersion which defaults to MinValue if no value was previously serialized.
+- Applied optional cancellation tokens to every public and protected async method, thereby facilitating propagation of cancellation tokens (**Breaking Change**).
+- Changed Ddd.AggregateRootExtensions.ToReference to include an optional switch to facilitate creation of an unversioned reference for the aggregate supplied.
+- Changed Ddd.Services.AggregateSavedEventHandler to an async variant named AggregateSavedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.AggregateSavingAsyncEventHandler to an async variant named AggregateSavingAsyncEventHandler (**Breaking Change**).
+- Changes Ddd.Services.CoordinatedGenerateHandler to inherit from Ddd.Services.CoordinatedHandler.
+- Changed Ddd.Services.DomainEventsPublishedEventHandler to an async variant named DomainEventsPublishedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.DomainEventsPublishingEventHandler to an async variant named DomainEventsPublishingAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.AggregateConflictDetectedEventHandler to an async variant named AggregateConflictDetectedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.AggregateReconciledEventHandler to an async variant named AggregateReconciledAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.IAggregateReconciliationProxy so that it no longer implements CreateAsync (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.EventsReconciledEventHandler to an async variant named EventsReconciledAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.EventsReconcilingEventHandler to an async variant named EventsReconcilingAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.EventSequenceAdvancedEventHandler to an async variant named EventSequenceAdvancedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.SnapshotRestorationCompletedEventHandler to an async variant named SnapshotRestorationCompletedAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Reconciliation.SnapshotRestorationCommencingEventHandler to an async variant named SnapshotRestorationCommencingAsyncEventHandler (**Breaking Change**).
+- Changed Ddd.Services.Repository so that it now implements IEmitDiagnostics.
+- Changed Services.Bus so that it now implements IEmitDiagnostics.
+- Changed Services.MessageInvokedEventHandler to an async variant named MessageInvokedAsyncEventHandler (**Breaking Change**).
+- Changed Services.MessageInvokingEventHandler to an async variant named MessageInvokingAsyncEventHandler (**Breaking Change**).
+- Changed the invocation of the AggregateReconciled event handler of Ddd.Services.AggregateReconciler to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the AggregateSaved event handler of Ddd.Services.Repository to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the EventsReconciled event handler of Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the Published event handler of Ddd.Services.Bus to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the Invoked event handler of Services.Bus to utilize the passive implementation (**Breaking Change**).
+- Changed the invocation of the SequenceAdvanced event handler of Ddd.Services.Reconciliation.EventReconciler to utilize the passive implementation (**Breaking Change**).
+- Removed Ddd.Services.Reconciliation.SynchronousAggregateReconciler due to inherrant challenges presented by the event driven feedback model (**Breaking Change**).
+- Renamed Ddd.ReferenceExtensions.ToTypedReference to Ddd.ReferenceExtensions.ToTyped (**Breaking Change**).
 
-## Bug Fixes
+## End-User Impact
 
-- Changed Message to inherit from Entity<Guid>, meaning that two messages will be deemed equal if they are of the same type and have the same Id (**Breaking Change**).
-- Changed Entity<T> so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
-- Changed Value so that it will now only deem two instances as equal if they both are of the same type (**Breaking Change**).
-- Changed the manner to which the type of a reference is serialized due to a serialization failure (**Breaking Change**).
-- Changed the Ddd.EventCentricAggregateRoot.ApplyChange behavior to account for inconsistent behavior on failure.
+In many cases, it is expected that event handlers can be updated by simply:
 
-# End-User Impact
+1. Changing the return type from void to Task.
+2. Returning Task.CompletedTask.
 
-- Ddd.Services.ConcurrentMemoryRepository & Ddd.Services.MemoryRepository (Impact: High)
-
-Due to the addition of the ICloner to the constructor, it is now no longer possible to clone these classes. It is recommended that consumers use the GetAll method to implement serialization if required.  Additionally, the dual function of versioned and unversioned persistance was resulting in unexpected behavior on consumption.  Each class now has a versioned and unversioned derivitive to provide a dependable implementation for the target use-case.
-
-- Ddd.Entity<T> Namespace (Impact: High)
-
-Entity was moved to facilitate a new inheritance change involving Message that would facilitate a greater degree of reuse and consistency accross the framework.  This resulted in a namespace change that would result in compilation failures for any consumer that utilized Ddd.Entity<T>.  While the solution is straightforward, every reference would need to be changed from MooVC.Architecture.Ddd to MooVC.Architecture.
-
-- Ddd.Value Namespace (Impact: High)
-
-Value was moved to for consistency with Entity<T>.  This resulted in a namespace change that would result in compilation failures for any consumer that utilized Ddd.Value.  While the solution is straightforward, every reference would need to be changed from MooVC.Architecture.Ddd to MooVC.Architecture.
-
-- Ddd.DomainEvent Constructor (Impact: Medium)
-
-This change was applied to force consumption of the types variant Ddd.DomainEvent<TAggregate> which will always result in an instance that correctly refers to the aggregate type to which it relates.
-
-- Ddd.DomainException Constructor (Impact: Medium)
-
-This change was applied to force consumption of the types variant Ddd.DomainException<TAggregate> which will always result in an instance that correctly refers to the aggregate type to which it relates.
-
-- Ddd.Services.IBus.Unhandled Event Removal (Impact: Medium)
-
-The unhandled domain event proved to be problematic, particularily for adaptors that themselves did not throw exceptions, or for situations where recovery required that the handler be persisted. It is recommended that each Bus derivation implement its own recovery strategy.
-
-- Entity<T>, Message and Value Equality (Impact: Low)
-
-It was always intended that messages and entities with the same Id be deemed equal if their Id and type where equal.  Values too should also only be deemed equal if the individual properties and its type are the same.  It is not anticipated that this have an impact due to the intent however, this may differ depending on your use-case.
-
-- Services.Handler & Services.HandlerExecutionFailureException (Impact: Low)
-
-These classes where seen as offering little-to-no value and have therefore been removed.  It is recommended that generic failures be captured and handled by the bus that performs execution of the command.  Validation should also be deferred to the domain layer, where appropriate derivations of Ddd.DomainException can be thrown.
+Passive handlers will no longer require that the observer handle exceptions.

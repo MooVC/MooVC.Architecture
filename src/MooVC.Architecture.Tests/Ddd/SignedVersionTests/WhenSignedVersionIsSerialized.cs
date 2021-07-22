@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.SignedVersionTests
 {
     using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Architecture.Serialization;
     using MooVC.Serialization;
     using Xunit;
 

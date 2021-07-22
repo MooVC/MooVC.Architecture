@@ -135,7 +135,13 @@
   <data name="AggregateReconciledEventArgsEventsRequired" xml:space="preserve">
     <value>The events that were successfully reconciled must be provided.</value>
   </data>
+  <data name="AggregateReconcilerOnAggregateReconciledAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification.</value>
+  </data>
   <data name="DefaultAggregateReconcilerFactoryRequired" xml:space="preserve">
+    <value>The factory from which aggregate are produced must be provided.</value>
+  </data>
+  <data name="DefaultAggregateReconcilerProxiesRequired" xml:space="preserve">
     <value>The factory from which aggregate type specific reconcilation proxies are produced must be provided.</value>
   </data>
   <data name="DefaultEventReconcilerEventStoreRequired" xml:space="preserve">
@@ -161,6 +167,12 @@
   </data>
   <data name="DefaultReconciliationOrchestratorSnapshotSourceRequired" xml:space="preserve">
     <value>The source responsible for providing the snapshots must be provided.</value>
+  </data>
+  <data name="EventReconcilerOnEventSequenceAdvancedAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for sequence advancement from successfully handling a notification.</value>
+  </data>
+  <data name="EventReconcilerOnEventsReconciledAsyncFailure" xml:space="preserve">
+    <value>A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification.</value>
   </data>
   <data name="EventReconciliationEventArgsEventsRequired" xml:space="preserve">
     <value>The events must be provided.</value>

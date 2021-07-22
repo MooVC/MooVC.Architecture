@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Services;
     using static MooVC.Architecture.Ddd.Services.Resources;
@@ -22,7 +23,7 @@
             this.timeout = timeout;
         }
 
-        public virtual async Task ExecuteAsync(TMessage message)
+        public virtual async Task ExecuteAsync(TMessage message, CancellationToken cancellationToken)
         {
             if (message is { })
             {
@@ -32,7 +33,8 @@
                 {
                     await reference
                         .CoordinateAsync(
-                            () => PerformCoordinatedExecuteAsync(message, reference),
+                            () => PerformCoordinatedExecuteAsync(message, reference, cancellationToken),
+                            cancellationToken: cancellationToken,
                             timeout: timeout)
                         .ConfigureAwait(false);
                 }
@@ -41,16 +43,19 @@
 
         protected abstract Reference<TAggregate> IdentifyTarget(TMessage message);
 
-        protected virtual async Task PerformCoordinatedExecuteAsync(TMessage message, Reference<TAggregate> reference)
+        protected virtual async Task PerformCoordinatedExecuteAsync(
+            TMessage message,
+            Reference<TAggregate> reference,
+            CancellationToken cancellationToken)
         {
             TAggregate aggregate = await reference
-                .RetrieveAsync(message, repository)
+                .RetrieveAsync(message, repository, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             PerformCoordinatedOperation(aggregate, message);
 
             await aggregate
-                .SaveAsync(repository)
+                .SaveAsync(repository, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 

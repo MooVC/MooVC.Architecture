@@ -1,11 +1,14 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
+    using System.Threading;
     using System.Threading.Tasks;
 
     public abstract class SynchronousReconciliationOrchestrator
         : ReconciliationOrchestrator
     {
-        public override Task ReconcileAsync(IEventSequence? target = default)
+        public override Task ReconcileAsync(
+            CancellationToken? cancellationToken = default,
+            IEventSequence? target = default)
         {
             PerformReconcile(target: target);
 

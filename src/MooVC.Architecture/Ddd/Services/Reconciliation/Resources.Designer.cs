@@ -115,11 +115,29 @@ namespace MooVC.Architecture.Ddd.Services.Reconciliation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification..
+        /// </summary>
+        internal static string AggregateReconcilerOnAggregateReconciledAsyncFailure {
+            get {
+                return ResourceManager.GetString("AggregateReconcilerOnAggregateReconciledAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The factory from which aggregate are produced must be provided..
         /// </summary>
         internal static string DefaultAggregateReconcilerFactoryRequired {
             get {
                 return ResourceManager.GetString("DefaultAggregateReconcilerFactoryRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The factory from which aggregate type specific reconcilation proxies are produced must be provided..
+        /// </summary>
+        internal static string DefaultAggregateReconcilerProxiesRequired {
+            get {
+                return ResourceManager.GetString("DefaultAggregateReconcilerProxiesRequired", resourceCulture);
             }
         }
         
@@ -192,6 +210,24 @@ namespace MooVC.Architecture.Ddd.Services.Reconciliation {
         internal static string DefaultReconciliationOrchestratorSnapshotSourceRequired {
             get {
                 return ResourceManager.GetString("DefaultReconciliationOrchestratorSnapshotSourceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for sequence advancement from successfully handling a notification..
+        /// </summary>
+        internal static string EventReconcilerOnEventSequenceAdvancedAsyncFailure {
+            get {
+                return ResourceManager.GetString("EventReconcilerOnEventSequenceAdvancedAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification..
+        /// </summary>
+        internal static string EventReconcilerOnEventsReconciledAsyncFailure {
+            get {
+                return ResourceManager.GetString("EventReconcilerOnEventsReconciledAsyncFailure", resourceCulture);
             }
         }
         

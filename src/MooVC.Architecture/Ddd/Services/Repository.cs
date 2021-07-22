@@ -2,36 +2,54 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
+    using MooVC.Diagnostics;
     using static MooVC.Architecture.Ddd.Services.Ensure;
+    using static MooVC.Architecture.Ddd.Services.Resources;
 
     public abstract class Repository<TAggregate>
-        : IRepository<TAggregate>
+        : IRepository<TAggregate>,
+          IEmitDiagnostics
         where TAggregate : AggregateRoot
     {
-        public event AggregateSavedEventHandler<TAggregate>? AggregateSaved;
+        public event AggregateSavedAsyncEventHandler<TAggregate>? AggregateSaved;
 
-        public event AggregateSavingEventHandler<TAggregate>? AggregateSaving;
+        public event AggregateSavingAsyncEventHandler<TAggregate>? AggregateSaving;
 
-        public abstract Task<IEnumerable<TAggregate>> GetAllAsync();
+        public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
 
-        public abstract Task<TAggregate?> GetAsync(Guid id, SignedVersion? version = default);
+        public abstract Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default);
 
-        public virtual async Task SaveAsync(TAggregate aggregate)
+        public abstract Task<TAggregate?> GetAsync(
+            Guid id,
+            CancellationToken? cancellationToken = default,
+            SignedVersion? version = default);
+
+        public virtual async Task SaveAsync(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default)
         {
-            OnAggregateSaving(aggregate);
-
-            await PerformSaveAsync(aggregate)
+            await OnAggregateSavingAsync(aggregate, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
-            OnAggregateSaved(aggregate);
+            await PerformSaveAsync(aggregate, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
+            await OnAggregateSavedAsync(aggregate, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
             aggregate.MarkChangesAsCommitted();
         }
 
-        protected virtual async Task<bool> CheckForConflictsAsync(TAggregate aggregate)
+        protected virtual async Task<bool> CheckForConflictsAsync(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default)
         {
-            Reference<TAggregate>? currentVersion = await GetCurrentVersionAsync(aggregate)
+            Reference<TAggregate>? currentVersion = await
+                GetCurrentVersionAsync(
+                    aggregate,
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             if (aggregate.Version == currentVersion?.Version)
@@ -44,30 +62,70 @@
             return true;
         }
 
-        protected abstract Task<Reference<TAggregate>?> GetCurrentVersionAsync(TAggregate aggregate);
+        protected abstract Task<Reference<TAggregate>?> GetCurrentVersionAsync(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default);
 
-        protected void OnAggregateSaved(TAggregate aggregate)
+        protected virtual Task OnAggregateSavedAsync(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default)
         {
-            AggregateSaved?.Invoke(this, new AggregateSavedEventArgs<TAggregate>(aggregate));
+            return AggregateSaved.PassiveInvokeAsync(
+                this,
+                new AggregateSavedAsyncEventArgs<TAggregate>(aggregate, cancellationToken: cancellationToken),
+                onFailure: failure => OnDiagnosticsEmittedAsync(
+                    Level.Warning,
+                    cancellationToken: cancellationToken,
+                    cause: failure,
+                    message: RepositoryOnAggregateSavedAsyncFailure));
         }
 
-        protected void OnAggregateSaving(TAggregate aggregate)
+        protected virtual Task OnAggregateSavingAsync(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default)
         {
-            AggregateSaving?.Invoke(this, new AggregateSavingEventArgs<TAggregate>(aggregate));
+            return AggregateSaving.InvokeAsync(
+                this,
+                new AggregateSavingAsyncEventArgs<TAggregate>(aggregate, cancellationToken: cancellationToken));
         }
 
-        protected virtual async Task PerformSaveAsync(TAggregate aggregate)
+        protected virtual Task OnDiagnosticsEmittedAsync(
+            Level level,
+            CancellationToken? cancellationToken = default,
+            Exception? cause = default,
+            string? message = default)
         {
-            bool isConflictFree = await CheckForConflictsAsync(aggregate)
+            return DiagnosticsEmitted.PassiveInvokeAsync(
+                this,
+                new DiagnosticsEmittedAsyncEventArgs(
+                    cancellationToken: cancellationToken,
+                    cause: cause,
+                    level: level,
+                    message: message));
+        }
+
+        protected virtual async Task PerformSaveAsync(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default)
+        {
+            bool isConflictFree = await
+                CheckForConflictsAsync(
+                    aggregate,
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
 
             if (isConflictFree)
             {
-                await UpdateStoreAsync(aggregate)
+                await
+                    UpdateStoreAsync(
+                        aggregate,
+                        cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }
         }
 
-        protected abstract Task UpdateStoreAsync(TAggregate aggregate);
+        protected abstract Task UpdateStoreAsync(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default);
     }
 }

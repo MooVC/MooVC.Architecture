@@ -19,7 +19,7 @@
         protected DomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            aggregate = new Lazy<Reference<TAggregate>>(() => base.Aggregate.ToTypedReference<TAggregate>());
+            aggregate = new Lazy<Reference<TAggregate>>(() => base.Aggregate.ToTyped<TAggregate>());
         }
 
         public new Reference<TAggregate> Aggregate => aggregate.Value;

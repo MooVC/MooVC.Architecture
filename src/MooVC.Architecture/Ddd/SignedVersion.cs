@@ -19,8 +19,7 @@
         private const int SplicePortion = 8;
 
         private static readonly byte[] emptySegment = new byte[SplicePortion];
-        private static readonly Lazy<SignedVersion> empty = new Lazy<SignedVersion>(
-            () => new SignedVersion(emptySegment, emptySegment, 0));
+        private static readonly Lazy<SignedVersion> empty = new(() => new SignedVersion(emptySegment, emptySegment, 0));
 
         private readonly Lazy<Guid> signature;
 
@@ -60,6 +59,7 @@
             Header = info.TryGetEnumerable(nameof(Header), emptySegment);
             Number = info.TryGetValue<ulong>(nameof(Number));
             signature = Combine();
+            TimeStamp = info.TryGetValue(nameof(TimeStamp), defaultValue: DateTimeOffset.MinValue);
         }
 
         public static SignedVersion Empty => empty.Value;
@@ -76,6 +76,8 @@
 
         public Guid Signature => signature.Value;
 
+        public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
+
         public int CompareTo(SignedVersion? other)
         {
             return other is { }
@@ -90,6 +92,7 @@
             _ = info.TryAddEnumerable(nameof(Footer), Footer, predicate: IsNotEmptySegment);
             _ = info.TryAddEnumerable(nameof(Header), Header, predicate: IsNotEmptySegment);
             _ = info.TryAddValue(nameof(Number), Number);
+            _ = info.TryAddValue(nameof(TimeStamp), TimeStamp, defaultValue: DateTimeOffset.MinValue);
         }
 
         public bool IsNext(SignedVersion? previous)
@@ -103,6 +106,20 @@
         public SignedVersion Next()
         {
             return new SignedVersion(this);
+        }
+
+        public Guid ToGuid()
+        {
+            if (IsEmpty)
+            {
+                return Guid.Empty;
+            }
+
+            var id = new List<byte>(Header);
+
+            id.AddRange(Footer);
+
+            return new(id.ToArray());
         }
 
         public override string ToString()

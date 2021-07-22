@@ -14,7 +14,7 @@
             var message = new SerializableMessage();
             bool wasInvoked = false;
 
-            bus.Invoking += (_, __) => wasInvoked = true;
+            bus.Invoking += (_, _) => Task.FromResult(wasInvoked = true);
 
             _ = await Assert.ThrowsAsync<InvalidOperationException>(
                 () => bus.InvokeAsync(message));
@@ -29,7 +29,7 @@
             var message = new SerializableMessage();
             bool wasInvoked = false;
 
-            bus.Invoked += (_, __) => wasInvoked = true;
+            bus.Invoked += (_, _) => Task.FromResult(wasInvoked = true);
 
             await bus.InvokeAsync(message);
 
@@ -55,8 +55,8 @@
             Message? message = default;
             bool wasInvoked = false;
 
-            bus.Invoking += (_, __) => wasInvoked = true;
-            bus.Invoked += (_, __) => wasInvoked = true;
+            bus.Invoking += (_, _) => Task.FromResult(wasInvoked = true);
+            bus.Invoked += (_, _) => Task.FromResult(wasInvoked = true);
 
             _ = await Assert.ThrowsAsync<ArgumentNullException>(
                 () => bus.InvokeAsync(message!));

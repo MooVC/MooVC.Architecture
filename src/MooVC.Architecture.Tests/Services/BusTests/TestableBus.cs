@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Services.BusTests
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture;
 
@@ -14,7 +15,9 @@
             this.@throw = @throw;
         }
 
-        protected override async Task PerformInvokeAsync(Message message)
+        protected override async Task PerformInvokeAsync(
+            Message message,
+            CancellationToken? cancellationToken = default)
         {
             if (@throw)
             {

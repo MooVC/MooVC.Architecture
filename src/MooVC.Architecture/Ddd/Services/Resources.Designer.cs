@@ -293,5 +293,14 @@ namespace MooVC.Architecture.Ddd.Services {
                 return ResourceManager.GetString("RepositoryOnAggregateSavedAsyncFailure", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The cloner that ensures mutual exclusive access to aggregates stored within the repository must be provided..
+        /// </summary>
+        internal static string SynchronousRepositoryClonerRequired {
+            get {
+                return ResourceManager.GetString("SynchronousRepositoryClonerRequired", resourceCulture);
+            }
+        }
     }
 }

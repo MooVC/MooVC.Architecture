@@ -12,21 +12,17 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
     public class WhenGetAllAsyncIsCalled
         : UnversionedMemoryRepositoryTests
     {
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturnedAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAnEmptyRepositoryThenAnEmptyEnumerableIsReturnedAsync()
         {
-            IRepository<SerializableAggregateRoot> repository = Create<SerializableAggregateRoot>(useCloner);
+            IRepository<SerializableAggregateRoot> repository = Create<SerializableAggregateRoot>();
             IEnumerable<SerializableAggregateRoot> results = await repository.GetAllAsync();
 
             Assert.Empty(results);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAPopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturnedAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAPopulatedRepositoryThenAListOfTheMostUpToDateVersionsIsReturnedAsync()
         {
             const int ExpectedTotal = 2;
 
@@ -34,7 +30,7 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             var second = new SerializableEventCentricAggregateRoot();
 
             IRepository<SerializableEventCentricAggregateRoot> repository =
-                Create<SerializableEventCentricAggregateRoot>(useCloner);
+                Create<SerializableEventCentricAggregateRoot>();
 
             await repository.SaveAsync(first);
             await repository.SaveAsync(second);

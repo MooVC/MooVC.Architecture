@@ -1,7 +1,7 @@
 ﻿namespace MooVC.Architecture.EntityMaximumIdValueExceededExceptionTests
 {
     using System;
-    using MooVC.Serialization;
+    using MooVC.Architecture.Serialization;
     using Xunit;
 
     public sealed class WhenEntityMaximumIdValueExceededExceptionIsSerialized

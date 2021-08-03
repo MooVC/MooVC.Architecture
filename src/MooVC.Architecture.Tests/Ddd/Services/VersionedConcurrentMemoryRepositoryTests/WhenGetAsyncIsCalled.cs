@@ -6,9 +6,9 @@ namespace MooVC.Architecture.Ddd.Services.VersionedConcurrentMemoryRepositoryTes
     public sealed class WhenGetAsyncIsCalled
         : Base
     {
-        protected override IRepository<TAggregate> Create<TAggregate>(ICloner? cloner)
+        protected override IRepository<TAggregate> Create<TAggregate>(ICloner cloner)
         {
-            return new VersionedConcurrentMemoryRepository<TAggregate>(cloner: cloner);
+            return new VersionedConcurrentMemoryRepository<TAggregate>(cloner);
         }
     }
 }

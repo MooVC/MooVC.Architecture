@@ -79,7 +79,12 @@
             return @internal.Remove(item.ToUnversioned());
         }
 
-        public bool TryGetValue(Reference<TAggregate> key, [MaybeNullWhen(false)] out T value)
+        public bool TryGetValue(
+            Reference<TAggregate> key,
+            #if NET5_0
+            [MaybeNullWhen(false)]
+            #endif
+            out T value)
         {
             return @internal.TryGetValue(key.ToUnversioned(), out value);
         }

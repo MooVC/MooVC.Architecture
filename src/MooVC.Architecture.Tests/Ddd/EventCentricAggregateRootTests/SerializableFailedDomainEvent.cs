@@ -7,12 +7,16 @@
     public sealed class SerializableFailedDomainEvent
         : DomainEvent<SerializableEventCentricAggregateRoot>
     {
-        public SerializableFailedDomainEvent(Message context, SerializableEventCentricAggregateRoot aggregate)
+        public SerializableFailedDomainEvent(
+            Message context,
+            SerializableEventCentricAggregateRoot aggregate)
             : base(context, aggregate)
         {
         }
 
-        private SerializableFailedDomainEvent(SerializationInfo info, StreamingContext context)
+        private SerializableFailedDomainEvent(
+            SerializationInfo info,
+            StreamingContext context)
             : base(info, context)
         {
         }

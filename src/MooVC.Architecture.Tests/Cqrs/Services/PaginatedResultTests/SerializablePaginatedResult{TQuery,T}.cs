@@ -9,12 +9,17 @@ namespace MooVC.Architecture.Cqrs.Services.PaginatedResultTests
         : PaginatedResult<TQuery, T>
         where TQuery : PaginatedQuery
     {
-        public SerializablePaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)
+        public SerializablePaginatedResult(
+            TQuery query,
+            IEnumerable<T> results,
+            ulong totalResults)
             : base(query, results, totalResults)
         {
         }
 
-        private SerializablePaginatedResult(SerializationInfo info, StreamingContext context)
+        private SerializablePaginatedResult(
+            SerializationInfo info,
+            StreamingContext context)
             : base(info, context)
         {
         }

@@ -2,7 +2,6 @@
 {
     using MooVC.Architecture.Serialization;
     using MooVC.Linq;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenPaginatedQueryIsSerialized

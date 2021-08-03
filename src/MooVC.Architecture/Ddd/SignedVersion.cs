@@ -19,7 +19,9 @@
         private const int SplicePortion = 8;
 
         private static readonly byte[] emptySegment = new byte[SplicePortion];
-        private static readonly Lazy<SignedVersion> empty = new(() => new SignedVersion(emptySegment, emptySegment, 0));
+
+        private static readonly Lazy<SignedVersion> empty = new(
+            () => new SignedVersion(emptySegment, emptySegment, 0));
 
         private readonly Lazy<Guid> signature;
 

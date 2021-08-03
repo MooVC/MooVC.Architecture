@@ -9,14 +9,10 @@ namespace MooVC.Architecture.Ddd.Services
         where TAggregate : AggregateRoot
         where TStore : IDictionary<Reference<TAggregate>, TAggregate>, new()
     {
-        protected MemoryRepository(ICloner? cloner = default)
+        protected MemoryRepository(ICloner cloner)
+            : base(cloner)
         {
-            Cloner = cloner is { }
-                ? cloner.Clone
-                : SerializableExtensions.Clone;
         }
-
-        protected Func<TAggregate, TAggregate> Cloner { get; }
 
         protected TStore Store { get; } = new TStore();
 
@@ -35,7 +31,7 @@ namespace MooVC.Architecture.Ddd.Services
             {
                 if (version is null || version.IsEmpty || version == aggregate.Version)
                 {
-                    return Cloner(aggregate);
+                    return aggregate;
                 }
             }
 
@@ -44,13 +40,11 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected override void PerformUpdateStore(TAggregate aggregate)
         {
-            TAggregate copy = Cloner(aggregate);
+            aggregate.MarkChangesAsCommitted();
 
-            copy.MarkChangesAsCommitted();
+            Reference<TAggregate> key = GetKey(aggregate);
 
-            Reference<TAggregate> key = GetKey(copy);
-
-            _ = Store[key] = copy;
+            _ = Store[key] = aggregate;
         }
     }
 }

@@ -7,12 +7,16 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
     public sealed class SerializableCreatedDomainEvent
         : DomainEvent<SerializableEventCentricAggregateRoot>
     {
-        public SerializableCreatedDomainEvent(Message context, SerializableEventCentricAggregateRoot aggregate)
+        public SerializableCreatedDomainEvent(
+            Message context,
+            SerializableEventCentricAggregateRoot aggregate)
             : base(context, aggregate)
         {
         }
 
-        private SerializableCreatedDomainEvent(SerializationInfo info, StreamingContext context)
+        private SerializableCreatedDomainEvent(
+            SerializationInfo info,
+            StreamingContext context)
             : base(info, context)
         {
         }

@@ -99,10 +99,14 @@
 
         public bool IsNext(SignedVersion? previous)
         {
-            return previous is { }
-                && !IsNew
-                && (Number - previous.Number) == 1
-                && Header.SequenceEqual(previous.Footer);
+            return previous is { } && IsNext(previous.Footer, previous.Number);
+        }
+
+        public bool IsNext(IEnumerable<byte> footer, ulong number)
+        {
+            return !IsNew
+                && (Number - number) == 1
+                && Header.SequenceEqual(footer);
         }
 
         public SignedVersion Next()

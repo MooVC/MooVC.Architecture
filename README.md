@@ -23,6 +23,7 @@ This release focuses on the standardizing the concept of serialization as define
 - Changed MooVC.Architecture.Ddd.Services.SynchronousRepository so that the recipient of a call to PerformUpdateStore now receives a clone of the aggregate, instead of the original aggregate (**Breaking Change**).
 - Changed MooVC.Architecture.Ddd.Services.UnversionedMemoryRepository so that the ICloner is now a required argument (**Breaking Change**).
 - Changed MooVC.Architecture.Ddd.Services.VersionedMemoryRepository so that the ICloner is now a required argument (**Breaking Change**).
+- Changed MooVC.Architecture.Ddd.SignedVersion to include a new variant of IsNext that can accept a footer and number directly, facilitating custom conflict handling (**Breaking Change**).
 
 ## Bug Fixes
 

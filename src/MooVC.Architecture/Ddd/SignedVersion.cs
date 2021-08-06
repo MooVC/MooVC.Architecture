@@ -19,7 +19,9 @@
         private const int SplicePortion = 8;
 
         private static readonly byte[] emptySegment = new byte[SplicePortion];
-        private static readonly Lazy<SignedVersion> empty = new(() => new SignedVersion(emptySegment, emptySegment, 0));
+
+        private static readonly Lazy<SignedVersion> empty = new(
+            () => new SignedVersion(emptySegment, emptySegment, 0));
 
         private readonly Lazy<Guid> signature;
 
@@ -97,10 +99,14 @@
 
         public bool IsNext(SignedVersion? previous)
         {
-            return previous is { }
-                && !IsNew
-                && (Number - previous.Number) == 1
-                && Header.SequenceEqual(previous.Footer);
+            return previous is { } && IsNext(previous.Footer, previous.Number);
+        }
+
+        public bool IsNext(IEnumerable<byte> footer, ulong number)
+        {
+            return !IsNew
+                && (Number - number) == 1
+                && Header.SequenceEqual(footer);
         }
 
         public SignedVersion Next()

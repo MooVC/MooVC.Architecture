@@ -8,12 +8,16 @@ namespace MooVC.Architecture.Ddd.DomainEventTests
         : DomainEvent<TAggregateRoot>
         where TAggregateRoot : AggregateRoot
     {
-        public SerializableDomainEvent(Message context, TAggregateRoot aggregate)
+        public SerializableDomainEvent(
+            Message context,
+            TAggregateRoot aggregate)
             : base(context, aggregate)
         {
         }
 
-        private SerializableDomainEvent(SerializationInfo info, StreamingContext context)
+        private SerializableDomainEvent(
+            SerializationInfo info,
+            StreamingContext context)
             : base(info, context)
         {
         }

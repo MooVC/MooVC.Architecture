@@ -1,7 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.AggregateDoesNotExistExceptionTests
 {
     using MooVC.Architecture.MessageTests;
-    using MooVC.Serialization;
+    using MooVC.Architecture.Serialization;
     using Xunit;
 
     public sealed class WhenAggregateDoesNotExistExceptionIsSerialized

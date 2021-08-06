@@ -10,8 +10,8 @@ namespace MooVC.Architecture.Ddd.Services
         : MemoryRepository<TAggregate, ConcurrentDictionary<Reference<TAggregate>, TAggregate>>
         where TAggregate : AggregateRoot
     {
-        protected ConcurrentMemoryRepository(ICloner? cloner = default)
-            : base(cloner: cloner)
+        protected ConcurrentMemoryRepository(ICloner cloner)
+            : base(cloner)
         {
         }
 
@@ -26,9 +26,9 @@ namespace MooVC.Architecture.Ddd.Services
             TAggregate aggregate,
             CancellationToken? cancellationToken = default)
         {
-            PerformUpdateStore(aggregate);
-
-            return Task.CompletedTask;
+            return UpdateStoreAsync(
+                aggregate,
+                cancellationToken: cancellationToken);
         }
 
         protected virtual TAggregate PerformUpdate(
@@ -43,16 +43,14 @@ namespace MooVC.Architecture.Ddd.Services
 
         protected override void PerformUpdateStore(TAggregate aggregate)
         {
-            TAggregate copy = Cloner(aggregate);
+            aggregate.MarkChangesAsCommitted();
 
-            copy.MarkChangesAsCommitted();
-
-            Reference<TAggregate> key = GetKey(copy);
+            Reference<TAggregate> key = GetKey(aggregate);
 
             _ = Store.AddOrUpdate(
                 key,
-                _ => PerformAdd(key, copy),
-                (_, existing) => PerformUpdate(existing, key, copy));
+                _ => PerformAdd(key, aggregate),
+                (_, existing) => PerformUpdate(existing, key, aggregate));
         }
     }
 }

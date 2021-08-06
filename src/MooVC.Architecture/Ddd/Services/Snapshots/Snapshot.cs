@@ -14,7 +14,9 @@
         : ISnapshot,
           ISerializable
     {
-        public Snapshot(IEnumerable<EventCentricAggregateRoot> aggregates, IEventSequence sequence)
+        public Snapshot(
+            IEnumerable<EventCentricAggregateRoot> aggregates,
+            IEventSequence sequence)
         {
             ArgumentNotNull(sequence, nameof(sequence), SnapshotSequenceRequired);
 

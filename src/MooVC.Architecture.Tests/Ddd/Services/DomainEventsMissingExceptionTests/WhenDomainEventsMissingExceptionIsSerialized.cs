@@ -1,6 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsMissingExceptionTests
 {
-    using MooVC.Serialization;
+    using MooVC.Architecture.Serialization;
     using Xunit;
 
     public sealed class WhenDomainEventsMissingExceptionIsSerialized

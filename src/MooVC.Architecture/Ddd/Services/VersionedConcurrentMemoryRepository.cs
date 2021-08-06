@@ -9,8 +9,8 @@ namespace MooVC.Architecture.Ddd.Services
         : ConcurrentMemoryRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public VersionedConcurrentMemoryRepository(ICloner? cloner = default)
-            : base(cloner: cloner)
+        public VersionedConcurrentMemoryRepository(ICloner cloner)
+            : base(cloner)
         {
         }
 

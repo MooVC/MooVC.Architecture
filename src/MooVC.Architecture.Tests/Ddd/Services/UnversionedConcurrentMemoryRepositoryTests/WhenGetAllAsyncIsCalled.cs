@@ -7,9 +7,9 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedConcurrentMemoryRepositoryT
     public sealed class WhenGetAllAsyncIsCalled
         : Base
     {
-        protected override IRepository<TAggregate> Create<TAggregate>(ICloner? cloner)
+        protected override IRepository<TAggregate> Create<TAggregate>(ICloner cloner)
         {
-            return new UnversionedConcurrentMemoryRepository<TAggregate>(cloner: cloner);
+            return new UnversionedConcurrentMemoryRepository<TAggregate>(cloner);
         }
     }
 }

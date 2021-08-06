@@ -17,7 +17,9 @@
             Sequence = sequence;
         }
 
-        private EventSequenceAdvancedAsyncEventArgs(SerializationInfo info, StreamingContext context)
+        private EventSequenceAdvancedAsyncEventArgs(
+            SerializationInfo info,
+            StreamingContext context)
         {
             Sequence = info.GetUInt64(nameof(Sequence));
         }

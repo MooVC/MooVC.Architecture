@@ -9,12 +9,18 @@ namespace MooVC.Architecture.Cqrs.Services.PaginatedResultTests
     internal sealed class SerializablePaginatedResult<T>
         : PaginatedResult<T>
     {
-        public SerializablePaginatedResult(Message context, Paging paging, IEnumerable<T> results, ulong totalResults)
+        public SerializablePaginatedResult(
+            Message context,
+            Paging paging,
+            IEnumerable<T> results,
+            ulong totalResults)
             : base(context, paging, results, totalResults)
         {
         }
 
-        private SerializablePaginatedResult(SerializationInfo info, StreamingContext context)
+        private SerializablePaginatedResult(
+            SerializationInfo info,
+            StreamingContext context)
             : base(info, context)
         {
         }

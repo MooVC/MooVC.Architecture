@@ -8,8 +8,8 @@ namespace MooVC.Architecture.Ddd.Services
         : ConcurrentMemoryRepository<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public UnversionedConcurrentMemoryRepository(ICloner? cloner = default)
-            : base(cloner: cloner)
+        public UnversionedConcurrentMemoryRepository(ICloner cloner)
+            : base(cloner)
         {
         }
 

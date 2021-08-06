@@ -10,16 +10,14 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
     public class WhenGetAsyncIsCalled
         : UnversionedMemoryRepositoryTests
     {
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturnedAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAnIdWhenAnExistingEntryExistsThenTheEntryIsReturnedAsync()
         {
             var expected = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
 
             IRepository<SerializableAggregateRoot> repository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             await repository.SaveAsync(expected);
             await repository.SaveAsync(other);
@@ -32,15 +30,13 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.NotSame(expected, actual);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAnIdWhenNoExistingEntryExistsThenANullValueIsReturnedAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAnIdWhenNoExistingEntryExistsThenANullValueIsReturnedAsync()
         {
             var other = new SerializableAggregateRoot();
 
             IRepository<SerializableAggregateRoot> repository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             await repository.SaveAsync(other);
 
@@ -49,15 +45,13 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.Null(actual);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturnedAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAnIdWhenTwoExistingVersionedEntriesExistThenTheMostUpToDateEntryIsReturnedAsync()
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
 
             IRepository<SerializableEventCentricAggregateRoot> repository =
-                Create<SerializableEventCentricAggregateRoot>(useCloner);
+                Create<SerializableEventCentricAggregateRoot>();
 
             await repository.SaveAsync(aggregate);
 
@@ -79,16 +73,14 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.Equal(aggregate.Version, actual.Version);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAVersionThatIsNotTheCurrentVersionThenANullValueIsReturnedAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAVersionThatIsNotTheCurrentVersionThenANullValueIsReturnedAsync()
         {
             var aggregate = new SerializableEventCentricAggregateRoot();
             SignedVersion expectedFirst = aggregate.Version;
 
             IRepository<SerializableEventCentricAggregateRoot> repository =
-                Create<SerializableEventCentricAggregateRoot>(useCloner);
+                Create<SerializableEventCentricAggregateRoot>();
 
             await repository.SaveAsync(aggregate);
 
@@ -115,16 +107,14 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.Equal(expectedSecond, actualSecond.Version);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAVersionWhenNoExistingVersionedEntryMatchesThenANullValueIsReturnedAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAVersionWhenNoExistingVersionedEntryMatchesThenANullValueIsReturnedAsync()
         {
             var aggregate = new SerializableAggregateRoot();
             var other = new SerializableAggregateRoot();
 
             IRepository<SerializableAggregateRoot> repository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             await repository.SaveAsync(aggregate);
             await repository.SaveAsync(other);

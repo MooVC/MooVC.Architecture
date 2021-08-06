@@ -2,7 +2,7 @@ namespace MooVC.Architecture.Ddd.ReferenceTests
 {
     using System;
     using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Serialization;
+    using MooVC.Architecture.Serialization;
     using Xunit;
 
     public sealed class WhenReferenceIsSerialized

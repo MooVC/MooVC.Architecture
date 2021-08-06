@@ -2,7 +2,7 @@
 {
     using System;
     using MooVC.Architecture.MessageTests;
-    using MooVC.Serialization;
+    using MooVC.Architecture.Serialization;
     using Xunit;
 
     public sealed class WhenAggregateNotFoundExceptionIsSerialized

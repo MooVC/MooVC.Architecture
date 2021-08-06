@@ -9,17 +9,25 @@
         : DomainException<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public SerializableDomainException(Message context, Reference<TAggregate> aggregate, string message)
+        public SerializableDomainException(
+            Message context,
+            Reference<TAggregate> aggregate,
+            string message)
             : base(context, aggregate, message)
         {
         }
 
-        public SerializableDomainException(Message context, TAggregate aggregate, string message)
+        public SerializableDomainException(
+            Message context,
+            TAggregate aggregate,
+            string message)
             : base(context, aggregate, message)
         {
         }
 
-        private SerializableDomainException(SerializationInfo info, StreamingContext context)
+        private SerializableDomainException(
+            SerializationInfo info,
+            StreamingContext context)
             : base(info, context)
         {
         }

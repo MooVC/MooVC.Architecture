@@ -1,7 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.AggregateReferenceMismatchExceptionTests
 {
     using System;
-    using MooVC.Serialization;
+    using MooVC.Architecture.Serialization;
     using Xunit;
 
     public sealed class WhenAggregateReferenceMismatchExceptionIsSerialized

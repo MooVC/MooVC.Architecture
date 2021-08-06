@@ -8,7 +8,10 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
     public sealed class SerializableSetDomainEvent
         : DomainEvent<SerializableEventCentricAggregateRoot>
     {
-        public SerializableSetDomainEvent(Message context, SerializableEventCentricAggregateRoot aggregate, Guid value)
+        public SerializableSetDomainEvent(
+            Message context,
+            SerializableEventCentricAggregateRoot aggregate,
+            Guid value)
             : base(context, aggregate)
         {
             Value = value;

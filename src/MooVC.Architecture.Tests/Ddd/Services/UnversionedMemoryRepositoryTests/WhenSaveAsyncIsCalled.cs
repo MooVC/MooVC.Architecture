@@ -2,21 +2,19 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
 {
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Serialization;
+    using MooVC.Architecture.Serialization;
     using Xunit;
 
     public class WhenSaveAsyncIsCalled
         : UnversionedMemoryRepositoryTests
     {
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheAggregateIsAddedAndTheVersionIncrementedAsync(bool useCloner)
+        [Fact]
+        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheAggregateIsAddedAndTheVersionIncrementedAsync()
         {
             var expected = new SerializableAggregateRoot();
 
             IRepository<SerializableAggregateRoot> repository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             await repository.SaveAsync(expected);
 
@@ -27,16 +25,14 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.NotSame(expected, actual);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenANewAggregateWhenAnExistingMemberWithTheSameIdExistsThenAnAggregateConflictDetectedExceptionIsThrownAsync(bool useCloner)
+        [Fact]
+        public async Task GivenANewAggregateWhenAnExistingMemberWithTheSameIdExistsThenAnAggregateConflictDetectedExceptionIsThrownAsync()
         {
             var saved = new SerializableAggregateRoot();
             var pending = new SerializableAggregateRoot(saved.Id);
 
             IRepository<SerializableAggregateRoot> repository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             await repository.SaveAsync(saved);
 
@@ -48,10 +44,8 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.Equal(saved.Version, exception.Persisted);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenANonNewAnAggregateWhenNoExistingMemberWithTheSameIdExistsThenAnAggregateConflictDetectedExceptionIsThrownAsync(bool useCloner)
+        [Fact]
+        public async Task GivenANonNewAnAggregateWhenNoExistingMemberWithTheSameIdExistsThenAnAggregateConflictDetectedExceptionIsThrownAsync()
         {
             var aggregate = new SerializableAggregateRoot();
 
@@ -59,7 +53,7 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             aggregate.Set();
 
             IRepository<SerializableAggregateRoot> repository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             AggregateConflictDetectedException<SerializableAggregateRoot> exception =
                 await Assert.ThrowsAsync<AggregateConflictDetectedException<SerializableAggregateRoot>>(
@@ -69,15 +63,13 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.Equal(SignedVersion.Empty, exception.Persisted);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAnAggregateWhenAnExistingMemberHasAHigherVersionThenAnAggregateConflictDetectedExceptionIsThrownAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAnAggregateWhenAnExistingMemberHasAHigherVersionThenAnAggregateConflictDetectedExceptionIsThrownAsync()
         {
             var saved = new SerializableAggregateRoot();
 
             IRepository<SerializableAggregateRoot> repository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             await repository.SaveAsync(saved);
 
@@ -95,15 +87,13 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.Equal(saved.Version, exception.Persisted);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenAnAggregateWhenAnExistingMemberHasALowerVersionThenAnAggregateConflictDetectedExceptionIsThrownAsync(bool useCloner)
+        [Fact]
+        public async Task GivenAnAggregateWhenAnExistingMemberHasALowerVersionThenAnAggregateConflictDetectedExceptionIsThrownAsync()
         {
             var saved = new SerializableAggregateRoot();
 
             IRepository<SerializableAggregateRoot> repository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             await repository.SaveAsync(saved);
 
@@ -122,17 +112,14 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.Equal(saved.Version, exception.Persisted);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavedEventIsRaisedPriorToTheVersionIncrementAsync(
-            bool useCloner)
+        [Fact]
+        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavedEventIsRaisedPriorToTheVersionIncrementAsync()
         {
             var expectedAggregate = new SerializableAggregateRoot();
             bool wasInvoked = false;
 
             IRepository<SerializableAggregateRoot> expectedRepository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             Task Aggregate_Saved(
                 IRepository<SerializableAggregateRoot> actualRepository,
@@ -153,17 +140,14 @@ namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
             Assert.True(wasInvoked);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavingEventIsRaisedPriorToTheVersionIncrementAsync(
-            bool useCloner)
+        [Fact]
+        public async Task GivenANewAggregateWhenNoExistingMemberWithTheSameIdExistsThenTheSavingEventIsRaisedPriorToTheVersionIncrementAsync()
         {
             var expectedAggregate = new SerializableAggregateRoot();
             bool wasInvoked = false;
 
             IRepository<SerializableAggregateRoot> expectedRepository =
-                Create<SerializableAggregateRoot>(useCloner);
+                Create<SerializableAggregateRoot>();
 
             Task Aggregate_Saving(
                 IRepository<SerializableAggregateRoot> actualRepository,

@@ -9,7 +9,9 @@ namespace MooVC.Architecture.Ddd.Services
         : AggregateAsyncEventArgs<TAggregate>
         where TAggregate : AggregateRoot
     {
-        public AggregateSavedAsyncEventArgs(TAggregate aggregate, CancellationToken? cancellationToken = default)
+        public AggregateSavedAsyncEventArgs(
+            TAggregate aggregate,
+            CancellationToken? cancellationToken = default)
             : base(aggregate, cancellationToken: cancellationToken)
         {
         }

@@ -21,6 +21,11 @@
 
             if (aggregate is null)
             {
+                if (version is null || version.IsEmpty)
+                {
+                    throw new AggregateNotFoundException<TAggregate>(context, id);
+                }
+
                 throw new AggregateVersionNotFoundException<TAggregate>(context, id, version: version);
             }
 

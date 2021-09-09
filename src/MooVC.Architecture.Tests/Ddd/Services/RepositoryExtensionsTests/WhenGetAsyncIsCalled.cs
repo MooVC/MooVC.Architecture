@@ -91,8 +91,8 @@
 
             var aggregateId = Guid.NewGuid();
 
-            AggregateVersionNotFoundException<SerializableAggregateRoot> exception =
-                await Assert.ThrowsAsync<AggregateVersionNotFoundException<SerializableAggregateRoot>>(
+            AggregateNotFoundException<SerializableAggregateRoot> exception =
+                await Assert.ThrowsAsync<AggregateNotFoundException<SerializableAggregateRoot>>(
                     () => repository.Object.GetAsync(context, aggregateId));
 
             repository.Verify(
@@ -145,8 +145,8 @@
 
             var reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
 
-            AggregateVersionNotFoundException<SerializableAggregateRoot> exception =
-                await Assert.ThrowsAsync<AggregateVersionNotFoundException<SerializableAggregateRoot>>(
+            AggregateNotFoundException<SerializableAggregateRoot> exception =
+                await Assert.ThrowsAsync<AggregateNotFoundException<SerializableAggregateRoot>>(
                     () => repository.Object.GetAsync(context, reference));
 
             repository.Verify(

@@ -8,26 +8,12 @@ MooVC was originally created as a PHP based framework back in 2009, intended to 
 
 While the original MooVC PHP based framework has long since been deprecated, many of the lessons learned from it have formed the basis of solutions the author has since developed.  This library, and those related to it, are all intended to support the rapid development of high quality software that addresses a variety of use-cases.
 
-# Release v8.0.0
-
-## Overview
-
-This release focuses on the standardizing the concept of serialization as defined by MooVC.
+# Release v8.1.0
 
 ## Enhancements
 
-- Changed to target MooVC v5.0.0 (**Breaking Change)**.
-- Changed MooVC.Architecture.Ddd.Services.ConcurrentMemoryRepository so that the ICloner is now a required argument (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.MemoryRepository so that the ICloner is now a required argument (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.SynchronousRepository so that it now requires an instance of ICloner on construction (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.SynchronousRepository so that the recipient of a call to PerformUpdateStore now receives a clone of the aggregate, instead of the original aggregate (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.UnversionedMemoryRepository so that the ICloner is now a required argument (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.Services.VersionedMemoryRepository so that the ICloner is now a required argument (**Breaking Change**).
-- Changed MooVC.Architecture.Ddd.SignedVersion to include a new variant of IsNext that can accept a footer and number directly, facilitating custom conflict handling (**Breaking Change**).
+- Changed Ddd.ReferenceExtensions.IsEmpty so that the input is flagged as not null when the return value is false.
 
 ## Bug Fixes
 
-- Fixed a bug where a GetAllAsync call to any derivations of MemoryRepository resulted in the recipient receiving a reference to the original aggregate within the store.
-
-## End-User Impact
-
+- Ddd.Services.RepositoryExtensions.GetAsync now correctly throws an AggregateNotFoundException if a specific version of the aggregate has not been specified.

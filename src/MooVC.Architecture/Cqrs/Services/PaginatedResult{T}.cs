@@ -3,7 +3,6 @@ namespace MooVC.Architecture.Cqrs.Services
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using MooVC.Collections.Generic;
     using MooVC.Linq;
     using MooVC.Serialization;
     using static MooVC.Architecture.Cqrs.Services.Resources;
@@ -11,16 +10,15 @@ namespace MooVC.Architecture.Cqrs.Services
 
     [Serializable]
     public abstract class PaginatedResult<T>
-        : Message
+        : EnumerableResult<T>
     {
         protected PaginatedResult(
             Message context,
             Paging paging,
             IEnumerable<T> results,
             ulong totalResults)
-            : base(context)
+            : base(context, results)
         {
-            Results = results.Snapshot();
             TotalPages = CalculateTotalPages(paging, totalResults);
             TotalResults = totalResults;
         }
@@ -28,12 +26,9 @@ namespace MooVC.Architecture.Cqrs.Services
         protected PaginatedResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Results = info.TryGetEnumerable<T>(nameof(Results));
             TotalPages = info.TryGetValue<ushort>(nameof(TotalPages));
             TotalResults = info.TryGetValue<ulong>(nameof(TotalResults));
         }
-
-        public IEnumerable<T> Results { get; }
 
         public ushort TotalPages { get; }
 
@@ -43,7 +38,6 @@ namespace MooVC.Architecture.Cqrs.Services
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddEnumerable(nameof(Results), Results);
             _ = info.TryAddValue(nameof(TotalPages), TotalPages);
             _ = info.TryAddValue(nameof(TotalResults), TotalResults);
         }

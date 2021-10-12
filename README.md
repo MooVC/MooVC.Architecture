@@ -8,12 +8,9 @@ MooVC was originally created as a PHP based framework back in 2009, intended to 
 
 While the original MooVC PHP based framework has long since been deprecated, many of the lessons learned from it have formed the basis of solutions the author has since developed.  This library, and those related to it, are all intended to support the rapid development of high quality software that addresses a variety of use-cases.
 
-# Release v8.1.0
+# Release v8.2.0
 
 ## Enhancements
 
-- Changed Ddd.ReferenceExtensions.IsEmpty so that the input is flagged as not null when the return value is false.
-
-## Bug Fixes
-
-- Ddd.Services.RepositoryExtensions.GetAsync now correctly throws an AggregateNotFoundException if a specific version of the aggregate has not been specified.
+- Added a new Architecture.Cqrs.Services.EnumerableResult that can be used to encapsulate a result that contains a collection.
+- Changed Architecture.Cqrs.Services.PaginatedResult so that it now inherits from Architecture.Cqrs.Services.EnumerableResult.

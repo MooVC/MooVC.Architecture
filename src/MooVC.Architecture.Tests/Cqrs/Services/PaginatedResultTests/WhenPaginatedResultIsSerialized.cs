@@ -4,7 +4,6 @@
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
     using MooVC.Linq;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenPaginatedResultIsSerialized

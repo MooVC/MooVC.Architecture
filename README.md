@@ -13,4 +13,5 @@ While the original MooVC PHP based framework has long since been deprecated, man
 ## Enhancements
 
 - Added a new Architecture.Cqrs.Services.EnumerableResult that can be used to encapsulate a result that contains a collection.
+- Changed Architecture.Ddd.Reference so that it now has a new Create variant, capable of directly accepting a type instance.
 - Changed Architecture.Cqrs.Services.PaginatedResult so that it now inherits from Architecture.Cqrs.Services.EnumerableResult.

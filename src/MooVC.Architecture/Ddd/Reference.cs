@@ -52,10 +52,16 @@ namespace MooVC.Architecture.Ddd
         public static Reference Create(string typeName, Guid id, SignedVersion? version = default)
         {
             var aggregate = Type.GetType(typeName, true);
-            Type reference = typeof(Reference<>);
-            Type typed = reference.MakeGenericType(aggregate!);
 
-            return (Reference)Activator.CreateInstance(typed, id, version)!;
+            return Create(aggregate, id, version: version);
+        }
+
+        public static Reference Create(Type type, Guid id, SignedVersion? version = default)
+        {
+            Type reference = typeof(Reference<>);
+            Type aggregate = reference.MakeGenericType(type);
+
+            return (Reference)Activator.CreateInstance(aggregate, id, version)!;
         }
 
         public override bool Equals(object? other)

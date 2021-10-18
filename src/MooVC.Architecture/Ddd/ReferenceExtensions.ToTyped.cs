@@ -11,7 +11,7 @@ namespace MooVC.Architecture.Ddd
 
             return reference is Reference<TAggregate> response
                 ? response
-                : new Reference<TAggregate>(reference.Id, reference.Version);
+                : new Reference<TAggregate>(reference.Id, version: reference.Version);
         }
     }
 }

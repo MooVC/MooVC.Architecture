@@ -1,9 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd.ReferenceTests
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
+    using static MooVC.Architecture.Ddd.Reference;
 
     public class WhenReferenceInEqualityIsChecked
     {
@@ -12,8 +11,8 @@
         {
             var aggregate = new SerializableAggregateRoot();
 
-            var first = new Reference<SerializableAggregateRoot>(aggregate.Id);
-            var second = new Reference<SerializableAggregateRoot>(aggregate);
+            Reference first = Create<SerializableAggregateRoot>(aggregate.Id);
+            Reference second = Create(aggregate);
 
             Assert.False(first != second);
         }
@@ -23,8 +22,8 @@
         {
             var aggregateId = Guid.NewGuid();
 
-            var first = new Reference<SerializableAggregateRoot>(aggregateId);
-            var second = new Reference<SerializableAggregateRoot>(aggregateId);
+            Reference first = Create<SerializableAggregateRoot>(aggregateId);
+            Reference second = Create<SerializableAggregateRoot>(aggregateId);
 
             Assert.False(first != second);
         }
@@ -32,8 +31,8 @@
         [Fact]
         public void GivenTwoSeparateInstancesWithTheDifferentIdButSameTypeThenBothAreNotConsideredEqual()
         {
-            var first = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
-            var second = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference first = Create<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference second = Create<SerializableAggregateRoot>(Guid.NewGuid());
 
             Assert.True(first != second);
         }
@@ -43,8 +42,8 @@
         {
             var aggregateId = Guid.NewGuid();
 
-            var first = new Reference<SerializableAggregateRoot>(aggregateId);
-            var second = new Reference<SerializableEventCentricAggregateRoot>(aggregateId);
+            Reference first = Create<SerializableAggregateRoot>(aggregateId);
+            Reference second = Create<SerializableEventCentricAggregateRoot>(aggregateId);
 
             Assert.True(first != second);
         }

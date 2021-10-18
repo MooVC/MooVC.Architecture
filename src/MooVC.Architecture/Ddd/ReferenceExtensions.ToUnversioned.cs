@@ -1,5 +1,6 @@
 namespace MooVC.Architecture.Ddd
 {
+    using static MooVC.Architecture.Ddd.Reference;
     using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
 
@@ -14,7 +15,7 @@ namespace MooVC.Architecture.Ddd
 
             if (reference.IsVersioned)
             {
-                return new Reference(reference.Id, reference.Type);
+                return Create(reference.Type, reference.Id);
             }
 
             return reference;

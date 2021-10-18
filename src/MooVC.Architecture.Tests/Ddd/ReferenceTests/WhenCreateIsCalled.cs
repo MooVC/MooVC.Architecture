@@ -2,31 +2,55 @@
 {
     using System;
     using Xunit;
+    using static MooVC.Architecture.Ddd.Reference;
 
     public sealed class WhenCreateIsCalled
     {
         [Fact]
+        public void GivenAnAggregateThenAReferenceIsReturned()
+        {
+            var aggregate = new SerializableEventCentricAggregateRoot();
+            Reference reference = Create(aggregate);
+
+            Assert.Equal(aggregate.Id, reference.Id);
+            Assert.Equal(aggregate.GetType(), reference.Type);
+            _ = Assert.IsType<Reference<SerializableEventCentricAggregateRoot>>(reference);
+        }
+
+        [Fact]
         public void GivenAnAggregateTypeNameThenAReferenceIsReturned()
         {
-            Type aggregate = typeof(EventCentricAggregateRoot);
+            Type aggregate = typeof(SerializableEventCentricAggregateRoot);
             var id = Guid.NewGuid();
-            var reference = Reference.Create(aggregate.AssemblyQualifiedName!, id);
+            Reference reference = Create(aggregate.AssemblyQualifiedName!, id);
 
             Assert.Equal(id, reference.Id);
             Assert.Equal(aggregate, reference.Type);
-            _ = Assert.IsType<Reference<EventCentricAggregateRoot>>(reference);
+            _ = Assert.IsType<Reference<SerializableEventCentricAggregateRoot>>(reference);
         }
 
         [Fact]
         public void GivenAnAggregateTypeThenAReferenceIsReturned()
         {
-            Type aggregate = typeof(EventCentricAggregateRoot);
+            Type aggregate = typeof(SerializableEventCentricAggregateRoot);
             var id = Guid.NewGuid();
-            var reference = Reference.Create(aggregate, id);
+            Reference reference = Create(aggregate, id);
 
             Assert.Equal(id, reference.Id);
             Assert.Equal(aggregate, reference.Type);
-            _ = Assert.IsType<Reference<EventCentricAggregateRoot>>(reference);
+            _ = Assert.IsType<Reference<SerializableEventCentricAggregateRoot>>(reference);
+        }
+
+        [Fact]
+        public void GivenANullAggregateTypeThenAnArgumentNullExceptionIsThrown()
+        {
+            Type? type = default;
+            var id = Guid.NewGuid();
+
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
+                () => Create(type!, id));
+
+            Assert.Equal(nameof(type), exception.ParamName);
         }
 
         [Fact]
@@ -35,7 +59,8 @@
             Type aggregate = typeof(Message);
             var id = Guid.NewGuid();
 
-            _ = Assert.Throws<ArgumentException>(() => Reference.Create(aggregate.AssemblyQualifiedName!, id));
+            _ = Assert.Throws<ArgumentException>(
+                () => Create(aggregate.AssemblyQualifiedName!, id));
         }
 
         [Fact]
@@ -44,7 +69,8 @@
             Type aggregate = typeof(Message);
             var id = Guid.NewGuid();
 
-            _ = Assert.Throws<ArgumentException>(() => Reference.Create(aggregate, id));
+            _ = Assert.Throws<ArgumentException>(
+                () => Create(aggregate, id));
         }
     }
 }

@@ -1,7 +1,6 @@
 namespace MooVC.Architecture.Ddd.ReferenceTests
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Serialization;
     using Xunit;
 
@@ -11,7 +10,7 @@ namespace MooVC.Architecture.Ddd.ReferenceTests
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
             var expectedId = Guid.NewGuid();
-            var original = new Reference<SerializableAggregateRoot>(expectedId);
+            var original = Reference<SerializableAggregateRoot>.Create(expectedId);
             Reference<SerializableAggregateRoot> deserialized = original.Clone();
 
             Assert.Equal(original, deserialized);

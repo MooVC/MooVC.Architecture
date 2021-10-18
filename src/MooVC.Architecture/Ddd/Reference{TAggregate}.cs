@@ -13,19 +13,30 @@
         private static readonly Lazy<Reference<TAggregate>> empty =
             new(() => new Reference<TAggregate>());
 
-        public Reference(Guid id, SignedVersion? version = default)
-            : base(id, typeof(TAggregate), version: version)
+        internal Reference(TAggregate aggregate)
+            : this(aggregate.Id, aggregate.GetType(), aggregate.Version)
+        {
+        }
+
+        internal Reference(Guid id, SignedVersion? version = default)
+            : this(id, typeof(TAggregate), version: version)
+        {
+        }
+
+        internal Reference(Guid id, Type type, SignedVersion? version = default)
+           : base(id, type, version: version)
         {
             ArgumentIsAcceptable(
                 id,
                 nameof(id),
                 value => value != Guid.Empty,
                 ReferenceIdRequired);
-        }
 
-        public Reference(TAggregate aggregate)
-            : base(aggregate)
-        {
+            ArgumentIsAcceptable(
+                type,
+                nameof(type),
+                value => !value.IsAbstract,
+                ReferenceTypeRequired);
         }
 
         private Reference()
@@ -40,15 +51,22 @@
 
         public static Reference<TAggregate> Empty => empty.Value;
 
-        public override Type Type => typeof(TAggregate);
+        public static Reference<TAggregate> Create(Guid id, SignedVersion? version = default)
+        {
+            return (Reference<TAggregate>)Create(typeof(TAggregate), id, version: version);
+        }
 
         protected override Type DeserializeType(SerializationInfo info, StreamingContext context)
         {
-            return typeof(TAggregate);
+            return DeserializeType(typeof(TAggregate), info, context);
         }
 
         protected override void SerializeType(SerializationInfo info, StreamingContext context)
         {
+            if (Type != typeof(TAggregate))
+            {
+                base.SerializeType(info, context);
+            }
         }
     }
 }

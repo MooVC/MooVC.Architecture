@@ -2,19 +2,19 @@ namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Reflection;
     using System.Runtime.Serialization;
     using MooVC.Serialization;
+    using static System.String;
+    using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Ensure;
 
     [Serializable]
-    public class Reference
+    public abstract class Reference
         : Value
     {
-        internal Reference(AggregateRoot aggregate)
-            : this(aggregate.Id, aggregate.GetType(), version: aggregate.Version)
-        {
-        }
-
-        internal Reference(Guid id, Type type, SignedVersion? version = default)
+        private protected Reference(Guid id, Type type, SignedVersion? version)
         {
             Id = id;
             Type = type;
@@ -35,7 +35,7 @@ namespace MooVC.Architecture.Ddd
 
         public bool IsVersioned => !Version.IsEmpty;
 
-        public virtual Type Type { get; }
+        public Type Type { get; }
 
         public SignedVersion Version { get; } = SignedVersion.Empty;
 
@@ -53,15 +53,47 @@ namespace MooVC.Architecture.Ddd
         {
             var aggregate = Type.GetType(typeName, true);
 
-            return Create(aggregate, id, version: version);
+            return Create(aggregate!, id, version: version);
         }
 
         public static Reference Create(Type type, Guid id, SignedVersion? version = default)
         {
+            ArgumentNotNull(type, nameof(type), ReferenceCreateTypeRequired);
+
             Type reference = typeof(Reference<>);
             Type aggregate = reference.MakeGenericType(type);
 
-            return (Reference)Activator.CreateInstance(aggregate, id, version)!;
+            if (id == Guid.Empty)
+            {
+                return (Reference)aggregate
+                    .GetProperty(nameof(Empty), aggregate)!
+                    .GetValue(default)!;
+            }
+
+            return (Reference)Activator.CreateInstance(
+                aggregate,
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                default,
+                new object?[]
+                {
+                    id,
+                    type,
+                    version,
+                },
+                default)!;
+        }
+
+        public static Reference Create<TAggregate>(Guid id, SignedVersion? version = default)
+            where TAggregate : AggregateRoot
+        {
+            return Create(typeof(TAggregate), id, version: version);
+        }
+
+        public static Reference Create(AggregateRoot aggregate)
+        {
+            ArgumentNotNull(aggregate, nameof(aggregate), ReferenceCreateAggregateRequired);
+
+            return Create(aggregate.GetType(), aggregate.Id, version: aggregate.Version);
         }
 
         public override bool Equals(object? other)
@@ -102,9 +134,27 @@ namespace MooVC.Architecture.Ddd
 
         protected virtual Type DeserializeType(SerializationInfo info, StreamingContext context)
         {
+            return DeserializeType(default, info, context);
+        }
+
+        protected virtual Type DeserializeType(
+            Type? @default,
+            SerializationInfo info,
+            StreamingContext context)
+        {
             string? typeName;
 
             typeName = info.TryGetInternalString(nameof(typeName));
+
+            if (IsNullOrEmpty(typeName))
+            {
+                if (@default is null)
+                {
+                    throw new SerializationException(ReferenceDeserializeTypeTypeIndeterminate);
+                }
+
+                return @default;
+            }
 
             var type = Type.GetType(typeName, true);
 

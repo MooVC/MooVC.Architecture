@@ -1,8 +1,6 @@
 namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
 
     public sealed class WhenToTypedIsCalled
@@ -10,7 +8,7 @@ namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
         [Fact]
         public void GivenAMatchingReferenceThenNoExceptionIsThrown()
         {
-            Reference generic = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference generic = Reference<SerializableAggregateRoot>.Create(Guid.NewGuid());
             Reference<SerializableAggregateRoot> typed = generic.ToTyped<SerializableAggregateRoot>();
 
             Assert.Same(generic, typed);
@@ -28,7 +26,7 @@ namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
         [Fact]
         public void GivenAMismatchingReferenceThenAnArgumentExceptionIsThrown()
         {
-            Reference reference = new Reference<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
+            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Create(Guid.NewGuid());
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => reference.ToTyped<SerializableAggregateRoot>());

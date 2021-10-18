@@ -14,7 +14,7 @@
 
             if (unversioned)
             {
-                return new Reference<TAggregate>(aggregate.Id);
+                return new Reference<TAggregate>(aggregate.Id, aggregate.GetType());
             }
 
             return new Reference<TAggregate>(aggregate);

@@ -8,10 +8,25 @@ MooVC was originally created as a PHP based framework back in 2009, intended to 
 
 While the original MooVC PHP based framework has long since been deprecated, many of the lessons learned from it have formed the basis of solutions the author has since developed.  This library, and those related to it, are all intended to support the rapid development of high quality software that addresses a variety of use-cases.
 
-# Release v8.2.0
+# Release v9.0.0
+
+## Overview
+
+This release focuses on addressing weaknesses in the handling of aggregate references, specifically, mismatches between their types depending on how they are created.
 
 ## Enhancements
 
 - Added a new Architecture.Cqrs.Services.EnumerableResult that can be used to encapsulate a result that contains a collection.
-- Changed Architecture.Ddd.Reference so that it now has a new Create variant, capable of directly accepting a type instance.
+- Added a new Architecture.Ddd.GuidExtensions.ToReference extension that acts as a shortcut to the new type centric Architecture.Ddd.Reference.Create variant. 
+- Changed Architecture.Ddd.AggregateHasUncommittedChangesException so that it now has a constructor capable of accepting an AggregateRoot instance.
+- Changed Architecture.Ddd.AggregateEventSequenceUnorderedException so that it now has a constructor capable of accepting an AggregateRoot instance.
+- Changed Architecture.Ddd.AggregateEventMismatchException so that it now has a constructor capable of accepting an AggregateRoot instance.
+- Changed Architecture.Ddd.AggregateHistoryInvalidForStateException so that it now has a constructor capable of accepting an AggregateRoot instance.
+- Changed Architecture.Ddd.Reference so that it now has a static Create variant, capable of directly accepting an aggregate instance.
+- Changed Architecture.Ddd.Reference so that it now has a static Create variant, capable of directly accepting a type instance.
+- Changed Architecture.Ddd.Reference so that it now has a static Create variant, capable of accepting a genertic AggregateRoot type.
+- Changed Architecture.Ddd.Reference so that it is now marked as abstract (**breaking change**).
+- Changed Architecture.Ddd.Reference so that it no longer accepts an aggregate as a constructor argument (**breaking change**).
+- Changed Architecture.Ddd.Reference<TAggregate> so that its constructors are now internal only  (**breaking change**).
+- Changed Architecture.Ddd.Reference<TAggregate> so that it now has a static Create variant, capable of accepting an id and optional version.
 - Changed Architecture.Cqrs.Services.PaginatedResult so that it now inherits from Architecture.Cqrs.Services.EnumerableResult.

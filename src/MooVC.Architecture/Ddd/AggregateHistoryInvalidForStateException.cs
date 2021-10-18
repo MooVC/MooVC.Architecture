@@ -7,12 +7,21 @@
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
     using static System.String;
+    using static MooVC.Architecture.Ddd.Reference;
     using static MooVC.Architecture.Ddd.Resources;
 
     [Serializable]
     public sealed class AggregateHistoryInvalidForStateException
         : ArgumentException
     {
+        internal AggregateHistoryInvalidForStateException(
+            AggregateRoot aggregate,
+            IEnumerable<DomainEvent> events,
+            SignedVersion startingVersion)
+            : this(Create(aggregate), events, startingVersion)
+        {
+        }
+
         internal AggregateHistoryInvalidForStateException(
             Reference aggregate,
             IEnumerable<DomainEvent> events,

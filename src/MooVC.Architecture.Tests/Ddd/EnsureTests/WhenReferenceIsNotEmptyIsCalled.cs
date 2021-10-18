@@ -2,9 +2,9 @@
 {
     using System;
     using MooVC.Architecture.Ddd;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
     using static MooVC.Architecture.Ddd.Ensure;
+    using static MooVC.Architecture.Ddd.Reference;
 
     public sealed class WhenReferenceIsNotEmptyIsCalled
     {
@@ -34,7 +34,7 @@
         [Fact]
         public void GivenANonEmptyReferenceThenNoExceptionIsThrown()
         {
-            var reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference reference = Create<SerializableAggregateRoot>(Guid.NewGuid());
 
             ReferenceIsNotEmpty(reference, nameof(reference));
         }

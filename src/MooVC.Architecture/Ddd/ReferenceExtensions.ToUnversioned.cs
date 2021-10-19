@@ -15,7 +15,7 @@ namespace MooVC.Architecture.Ddd
 
             if (reference.IsVersioned)
             {
-                return Create(reference.Type, reference.Id);
+                return Create(reference.Id, reference.Type);
             }
 
             return reference;

@@ -49,14 +49,14 @@ namespace MooVC.Architecture.Ddd
             return NotEqualOperator(first, second);
         }
 
-        public static Reference Create(string typeName, Guid id, SignedVersion? version = default)
+        public static Reference Create(Guid id, string typeName, SignedVersion? version = default)
         {
             var aggregate = Type.GetType(typeName, true);
 
-            return Create(aggregate!, id, version: version);
+            return Create(id, aggregate!, version: version);
         }
 
-        public static Reference Create(Type type, Guid id, SignedVersion? version = default)
+        public static Reference Create(Guid id, Type type, SignedVersion? version = default)
         {
             ArgumentNotNull(type, nameof(type), ReferenceCreateTypeRequired);
 
@@ -86,14 +86,14 @@ namespace MooVC.Architecture.Ddd
         public static Reference Create<TAggregate>(Guid id, SignedVersion? version = default)
             where TAggregate : AggregateRoot
         {
-            return Create(typeof(TAggregate), id, version: version);
+            return Create(id, typeof(TAggregate), version: version);
         }
 
         public static Reference Create(AggregateRoot aggregate)
         {
             ArgumentNotNull(aggregate, nameof(aggregate), ReferenceCreateAggregateRequired);
 
-            return Create(aggregate.GetType(), aggregate.Id, version: aggregate.Version);
+            return Create(aggregate.Id, aggregate.GetType(), version: aggregate.Version);
         }
 
         public override bool Equals(object? other)

@@ -6,7 +6,7 @@
     {
         public static Reference ToReference(this Guid id, Type type, SignedVersion? version = default)
         {
-            return Reference.Create(type, id, version: version);
+            return Reference.Create(id, type, version: version);
         }
 
         public static Reference<TAggregate> ToReference<TAggregate>(this Guid id, SignedVersion? version = default)

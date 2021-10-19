@@ -22,7 +22,7 @@
         {
             Type aggregate = typeof(SerializableEventCentricAggregateRoot);
             var id = Guid.NewGuid();
-            Reference reference = Create(aggregate.AssemblyQualifiedName!, id);
+            Reference reference = Create(id, aggregate.AssemblyQualifiedName!);
 
             Assert.Equal(id, reference.Id);
             Assert.Equal(aggregate, reference.Type);
@@ -34,7 +34,7 @@
         {
             Type aggregate = typeof(SerializableEventCentricAggregateRoot);
             var id = Guid.NewGuid();
-            Reference reference = Create(aggregate, id);
+            Reference reference = Create(id, aggregate);
 
             Assert.Equal(id, reference.Id);
             Assert.Equal(aggregate, reference.Type);
@@ -48,7 +48,7 @@
             var id = Guid.NewGuid();
 
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => Create(type!, id));
+                () => Create(id, type!));
 
             Assert.Equal(nameof(type), exception.ParamName);
         }
@@ -60,7 +60,7 @@
             var id = Guid.NewGuid();
 
             _ = Assert.Throws<ArgumentException>(
-                () => Create(aggregate.AssemblyQualifiedName!, id));
+                () => Create(id, aggregate.AssemblyQualifiedName!));
         }
 
         [Fact]
@@ -70,7 +70,7 @@
             var id = Guid.NewGuid();
 
             _ = Assert.Throws<ArgumentException>(
-                () => Create(aggregate, id));
+                () => Create(id, aggregate));
         }
     }
 }

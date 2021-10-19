@@ -53,7 +53,10 @@
 
         public static Reference<TAggregate> Create(Guid id, SignedVersion? version = default)
         {
-            return (Reference<TAggregate>)Create(typeof(TAggregate), id, version: version);
+            return (Reference<TAggregate>)Create(
+                id,
+                typeof(TAggregate),
+                version: version);
         }
 
         protected override Type DeserializeType(SerializationInfo info, StreamingContext context)

@@ -10,8 +10,8 @@
             var aggregate = new SerializableAggregateRoot();
 
             var original = Reference.Create(
-                aggregate.GetType(),
                 aggregate.Id,
+                aggregate.GetType(),
                 version: aggregate.Version);
 
             Reference unversioned = original.ToUnversioned();
@@ -26,8 +26,7 @@
         public void GivenAnUntypedUnversionedReferenceThenTheSameInstanceIsReturned()
         {
             var aggregate = new SerializableAggregateRoot();
-
-            var original = Reference.Create(aggregate.GetType(), aggregate.Id);
+            var original = Reference.Create(aggregate.Id, aggregate.GetType());
 
             Reference unversioned = original.ToUnversioned();
 

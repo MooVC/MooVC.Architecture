@@ -27,6 +27,7 @@ This release focuses on addressing weaknesses in the handling of aggregate refer
 - Changed Architecture.Ddd.Reference so that it now has a static Create variant, capable of accepting a genertic AggregateRoot type.
 - Changed Architecture.Ddd.Reference so that it is now marked as abstract (**breaking change**).
 - Changed Architecture.Ddd.Reference so that it no longer accepts an aggregate as a constructor argument (**breaking change**).
+- Changed Architecture.Ddd.Reference.Create so that the type parameter now comes after the id parameter (**breaking change**).
 - Changed Architecture.Ddd.Reference<TAggregate> so that its constructors are now internal only  (**breaking change**).
 - Changed Architecture.Ddd.Reference<TAggregate> so that it now has a static Create variant, capable of accepting an id and optional version.
 - Changed Architecture.Cqrs.Services.PaginatedResult so that it now inherits from Architecture.Cqrs.Services.EnumerableResult.

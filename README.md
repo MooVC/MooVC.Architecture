@@ -18,6 +18,7 @@ This release focuses on addressing weaknesses in the handling of aggregate refer
 
 - Added a new Architecture.Cqrs.Services.EnumerableResult that can be used to encapsulate a result that contains a collection.
 - Added a new Architecture.Ddd.GuidExtensions.ToReference extension that acts as a shortcut to the new type centric Architecture.Ddd.Reference.Create variant. 
+- Changed Architecture.Cqrs.Services.PaginatedResult so that it now inherits from Architecture.Cqrs.Services.EnumerableResult.
 - Changed Architecture.Ddd.AggregateHasUncommittedChangesException so that it now has a constructor capable of accepting an AggregateRoot instance.
 - Changed Architecture.Ddd.AggregateEventSequenceUnorderedException so that it now has a constructor capable of accepting an AggregateRoot instance.
 - Changed Architecture.Ddd.AggregateEventMismatchException so that it now has a constructor capable of accepting an AggregateRoot instance.
@@ -30,4 +31,4 @@ This release focuses on addressing weaknesses in the handling of aggregate refer
 - Changed Architecture.Ddd.Reference.Create so that the type parameter now comes after the id parameter (**breaking change**).
 - Changed Architecture.Ddd.Reference<TAggregate> so that its constructors are now internal only  (**breaking change**).
 - Changed Architecture.Ddd.Reference<TAggregate> so that it now has a static Create variant, capable of accepting an id and optional version.
-- Changed Architecture.Cqrs.Services.PaginatedResult so that it now inherits from Architecture.Cqrs.Services.EnumerableResult.
+- Changed Architecture.Ddd.ReferenceExtensions.ToTyped now accepts and validates a nullable reference.

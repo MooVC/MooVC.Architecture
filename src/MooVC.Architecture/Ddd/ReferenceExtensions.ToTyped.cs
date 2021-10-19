@@ -4,7 +4,7 @@ namespace MooVC.Architecture.Ddd
 
     public static partial class ReferenceExtensions
     {
-        public static Reference<TAggregate> ToTyped<TAggregate>(this Reference reference)
+        public static Reference<TAggregate> ToTyped<TAggregate>(this Reference? reference)
             where TAggregate : AggregateRoot
         {
             ReferenceIsOfType<TAggregate>(reference, nameof(reference));

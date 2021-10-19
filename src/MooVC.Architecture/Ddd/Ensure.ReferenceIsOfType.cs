@@ -24,7 +24,7 @@ namespace MooVC.Architecture.Ddd
             string message)
             where TAggregate : AggregateRoot
         {
-            if (reference is null || reference.Type != typeof(TAggregate))
+            if (reference is null || !typeof(TAggregate).IsAssignableFrom(reference.Type))
             {
                 throw new ArgumentException(message, argumentName);
             }

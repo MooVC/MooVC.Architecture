@@ -215,6 +215,9 @@
   <data name="SignedVersionPreviousRequired" xml:space="preserve">
     <value>The previous version must be provided.</value>
   </data>
+  <data name="SignedVersionUnversioned" xml:space="preserve">
+    <value>Unversioned</value>
+  </data>
   <data name="VersionedReferenceIdRequired" xml:space="preserve">
     <value>A non-empty ID for the aggregate this versioned reference represents must be provided.</value>
   </data>

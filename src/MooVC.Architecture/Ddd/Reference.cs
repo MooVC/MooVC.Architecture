@@ -127,6 +127,16 @@ namespace MooVC.Architecture.Ddd
                 && (Version.IsEmpty || Version == aggregate.Version);
         }
 
+        public override string ToString()
+        {
+            if (IsEmpty)
+            {
+                return Type.FullName;
+            }
+
+            return $"{Type.FullName} [{Id:P}, {Version}]";
+        }
+
         protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)
         {
             return info.TryGetValue(nameof(Id), defaultValue: Guid.Empty);

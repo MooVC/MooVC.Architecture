@@ -130,7 +130,12 @@
 
         public override string ToString()
         {
-            return $"{Number} ({Signature})";
+            if (IsEmpty)
+            {
+                return SignedVersionUnversioned;
+            }
+
+            return $"{Number} ({Signature:P})";
         }
 
         protected override IEnumerable<object> GetAtomicValues()

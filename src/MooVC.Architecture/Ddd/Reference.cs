@@ -39,6 +39,21 @@ namespace MooVC.Architecture.Ddd
 
         public SignedVersion Version { get; } = SignedVersion.Empty;
 
+        public static implicit operator Guid(Reference reference)
+        {
+            return reference.Id;
+        }
+
+        public static implicit operator Type(Reference reference)
+        {
+            return reference.Type;
+        }
+
+        public static implicit operator SignedVersion(Reference reference)
+        {
+            return reference.Version;
+        }
+
         public static bool operator ==(Reference? first, Reference? second)
         {
             return EqualOperator(first, second);

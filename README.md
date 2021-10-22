@@ -25,6 +25,8 @@ This release focuses on addressing weaknesses in the handling of aggregate refer
 - Changed Architecture.Ddd.AggregateEventMismatchException so that it now has a constructor capable of accepting an AggregateRoot instance.
 - Changed Architecture.Ddd.AggregateHistoryInvalidForStateException so that it now has a constructor capable of accepting an AggregateRoot instance.
 - Changed Architecture.Ddd.Ensure.ReferenceIsOfType so that it will return as long as the type of the reference can be assigned to the generic type provided.
+- Changed Architecture.Ddd.Projection so that it can now be implicitly cast to a reference.
+- Changed Architecture.Ddd.Projection so that it can now be equated to a reference.
 - Changed Architecture.Ddd.Reference so that it can now be implicitly cast to its constituent parts (Id, Type, Version).
 - Changed Architecture.Ddd.Reference so that it now has a static Create variant, capable of directly accepting an aggregate instance.
 - Changed Architecture.Ddd.Reference so that it now has a static Create variant, capable of directly accepting a type instance.

@@ -131,7 +131,7 @@ namespace MooVC.Architecture.Ddd
         {
             if (IsEmpty)
             {
-                return Type.FullName;
+                return Type.FullName!;
             }
 
             return $"{Type.FullName} [{Id:P}, {Version}]";

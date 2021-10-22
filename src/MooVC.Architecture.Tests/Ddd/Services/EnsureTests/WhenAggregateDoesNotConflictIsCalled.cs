@@ -68,7 +68,7 @@
         public void GivenANewAggregateAndNoCurrentAggregateThenNoExceptionIsThrown()
         {
             var proposed = new SerializableAggregateRoot();
-            AggregateRoot? current = default;
+            SerializableAggregateRoot? current = default;
 
             AggregateDoesNotConflict(proposed, current);
         }

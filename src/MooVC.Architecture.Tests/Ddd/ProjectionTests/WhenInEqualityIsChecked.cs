@@ -13,6 +13,7 @@
             var second = new SerializableProjection<SerializableAggregateRoot>(aggregate);
 
             Assert.False(first != second);
+            Assert.False(second != first);
         }
 
         [Fact]
@@ -23,6 +24,7 @@
             var second = aggregate.ToReference();
 
             Assert.False(first != second);
+            Assert.False(second != first);
         }
 
         [Fact]
@@ -35,6 +37,7 @@
                 new SerializableAggregateRoot());
 
             Assert.True(first != second);
+            Assert.True(second != first);
         }
 
         [Fact]
@@ -46,6 +49,7 @@
             var second = Reference.Create<SerializableAggregateRoot>(Guid.NewGuid());
 
             Assert.True(first != second);
+            Assert.True(second != first);
         }
     }
 }

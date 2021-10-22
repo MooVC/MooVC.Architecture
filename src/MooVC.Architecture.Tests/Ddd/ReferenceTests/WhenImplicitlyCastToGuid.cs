@@ -22,5 +22,14 @@
 
             Assert.Equal(reference.Id, id);
         }
+
+        [Fact]
+        public void GivenANullReferenceThenAnEmptyIdIsReturned()
+        {
+            Reference? reference = default;
+            Guid id = reference;
+
+            Assert.Equal(Guid.Empty, id);
+        }
     }
 }

@@ -26,5 +26,33 @@
 
             Assert.True(reference.IsMatch(aggregate));
         }
+
+        [Fact]
+        public void GivenANullEventWhenCastToATypedReferenceThenAnEmptyTypedReferenceIsReturned()
+        {
+            SerializableDomainEvent<SerializableEventCentricAggregateRoot>? @event = default;
+            Reference<SerializableEventCentricAggregateRoot> reference = @event;
+
+            Assert.True(reference.IsEmpty);
+        }
+
+        [Fact]
+        public void GivenANullBaseEventWhenCastToATypedReferenceThenAnEmptyTypedReferenceIsReturned()
+        {
+            DomainEvent? @event = default;
+            Reference reference = @event;
+
+            Assert.True(reference.IsEmpty);
+        }
+
+        [Fact]
+        public void GivenANullEventWhenCastToAUntypedReferenceThenAnEmptyUntypedReferenceIsReturned()
+        {
+            SerializableDomainEvent<SerializableEventCentricAggregateRoot>? @event = default;
+            Reference reference = @event;
+
+            Assert.True(reference.IsEmpty);
+            Assert.Equal(typeof(SerializableEventCentricAggregateRoot), reference.Type);
+        }
     }
 }

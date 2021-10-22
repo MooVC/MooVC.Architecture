@@ -3,7 +3,6 @@
     using System;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenInEqualityIsChecked
@@ -15,6 +14,7 @@
             SerializableEntity<int> second = first.Clone();
 
             Assert.False(first != second);
+            Assert.False(second != first);
         }
 
         [Fact]
@@ -24,6 +24,7 @@
             var second = new SerializableEntity<int>(2);
 
             Assert.True(first != second);
+            Assert.True(second != first);
         }
 
         [Fact]
@@ -33,6 +34,7 @@
             var second = new SerializableEntity<Guid>(first.Id);
 
             Assert.True(first != second);
+            Assert.True(second != first);
         }
     }
 }

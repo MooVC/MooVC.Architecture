@@ -24,5 +24,14 @@
 
             Assert.Equal(version.Signature, signature);
         }
+
+        [Fact]
+        public void GivenANullVersionThenAnEmptyGuidIsReturned()
+        {
+            SignedVersion? version = default;
+            Guid signature = version;
+
+            Assert.Equal(Guid.Empty, signature);
+        }
     }
 }

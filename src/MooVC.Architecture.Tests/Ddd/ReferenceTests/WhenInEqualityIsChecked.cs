@@ -15,6 +15,7 @@
             Reference second = Create(aggregate);
 
             Assert.False(first != second);
+            Assert.False(second != first);
         }
 
         [Fact]
@@ -26,6 +27,7 @@
             Reference second = Create<SerializableAggregateRoot>(aggregateId);
 
             Assert.False(first != second);
+            Assert.False(second != first);
         }
 
         [Fact]
@@ -35,6 +37,7 @@
             Reference second = Create<SerializableAggregateRoot>(Guid.NewGuid());
 
             Assert.True(first != second);
+            Assert.True(second != first);
         }
 
         [Fact]
@@ -46,6 +49,7 @@
             Reference second = Create<SerializableEventCentricAggregateRoot>(aggregateId);
 
             Assert.True(first != second);
+            Assert.True(second != first);
         }
     }
 }

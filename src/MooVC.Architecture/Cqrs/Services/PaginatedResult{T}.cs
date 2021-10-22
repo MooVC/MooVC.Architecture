@@ -15,31 +15,31 @@ namespace MooVC.Architecture.Cqrs.Services
         protected PaginatedResult(
             Message context,
             Paging paging,
-            IEnumerable<T> results,
-            ulong totalResults)
-            : base(context, results)
+            ulong total,
+            IEnumerable<T> values)
+            : base(context, values)
         {
-            TotalPages = CalculateTotalPages(paging, totalResults);
-            TotalResults = totalResults;
+            Pages = CalculateTotalPages(paging, total);
+            Total = total;
         }
 
         protected PaginatedResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            TotalPages = info.TryGetValue<ushort>(nameof(TotalPages));
-            TotalResults = info.TryGetValue<ulong>(nameof(TotalResults));
+            Pages = info.TryGetValue<ushort>(nameof(Pages));
+            Total = info.TryGetValue<ulong>(nameof(Total));
         }
 
-        public ushort TotalPages { get; }
+        public ushort Pages { get; }
 
-        public ulong TotalResults { get; }
+        public ulong Total { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddValue(nameof(TotalPages), TotalPages);
-            _ = info.TryAddValue(nameof(TotalResults), TotalResults);
+            _ = info.TryAddValue(nameof(Pages), Pages);
+            _ = info.TryAddValue(nameof(Total), Total);
         }
 
         internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)

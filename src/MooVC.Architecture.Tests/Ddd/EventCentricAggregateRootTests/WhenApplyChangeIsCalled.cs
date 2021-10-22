@@ -10,16 +10,16 @@ namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
         [Fact]
         public void GivenAValueThenTheValueIsPropagated()
         {
-            var expectedValue = Guid.NewGuid();
+            var expected = Guid.NewGuid();
             var context = new SerializableMessage();
-            var request = new SetRequest(context, expectedValue);
+            var request = new SetRequest(context, expected);
             var aggregate = new SerializableEventCentricAggregateRoot(context);
 
-            Assert.NotEqual(expectedValue, aggregate.Value);
+            Assert.NotEqual(expected, aggregate.Value);
 
             aggregate.Set(request);
 
-            Assert.Equal(expectedValue, aggregate.Value);
+            Assert.Equal(expected, aggregate.Value);
         }
 
         [Fact]

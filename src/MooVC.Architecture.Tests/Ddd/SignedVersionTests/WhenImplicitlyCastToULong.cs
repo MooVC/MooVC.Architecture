@@ -23,5 +23,14 @@
 
             Assert.Equal(version.Number, number);
         }
+
+        [Fact]
+        public void GivenANullVersionThenTheMinumumNumberIsReturned()
+        {
+            SignedVersion? version = default;
+            ulong number = version;
+
+            Assert.Equal(ulong.MinValue, number);
+        }
     }
 }

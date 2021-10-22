@@ -2,38 +2,43 @@ namespace MooVC.Architecture.Cqrs.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Runtime.Serialization;
     using MooVC.Collections.Generic;
-    using MooVC.Serialization;
 
     [Serializable]
     public abstract class EnumerableResult<T>
-        : Message
+        : Result<IEnumerable<T>>
     {
-        protected EnumerableResult(Message context, IEnumerable<T> results)
-            : base(context)
+        protected EnumerableResult(Message context, IEnumerable<T> values)
+            : base(context, values.Snapshot())
         {
-            Results = results.Snapshot();
         }
 
         protected EnumerableResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Results = info.TryGetEnumerable<T>(nameof(Results));
         }
 
-        public IEnumerable<T> Results { get; }
+        public ulong Count => (ulong)Value.LongCount();
+
+        public T this[int index] => Value.ElementAt(index);
+
+        [return: NotNullIfNotNull("result")]
+        public static implicit operator T[](EnumerableResult<T>? result)
+        {
+            if (result is null)
+            {
+                return Array.Empty<T>();
+            }
+
+            return result.Value.ToArray();
+        }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return Results.GetEnumerator();
-        }
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            _ = info.TryAddEnumerable(nameof(Results), Results);
+            return Value.GetEnumerator();
         }
     }
 }

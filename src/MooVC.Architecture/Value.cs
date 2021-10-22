@@ -44,7 +44,7 @@
             return false;
         }
 
-        public bool Equals(Value? other)
+        public virtual bool Equals(Value? other)
         {
             if (other is { } && other.GetType() == GetType())
             {

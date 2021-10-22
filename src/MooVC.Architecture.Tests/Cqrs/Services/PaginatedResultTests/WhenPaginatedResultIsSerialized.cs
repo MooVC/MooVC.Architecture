@@ -12,7 +12,7 @@
         public void GivenANonQueryTypedInstanceThenAllPropertiesAreSerialized()
         {
             var context = new SerializableMessage();
-            var result = new SerializablePaginatedResult<int>(context, new Paging(), new[] { 1, 2, 3 }, 100);
+            var result = new SerializablePaginatedResult<int>(context, new Paging(), 100, new[] { 1, 2, 3 });
             SerializablePaginatedResult<int> deserialized = result.Clone();
 
             Assert.Equal(result, deserialized);
@@ -24,7 +24,7 @@
         public void GivenAQueryTypedInstanceThenAllPropertiesAreSerialized()
         {
             var result = new SerializablePaginatedResult<SerializablePaginatedQuery, int>(
-                new SerializablePaginatedQuery(new Paging()), new[] { 1, 2, 3 }, 100);
+                new SerializablePaginatedQuery(new Paging()),  100, new[] { 1, 2, 3 });
             SerializablePaginatedResult<SerializablePaginatedQuery, int> deserialized = result.Clone();
 
             Assert.Equal(result, deserialized);

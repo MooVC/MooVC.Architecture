@@ -12,9 +12,9 @@ namespace MooVC.Architecture.Cqrs.Services.PaginatedResultTests
         public SerializablePaginatedResult(
             Message context,
             Paging paging,
-            IEnumerable<T> results,
-            ulong totalResults)
-            : base(context, paging, results, totalResults)
+            ulong total,
+            IEnumerable<T> values)
+            : base(context, paging, total, values)
         {
         }
 

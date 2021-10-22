@@ -13,6 +13,8 @@
             var second = new SerializableProjection<SerializableAggregateRoot>(aggregate);
 
             Assert.True(first == second);
+            Assert.True(first.Equals(second));
+            Assert.True(second == first);
         }
 
         [Fact]
@@ -23,6 +25,8 @@
             var second = aggregate.ToReference();
 
             Assert.True(first == second);
+            Assert.True(first.Equals(second));
+            Assert.True(second == first);
         }
 
         [Fact]
@@ -35,6 +39,8 @@
                 new SerializableAggregateRoot());
 
             Assert.False(first == second);
+            Assert.False(first.Equals(second));
+            Assert.False(second == first);
         }
 
         [Fact]
@@ -46,6 +52,8 @@
             var second = Reference.Create<SerializableAggregateRoot>(Guid.NewGuid());
 
             Assert.False(first == second);
+            Assert.False(first.Equals(second));
+            Assert.False(second == first);
         }
     }
 }

@@ -12,21 +12,32 @@
         public void GivenANullContextThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new SerializablePaginatedResult<int>(default!, new Paging(), new int[0], 0));
+                () => new SerializablePaginatedResult<int>(
+                    default!,
+                    new Paging(),
+                    0,
+                    Array.Empty<int>()));
         }
 
         [Fact]
         public void GivenANullQueryThenANullReferenceExceptionIsThrown()
         {
             _ = Assert.Throws<NullReferenceException>(
-                () => new SerializablePaginatedResult<PaginatedQuery, int>(default!, new int[0], 0));
+                () => new SerializablePaginatedResult<PaginatedQuery, int>(
+                    default!,
+                    0,
+                    Array.Empty<int>()));
         }
 
         [Fact]
         public void GivenNullPagingThenAnArgumentNullExceptionIsThrown()
         {
             _ = Assert.Throws<ArgumentNullException>(
-                () => new SerializablePaginatedResult<int>(new SerializableMessage(), default!, new int[0], 0));
+                () => new SerializablePaginatedResult<int>(
+                    new SerializableMessage(),
+                    default!,
+                    0,
+                    Array.Empty<int>()));
         }
 
         [Theory]
@@ -36,22 +47,22 @@
         [InlineData(new[] { 4 }, 10, 5, 50)]
         [InlineData(new[] { -100, -200 }, 100, 3, 202)]
         public void GivenContextResultsAndTotalResultsThenTheContextResultsAndTotalResultsPropertiesAreSetToMatch(
-            int[] results,
+            int[] values,
             ushort size,
-            ushort totalPages,
-            ulong totalResults)
+            ushort pages,
+            ulong total)
         {
             var context = new SerializableMessage();
             var paging = new Paging(size: size);
-            var result = new SerializablePaginatedResult<int>(context, paging, results, totalResults);
+            var result = new SerializablePaginatedResult<int>(context, paging, total, values);
 
-            int[] expectedResults = results ?? new int[0];
+            int[] expected = values ?? Array.Empty<int>();
 
             Assert.Equal(context.Id, result.CausationId);
             Assert.Equal(context.CorrelationId, result.CorrelationId);
-            Assert.Equal(expectedResults, result.Results);
-            Assert.Equal(totalPages, result.TotalPages);
-            Assert.Equal(totalResults, result.TotalResults);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(pages, result.Pages);
+            Assert.Equal(total, result.Total);
         }
 
         [Theory]
@@ -61,21 +72,21 @@
         [InlineData(new[] { 4 }, 10, 5, 50)]
         [InlineData(new[] { -100, -200 }, 100, 3, 202)]
         public void GivenQueryResultsAndTotalResultsThenTheQueryResultsAndTotalResultsPropertiesAreSetToMatch(
-            int[] results,
+            int[] values,
             ushort size,
-            ushort totalPages,
-            ulong totalResults)
+            ushort pages,
+            ulong total)
         {
             var paging = new Paging(size: size);
             var query = new SerializablePaginatedQuery(paging);
-            var result = new SerializablePaginatedResult<SerializablePaginatedQuery, int>(query, results, totalResults);
+            var result = new SerializablePaginatedResult<SerializablePaginatedQuery, int>(query, total, values);
 
-            int[] expectedResults = results ?? new int[0];
+            int[] expected = values ?? Array.Empty<int>();
 
             Assert.Equal(query, result.Query);
-            Assert.Equal(expectedResults, result.Results);
-            Assert.Equal(totalPages, result.TotalPages);
-            Assert.Equal(totalResults, result.TotalResults);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(pages, result.Pages);
+            Assert.Equal(total, result.Total);
         }
     }
 }

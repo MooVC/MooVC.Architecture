@@ -11,9 +11,9 @@ namespace MooVC.Architecture.Cqrs.Services.PaginatedResultTests
     {
         public SerializablePaginatedResult(
             TQuery query,
-            IEnumerable<T> results,
-            ulong totalResults)
-            : base(query, results, totalResults)
+            ulong total,
+            IEnumerable<T> values)
+            : base(query, total, values)
         {
         }
 

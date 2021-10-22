@@ -4,7 +4,7 @@
     using MooVC.Architecture.Serialization;
     using Xunit;
 
-    public sealed class WhenPaginatedResultIsSerialized
+    public sealed class WhenEnumerableResultIsSerialized
     {
         [Fact]
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
@@ -15,7 +15,7 @@
 
             Assert.Equal(result, deserialized);
             Assert.NotSame(result, deserialized);
-            Assert.Equal(result.Results, deserialized.Results);
+            Assert.Equal(result.Value, deserialized.Value);
             Assert.Equal(result.GetHashCode(), deserialized.GetHashCode());
         }
     }

@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
     using MooVC.Architecture.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
@@ -31,9 +32,9 @@
 
         public Reference<TAggregate> Aggregate { get; }
 
-        public static implicit operator Reference<TAggregate>(Projection<TAggregate> projection)
+        public static implicit operator Reference<TAggregate>(Projection<TAggregate>? projection)
         {
-            return projection.Aggregate;
+            return projection?.Aggregate ?? Reference<TAggregate>.Empty;
         }
 
         public static bool operator ==(Projection<TAggregate>? first, Reference? second)
@@ -61,7 +62,7 @@
             return false;
         }
 
-        public bool Equals(Reference other)
+        public bool Equals(Reference? other)
         {
             return Aggregate == other;
         }

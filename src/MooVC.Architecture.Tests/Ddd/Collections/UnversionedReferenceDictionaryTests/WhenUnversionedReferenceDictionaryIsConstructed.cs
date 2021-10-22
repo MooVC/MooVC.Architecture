@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
 {
     using System.Collections.Generic;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Collections.Generic;
     using Xunit;
 
@@ -22,7 +21,7 @@
             IDictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot> existing = Dictionary.Snapshot();
             var instance = new UnversionedReferenceDictionary<SerializableAggregateRoot, SerializableAggregateRoot>(existing: existing);
 
-            Assert.Equal(existing, instance);
+            Assert.Equal<IDictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>>(existing, instance);
         }
     }
 }

@@ -4,7 +4,7 @@
     using MooVC.Architecture.MessageTests;
     using Xunit;
 
-    public sealed class WhenPaginatedResultIsConstructed
+    public sealed class WhenEnumerableResultIsConstructed
     {
         [Fact]
         public void GivenANullContextThenAnArgumentNullExceptionIsThrown()
@@ -19,16 +19,16 @@
         [InlineData(default)]
         [InlineData(new[] { 4 })]
         [InlineData(new[] { -100, -200 })]
-        public void GivenContextAndResultsThenTheContextAndResultsPropertiesAreSetToMatch(int[] results)
+        public void GivenContextAndValuesThenTheContextAndValuePropertiesAreSetToMatch(int[] values)
         {
             var context = new SerializableMessage();
-            var result = new SerializableEnumerableResult<int>(context, results);
+            var result = new SerializableEnumerableResult<int>(context, values);
 
-            int[] expectedResults = results ?? Array.Empty<int>();
+            int[] expected = values ?? Array.Empty<int>();
 
             Assert.Equal(context.Id, result.CausationId);
             Assert.Equal(context.CorrelationId, result.CorrelationId);
-            Assert.Equal(expectedResults, result.Results);
+            Assert.Equal(expected, result.Value);
         }
     }
 }

@@ -26,5 +26,15 @@
             Assert.False(version.IsEmpty);
             Assert.True(version.IsNew);
         }
+
+        [Fact]
+        public void GivenANullReferenceThenAnEmptyVersionIsReturned()
+        {
+            Reference? reference = default;
+            SignedVersion version = reference;
+
+            Assert.Equal(SignedVersion.Empty, version);
+            Assert.True(version.IsEmpty);
+        }
     }
 }

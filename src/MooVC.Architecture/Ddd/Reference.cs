@@ -2,7 +2,7 @@ namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
     using System.Runtime.Serialization;
     using MooVC.Serialization;
@@ -12,7 +12,8 @@ namespace MooVC.Architecture.Ddd
 
     [Serializable]
     public abstract class Reference
-        : Value
+        : Value,
+          IEquatable<Reference>
     {
         private protected Reference(Guid id, Type type, SignedVersion? version)
         {
@@ -39,19 +40,20 @@ namespace MooVC.Architecture.Ddd
 
         public SignedVersion Version { get; } = SignedVersion.Empty;
 
-        public static implicit operator Guid(Reference reference)
+        public static implicit operator Guid(Reference? reference)
         {
-            return reference.Id;
+            return reference?.Id ?? Guid.Empty;
         }
 
-        public static implicit operator Type(Reference reference)
+        [return: NotNullIfNotNull("reference")]
+        public static implicit operator Type?(Reference? reference)
         {
-            return reference.Type;
+            return reference?.Type;
         }
 
-        public static implicit operator SignedVersion(Reference reference)
+        public static implicit operator SignedVersion(Reference? reference)
         {
-            return reference.Version;
+            return reference?.Version ?? SignedVersion.Empty;
         }
 
         public static bool operator ==(Reference? first, Reference? second)
@@ -112,6 +114,16 @@ namespace MooVC.Architecture.Ddd
         }
 
         public override bool Equals(object? other)
+        {
+            return EqualOperator(this, other as Reference);
+        }
+
+        public bool Equals(Reference? other)
+        {
+            return EqualOperator(this, other);
+        }
+
+        public override bool Equals(Value? other)
         {
             return EqualOperator(this, other as Reference);
         }

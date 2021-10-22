@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Resources;
@@ -26,9 +27,9 @@
 
         public Reference Aggregate { get; }
 
-        public static implicit operator Reference(DomainEvent @event)
+        public static implicit operator Reference(DomainEvent? @event)
         {
-            return @event.Aggregate;
+            return @event?.Aggregate ?? Reference<AggregateRoot>.Empty;
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

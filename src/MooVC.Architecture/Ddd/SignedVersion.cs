@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Runtime.Serialization;
     using MooVC.Collections.Generic;
@@ -80,14 +81,14 @@
 
         public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
 
-        public static implicit operator ulong(SignedVersion version)
+        public static implicit operator ulong(SignedVersion? version)
         {
-            return version.Number;
+            return version?.Number ?? ulong.MinValue;
         }
 
-        public static implicit operator Guid(SignedVersion version)
+        public static implicit operator Guid(SignedVersion? version)
         {
-            return version.Signature;
+            return version?.Signature ?? Guid.Empty;
         }
 
         public int CompareTo(SignedVersion? other)

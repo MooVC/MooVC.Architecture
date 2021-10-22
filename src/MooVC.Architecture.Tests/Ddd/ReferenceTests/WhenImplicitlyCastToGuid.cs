@@ -3,7 +3,7 @@
     using System;
     using Xunit;
 
-    public sealed class WhenImplicitlyCastToGuidIsInvoked
+    public sealed class WhenImplicitlyCastToGuid
     {
         [Fact]
         public void GivenAnEmptyReferenceThenAnEmptyGuidIsReturned()

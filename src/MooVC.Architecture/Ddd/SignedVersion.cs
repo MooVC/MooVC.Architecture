@@ -21,7 +21,7 @@
         private static readonly byte[] emptySegment = new byte[SplicePortion];
 
         private static readonly Lazy<SignedVersion> empty = new(
-            () => new SignedVersion(emptySegment, emptySegment, 0));
+            () => new SignedVersion(emptySegment, emptySegment, ulong.MinValue));
 
         private readonly Lazy<Guid> signature;
 
@@ -79,6 +79,16 @@
         public Guid Signature => signature.Value;
 
         public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
+
+        public static implicit operator ulong(SignedVersion version)
+        {
+            return version.Number;
+        }
+
+        public static implicit operator Guid(SignedVersion version)
+        {
+            return version.Signature;
+        }
 
         public int CompareTo(SignedVersion? other)
         {

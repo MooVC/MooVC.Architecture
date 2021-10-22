@@ -3,7 +3,7 @@
     using System;
     using Xunit;
 
-    public sealed class WhenImplicitlyCastToTypeIsInvoked
+    public sealed class WhenImplicitlyCastToType
     {
         [Fact]
         public void GivenATypedReferenceThenTheIdOfThatReferenceIsReturned()

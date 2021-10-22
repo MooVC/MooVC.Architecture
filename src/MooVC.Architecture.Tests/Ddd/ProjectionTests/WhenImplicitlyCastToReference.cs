@@ -2,7 +2,7 @@
 {
     using Xunit;
 
-    public sealed class WhenImplicitlyCastToReferenceIsInvoked
+    public sealed class WhenImplicitlyCastToReference
     {
         [Fact]
         public void GivenAProjectionThenTheReferenceForItsAggregateIsReturned()

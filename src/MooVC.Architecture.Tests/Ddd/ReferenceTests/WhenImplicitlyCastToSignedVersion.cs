@@ -2,7 +2,7 @@
 {
     using Xunit;
 
-    public sealed class WhenImplicitlyCastToSignedVersionIsInvoked
+    public sealed class WhenImplicitlyCastToSignedVersion
     {
         [Fact]
         public void GivenAnEmptyReferenceThenAnEmptyVersionIsReturned()

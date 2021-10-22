@@ -26,6 +26,11 @@
 
         public Reference Aggregate { get; }
 
+        public static implicit operator Reference(DomainEvent @event)
+        {
+            return @event.Aggregate;
+        }
+
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

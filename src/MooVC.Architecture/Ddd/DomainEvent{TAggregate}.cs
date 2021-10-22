@@ -13,15 +13,30 @@
         protected DomainEvent(Message context, TAggregate aggregate)
             : base(context, aggregate.ToReference())
         {
-            this.aggregate = new Lazy<Reference<TAggregate>>(aggregate.ToReference());
+            this.aggregate = new(GetTypedReference);
         }
 
         protected DomainEvent(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            aggregate = new Lazy<Reference<TAggregate>>(() => base.Aggregate.ToTyped<TAggregate>());
+            aggregate = new(GetTypedReference);
         }
 
         public new Reference<TAggregate> Aggregate => aggregate.Value;
+
+        public static implicit operator Reference(DomainEvent<TAggregate> @event)
+        {
+            return ((DomainEvent)@event).Aggregate;
+        }
+
+        public static implicit operator Reference<TAggregate>(DomainEvent<TAggregate> @event)
+        {
+            return @event.Aggregate;
+        }
+
+        private Reference<TAggregate> GetTypedReference()
+        {
+            return base.Aggregate.ToTyped<TAggregate>();
+        }
     }
 }

@@ -58,12 +58,22 @@
             SignedVersion? persisted = default,
             bool persistedRequired = false)
         {
-            ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedExceptionAggregateRequired);
-            ArgumentNotNull(received, nameof(received), AggregateConflictDetectedExceptionReceivedRequired);
+            _ = ReferenceIsNotEmpty(
+                aggregate,
+                nameof(aggregate),
+                AggregateConflictDetectedExceptionAggregateRequired);
+
+            _ = ArgumentNotNull(
+                received,
+                nameof(received),
+                AggregateConflictDetectedExceptionReceivedRequired);
 
             if (persistedRequired)
             {
-                ArgumentNotNull(persisted, nameof(persisted), AggregateConflictDetectedExceptionPersistedRequired);
+                _ = ArgumentNotNull(
+                    persisted,
+                    nameof(persisted),
+                    AggregateConflictDetectedExceptionPersistedRequired);
 
                 return Format(
                     AggregateConflictDetectedExceptionExistingEntryMessage,

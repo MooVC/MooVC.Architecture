@@ -7,9 +7,10 @@
     {
         protected Request(Message context)
         {
-            ArgumentNotNull(context, nameof(context), RequestContextRequired);
-
-            Context = context;
+            Context = ArgumentNotNull(
+                context,
+                nameof(context),
+                RequestContextRequired);
         }
 
         public Message Context { get; }

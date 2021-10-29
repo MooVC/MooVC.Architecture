@@ -16,7 +16,7 @@
         {
             if (aggregate is { } && aggregate.HasUncommittedChanges)
             {
-                ArgumentNotNull(
+                _ = ArgumentNotNull(
                     destination,
                     nameof(destination),
                     AggregateRootExtensionsSaveDestinationRequired);

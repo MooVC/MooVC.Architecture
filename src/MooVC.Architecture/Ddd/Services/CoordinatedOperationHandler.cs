@@ -17,9 +17,11 @@
 
         public CoordinatedOperationHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
         {
-            ArgumentNotNull(repository, nameof(repository), CoordinatedOperationHandlerRepositoryRequired);
+            this.repository = ArgumentNotNull(
+                repository,
+                nameof(repository),
+                CoordinatedOperationHandlerRepositoryRequired);
 
-            this.repository = repository;
             this.timeout = timeout;
         }
 

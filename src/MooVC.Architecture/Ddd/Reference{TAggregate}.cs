@@ -26,13 +26,13 @@
         internal Reference(Guid id, Type type, SignedVersion? version = default)
            : base(id, type, version: version)
         {
-            ArgumentIsAcceptable(
+            _ = ArgumentIsAcceptable(
                 id,
                 nameof(id),
                 value => value != Guid.Empty,
                 ReferenceIdRequired);
 
-            ArgumentIsAcceptable(
+            _ = ArgumentIsAcceptable(
                 type,
                 nameof(type),
                 value => !value.IsAbstract,

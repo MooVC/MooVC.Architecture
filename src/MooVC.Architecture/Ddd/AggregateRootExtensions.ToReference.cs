@@ -10,7 +10,10 @@
             bool unversioned = false)
             where TAggregate : AggregateRoot
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), AggregateRootExtensionsToReferenceAggregateRequired);
+            _ = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                AggregateRootExtensionsToReferenceAggregateRequired);
 
             if (unversioned)
             {

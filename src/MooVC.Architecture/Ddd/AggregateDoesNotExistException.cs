@@ -15,9 +15,10 @@
         public AggregateDoesNotExistException(Message context)
             : base(Format(AggregateDoesNotExistExceptionMessage, typeof(TAggregate).Name))
         {
-            ArgumentNotNull(context, nameof(context), AggregateDoesNotExistExceptionContextRequired);
-
-            Context = context;
+            Context = ArgumentNotNull(
+                context,
+                nameof(context),
+                AggregateDoesNotExistExceptionContextRequired);
         }
 
         private AggregateDoesNotExistException(SerializationInfo info, StreamingContext context)

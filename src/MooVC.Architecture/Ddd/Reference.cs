@@ -75,7 +75,10 @@ namespace MooVC.Architecture.Ddd
 
         public static Reference Create(Guid id, Type type, SignedVersion? version = default)
         {
-            ArgumentNotNull(type, nameof(type), ReferenceCreateTypeRequired);
+            _ = ArgumentNotNull(
+                type,
+                nameof(type),
+                ReferenceCreateTypeRequired);
 
             Type reference = typeof(Reference<>);
             Type aggregate = reference.MakeGenericType(type);
@@ -108,7 +111,10 @@ namespace MooVC.Architecture.Ddd
 
         public static Reference Create(AggregateRoot aggregate)
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), ReferenceCreateAggregateRequired);
+            _ = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                ReferenceCreateAggregateRequired);
 
             return Create(aggregate.Id, aggregate.GetType(), version: aggregate.Version);
         }

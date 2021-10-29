@@ -8,7 +8,10 @@
     {
         private static string GenerateContext(this Type type)
         {
-            ArgumentNotNull(type, nameof(type), TypeExtensionsGenerateContextTypeRequired);
+            _ = ArgumentNotNull(
+                type,
+                nameof(type),
+                TypeExtensionsGenerateContextTypeRequired);
 
             return type.FullName ?? type.ToString();
         }

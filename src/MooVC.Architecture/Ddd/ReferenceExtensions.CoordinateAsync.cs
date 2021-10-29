@@ -14,7 +14,10 @@
             CancellationToken? cancellationToken = default,
             TimeSpan? timeout = default)
         {
-            ArgumentNotNull(reference, nameof(reference), ReferenceExtensionsCoordinateAsyncReferenceRequired);
+            _ = ArgumentNotNull(
+                reference,
+                nameof(reference),
+                ReferenceExtensionsCoordinateAsyncReferenceRequired);
 
             await reference
                 .Type

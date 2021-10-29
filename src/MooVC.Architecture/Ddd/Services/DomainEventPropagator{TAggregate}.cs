@@ -13,15 +13,22 @@ namespace MooVC.Architecture.Ddd.Services
 
         public DomainEventPropagator(IBus bus, IRepository<TAggregate> repository)
         {
-            ArgumentNotNull(bus, nameof(bus), DomainEventPropagatorBusRequired);
-            ArgumentNotNull(repository, nameof(repository), DomainEventPropagatorRepositoryRequired);
+            this.bus = ArgumentNotNull(
+                bus,
+                nameof(bus),
+                DomainEventPropagatorBusRequired);
 
-            this.bus = bus;
-            this.repository = repository;
+            this.repository = ArgumentNotNull(
+                repository,
+                nameof(repository),
+                DomainEventPropagatorRepositoryRequired);
+
             this.repository.AggregateSaved += Repository_AggregateSaved;
         }
 
-        private async Task Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedAsyncEventArgs<TAggregate> e)
+        private async Task Repository_AggregateSaved(
+            IRepository<TAggregate> sender,
+            AggregateSavedAsyncEventArgs<TAggregate> e)
         {
             IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
 

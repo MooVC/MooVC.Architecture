@@ -45,8 +45,15 @@
 
         private static string FormatMessage(Reference aggregate, Reference eventAggregate)
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventMismatchExceptionAggregateRequired);
-            ArgumentNotNull(eventAggregate, nameof(eventAggregate), AggregateEventMismatchExceptionEventAggregateRequired);
+            _ = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                AggregateEventMismatchExceptionAggregateRequired);
+
+            _ = ArgumentNotNull(
+                eventAggregate,
+                nameof(eventAggregate),
+                AggregateEventMismatchExceptionEventAggregateRequired);
 
             return Format(
                 AggregateEventMismatchExceptionMessage,

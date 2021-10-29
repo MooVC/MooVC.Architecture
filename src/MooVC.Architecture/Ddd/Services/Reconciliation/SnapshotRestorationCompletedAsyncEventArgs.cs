@@ -12,9 +12,10 @@
             CancellationToken? cancellationToken = default)
             : base(cancellationToken: cancellationToken)
         {
-            ArgumentNotNull(sequence, nameof(sequence), SnapshotRestorationCompletedEventArgsSequenceRequired);
-
-            Sequence = sequence;
+            Sequence = ArgumentNotNull(
+                sequence,
+                nameof(sequence),
+                SnapshotRestorationCompletedEventArgsSequenceRequired);
         }
 
         public IEventSequence Sequence { get; }

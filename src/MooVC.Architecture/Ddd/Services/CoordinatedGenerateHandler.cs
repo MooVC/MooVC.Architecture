@@ -20,9 +20,10 @@
             TimeSpan? timeout = default)
             : base(timeout: timeout)
         {
-            ArgumentNotNull(repository, nameof(repository), CoordinatedGenerateHandlerRepositoryRequired);
-
-            this.repository = repository;
+            this.repository = ArgumentNotNull(
+                repository,
+                nameof(repository),
+                CoordinatedGenerateHandlerRepositoryRequired);
         }
 
         protected abstract TAggregate PerformCoordinatedGenerate(TCommand command);

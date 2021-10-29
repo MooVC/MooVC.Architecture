@@ -48,8 +48,15 @@
 
         private static string FormatMessage(Reference aggregate, IEnumerable<DomainEvent> events)
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventSequenceUnorderedExceptionAggregateRequired);
-            ArgumentNotNull(events, nameof(events), AggregateEventSequenceUnorderedExceptionEventsRequired);
+            _ = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                AggregateEventSequenceUnorderedExceptionAggregateRequired);
+
+            _ = ArgumentNotNull(
+                events,
+                nameof(events),
+                AggregateEventSequenceUnorderedExceptionEventsRequired);
 
             return Format(
                 AggregateEventSequenceUnorderedExceptionMessage,

@@ -40,6 +40,9 @@ This release focuses on addressing weaknesses in the handling of aggregate refer
 - Changed Architecture.Ddd.Reference.Create so that the type parameter now comes after the id parameter (**breaking change**).
 - Changed Architecture.Ddd.Reference<TAggregate> so that its constructors are now internal only  (**breaking change**).
 - Changed Architecture.Ddd.Reference<TAggregate> so that it now has a static Create variant, capable of accepting an id and optional version.
+- Changed Architecture.Ddd.Ensure.ReferenceIsNotEmpty so that it now returns the tested reference.
+- Changed Architecture.Ddd.Ensure.ReferenceIsOfType so that it now returns the tested reference.
+- Changed Architecture.Ddd.ReferenceExtensions.ToTyped now accepts and validates a nullable reference.
 - Changed Architecture.Ddd.ReferenceExtensions.ToTyped now accepts and validates a nullable reference.
 - Changed Architecture.Ddd.SignedVersion so that the custom formatted string retutned when ToString is invoked now takes account of the empty state.
 - Changed Architecture.Ddd.SignedVersion so that it can now be implicitly cast to its constituent parts (Number, Signature).

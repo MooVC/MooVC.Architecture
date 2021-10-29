@@ -17,9 +17,10 @@ namespace MooVC.Architecture.Services
             CancellationToken? cancellationToken = default)
             : base(cancellationToken: cancellationToken)
         {
-            ArgumentNotNull(message, nameof(message), MessageEventArgsMessageRequired);
-
-            Message = message;
+            Message = ArgumentNotNull(
+                message,
+                nameof(message),
+                MessageEventArgsMessageRequired);
         }
 
         protected MessageAsyncEventArgs(SerializationInfo info, StreamingContext context)

@@ -14,7 +14,10 @@
             CancellationToken? cancellationToken = default,
             TimeSpan? timeout = default)
         {
-            ArgumentNotNull(target, nameof(target), ObjectExtensionsCoordinateAsyncObjectRequired);
+            _ = ArgumentNotNull(
+                target,
+                nameof(target),
+                ObjectExtensionsCoordinateAsyncObjectRequired);
 
             await target
                 .GetType()

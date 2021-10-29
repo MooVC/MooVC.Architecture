@@ -12,7 +12,11 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         {
             Reference reference = Reference<SerializableAggregateRoot>.Create(Guid.NewGuid());
 
-            ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference));
+            Reference<SerializableAggregateRoot> result = ReferenceIsOfType<SerializableAggregateRoot>(
+                reference,
+                nameof(reference));
+
+            Assert.Same(reference, result);
         }
 
         [Fact]
@@ -20,7 +24,11 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         {
             Reference reference = Reference<SerializableAggregateRoot>.Empty;
 
-            ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference));
+            Reference<SerializableAggregateRoot> result = ReferenceIsOfType<SerializableAggregateRoot>(
+                reference,
+                nameof(reference));
+
+            Assert.Same(reference, result);
         }
 
         [Fact]

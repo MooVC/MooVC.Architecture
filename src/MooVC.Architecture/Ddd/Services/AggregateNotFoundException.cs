@@ -47,8 +47,15 @@
 
         private static string FormatMessage(Message context, Reference<TAggregate> aggregate)
         {
-            ArgumentNotNull(context, nameof(context), AggregateNotFoundExceptionContextRequired);
-            ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateNotFoundExceptionAggregateRequired);
+            _ = ArgumentNotNull(
+                context,
+                nameof(context),
+                AggregateNotFoundExceptionContextRequired);
+
+            _ = ReferenceIsNotEmpty(
+                aggregate,
+                nameof(aggregate),
+                AggregateNotFoundExceptionAggregateRequired);
 
             return Format(
                 AggregateNotFoundExceptionMessage,

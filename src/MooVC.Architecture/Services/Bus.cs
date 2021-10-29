@@ -21,7 +21,7 @@ namespace MooVC.Architecture.Services
             Message message,
             CancellationToken? cancellationToken = default)
         {
-            ArgumentNotNull(message, nameof(message), BusMessageRequired);
+            _ = ArgumentNotNull(message, nameof(message), BusMessageRequired);
 
             await OnInvokingAsync(message, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);

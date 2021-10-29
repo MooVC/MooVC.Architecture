@@ -23,11 +23,15 @@
             CancellationToken? cancellationToken = default)
             : base(cancellationToken: cancellationToken)
         {
-            ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateReconciledEventArgsAggregateRequired);
-            ArgumentIsAcceptable(events, nameof(events), value => value.Any(), AggregateReconciledEventArgsEventsRequired);
+            Aggregate = ReferenceIsNotEmpty(
+                aggregate,
+                nameof(aggregate),
+                AggregateReconciledEventArgsAggregateRequired);
 
-            Aggregate = aggregate;
-            Events = events;
+            Events = ArgumentNotEmpty(
+                events,
+                nameof(events),
+                AggregateReconciledEventArgsEventsRequired);
         }
 
         private AggregateReconciledAsyncEventArgs(SerializationInfo info, StreamingContext context)

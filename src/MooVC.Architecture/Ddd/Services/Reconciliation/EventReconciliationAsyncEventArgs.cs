@@ -20,13 +20,10 @@
             CancellationToken? cancellationToken = default)
             : base(cancellationToken: cancellationToken)
         {
-            ArgumentIsAcceptable(
+            Events = ArgumentNotEmpty(
                 events,
                 nameof(events),
-                _ => events.Any(),
                 EventReconciliationEventArgsEventsRequired);
-
-            Events = events.Snapshot();
         }
 
         private EventReconciliationAsyncEventArgs(SerializationInfo info, StreamingContext context)

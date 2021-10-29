@@ -7,25 +7,29 @@
 
     public static partial class Ensure
     {
-        public static void ReferenceIsNotEmpty(
-            [NotNull] Reference? reference,
+        public static T ReferenceIsNotEmpty<T>(
+            [NotNull] T? reference,
             string argumentName)
+            where T : Reference
         {
-            ReferenceIsNotEmpty(
+            return ReferenceIsNotEmpty(
                 reference,
                 argumentName,
                 Format(EnsureReferenceIsNotEmptyMessage, reference?.Type.Name));
         }
 
-        public static void ReferenceIsNotEmpty(
-            [NotNull] Reference? reference,
+        public static T ReferenceIsNotEmpty<T>(
+            [NotNull] T? reference,
             string argumentName,
             string message)
+            where T : Reference
         {
             if (reference is null || reference.IsEmpty)
             {
                 throw new ArgumentException(message, argumentName);
             }
+
+            return reference;
         }
     }
 }

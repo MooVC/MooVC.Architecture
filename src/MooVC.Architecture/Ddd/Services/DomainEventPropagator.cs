@@ -12,15 +12,22 @@
 
         public DomainEventPropagator(IBus bus, IAggregateReconciler reconciler)
         {
-            ArgumentNotNull(bus, nameof(bus), DomainEventPropagatorBusRequired);
-            ArgumentNotNull(reconciler, nameof(reconciler), DomainEventPropagatorReconcilerRequired);
+            this.bus = ArgumentNotNull(
+                bus,
+                nameof(bus),
+                DomainEventPropagatorBusRequired);
 
-            this.bus = bus;
-            this.reconciler = reconciler;
+            this.reconciler = ArgumentNotNull(
+                reconciler,
+                nameof(reconciler),
+                DomainEventPropagatorReconcilerRequired);
+
             this.reconciler.AggregateReconciled += Reconciler_AggregateReconciled;
         }
 
-        private async Task Reconciler_AggregateReconciled(IAggregateReconciler sender, AggregateReconciledAsyncEventArgs e)
+        private async Task Reconciler_AggregateReconciled(
+            IAggregateReconciler sender,
+            AggregateReconciledAsyncEventArgs e)
         {
             await bus
                 .PublishAsync(e.Events, cancellationToken: e.CancellationToken)

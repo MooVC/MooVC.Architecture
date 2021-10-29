@@ -33,9 +33,12 @@
 
         internal SignedVersion(SignedVersion previous)
         {
-            ArgumentNotNull(previous, nameof(previous), SignedVersionPreviousRequired);
+            _ = ArgumentNotNull(
+                previous,
+                nameof(previous),
+                SignedVersionPreviousRequired);
 
-            ArgumentIsAcceptable(
+            _ = ArgumentIsAcceptable(
                 previous,
                 nameof(previous),
                 _ => !previous.Footer.SequenceEqual(emptySegment),

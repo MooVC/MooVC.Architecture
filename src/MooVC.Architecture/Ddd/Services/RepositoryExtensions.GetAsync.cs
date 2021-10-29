@@ -45,7 +45,7 @@
                 throw new AggregateDoesNotExistException<TAggregate>(context);
             }
 
-            ReferenceIsOfType<TAggregate>(reference, nameof(reference));
+            _ = ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
             if (latest || reference.Version.IsEmpty)
             {

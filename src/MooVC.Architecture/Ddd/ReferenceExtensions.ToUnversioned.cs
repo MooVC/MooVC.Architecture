@@ -8,7 +8,7 @@ namespace MooVC.Architecture.Ddd
     {
         public static Reference ToUnversioned(this Reference reference)
         {
-            ArgumentNotNull(
+            _ = ArgumentNotNull(
                 reference,
                 nameof(reference),
                 ReferenceExtensionsToUnversionedReferenceRequired);
@@ -24,7 +24,7 @@ namespace MooVC.Architecture.Ddd
         public static Reference<TAggregate> ToUnversioned<TAggregate>(this Reference<TAggregate> reference)
             where TAggregate : AggregateRoot
         {
-            ArgumentNotNull(
+            _ = ArgumentNotNull(
                 reference,
                 nameof(reference),
                 ReferenceExtensionsToUnversionedReferenceRequired);

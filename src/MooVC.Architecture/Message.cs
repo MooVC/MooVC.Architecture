@@ -18,7 +18,7 @@
         protected Message(Message context)
             : this()
         {
-            ArgumentNotNull(context, nameof(context), MessageContextRequired);
+            _ = ArgumentNotNull(context, nameof(context), MessageContextRequired);
 
             CausationId = context.Id;
             CorrelationId = context.CorrelationId;

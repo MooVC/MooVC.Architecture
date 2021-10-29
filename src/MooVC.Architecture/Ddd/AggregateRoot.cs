@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Reference;
@@ -15,7 +14,7 @@
         protected AggregateRoot(Guid id)
             : base(id)
         {
-            ArgumentIsAcceptable(
+            _ = ArgumentIsAcceptable(
                 id,
                 nameof(id),
                 value => value != Guid.Empty,

@@ -35,7 +35,10 @@
 
         private static string FormatMessage(Reference reference)
         {
-            ArgumentNotNull(reference, nameof(reference), AggregateReferenceMismatchExceptionReferenceRequired);
+            _ = ArgumentNotNull(
+                reference,
+                nameof(reference),
+                AggregateReferenceMismatchExceptionReferenceRequired);
 
             return Format(
                 AggregateReferenceMismatchExceptionMessage,

@@ -20,9 +20,10 @@
         private protected DomainEvent(Message context, Reference aggregate)
             : base(context)
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);
-
-            Aggregate = aggregate;
+            Aggregate = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                DomainEventAggregateRequired);
         }
 
         public Reference Aggregate { get; }

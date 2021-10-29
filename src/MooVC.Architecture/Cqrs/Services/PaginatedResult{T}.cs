@@ -44,7 +44,10 @@ namespace MooVC.Architecture.Cqrs.Services
 
         internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)
         {
-            ArgumentNotNull(paging, nameof(paging), PaginatedResultCalculateTotalPagesPagingRequired);
+            _ = ArgumentNotNull(
+                paging,
+                nameof(paging),
+                PaginatedResultCalculateTotalPagesPagingRequired);
 
             decimal requiredPages = (decimal)totalResults / paging.Size;
             ulong totalPages = (ulong)Math.Ceiling(requiredPages);

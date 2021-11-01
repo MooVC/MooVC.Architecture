@@ -14,10 +14,9 @@
         protected AggregateRoot(Guid id)
             : base(id)
         {
-            _ = ArgumentIsAcceptable<Guid>(
+            _ = ArgumentNotEmpty(
                 id,
                 nameof(id),
-                value => value != Guid.Empty,
                 AggregateRootIdRequired);
 
             State = new AggregateState(new SignedVersion(), SignedVersion.Empty);

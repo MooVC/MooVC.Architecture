@@ -26,7 +26,7 @@
         internal Reference(Guid id, Type type, SignedVersion? version = default)
            : base(id, type, version: version)
         {
-            _ = ArgumentIsAcceptable(
+            _ = ArgumentIsAcceptable<Guid>(
                 id,
                 nameof(id),
                 value => value != Guid.Empty,

@@ -14,7 +14,7 @@
         protected AggregateRoot(Guid id)
             : base(id)
         {
-            _ = ArgumentIsAcceptable(
+            _ = ArgumentIsAcceptable<Guid>(
                 id,
                 nameof(id),
                 value => value != Guid.Empty,

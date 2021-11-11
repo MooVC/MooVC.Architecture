@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using MooVC.Collections.Generic;
     using MooVC.Serialization;
     using static System.String;

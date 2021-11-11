@@ -1,9 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
     using static MooVC.Architecture.Ddd.Resources;
 
@@ -20,9 +19,10 @@
 
         protected Projection(Reference<TAggregate> aggregate)
         {
-            ReferenceIsNotEmpty(aggregate, nameof(aggregate), ProjectionAggregateRequired);
-
-            Aggregate = aggregate;
+            Aggregate = ReferenceIsNotEmpty(
+                aggregate,
+                nameof(aggregate),
+                ProjectionAggregateRequired);
         }
 
         protected Projection(SerializationInfo info, StreamingContext context)

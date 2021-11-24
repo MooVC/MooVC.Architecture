@@ -18,10 +18,15 @@
         [Fact]
         public void GivenAnExistingDictionaryThenAnEmptyInstanceIsReturned()
         {
-            IDictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot> existing = Dictionary.Snapshot();
-            var instance = new UnversionedReferenceDictionary<SerializableAggregateRoot, SerializableAggregateRoot>(existing: existing);
+            IDictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot> existing =
+                Dictionary.Snapshot();
 
-            Assert.Equal<IDictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>>(existing, instance);
+            IDictionary<Reference<SerializableAggregateRoot>, SerializableAggregateRoot> instance =
+                new UnversionedReferenceDictionary<SerializableAggregateRoot, SerializableAggregateRoot>(existing: existing);
+
+            Assert.NotSame(existing, instance);
+            Assert.Equal(existing.Count, instance.Count);
+            Assert.Contains(existing, existing => instance.Contains(existing));
         }
     }
 }

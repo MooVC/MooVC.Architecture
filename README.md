@@ -46,6 +46,7 @@ This release focuses on addressing weaknesses in the handling of aggregate refer
 - Changed Architecture.Ddd.ReferenceExtensions.ToTyped now accepts and validates a nullable reference.
 - Changed Architecture.Ddd.SignedVersion so that the custom formatted string retutned when ToString is invoked now takes account of the empty state.
 - Changed Architecture.Ddd.SignedVersion so that it can now be implicitly cast to its constituent parts (Number, Signature).
+- Changed to target NET 6 in addition to NET 5 and NET Standard 2.1.
 - Moved Architecture.Serialization to Architecture.Ddd.Serialization as it contained items that solely related to Ddd (**breaking change**).
 - Renamed Architecture.Cqrs.Services.PaginatedResult.TotalPages to Pages (**breaking change**).
 - Renamed Architecture.Cqrs.Services.PaginatedResult.TotalResults to Total (**breaking change**).

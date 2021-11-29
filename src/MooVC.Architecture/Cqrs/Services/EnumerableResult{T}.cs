@@ -11,17 +11,23 @@ namespace MooVC.Architecture.Cqrs.Services
     public abstract class EnumerableResult<T>
         : Result<IEnumerable<T>>
     {
+        private readonly Lazy<ulong> count;
+
         protected EnumerableResult(Message context, IEnumerable<T> values)
             : base(context, values.Snapshot())
         {
+            count = new(CalculateCount);
         }
 
         protected EnumerableResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
+            count = new(CalculateCount);
         }
 
-        public ulong Count => (ulong)Value.LongCount();
+        public ulong Count => count.Value;
+
+        public bool HasResults => Count > 0;
 
         public T this[int index] => Value.ElementAt(index);
 
@@ -39,6 +45,11 @@ namespace MooVC.Architecture.Cqrs.Services
         public IEnumerator<T> GetEnumerator()
         {
             return Value.GetEnumerator();
+        }
+
+        private ulong CalculateCount()
+        {
+            return (ulong)Value.LongCount();
         }
     }
 }

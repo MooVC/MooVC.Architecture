@@ -28,7 +28,9 @@
 
         protected abstract TAggregate PerformCoordinatedGenerate(TCommand command);
 
-        protected override async Task PerformCoordinatedExecuteAsync(TCommand command, CancellationToken cancellationToken)
+        protected override async Task PerformCoordinatedExecuteAsync(
+            TCommand command,
+            CancellationToken cancellationToken)
         {
             TAggregate aggregate = PerformCoordinatedGenerate(command);
 

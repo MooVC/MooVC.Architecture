@@ -19,6 +19,8 @@ This release focuses on addressing weaknesses in the handling of aggregate refer
 - Added a new Architecture.Cqrs.Services.Result that can be used to encapsulate a result of a query.
 - Added a new Architecture.Cqrs.Services.EnumerableResult that can be used to encapsulate a result that contains a collection.
 - Added a new Architecture.Ddd.GuidExtensions.ToReference extension that acts as a shortcut to the new type centric Architecture.Ddd.Reference.Create variant. 
+- Added a new Architecture.Ddd.Services.CoordinatedContextHandler that can be used to coorindate an operation in the context of an aggregate.
+- Added a new Architecture.Ddd.Services.CoordinatedReactionHandler that can be used to coorindate a reaction to an event in the context of the aggregate from which it was emitted.
 - Added a new Architecture.Ddd.Services.Ensure.AggregateDoesNotConflict variant that accepts a nullable aggregate as the current version.
 - Changed Architecture.Cqrs.Services.PaginatedResult so that it now inherits from Architecture.Cqrs.Services.EnumerableResult (**breaking change**).
 - Changed Architecture.Ddd.AggregateHasUncommittedChangesException so that it now has a constructor capable of accepting an AggregateRoot instance.
@@ -44,6 +46,7 @@ This release focuses on addressing weaknesses in the handling of aggregate refer
 - Changed Architecture.Ddd.Ensure.ReferenceIsOfType so that it now returns the tested reference.
 - Changed Architecture.Ddd.ReferenceExtensions.ToTyped now accepts and validates a nullable reference.
 - Changed Architecture.Ddd.ReferenceExtensions.ToTyped now accepts and validates a nullable reference.
+- Changed Architecture.Ddd.Services.CoordinatedOperationHandler so that it now inherits from Architecture.Ddd.Services.CoordinatedContextHandler;
 - Changed Architecture.Ddd.SignedVersion so that the custom formatted string retutned when ToString is invoked now takes account of the empty state.
 - Changed Architecture.Ddd.SignedVersion so that it can now be implicitly cast to its constituent parts (Number, Signature).
 - Changed to target NET 6 in addition to NET 5 and NET Standard 2.1.

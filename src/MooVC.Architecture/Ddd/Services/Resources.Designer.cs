@@ -207,18 +207,18 @@ namespace MooVC.Architecture.Ddd.Services {
         /// <summary>
         ///   Looks up a localized string similar to The repository must be provided..
         /// </summary>
-        internal static string CoordinatedGenerateHandlerRepositoryRequired {
+        internal static string CoordinatedContextHandlerRepositoryRequired {
             get {
-                return ResourceManager.GetString("CoordinatedGenerateHandlerRepositoryRequired", resourceCulture);
+                return ResourceManager.GetString("CoordinatedContextHandlerRepositoryRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The repository must be provided..
         /// </summary>
-        internal static string CoordinatedOperationHandlerRepositoryRequired {
+        internal static string CoordinatedGenerateHandlerRepositoryRequired {
             get {
-                return ResourceManager.GetString("CoordinatedOperationHandlerRepositoryRequired", resourceCulture);
+                return ResourceManager.GetString("CoordinatedGenerateHandlerRepositoryRequired", resourceCulture);
             }
         }
         

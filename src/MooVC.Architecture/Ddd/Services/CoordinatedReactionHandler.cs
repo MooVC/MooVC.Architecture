@@ -3,7 +3,7 @@
     using System;
 
     public abstract class CoordinatedReactionHandler<TAggregate, TEvent>
-        : CoordinatedOperationHandler<TAggregate, TEvent>
+        : CoordinatedContextHandler<TAggregate, TEvent>
         where TAggregate : AggregateRoot
         where TEvent : DomainEvent<TAggregate>
     {

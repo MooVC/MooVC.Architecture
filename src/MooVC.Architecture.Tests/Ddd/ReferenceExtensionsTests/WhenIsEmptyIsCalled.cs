@@ -1,8 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
+    using static MooVC.Architecture.Ddd.Reference;
 
     public sealed class WhenIsEmptyIsCalled
     {
@@ -25,7 +25,7 @@
         [Fact]
         public void GivenAReferenceThenTheResponseIsNegative()
         {
-            var reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference reference = Create<SerializableAggregateRoot>(Guid.NewGuid());
 
             Assert.False(reference.IsEmpty());
         }

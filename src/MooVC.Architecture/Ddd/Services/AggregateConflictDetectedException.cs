@@ -2,7 +2,7 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using MooVC.Serialization;
     using static System.String;
     using static MooVC.Architecture.Ddd.Ensure;
@@ -58,12 +58,22 @@
             SignedVersion? persisted = default,
             bool persistedRequired = false)
         {
-            ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedExceptionAggregateRequired);
-            ArgumentNotNull(received, nameof(received), AggregateConflictDetectedExceptionReceivedRequired);
+            _ = ReferenceIsNotEmpty(
+                aggregate,
+                nameof(aggregate),
+                AggregateConflictDetectedExceptionAggregateRequired);
+
+            _ = ArgumentNotNull(
+                received,
+                nameof(received),
+                AggregateConflictDetectedExceptionReceivedRequired);
 
             if (persistedRequired)
             {
-                ArgumentNotNull(persisted, nameof(persisted), AggregateConflictDetectedExceptionPersistedRequired);
+                _ = ArgumentNotNull(
+                    persisted,
+                    nameof(persisted),
+                    AggregateConflictDetectedExceptionPersistedRequired);
 
                 return Format(
                     AggregateConflictDetectedExceptionExistingEntryMessage,

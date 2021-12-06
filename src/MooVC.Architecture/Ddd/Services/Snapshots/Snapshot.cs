@@ -18,10 +18,12 @@
             IEnumerable<EventCentricAggregateRoot> aggregates,
             IEventSequence sequence)
         {
-            ArgumentNotNull(sequence, nameof(sequence), SnapshotSequenceRequired);
-
             Aggregates = aggregates.Snapshot();
-            Sequence = sequence;
+
+            Sequence = ArgumentNotNull(
+                sequence,
+                nameof(sequence),
+                SnapshotSequenceRequired);
         }
 
         private Snapshot(SerializationInfo info, StreamingContext context)

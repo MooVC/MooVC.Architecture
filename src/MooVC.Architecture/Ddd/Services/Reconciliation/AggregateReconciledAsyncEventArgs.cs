@@ -2,11 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading;
     using MooVC.Architecture.Ddd;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
@@ -23,11 +22,15 @@
             CancellationToken? cancellationToken = default)
             : base(cancellationToken: cancellationToken)
         {
-            ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateReconciledEventArgsAggregateRequired);
-            ArgumentIsAcceptable(events, nameof(events), value => value.Any(), AggregateReconciledEventArgsEventsRequired);
+            Aggregate = ReferenceIsNotEmpty(
+                aggregate,
+                nameof(aggregate),
+                AggregateReconciledEventArgsAggregateRequired);
 
-            Aggregate = aggregate;
-            Events = events;
+            Events = ArgumentNotEmpty(
+                events,
+                nameof(events),
+                AggregateReconciledEventArgsEventsRequired);
         }
 
         private AggregateReconciledAsyncEventArgs(SerializationInfo info, StreamingContext context)

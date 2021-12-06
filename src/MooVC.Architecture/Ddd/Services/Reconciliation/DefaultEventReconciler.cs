@@ -25,11 +25,16 @@
             IAggregateReconciler reconciler,
             ushort numberToRead = DefaultNumberToRead)
         {
-            ArgumentNotNull(eventStore, nameof(eventStore), DefaultEventReconcilerEventStoreRequired);
-            ArgumentNotNull(reconciler, nameof(reconciler), DefaultEventReconcilerReconcilerRequired);
+            this.eventStore = ArgumentNotNull(
+                eventStore,
+                nameof(eventStore),
+                DefaultEventReconcilerEventStoreRequired);
 
-            this.eventStore = eventStore;
-            this.reconciler = reconciler;
+            this.reconciler = ArgumentNotNull(
+                reconciler,
+                nameof(reconciler),
+                DefaultEventReconcilerReconcilerRequired);
+
             this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
         }
 

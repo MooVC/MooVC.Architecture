@@ -11,6 +11,7 @@
             var second = new EmptyValue();
 
             Assert.False(first != second);
+            Assert.False(second != first);
         }
 
         [Theory]
@@ -37,6 +38,7 @@
             var value2 = new TestValue(secondA, secondB, secondC);
 
             Assert.True(value1 != value2);
+            Assert.True(value2 != value1);
         }
 
         [Theory]
@@ -52,6 +54,7 @@
 
             Assert.NotSame(value1, value2);
             Assert.False(value1 != value2);
+            Assert.False(value2 != value1);
         }
 
         [Theory]
@@ -66,6 +69,7 @@
             var value2 = new TestValue(valueC, valueB, valueA);
 
             Assert.True(value1 != value2);
+            Assert.True(value2 != value1);
         }
     }
 }

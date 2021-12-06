@@ -81,7 +81,7 @@
 
         public bool TryGetValue(
             Reference<TAggregate> key,
-            #if NET5_0
+            #if !NETSTANDARD2_1
             [MaybeNullWhen(false)]
             #endif
             out T value)

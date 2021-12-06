@@ -1,4 +1,4 @@
-namespace MooVC.Architecture.Ddd.AggregateRootTests
+namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Runtime.Serialization;

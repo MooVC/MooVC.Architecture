@@ -14,6 +14,7 @@
             Assert.Equal(first, second);
             Assert.True(first == second);
             Assert.True(first.Equals(second));
+            Assert.True(second == first);
         }
 
         [Theory]
@@ -42,6 +43,7 @@
             Assert.NotEqual(value1, value2);
             Assert.False(value1 == value2);
             Assert.False(value1.Equals(value2));
+            Assert.False(value2 == value1);
         }
 
         [Theory]
@@ -59,6 +61,7 @@
             Assert.Equal(value1, value2);
             Assert.True(value1 == value2);
             Assert.True(value1.Equals(value2));
+            Assert.True(value2 == value1);
         }
 
         [Theory]
@@ -75,6 +78,7 @@
             Assert.NotEqual(value1, value2);
             Assert.False(value1 == value2);
             Assert.False(value1.Equals(value2));
+            Assert.False(value2 == value1);
         }
     }
 }

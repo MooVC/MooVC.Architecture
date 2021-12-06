@@ -13,17 +13,19 @@
     {
         protected PaginatedQuery(Paging paging)
         {
-            ArgumentNotNull(paging, nameof(paging), PaginatedQueryPagingRequired);
-
-            Paging = paging;
+            Paging = ArgumentNotNull(
+                paging,
+                nameof(paging),
+                PaginatedQueryPagingRequired);
         }
 
         protected PaginatedQuery(Message context, Paging paging)
             : base(context)
         {
-            ArgumentNotNull(paging, nameof(paging), PaginatedQueryPagingRequired);
-
-            Paging = paging;
+            Paging = ArgumentNotNull(
+                paging,
+                nameof(paging),
+                PaginatedQueryPagingRequired);
         }
 
         protected PaginatedQuery(SerializationInfo info, StreamingContext context)

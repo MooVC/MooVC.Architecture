@@ -2,19 +2,20 @@ namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Reflection;
     using System.Runtime.Serialization;
     using MooVC.Serialization;
+    using static System.String;
+    using static MooVC.Architecture.Ddd.Resources;
+    using static MooVC.Ensure;
 
     [Serializable]
-    public class Reference
-        : Value
+    public abstract class Reference
+        : Value,
+          IEquatable<Reference>
     {
-        internal Reference(AggregateRoot aggregate)
-            : this(aggregate.Id, aggregate.GetType(), version: aggregate.Version)
-        {
-        }
-
-        internal Reference(Guid id, Type type, SignedVersion? version = default)
+        private protected Reference(Guid id, Type type, SignedVersion? version)
         {
             Id = id;
             Type = type;
@@ -35,9 +36,25 @@ namespace MooVC.Architecture.Ddd
 
         public bool IsVersioned => !Version.IsEmpty;
 
-        public virtual Type Type { get; }
+        public Type Type { get; }
 
         public SignedVersion Version { get; } = SignedVersion.Empty;
+
+        public static implicit operator Guid(Reference? reference)
+        {
+            return reference?.Id ?? Guid.Empty;
+        }
+
+        [return: NotNullIfNotNull("reference")]
+        public static implicit operator Type?(Reference? reference)
+        {
+            return reference?.Type;
+        }
+
+        public static implicit operator SignedVersion(Reference? reference)
+        {
+            return reference?.Version ?? SignedVersion.Empty;
+        }
 
         public static bool operator ==(Reference? first, Reference? second)
         {
@@ -49,16 +66,70 @@ namespace MooVC.Architecture.Ddd
             return NotEqualOperator(first, second);
         }
 
-        public static Reference Create(string typeName, Guid id, SignedVersion? version = default)
+        public static Reference Create(Guid id, string typeName, SignedVersion? version = default)
         {
             var aggregate = Type.GetType(typeName, true);
-            Type reference = typeof(Reference<>);
-            Type typed = reference.MakeGenericType(aggregate!);
 
-            return (Reference)Activator.CreateInstance(typed, id, version)!;
+            return Create(id, aggregate!, version: version);
+        }
+
+        public static Reference Create(Guid id, Type type, SignedVersion? version = default)
+        {
+            _ = ArgumentNotNull(
+                type,
+                nameof(type),
+                ReferenceCreateTypeRequired);
+
+            Type reference = typeof(Reference<>);
+            Type aggregate = reference.MakeGenericType(type);
+
+            if (id == Guid.Empty)
+            {
+                return (Reference)aggregate
+                    .GetProperty(nameof(Empty), aggregate)!
+                    .GetValue(default)!;
+            }
+
+            return (Reference)Activator.CreateInstance(
+                aggregate,
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                default,
+                new object?[]
+                {
+                    id,
+                    type,
+                    version,
+                },
+                default)!;
+        }
+
+        public static Reference Create<TAggregate>(Guid id, SignedVersion? version = default)
+            where TAggregate : AggregateRoot
+        {
+            return Create(id, typeof(TAggregate), version: version);
+        }
+
+        public static Reference Create(AggregateRoot aggregate)
+        {
+            _ = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                ReferenceCreateAggregateRequired);
+
+            return Create(aggregate.Id, aggregate.GetType(), version: aggregate.Version);
         }
 
         public override bool Equals(object? other)
+        {
+            return EqualOperator(this, other as Reference);
+        }
+
+        public bool Equals(Reference? other)
+        {
+            return EqualOperator(this, other);
+        }
+
+        public override bool Equals(Value? other)
         {
             return EqualOperator(this, other as Reference);
         }
@@ -89,6 +160,16 @@ namespace MooVC.Architecture.Ddd
                 && (Version.IsEmpty || Version == aggregate.Version);
         }
 
+        public override string ToString()
+        {
+            if (IsEmpty)
+            {
+                return Type.FullName!;
+            }
+
+            return $"{Type.FullName} [{Id:P}, {Version}]";
+        }
+
         protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)
         {
             return info.TryGetValue(nameof(Id), defaultValue: Guid.Empty);
@@ -96,9 +177,27 @@ namespace MooVC.Architecture.Ddd
 
         protected virtual Type DeserializeType(SerializationInfo info, StreamingContext context)
         {
+            return DeserializeType(default, info, context);
+        }
+
+        protected virtual Type DeserializeType(
+            Type? @default,
+            SerializationInfo info,
+            StreamingContext context)
+        {
             string? typeName;
 
             typeName = info.TryGetInternalString(nameof(typeName));
+
+            if (IsNullOrEmpty(typeName))
+            {
+                if (@default is null)
+                {
+                    throw new SerializationException(ReferenceDeserializeTypeTypeIndeterminate);
+                }
+
+                return @default;
+            }
 
             var type = Type.GetType(typeName, true);
 

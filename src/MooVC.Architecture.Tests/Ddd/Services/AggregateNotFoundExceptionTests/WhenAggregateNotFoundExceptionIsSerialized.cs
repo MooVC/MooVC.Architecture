@@ -10,14 +10,14 @@
         [Fact]
         public void GivenAnInstanceThenAllPropertiesAreSerialized()
         {
-            var aggregate = Guid.NewGuid().ToReference<AggregateRoot>();
+            var aggregate = Guid.NewGuid().ToReference<SerializableAggregateRoot>();
             var context = new SerializableMessage();
 
-            var original = new AggregateNotFoundException<AggregateRoot>(
+            var original = new AggregateNotFoundException<SerializableAggregateRoot>(
                 context,
                 aggregate);
 
-            AggregateNotFoundException<AggregateRoot> deserialized = original.Clone();
+            AggregateNotFoundException<SerializableAggregateRoot> deserialized = original.Clone();
 
             Assert.NotSame(original, deserialized);
             Assert.Equal(original.Aggregate, deserialized.Aggregate);

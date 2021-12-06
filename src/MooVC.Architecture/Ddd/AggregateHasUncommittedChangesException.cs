@@ -2,14 +2,20 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using static System.String;
+    using static MooVC.Architecture.Ddd.Reference;
     using static MooVC.Architecture.Ddd.Resources;
 
     [Serializable]
     public sealed class AggregateHasUncommittedChangesException
         : ArgumentException
     {
+        internal AggregateHasUncommittedChangesException(AggregateRoot aggregate)
+            : this(Create(aggregate))
+        {
+        }
+
         internal AggregateHasUncommittedChangesException(Reference aggregate)
             : base(Format(
                 AggregateHasUncommittedChangesExceptionMessage,

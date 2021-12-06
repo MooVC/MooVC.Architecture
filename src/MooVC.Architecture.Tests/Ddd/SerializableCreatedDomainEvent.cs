@@ -1,20 +1,20 @@
-﻿namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
+namespace MooVC.Architecture.Ddd
 {
     using System;
     using System.Runtime.Serialization;
 
     [Serializable]
-    public sealed class SerializableFailedDomainEvent
+    public sealed class SerializableCreatedDomainEvent
         : DomainEvent<SerializableEventCentricAggregateRoot>
     {
-        public SerializableFailedDomainEvent(
+        public SerializableCreatedDomainEvent(
             Message context,
             SerializableEventCentricAggregateRoot aggregate)
             : base(context, aggregate)
         {
         }
 
-        private SerializableFailedDomainEvent(
+        private SerializableCreatedDomainEvent(
             SerializationInfo info,
             StreamingContext context)
             : base(info, context)

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Runtime.Serialization;
     using MooVC.Collections.Generic;
@@ -21,7 +22,7 @@
         private static readonly byte[] emptySegment = new byte[SplicePortion];
 
         private static readonly Lazy<SignedVersion> empty = new(
-            () => new SignedVersion(emptySegment, emptySegment, 0));
+            () => new SignedVersion(emptySegment, emptySegment, ulong.MinValue));
 
         private readonly Lazy<Guid> signature;
 
@@ -32,9 +33,12 @@
 
         internal SignedVersion(SignedVersion previous)
         {
-            ArgumentNotNull(previous, nameof(previous), SignedVersionPreviousRequired);
+            _ = ArgumentNotNull(
+                previous,
+                nameof(previous),
+                SignedVersionPreviousRequired);
 
-            ArgumentIsAcceptable(
+            _ = ArgumentIsAcceptable(
                 previous,
                 nameof(previous),
                 _ => !previous.Footer.SequenceEqual(emptySegment),
@@ -79,6 +83,16 @@
         public Guid Signature => signature.Value;
 
         public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
+
+        public static implicit operator ulong(SignedVersion? version)
+        {
+            return version?.Number ?? ulong.MinValue;
+        }
+
+        public static implicit operator Guid(SignedVersion? version)
+        {
+            return version?.Signature ?? Guid.Empty;
+        }
 
         public int CompareTo(SignedVersion? other)
         {
@@ -130,7 +144,12 @@
 
         public override string ToString()
         {
-            return $"{Number} ({Signature})";
+            if (IsEmpty)
+            {
+                return SignedVersionUnversioned;
+            }
+
+            return $"{Number} ({Signature:P})";
         }
 
         protected override IEnumerable<object> GetAtomicValues()

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using static System.String;
     using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
@@ -35,7 +35,10 @@
 
         private static string FormatMessage(Reference reference)
         {
-            ArgumentNotNull(reference, nameof(reference), AggregateReferenceMismatchExceptionReferenceRequired);
+            _ = ArgumentNotNull(
+                reference,
+                nameof(reference),
+                AggregateReferenceMismatchExceptionReferenceRequired);
 
             return Format(
                 AggregateReferenceMismatchExceptionMessage,

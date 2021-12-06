@@ -165,10 +165,10 @@
   <data name="BusOnPublishedAsyncFailure" xml:space="preserve">
     <value>A failure has prevented one or more listeners for publications from successfully handling a notification.</value>
   </data>
-  <data name="CoordinatedGenerateHandlerRepositoryRequired" xml:space="preserve">
+  <data name="CoordinatedContextHandlerRepositoryRequired" xml:space="preserve">
     <value>The repository must be provided.</value>
   </data>
-  <data name="CoordinatedOperationHandlerRepositoryRequired" xml:space="preserve">
+  <data name="CoordinatedGenerateHandlerRepositoryRequired" xml:space="preserve">
     <value>The repository must be provided.</value>
   </data>
   <data name="DomainEventPropagatorBusRequired" xml:space="preserve">

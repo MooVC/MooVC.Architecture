@@ -2,7 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
+    using static MooVC.Architecture.Ddd.Reference;
     using Base = MooVC.Architecture.WhenCoordinateAsyncIsCalled;
 
     public sealed class WhenCoordinateIsCalled
@@ -12,7 +12,7 @@
 
         public WhenCoordinateIsCalled()
         {
-            reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            reference = Create<SerializableAggregateRoot>(Guid.NewGuid());
         }
 
         protected override Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default)

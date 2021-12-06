@@ -26,13 +26,21 @@
             Func<Func<Type, IAggregateReconciliationProxy?>> proxies,
             ushort numberToRead = DefaultEventReconciler<TSequencedEvents>.DefaultNumberToRead)
         {
-            ArgumentNotNull(factory, nameof(factory), DefaultSnapshotProviderFactoryRequired);
-            ArgumentNotNull(eventStore, nameof(eventStore), DefaultSnapshotProviderEventStoreRequired);
-            ArgumentNotNull(proxies, nameof(proxies), DefaultSnapshotProviderProxiesRequired);
+            this.eventStore = ArgumentNotNull(
+                eventStore,
+                nameof(eventStore),
+                DefaultSnapshotProviderEventStoreRequired);
 
-            this.eventStore = eventStore;
-            this.factory = factory;
-            this.proxies = proxies;
+            this.factory = ArgumentNotNull(
+                factory,
+                nameof(factory),
+                DefaultSnapshotProviderFactoryRequired);
+
+            this.proxies = ArgumentNotNull(
+                proxies,
+                nameof(proxies),
+                DefaultSnapshotProviderProxiesRequired);
+
             this.numberToRead = numberToRead;
         }
 

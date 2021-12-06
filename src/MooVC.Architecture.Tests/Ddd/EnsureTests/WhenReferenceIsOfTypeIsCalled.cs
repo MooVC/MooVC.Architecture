@@ -2,8 +2,6 @@ namespace MooVC.Architecture.Ddd.EnsureTests
 {
     using System;
     using MooVC.Architecture.Ddd;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
     using static MooVC.Architecture.Ddd.Ensure;
 
@@ -12,9 +10,13 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMatchingReferenceThenNoExceptionIsThrown()
         {
-            Reference reference = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference reference = Reference<SerializableAggregateRoot>.Create(Guid.NewGuid());
 
-            ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference));
+            Reference<SerializableAggregateRoot> result = ReferenceIsOfType<SerializableAggregateRoot>(
+                reference,
+                nameof(reference));
+
+            Assert.Same(reference, result);
         }
 
         [Fact]
@@ -22,13 +24,17 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         {
             Reference reference = Reference<SerializableAggregateRoot>.Empty;
 
-            ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference));
+            Reference<SerializableAggregateRoot> result = ReferenceIsOfType<SerializableAggregateRoot>(
+                reference,
+                nameof(reference));
+
+            Assert.Same(reference, result);
         }
 
         [Fact]
         public void GivenAMismatchingReferenceThenAnArgumentExceptionIsThrown()
         {
-            Reference reference = new Reference<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
+            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Create(Guid.NewGuid());
 
             ArgumentException exception = Assert.Throws<ArgumentException>(
                 () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference)));
@@ -50,7 +56,7 @@ namespace MooVC.Architecture.Ddd.EnsureTests
         [Fact]
         public void GivenAMismatchingReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
         {
-            Reference reference = new Reference<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
+            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Create(Guid.NewGuid());
             string message = "Some sessage";
 
             ArgumentException exception = Assert.Throws<ArgumentException>(

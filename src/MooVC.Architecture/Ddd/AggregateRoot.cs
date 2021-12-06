@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
     using MooVC.Serialization;
+    using static MooVC.Architecture.Ddd.Reference;
     using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
 
@@ -13,10 +14,9 @@
         protected AggregateRoot(Guid id)
             : base(id)
         {
-            ArgumentIsAcceptable(
+            _ = ArgumentNotEmpty(
                 id,
                 nameof(id),
-                value => value != Guid.Empty,
                 AggregateRootIdRequired);
 
             State = new AggregateState(new SignedVersion(), SignedVersion.Empty);
@@ -39,6 +39,26 @@
         public bool HasUncommittedChanges => State.HasUncommittedChanges;
 
         private protected AggregateState State { get; set; }
+
+        public static implicit operator Guid(AggregateRoot? aggregate)
+        {
+            return aggregate?.Id ?? Guid.Empty;
+        }
+
+        public static implicit operator Reference(AggregateRoot? aggregate)
+        {
+            if (aggregate is { })
+            {
+                return Create(aggregate);
+            }
+
+            return Reference<AggregateRoot>.Empty;
+        }
+
+        public static implicit operator SignedVersion(AggregateRoot? aggregate)
+        {
+            return aggregate?.Version ?? SignedVersion.Empty;
+        }
 
         public override bool Equals(object? other)
         {

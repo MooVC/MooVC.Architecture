@@ -1,10 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd.ReferenceTests
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
-    using Moq;
     using Xunit;
+    using static MooVC.Architecture.Ddd.Reference;
 
     public sealed class WhenIsMatchIsCalled
     {
@@ -13,7 +11,7 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new SerializableAggregateRoot(aggregateId);
-            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
+            Reference reference = Create<SerializableAggregateRoot>(aggregateId);
 
             Assert.True(condition: reference.IsMatch(aggregate));
         }
@@ -22,7 +20,7 @@
         public void GivenANullAggregateThenFalseIsReturned()
         {
             var aggregateId = Guid.NewGuid();
-            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
+            Reference reference = Create<SerializableAggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(default!));
         }
@@ -32,7 +30,7 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new DerivedAggregateRoot(aggregateId);
-            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
+            Reference reference = Create<SerializableAggregateRoot>(aggregateId);
 
             Assert.True(condition: reference.IsMatch(aggregate));
         }
@@ -42,7 +40,7 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new SerializableAggregateRoot(aggregateId);
-            var reference = new Reference<DerivedAggregateRoot>(aggregateId);
+            Reference reference = Create<DerivedAggregateRoot>(aggregateId);
 
             Assert.True(condition: reference.IsMatch(aggregate));
         }
@@ -53,7 +51,7 @@
             var aggregateId = Guid.NewGuid();
             var referenceId = Guid.NewGuid();
             var aggregate = new SerializableAggregateRoot(aggregateId);
-            var reference = new Reference<SerializableAggregateRoot>(referenceId);
+            Reference reference = Create<SerializableAggregateRoot>(referenceId);
 
             Assert.False(condition: reference.IsMatch(aggregate));
         }
@@ -63,7 +61,7 @@
         {
             var aggregateId = Guid.NewGuid();
             var aggregate = new SerializableAggregateRoot(aggregateId);
-            var reference = new Reference<SerializableEventCentricAggregateRoot>(aggregateId);
+            Reference reference = Create<SerializableEventCentricAggregateRoot>(aggregateId);
 
             Assert.False(condition: reference.IsMatch(aggregate));
         }

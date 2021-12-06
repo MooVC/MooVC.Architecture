@@ -13,9 +13,10 @@
             CancellationToken? cancellationToken = default)
             : base(cancellationToken: cancellationToken)
         {
-            ArgumentNotNull(type, nameof(type), UnsupportedAggregateTypeDetectedEventArgsTypeRequired);
-
-            Type = type;
+            Type = ArgumentNotNull(
+                type,
+                nameof(type),
+                UnsupportedAggregateTypeDetectedEventArgsTypeRequired);
         }
 
         public Type Type { get; }

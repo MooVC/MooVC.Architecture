@@ -10,11 +10,14 @@
             bool unversioned = false)
             where TAggregate : AggregateRoot
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), AggregateRootExtensionsToReferenceAggregateRequired);
+            _ = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                AggregateRootExtensionsToReferenceAggregateRequired);
 
             if (unversioned)
             {
-                return new Reference<TAggregate>(aggregate.Id);
+                return new Reference<TAggregate>(aggregate.Id, aggregate.GetType());
             }
 
             return new Reference<TAggregate>(aggregate);

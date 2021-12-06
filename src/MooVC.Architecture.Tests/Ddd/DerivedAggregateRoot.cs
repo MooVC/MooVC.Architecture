@@ -1,7 +1,6 @@
-namespace MooVC.Architecture.Ddd.ReferenceTests
+namespace MooVC.Architecture.Ddd
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
 
     internal sealed class DerivedAggregateRoot
         : SerializableAggregateRoot

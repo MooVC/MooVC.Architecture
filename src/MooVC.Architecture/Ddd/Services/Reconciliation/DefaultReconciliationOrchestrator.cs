@@ -29,19 +29,35 @@
             IStore<TEventSequence, ulong> sequenceStore,
             Func<ISnapshot> snapshotSource)
         {
-            ArgumentNotNull(aggregateReconciler, nameof(aggregateReconciler), DefaultReconciliationOrchestratorAggregateReconcilerRequired);
-            ArgumentNotNull(aggregateSource, nameof(aggregateSource), DefaultReconciliationOrchestratorAggregateSourceRequired);
-            ArgumentNotNull(eventReconciler, nameof(eventReconciler), DefaultReconciliationOrchestratorEventReconcilerRequired);
-            ArgumentNotNull(sequenceFactory, nameof(sequenceFactory), DefaultReconciliationOrchestratorSequenceFactoryRequired);
-            ArgumentNotNull(sequenceStore, nameof(sequenceStore), DefaultReconciliationOrchestratorSequenceStoreRequired);
-            ArgumentNotNull(snapshotSource, nameof(snapshotSource), DefaultReconciliationOrchestratorSnapshotSourceRequired);
+            this.aggregateReconciler = ArgumentNotNull(
+                aggregateReconciler,
+                nameof(aggregateReconciler),
+                DefaultReconciliationOrchestratorAggregateReconcilerRequired);
 
-            this.aggregateReconciler = aggregateReconciler;
-            this.aggregateSource = aggregateSource;
-            this.eventReconciler = eventReconciler;
-            this.sequenceFactory = sequenceFactory;
-            this.sequenceStore = sequenceStore;
-            this.snapshotSource = snapshotSource;
+            this.aggregateSource = ArgumentNotNull(
+                aggregateSource,
+                nameof(aggregateSource),
+                DefaultReconciliationOrchestratorAggregateSourceRequired);
+
+            this.eventReconciler = ArgumentNotNull(
+                eventReconciler,
+                nameof(eventReconciler),
+                DefaultReconciliationOrchestratorEventReconcilerRequired);
+
+            this.sequenceFactory = ArgumentNotNull(
+                sequenceFactory,
+                nameof(sequenceFactory),
+                DefaultReconciliationOrchestratorSequenceFactoryRequired);
+
+            this.sequenceStore = ArgumentNotNull(
+                sequenceStore,
+                nameof(sequenceStore),
+                DefaultReconciliationOrchestratorSequenceStoreRequired);
+
+            this.snapshotSource = ArgumentNotNull(
+                snapshotSource,
+                nameof(snapshotSource),
+                DefaultReconciliationOrchestratorSnapshotSourceRequired);
 
             this.aggregateReconciler.AggregateConflictDetected += AggregateReconciler_AggregateConflictDetected;
             this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;

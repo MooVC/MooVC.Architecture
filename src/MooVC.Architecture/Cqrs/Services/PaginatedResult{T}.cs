@@ -3,7 +3,6 @@ namespace MooVC.Architecture.Cqrs.Services
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using MooVC.Collections.Generic;
     using MooVC.Linq;
     using MooVC.Serialization;
     using static MooVC.Architecture.Cqrs.Services.Resources;
@@ -11,46 +10,44 @@ namespace MooVC.Architecture.Cqrs.Services
 
     [Serializable]
     public abstract class PaginatedResult<T>
-        : Message
+        : EnumerableResult<T>
     {
         protected PaginatedResult(
             Message context,
             Paging paging,
-            IEnumerable<T> results,
-            ulong totalResults)
-            : base(context)
+            ulong total,
+            IEnumerable<T> values)
+            : base(context, values)
         {
-            Results = results.Snapshot();
-            TotalPages = CalculateTotalPages(paging, totalResults);
-            TotalResults = totalResults;
+            Pages = CalculateTotalPages(paging, total);
+            Total = total;
         }
 
         protected PaginatedResult(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Results = info.TryGetEnumerable<T>(nameof(Results));
-            TotalPages = info.TryGetValue<ushort>(nameof(TotalPages));
-            TotalResults = info.TryGetValue<ulong>(nameof(TotalResults));
+            Pages = info.TryGetValue<ushort>(nameof(Pages));
+            Total = info.TryGetValue<ulong>(nameof(Total));
         }
 
-        public IEnumerable<T> Results { get; }
+        public ushort Pages { get; }
 
-        public ushort TotalPages { get; }
-
-        public ulong TotalResults { get; }
+        public ulong Total { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
 
-            _ = info.TryAddEnumerable(nameof(Results), Results);
-            _ = info.TryAddValue(nameof(TotalPages), TotalPages);
-            _ = info.TryAddValue(nameof(TotalResults), TotalResults);
+            _ = info.TryAddValue(nameof(Pages), Pages);
+            _ = info.TryAddValue(nameof(Total), Total);
         }
 
         internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)
         {
-            ArgumentNotNull(paging, nameof(paging), PaginatedResultCalculateTotalPagesPagingRequired);
+            _ = ArgumentNotNull(
+                paging,
+                nameof(paging),
+                PaginatedResultCalculateTotalPagesPagingRequired);
 
             decimal requiredPages = (decimal)totalResults / paging.Size;
             ulong totalPages = (ulong)Math.Ceiling(requiredPages);

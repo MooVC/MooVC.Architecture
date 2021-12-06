@@ -188,6 +188,15 @@
   <data name="ProjectionAggregateRequired" xml:space="preserve">
     <value>A reference to the aggregate must be provided.</value>
   </data>
+  <data name="ReferenceCreateAggregateRequired" xml:space="preserve">
+    <value>The aggregate to be referenced must be provided.</value>
+  </data>
+  <data name="ReferenceCreateTypeRequired" xml:space="preserve">
+    <value>The type of the aggregate to be referenced must be provided.</value>
+  </data>
+  <data name="ReferenceDeserializeTypeTypeIndeterminate" xml:space="preserve">
+    <value>The type of the reference could not be determined.</value>
+  </data>
   <data name="ReferenceExtensionsCoordinateAsyncReferenceRequired" xml:space="preserve">
     <value>The reference that serves as the context for coordination must be provided.</value>
   </data>
@@ -197,11 +206,17 @@
   <data name="ReferenceIdRequired" xml:space="preserve">
     <value>A non-empty ID for the aggregate this reference represents must be provided.</value>
   </data>
+  <data name="ReferenceTypeRequired" xml:space="preserve">
+    <value>The type of the reference must be concrete.</value>
+  </data>
   <data name="SignedVersionPreviousFooterInvalid" xml:space="preserve">
     <value>The footer of previous version {0} is invalid.</value>
   </data>
   <data name="SignedVersionPreviousRequired" xml:space="preserve">
     <value>The previous version must be provided.</value>
+  </data>
+  <data name="SignedVersionUnversioned" xml:space="preserve">
+    <value>Unversioned</value>
   </data>
   <data name="VersionedReferenceIdRequired" xml:space="preserve">
     <value>A non-empty ID for the aggregate this versioned reference represents must be provided.</value>

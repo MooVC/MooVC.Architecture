@@ -8,8 +8,8 @@
         [Fact]
         public void GivenAReferenceThenAnInstanceIsReturnedWithAllPropertiesSet()
         {
-            var reference = Guid.NewGuid().ToReference<AggregateRoot>();
-            var original = new AggregateReferenceMismatchException<EventCentricAggregateRoot>(reference);
+            var reference = Guid.NewGuid().ToReference<SerializableAggregateRoot>();
+            var original = new AggregateReferenceMismatchException<SerializableEventCentricAggregateRoot>(reference);
 
             Assert.Equal(reference, original.Reference);
         }

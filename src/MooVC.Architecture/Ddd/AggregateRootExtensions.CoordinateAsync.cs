@@ -14,7 +14,10 @@
             CancellationToken? cancellationToken = default,
             TimeSpan? timeout = default)
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), AggregateRootExtensionsCoordinateAsyncAggregateRequired);
+            _ = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                AggregateRootExtensionsCoordinateAsyncAggregateRequired);
 
             await aggregate
                 .GetType()

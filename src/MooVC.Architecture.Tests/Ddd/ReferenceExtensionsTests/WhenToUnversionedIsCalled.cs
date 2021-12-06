@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
 {
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenToUnversionedIsCalled
@@ -11,8 +10,8 @@
             var aggregate = new SerializableAggregateRoot();
 
             var original = Reference.Create(
-                typeof(AggregateRoot).AssemblyQualifiedName!,
                 aggregate.Id,
+                aggregate.GetType(),
                 version: aggregate.Version);
 
             Reference unversioned = original.ToUnversioned();
@@ -27,10 +26,7 @@
         public void GivenAnUntypedUnversionedReferenceThenTheSameInstanceIsReturned()
         {
             var aggregate = new SerializableAggregateRoot();
-
-            var original = Reference.Create(
-                typeof(AggregateRoot).AssemblyQualifiedName!,
-                aggregate.Id);
+            var original = Reference.Create(aggregate.Id, aggregate.GetType());
 
             Reference unversioned = original.ToUnversioned();
 

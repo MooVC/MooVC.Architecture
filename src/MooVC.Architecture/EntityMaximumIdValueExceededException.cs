@@ -27,7 +27,10 @@
 
         private static string FormatMessage(string max, Type type)
         {
-            ArgumentNotNull(type, nameof(type), EntityMaximumIdValueExceededExceptionTypeRequired);
+            _ = ArgumentNotNull(
+                type,
+                nameof(type),
+                EntityMaximumIdValueExceededExceptionTypeRequired);
 
             return Format(
                 EntityMaximumIdValueExceededExceptionMessage,

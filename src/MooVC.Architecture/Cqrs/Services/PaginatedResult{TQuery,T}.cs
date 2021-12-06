@@ -10,8 +10,8 @@
         : PaginatedResult<T>
         where TQuery : PaginatedQuery
     {
-        protected PaginatedResult(TQuery query, IEnumerable<T> results, ulong totalResults)
-            : base(query, query.Paging, results, totalResults)
+        protected PaginatedResult(TQuery query, ulong total, IEnumerable<T> values)
+            : base(query, query.Paging, total, values)
         {
             Query = query;
         }

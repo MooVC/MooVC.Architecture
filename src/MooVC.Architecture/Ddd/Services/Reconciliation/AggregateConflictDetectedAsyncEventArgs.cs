@@ -2,11 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading;
     using MooVC.Architecture.Ddd;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Ensure;
     using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
@@ -25,15 +24,25 @@
             CancellationToken? cancellationToken = default)
             : base(cancellationToken: cancellationToken)
         {
-            ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedEventArgsAggregateRequired);
-            ArgumentIsAcceptable(events, nameof(events), value => value.Any(), AggregateConflictDetectedEventArgsEventsRequired);
-            ArgumentNotNull(next, nameof(next), AggregateConflictDetectedEventArgsNextRequired);
-            ArgumentNotNull(previous, nameof(previous), AggregateConflictDetectedEventArgsPreviousRequired);
+            Aggregate = ReferenceIsNotEmpty(
+                aggregate,
+                nameof(aggregate),
+                AggregateConflictDetectedEventArgsAggregateRequired);
 
-            Aggregate = aggregate;
-            Events = events;
-            Next = next;
-            Previous = previous;
+            Events = ArgumentNotEmpty(
+                events,
+                nameof(events),
+                AggregateConflictDetectedEventArgsEventsRequired);
+
+            Next = ArgumentNotNull(
+                next,
+                nameof(next),
+                AggregateConflictDetectedEventArgsNextRequired);
+
+            Previous = ArgumentNotNull(
+                previous,
+                nameof(previous),
+                AggregateConflictDetectedEventArgsPreviousRequired);
         }
 
         private AggregateConflictDetectedAsyncEventArgs(SerializationInfo info, StreamingContext context)

@@ -2,8 +2,9 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using static System.String;
+    using static MooVC.Architecture.Ddd.Reference;
     using static MooVC.Architecture.Ddd.Resources;
     using static MooVC.Ensure;
 
@@ -11,6 +12,11 @@
     public sealed class AggregateEventMismatchException
         : ArgumentException
     {
+        public AggregateEventMismatchException(AggregateRoot aggregate, Reference eventAggregate)
+            : this(Create(aggregate), eventAggregate)
+        {
+        }
+
         public AggregateEventMismatchException(Reference aggregate, Reference eventAggregate)
             : base(FormatMessage(aggregate, eventAggregate))
         {
@@ -39,8 +45,15 @@
 
         private static string FormatMessage(Reference aggregate, Reference eventAggregate)
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventMismatchExceptionAggregateRequired);
-            ArgumentNotNull(eventAggregate, nameof(eventAggregate), AggregateEventMismatchExceptionEventAggregateRequired);
+            _ = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                AggregateEventMismatchExceptionAggregateRequired);
+
+            _ = ArgumentNotNull(
+                eventAggregate,
+                nameof(eventAggregate),
+                AggregateEventMismatchExceptionEventAggregateRequired);
 
             return Format(
                 AggregateEventMismatchExceptionMessage,

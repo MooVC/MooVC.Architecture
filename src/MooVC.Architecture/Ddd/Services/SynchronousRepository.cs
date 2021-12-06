@@ -15,9 +15,10 @@
     {
         protected SynchronousRepository(ICloner cloner)
         {
-            ArgumentNotNull(cloner, nameof(cloner), SynchronousRepositoryClonerRequired);
-
-            Cloner = cloner;
+            Cloner = ArgumentNotNull(
+                cloner,
+                nameof(cloner),
+                SynchronousRepositoryClonerRequired);
         }
 
         protected ICloner Cloner { get; }

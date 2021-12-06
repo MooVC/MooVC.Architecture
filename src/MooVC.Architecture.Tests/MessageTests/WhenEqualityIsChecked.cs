@@ -9,14 +9,14 @@
     public sealed class WhenEqualityIsChecked
     {
         [Fact]
-        public void GivenTwoMessagesWithTheSameIdAndTypeThenAPositiveResponseIsReturned()
+        public void GivenTwoEntitiesWithTheSameIdsButDifferentTypesThenANegativeResponseIsReturned()
         {
             var first = new SerializableMessage();
-            SerializableMessage second = first.Clone();
+            var second = new SerializableEntity<Guid>(first.Id);
 
-            Assert.Equal(first, second);
-            Assert.True(first == second);
-            Assert.True(first.Equals(second));
+            Assert.False(first == second);
+            Assert.False(first.Equals(second));
+            Assert.False(second == first);
         }
 
         [Fact]
@@ -28,16 +28,19 @@
             Assert.NotEqual(first, second);
             Assert.False(first == second);
             Assert.False(first.Equals(second));
+            Assert.False(second == first);
         }
 
         [Fact]
-        public void GivenTwoEntitiesWithTheSameIdsButDifferentTypesThenANegativeResponseIsReturned()
+        public void GivenTwoMessagesWithTheSameIdAndTypeThenAPositiveResponseIsReturned()
         {
             var first = new SerializableMessage();
-            var second = new SerializableEntity<Guid>(first.Id);
+            SerializableMessage second = first.Clone();
 
-            Assert.False(first == second);
-            Assert.False(first.Equals(second));
+            Assert.Equal(first, second);
+            Assert.True(first == second);
+            Assert.True(first.Equals(second));
+            Assert.True(second == first);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Runtime.Serialization;
-    using MooVC.Architecture.Serialization;
+    using MooVC.Architecture.Ddd.Serialization;
     using MooVC.Serialization;
     using static System.String;
     using static MooVC.Architecture.Ddd.Ensure;
@@ -47,8 +47,15 @@
 
         private static string FormatMessage(Message context, Reference<TAggregate> aggregate)
         {
-            ArgumentNotNull(context, nameof(context), AggregateNotFoundExceptionContextRequired);
-            ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateNotFoundExceptionAggregateRequired);
+            _ = ArgumentNotNull(
+                context,
+                nameof(context),
+                AggregateNotFoundExceptionContextRequired);
+
+            _ = ReferenceIsNotEmpty(
+                aggregate,
+                nameof(aggregate),
+                AggregateNotFoundExceptionAggregateRequired);
 
             return Format(
                 AggregateNotFoundExceptionMessage,

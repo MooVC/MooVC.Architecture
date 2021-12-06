@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
@@ -18,9 +17,10 @@
 
         public PersistentBus(IStore<AtomicUnit, Guid> store)
         {
-            ArgumentNotNull(store, nameof(store), PersistentBusStoreRequired);
-
-            this.store = store;
+            this.store = ArgumentNotNull(
+                store,
+                nameof(store),
+                PersistentBusStoreRequired);
         }
 
         protected override async Task PerformPublishAsync(

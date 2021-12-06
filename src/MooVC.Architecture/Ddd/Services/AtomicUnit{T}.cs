@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Runtime.Serialization;
     using MooVC.Architecture.Ddd;
-    using MooVC.Collections.Generic;
     using MooVC.Serialization;
     using static MooVC.Architecture.Ddd.Services.Resources;
     using static MooVC.Ensure;
@@ -23,26 +22,25 @@
 
         protected AtomicUnit(T id, IEnumerable<DomainEvent> events)
         {
-            ArgumentIsAcceptable(
+            Events = ArgumentNotEmpty(
                 events,
                 nameof(events),
-                value => value.Any() && value.All(@event => @event is { }),
-                AtomicUnitEventsRequired);
+                AtomicUnitEventsRequired,
+                predicate: value => value is { });
 
-            ArgumentIsAcceptable(
-                events,
+            _ = ArgumentIsAcceptable(
+                Events,
                 nameof(events),
                 HasSameAggregate,
                 AtomicUnitDistinctAggregateVersionRequired);
 
-            ArgumentIsAcceptable(
-                events,
+            _ = ArgumentIsAcceptable(
+                Events,
                 nameof(events),
                 HasSameContext,
                 AtomicUnitDistinctContextRequired);
 
             aggregate = new Lazy<Reference>(IdentifyAggregate);
-            Events = events.Snapshot();
             Id = id;
         }
 

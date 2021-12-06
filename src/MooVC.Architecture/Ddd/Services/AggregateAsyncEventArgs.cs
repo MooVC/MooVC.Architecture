@@ -16,9 +16,10 @@ namespace MooVC.Architecture.Ddd.Services
         protected AggregateAsyncEventArgs(TAggregate aggregate, CancellationToken? cancellationToken = default)
             : base(cancellationToken: cancellationToken)
         {
-            ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventArgsAggregateRequired);
-
-            Aggregate = aggregate;
+            Aggregate = ArgumentNotNull(
+                aggregate,
+                nameof(aggregate),
+                AggregateEventArgsAggregateRequired);
         }
 
         protected AggregateAsyncEventArgs(SerializationInfo info, StreamingContext context)

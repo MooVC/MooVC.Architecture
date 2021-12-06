@@ -12,6 +12,7 @@
     using MooVC.Architecture.MessageTests;
     using Moq;
     using Xunit;
+    using static MooVC.Architecture.Ddd.Reference;
 
     public sealed class WhenRetrieveAsyncIsCalled
     {
@@ -26,8 +27,8 @@
 
         public static IEnumerable<object[]> GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData()
         {
-            var reference1 = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
-            var reference2 = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference reference1 = Create<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference reference2 = Create<SerializableAggregateRoot>(Guid.NewGuid());
 
             yield return new[]
             {
@@ -62,9 +63,9 @@
 
         public static IEnumerable<object[]> GivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissingData()
         {
-            var reference1 = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
-            var reference2 = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
-            var reference3 = new Reference<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference reference1 = Create<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference reference2 = Create<SerializableAggregateRoot>(Guid.NewGuid());
+            Reference reference3 = Create<SerializableAggregateRoot>(Guid.NewGuid());
 
             IEnumerable<IDictionary<Reference, bool>> singles = GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
                 reference1,
@@ -122,7 +123,7 @@
                 .ReturnsAsync(default(SerializableAggregateRoot));
 
             var aggregateId = Guid.NewGuid();
-            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
+            var reference = Reference<SerializableAggregateRoot>.Create(aggregateId);
 
             AggregateNotFoundException<SerializableAggregateRoot> exception =
                 await Assert.ThrowsAsync<AggregateNotFoundException<SerializableAggregateRoot>>(
@@ -150,7 +151,7 @@
                 .ReturnsAsync(default(SerializableAggregateRoot));
 
             var aggregateId = Guid.NewGuid();
-            var reference = new Reference<SerializableEventCentricAggregateRoot>(aggregateId);
+            var reference = Reference<SerializableEventCentricAggregateRoot>.Create(aggregateId);
 
             ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
                 () => reference.RetrieveAsync(context, repository.Object));
@@ -169,7 +170,7 @@
             var aggregateId = Guid.NewGuid();
             var firstAggregate = new Mock<SerializableAggregateRoot>(aggregateId);
             var secondAggregate = new Mock<SerializableAggregateRoot>(aggregateId);
-            var reference = new Reference<SerializableAggregateRoot>(aggregateId);
+            var reference = Reference<SerializableAggregateRoot>.Create(aggregateId);
 
             _ = repository
                .Setup(repo => repo.GetAsync(

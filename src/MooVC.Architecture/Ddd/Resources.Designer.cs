@@ -270,6 +270,33 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The aggregate to be referenced must be provided..
+        /// </summary>
+        internal static string ReferenceCreateAggregateRequired {
+            get {
+                return ResourceManager.GetString("ReferenceCreateAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type of the aggregate to be referenced must be provided..
+        /// </summary>
+        internal static string ReferenceCreateTypeRequired {
+            get {
+                return ResourceManager.GetString("ReferenceCreateTypeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type of the reference could not be determined..
+        /// </summary>
+        internal static string ReferenceDeserializeTypeTypeIndeterminate {
+            get {
+                return ResourceManager.GetString("ReferenceDeserializeTypeTypeIndeterminate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
         /// </summary>
         internal static string ReferenceExtensionsCoordinateAsyncReferenceRequired {
@@ -297,6 +324,15 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The type of the reference must be concrete..
+        /// </summary>
+        internal static string ReferenceTypeRequired {
+            get {
+                return ResourceManager.GetString("ReferenceTypeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The footer of previous version {0} is invalid..
         /// </summary>
         internal static string SignedVersionPreviousFooterInvalid {
@@ -311,6 +347,15 @@ namespace MooVC.Architecture.Ddd {
         internal static string SignedVersionPreviousRequired {
             get {
                 return ResourceManager.GetString("SignedVersionPreviousRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unversioned.
+        /// </summary>
+        internal static string SignedVersionUnversioned {
+            get {
+                return ResourceManager.GetString("SignedVersionUnversioned", resourceCulture);
             }
         }
         

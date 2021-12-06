@@ -14,7 +14,10 @@
             CancellationToken? cancellationToken = default,
             TimeSpan? timeout = default)
         {
-            ArgumentNotNull(message, nameof(message), MessageExtensionsCoordinateAsyncMessageRequired);
+            _ = ArgumentNotNull(
+                message,
+                nameof(message),
+                MessageExtensionsCoordinateAsyncMessageRequired);
 
             await message
                 .GetType()

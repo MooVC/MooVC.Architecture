@@ -44,7 +44,7 @@
             {
                 if (changes.Any())
                 {
-                    throw new AggregateHasUncommittedChangesException(new Reference(this));
+                    throw new AggregateHasUncommittedChangesException(this);
                 }
 
                 IEnumerable<DomainEvent> sequence = history
@@ -53,7 +53,7 @@
 
                 if (!sequence.SequenceEqual(history))
                 {
-                    throw new AggregateEventSequenceUnorderedException(new Reference(this), history);
+                    throw new AggregateEventSequenceUnorderedException(this, history);
                 }
 
                 Reference? mismatch = sequence
@@ -63,14 +63,14 @@
 
                 if (mismatch is { })
                 {
-                    throw new AggregateEventMismatchException(new Reference(this), mismatch);
+                    throw new AggregateEventMismatchException(this, mismatch);
                 }
 
                 SignedVersion startingVersion = sequence.First().Aggregate.Version;
 
                 if (!(startingVersion.IsNext(Version) || (startingVersion.IsNew && Version.IsNew)))
                 {
-                    throw new AggregateHistoryInvalidForStateException(new Reference(this), sequence, startingVersion);
+                    throw new AggregateHistoryInvalidForStateException(this, sequence, startingVersion);
                 }
 
                 sequence.ForEach(@event => ApplyChange(() => @event, isNew: false));

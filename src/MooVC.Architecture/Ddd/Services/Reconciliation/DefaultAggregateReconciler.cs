@@ -23,11 +23,16 @@
             bool ignorePreviousVersions = true,
             TimeSpan? timeout = default)
         {
-            ArgumentNotNull(factory, nameof(factory), DefaultAggregateReconcilerFactoryRequired);
-            ArgumentNotNull(proxies, nameof(proxies), DefaultAggregateReconcilerProxiesRequired);
+            this.factory = ArgumentNotNull(
+                factory,
+                nameof(factory),
+                DefaultAggregateReconcilerFactoryRequired);
 
-            this.factory = factory;
-            this.proxies = proxies;
+            this.proxies = ArgumentNotNull(
+                proxies,
+                nameof(proxies),
+                DefaultAggregateReconcilerProxiesRequired);
+
             this.ignorePreviousVersions = ignorePreviousVersions;
             this.timeout = timeout;
         }

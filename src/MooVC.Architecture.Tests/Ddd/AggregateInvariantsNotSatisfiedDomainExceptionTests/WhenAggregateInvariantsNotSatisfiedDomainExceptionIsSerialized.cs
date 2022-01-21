@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.AggregateInvariantsNotSatisfiedDomainExceptionTests
 {
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.RequestTests;
     using MooVC.Architecture.Serialization;

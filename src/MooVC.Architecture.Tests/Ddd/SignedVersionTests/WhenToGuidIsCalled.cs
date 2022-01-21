@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenToGuidIsCalled

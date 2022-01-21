@@ -1,7 +1,6 @@
 namespace MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests
 {
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Serialization;
     using Xunit;
 

@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.AggregateConflictDetectedExceptionTests
 {
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Serialization;
     using Xunit;
 

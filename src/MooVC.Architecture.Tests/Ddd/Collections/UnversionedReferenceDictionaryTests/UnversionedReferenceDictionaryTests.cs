@@ -1,7 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
 {
-    using MooVC.Architecture.Ddd.AggregateRootTests;
-
     public abstract class UnversionedReferenceDictionaryTests
     {
         public const int ExpectedCount = 2;

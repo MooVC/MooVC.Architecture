@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.EventReconciliationAsyncEventArgsTests
 {
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
     using Xunit;

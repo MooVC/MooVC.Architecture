@@ -1,11 +1,9 @@
 ﻿namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenLoadFromHistoryIsCalled

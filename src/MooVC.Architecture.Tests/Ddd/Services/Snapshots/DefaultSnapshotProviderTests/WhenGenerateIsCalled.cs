@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Architecture.MessageTests;
     using MooVC.Persistence;

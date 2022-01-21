@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Collections.EnumerableExtensionsTests
 {
     using System.Collections.Generic;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.ProjectionTests;
     using Xunit;
 

@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.DefaultReconciliationOrchestratorTests
 {
     using System;
-    using MooVC.Architecture.Ddd.Services.Snapshots;
     using Xunit;
 
     public sealed class WhenDefaultReconciliationOrchestratorIsConstructed

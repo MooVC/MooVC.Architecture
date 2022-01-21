@@ -3,7 +3,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
 
     public sealed class TestableDefaultAggregateFactory
         : DefaultAggregateFactory

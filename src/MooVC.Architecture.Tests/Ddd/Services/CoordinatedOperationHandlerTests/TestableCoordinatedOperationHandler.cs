@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.CoordinatedOperationHandlerTests
 {
     using System;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
 
     internal sealed class TestableCoordinatedOperationHandler<TCommand>
         : CoordinatedOperationHandler<SerializableEventCentricAggregateRoot, TCommand>

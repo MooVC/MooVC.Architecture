@@ -24,7 +24,7 @@
         public void GivenAQueryTypedInstanceThenAllPropertiesAreSerialized()
         {
             var result = new SerializablePaginatedResult<SerializablePaginatedQuery, int>(
-                new SerializablePaginatedQuery(new Paging()),  100, new[] { 1, 2, 3 });
+                new SerializablePaginatedQuery(new Paging()), 100, new[] { 1, 2, 3 });
             SerializablePaginatedResult<SerializablePaginatedQuery, int> deserialized = result.Clone();
 
             Assert.Equal(result, deserialized);

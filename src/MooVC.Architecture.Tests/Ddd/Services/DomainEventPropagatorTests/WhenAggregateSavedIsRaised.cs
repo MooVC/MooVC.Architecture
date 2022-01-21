@@ -5,7 +5,6 @@ namespace MooVC.Architecture.Ddd.Services.DomainEventPropagatorTests
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
     using Moq;

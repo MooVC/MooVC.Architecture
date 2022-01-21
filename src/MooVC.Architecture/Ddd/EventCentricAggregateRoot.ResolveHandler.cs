@@ -7,7 +7,7 @@
     public partial class EventCentricAggregateRoot
     {
         public const string HandlerName = "Handle";
-        private static readonly ConcurrentDictionary<Type, MethodInfo> handlers = new ConcurrentDictionary<Type, MethodInfo>();
+        private static readonly ConcurrentDictionary<Type, MethodInfo> handlers = new();
 
         protected virtual Action<TEvent>? ResolveHandler<TEvent>(DomainEvent @event)
            where TEvent : DomainEvent

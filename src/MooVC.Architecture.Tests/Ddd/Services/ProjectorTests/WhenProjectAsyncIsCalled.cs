@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.ProjectorTests
 {
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.ProjectionTests;
     using Xunit;
 

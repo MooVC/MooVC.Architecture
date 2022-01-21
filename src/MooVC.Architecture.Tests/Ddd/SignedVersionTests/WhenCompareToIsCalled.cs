@@ -1,9 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.SignedVersionTests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenCompareToIsCalled

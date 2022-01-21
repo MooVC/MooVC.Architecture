@@ -3,12 +3,12 @@
     <Authors>Paul Martins;ControlSoft Automation Systems Limited</Authors>
     <CodeAnalysisRuleSet>../../stylecop.analyzers.ruleset</CodeAnalysisRuleSet>
     <Company>MooVC</Company>
-    <Copyright>MooVC © 2019-2021</Copyright>
+    <Copyright>MooVC © 2019-2022</Copyright>
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <LangVersion>latest</LangVersion>
-    <NoWarn>NU5105;CS0618</NoWarn>
+    <NeutralLanguage>en-IE</NeutralLanguage>
     <Nullable>enable</Nullable>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/MooVC/moovc.architecture</PackageProjectUrl>

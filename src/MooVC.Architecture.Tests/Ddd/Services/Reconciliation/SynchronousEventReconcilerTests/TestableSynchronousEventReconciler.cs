@@ -6,7 +6,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Architecture.Ddd;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
 
     public sealed class TestableSynchronousEventReconciler

@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.SignedVersionTests
 {
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenSignedVersionIsConstructed

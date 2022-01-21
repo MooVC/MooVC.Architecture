@@ -81,9 +81,9 @@
 
         public bool TryGetValue(
             Reference<TAggregate> key,
-            #if !NETSTANDARD2_1
+#if !NETSTANDARD2_1
             [MaybeNullWhen(false)]
-            #endif
+#endif
             out T value)
         {
             return @internal.TryGetValue(key.ToUnversioned(), out value);

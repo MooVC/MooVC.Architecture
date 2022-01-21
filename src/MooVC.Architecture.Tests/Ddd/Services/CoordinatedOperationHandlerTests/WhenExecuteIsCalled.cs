@@ -1,12 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.CoordinatedOperationHandlerTests
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using Moq;
     using Xunit;

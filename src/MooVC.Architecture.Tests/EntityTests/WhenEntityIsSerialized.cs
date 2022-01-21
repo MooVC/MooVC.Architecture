@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.EntityTests
 {
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenEntityIsSerialized

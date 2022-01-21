@@ -9,6 +9,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
+    <NeutralLanguage>en</NeutralLanguage>
     <NoWarn>NU5105;CS0618</NoWarn>
     <Nullable>enable</Nullable>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

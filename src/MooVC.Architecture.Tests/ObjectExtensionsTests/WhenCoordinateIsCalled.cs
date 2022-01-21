@@ -9,7 +9,7 @@
     {
         protected override Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default)
         {
-            object @object = new object();
+            object @object = new();
 
             return @object.CoordinateAsync(operation, timeout: timeout);
         }

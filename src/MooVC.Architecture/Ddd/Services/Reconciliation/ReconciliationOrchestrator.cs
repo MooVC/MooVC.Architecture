@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
 {
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using MooVC.Diagnostics;

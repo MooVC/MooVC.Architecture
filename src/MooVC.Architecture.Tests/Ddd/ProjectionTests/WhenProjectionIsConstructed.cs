@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.ProjectionTests
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenProjectionIsConstructed

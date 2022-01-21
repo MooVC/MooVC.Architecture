@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.ProjectionTests
 {
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Serialization;
     using Xunit;
 

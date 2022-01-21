@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Snapshots.SnapshotTests
 {
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using MooVC.Architecture.Serialization;
     using Xunit;

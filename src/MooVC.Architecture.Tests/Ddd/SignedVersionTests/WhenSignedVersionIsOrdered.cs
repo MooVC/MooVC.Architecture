@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.SignedVersionTests
 {
     using System.Linq;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenSignedVersionIsOrdered
@@ -28,7 +27,7 @@
             Assert.Equal(expected, actual);
         }
 
-        private void Prepare(
+        private static void Prepare(
             out SignedVersion first,
             out SignedVersion second,
             out SignedVersion third,

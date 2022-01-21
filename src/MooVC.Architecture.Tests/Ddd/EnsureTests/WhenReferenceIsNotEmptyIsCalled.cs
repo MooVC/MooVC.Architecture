@@ -36,7 +36,7 @@
         {
             Reference reference = Create<SerializableAggregateRoot>(Guid.NewGuid());
 
-            ReferenceIsNotEmpty(reference, nameof(reference));
+            _ = ReferenceIsNotEmpty(reference, nameof(reference));
         }
     }
 }

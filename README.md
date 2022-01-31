@@ -13,3 +13,4 @@ While the original MooVC PHP based framework has long since been deprecated, man
 ## Enhancements
 
 - Added a new Architecture.ImplicitValue, intended to faciliate generation of domain rich types for properties that are typically represented using primiative types.
+- Added a new Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies that can be used to ensure a argument satifies the conditions associated with a given specification.

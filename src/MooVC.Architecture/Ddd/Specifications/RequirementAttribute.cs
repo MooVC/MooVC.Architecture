@@ -2,6 +2,7 @@
 {
     using System;
     using System.Resources;
+    using static System.String;
 
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class RequirementAttribute
@@ -24,8 +25,14 @@
         private static string GetDescription(string resourceName, Type resourceType)
         {
             ResourceManager manager = new(resourceType);
+            string? description = manager.GetString(resourceName);
 
-            return manager.GetString(resourceName);
+            if (description is { })
+            {
+                return description;
+            }
+
+            return Empty;
         }
     }
 }

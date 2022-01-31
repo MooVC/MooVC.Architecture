@@ -4,6 +4,7 @@
     using Xunit;
     using static MooVC.Architecture.Ddd.Specifications.Ensure;
     using static MooVC.Architecture.Ddd.Specifications.EnsureTests.Resources;
+
     public sealed class WhenArgumentSatisfiesIsCalled
     {
         [Fact]

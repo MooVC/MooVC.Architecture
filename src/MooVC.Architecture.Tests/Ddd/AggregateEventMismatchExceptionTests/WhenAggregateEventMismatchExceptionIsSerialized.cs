@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.AggregateEventMismatchExceptionTests
 {
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Serialization;
     using Xunit;
 

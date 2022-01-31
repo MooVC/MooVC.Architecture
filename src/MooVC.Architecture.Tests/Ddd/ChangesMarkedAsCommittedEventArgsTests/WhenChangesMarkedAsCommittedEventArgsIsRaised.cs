@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.ChangesMarkedAsCommittedEventArgsTests
 {
     using System.Collections.Generic;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using Xunit;
 

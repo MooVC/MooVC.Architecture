@@ -3,7 +3,6 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;

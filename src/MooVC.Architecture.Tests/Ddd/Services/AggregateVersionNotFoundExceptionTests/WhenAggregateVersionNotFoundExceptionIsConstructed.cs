@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.AggregateVersionNotFoundExceptionTests
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using Xunit;
 

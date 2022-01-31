@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using Xunit;
 
     public sealed class WhenGetAllAsyncIsCalled

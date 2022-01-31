@@ -2,7 +2,6 @@ namespace MooVC.Architecture.ValueTests
 {
     using System.Collections.Generic;
     using MooVC.Architecture.Serialization;
-    using MooVC.Serialization;
     using Xunit;
 
     public sealed class WhenValueIsSerialized

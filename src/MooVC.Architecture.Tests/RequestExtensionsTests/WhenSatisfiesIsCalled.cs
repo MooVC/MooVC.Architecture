@@ -3,7 +3,6 @@ namespace MooVC.Architecture.RequestExtensionsTests
     using System;
     using System.Collections.Generic;
     using MooVC.Architecture.Ddd;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.RequestTests;
     using Moq;

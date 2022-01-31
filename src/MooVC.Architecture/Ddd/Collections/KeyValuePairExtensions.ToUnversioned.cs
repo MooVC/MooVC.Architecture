@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Collections
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     internal static partial class KeyValuePairExtensions
     {

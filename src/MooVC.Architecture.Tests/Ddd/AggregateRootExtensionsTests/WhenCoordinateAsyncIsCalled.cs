@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Base = MooVC.Architecture.WhenCoordinateAsyncIsCalled;
 
     public sealed class WhenCoordinateAsyncIsCalled

@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.AtomicUnitTests
 {
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;

@@ -1,10 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.Collections.DictionaryExtensionsTests
 {
     using System.Collections.Generic;
-    using System.Linq;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.ProjectionTests;
-    using MooVC.Collections.Generic;
     using Xunit;
 
     public sealed class WhenToUnversionedIsCalled

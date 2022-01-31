@@ -410,7 +410,7 @@
             Assert.Equal(start, nextId);
         }
 
-        private IEnumerable<Entity<TKey>> GenerateEntities<TKey>(IEnumerable<TKey> ids)
+        private static IEnumerable<Entity<TKey>> GenerateEntities<TKey>(IEnumerable<TKey> ids)
             where TKey : notnull
         {
             foreach (TKey id in ids)

@@ -9,6 +9,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
+    <NeutralLanguage>en</NeutralLanguage>
     <NoWarn>NU5105;CS0618</NoWarn>
     <Nullable>enable</Nullable>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -40,5 +41,18 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MooVC.Architecture\MooVC.Architecture.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Ddd\Specifications\EnsureTests\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Ddd\Specifications\EnsureTests\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

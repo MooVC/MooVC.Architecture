@@ -2,8 +2,6 @@ namespace MooVC.Architecture.Ddd.Services.VersionedMemoryRepositoryTests
 {
     using System;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Serialization;

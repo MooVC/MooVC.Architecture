@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.DomainExceptionTests
 {
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
     using Xunit;

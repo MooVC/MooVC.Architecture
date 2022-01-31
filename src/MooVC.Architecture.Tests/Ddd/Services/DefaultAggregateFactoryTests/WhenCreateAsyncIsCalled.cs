@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using Xunit;
 

@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.AggregateSavedAsyncEventArgsTests
 {
     using System;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenAggregateSavedAsyncEventArgsIsConstructed

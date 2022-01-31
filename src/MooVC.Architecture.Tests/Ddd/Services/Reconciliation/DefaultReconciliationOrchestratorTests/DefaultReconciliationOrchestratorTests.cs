@@ -2,7 +2,6 @@
 {
     using System;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
-    using MooVC.Architecture.Ddd.Services.Snapshots;
     using MooVC.Persistence;
     using Moq;
 

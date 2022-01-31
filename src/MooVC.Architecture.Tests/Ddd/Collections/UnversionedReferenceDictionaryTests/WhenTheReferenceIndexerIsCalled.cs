@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
 {
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenTheReferenceIndexerIsCalled

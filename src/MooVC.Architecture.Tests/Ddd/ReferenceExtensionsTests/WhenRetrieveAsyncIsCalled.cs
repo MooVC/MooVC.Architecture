@@ -6,8 +6,6 @@
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services;
     using MooVC.Architecture.MessageTests;
     using Moq;

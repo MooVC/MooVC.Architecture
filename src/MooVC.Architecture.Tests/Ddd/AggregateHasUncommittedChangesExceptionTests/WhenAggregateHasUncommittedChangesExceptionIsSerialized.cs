@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.AggregateHasUncommittedChangesExceptionTests
 {
     using System.Collections.Generic;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using MooVC.Architecture.Serialization;
     using Xunit;

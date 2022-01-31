@@ -2,7 +2,6 @@
 {
     using System;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using Xunit;
 

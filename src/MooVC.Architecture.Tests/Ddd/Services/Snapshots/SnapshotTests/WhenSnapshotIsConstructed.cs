@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Snapshots.SnapshotTests
 {
     using System;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.Ddd.Services.Reconciliation;
     using Xunit;
 
@@ -32,14 +31,14 @@
             var sequence = new EventSequence(2);
             var instance = new Snapshot(default!, sequence);
 
-            Assert.Equal(new EventCentricAggregateRoot[0], instance.Aggregates);
+            Assert.Empty(instance.Aggregates);
             Assert.Equal(sequence, instance.Sequence);
         }
 
         [Fact]
         public void GivenNoAggregatesAndASequenceThenAnInstanceIsCreated()
         {
-            var aggregates = new EventCentricAggregateRoot[0];
+            EventCentricAggregateRoot[] aggregates = Array.Empty<EventCentricAggregateRoot>();
             var sequence = new EventSequence(2);
             var instance = new Snapshot(aggregates, sequence);
 

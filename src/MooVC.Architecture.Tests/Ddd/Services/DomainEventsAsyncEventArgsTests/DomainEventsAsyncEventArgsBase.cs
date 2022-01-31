@@ -2,13 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using MooVC.Architecture.Ddd.DomainEventTests;
     using MooVC.Architecture.MessageTests;
 
     public abstract class DomainEventsAsyncEventArgsBase
     {
-        protected IEnumerable<DomainEvent> CreateEvents(int count)
+        protected static IEnumerable<DomainEvent> CreateEvents(int count)
         {
             var context = new SerializableMessage();
             var aggregate = new SerializableAggregateRoot();

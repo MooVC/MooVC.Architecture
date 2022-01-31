@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
 {
     using System.Collections.Generic;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
     using Xunit;
 
     public sealed class WhenCopyToIsCalled

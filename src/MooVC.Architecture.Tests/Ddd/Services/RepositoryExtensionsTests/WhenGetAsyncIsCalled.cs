@@ -3,8 +3,6 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.AggregateRootTests;
-    using MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
     using MooVC.Architecture.MessageTests;
     using Moq;
     using Xunit;

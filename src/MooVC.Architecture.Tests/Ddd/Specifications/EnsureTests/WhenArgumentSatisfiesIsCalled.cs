@@ -65,6 +65,20 @@
         }
 
         [Fact]
+        public void GivenAValueTypeAndANullMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
+        {
+            const int Value = 5;
+
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+                Value,
+                nameof(Value),
+                new FailingValueSpecification(),
+                default!));
+
+            Assert.Contains(FailingValueSpecification.Requirement, exception.Message);
+        }
+
+        [Fact]
         public void GivenAValueTypeWhenTheSpecificationFailsWithAnEmbeddedMessageThenAnArgumentExceptionIsThrownWithTheMessage()
         {
             const int Value = 5;
@@ -75,6 +89,17 @@
                 new EmbeddedFailingValueSpecification()));
 
             Assert.Contains(EmbeddedFailingValueSpecificationRequirement, exception.Message);
+        }
+
+        [Fact]
+        public void GivenAValueTypeWhenTheSpecificationFailsWithAnIncorrectEmbeddedMessageThenAnArgumentExceptionIsThrown()
+        {
+            const int Value = 5;
+
+            _ = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+                Value,
+                nameof(Value),
+                new IncorrectEmbeddedFailingValueSpecification()));
         }
 
         [Fact]
@@ -135,6 +160,20 @@
         }
 
         [Fact]
+        public void GivenAReferenceTypeAndANullMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
+        {
+            const string Expected = "Irrelevant value";
+
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+                Expected,
+                nameof(Expected),
+                new FailingReferenceSpecification(),
+                default!));
+
+            Assert.Contains(FailingReferenceSpecification.Requirement, exception.Message);
+        }
+
+        [Fact]
         public void GivenAReferenceTypeWhenTheSpecificationFailsWithAnEmbeddedMessageThenAnArgumentExceptionIsThrownWithTheMessage()
         {
             const string Expected = "Irrelevant value";
@@ -145,6 +184,17 @@
                 new EmbeddedFailingReferenceSpecification()));
 
             Assert.Contains(EmbeddedFailingReferenceSpecificationRequirement, exception.Message);
+        }
+
+        [Fact]
+        public void GivenAReferenceTypeWhenTheSpecificationFailsWithAnIncorrectEmbeddedMessageThenAnArgumentExceptionIsThrown()
+        {
+            const string Expected = "Irrelevant value";
+
+            _ = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+                Expected,
+                nameof(Expected),
+                new IncorrectEmbeddedFailingReferenceSpecification()));
         }
     }
 }

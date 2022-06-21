@@ -1,8 +1,8 @@
 ﻿namespace MooVC.Architecture.Ddd.Specifications;
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using static System.Environment;
 using static System.String;
 using static MooVC.Architecture.Ddd.Specifications.Resources;
 using static MooVC.Ensure;
@@ -12,11 +12,7 @@ public static partial class Ensure
     public static T ArgumentSatisifies<T>([NotNull] T? argument, string argumentName, Specification<T> specification)
         where T : struct
     {
-        return ArgumentSatisifies(
-            argument,
-            argumentName,
-            specification,
-            Empty);
+        return ArgumentSatisifies(argument, argumentName, specification, Empty);
     }
 
     public static T ArgumentSatisifies<T>([NotNull] T? argument, string argumentName, Specification<T> specification)
@@ -25,11 +21,7 @@ public static partial class Ensure
         return ArgumentSatisifies(argument, argumentName, specification, Empty);
     }
 
-    public static T ArgumentSatisifies<T>(
-        [NotNull] T? argument,
-        string argumentName,
-        Specification<T> specification,
-        string message)
+    public static T ArgumentSatisifies<T>([NotNull] T? argument, string argumentName, Specification<T> specification, string message)
         where T : struct
     {
         _ = ArgumentNotNull(specification, nameof(specification), EnsureArgumentSatisfiesSpecificationRequired);
@@ -41,11 +33,7 @@ public static partial class Ensure
             FormatMessage(specification, message: message));
     }
 
-    public static T ArgumentSatisifies<T>(
-        [NotNull] T? argument,
-        string argumentName,
-        Specification<T> specification,
-        string message)
+    public static T ArgumentSatisifies<T>([NotNull] T? argument, string argumentName, Specification<T> specification, string message)
         where T : class
     {
         _ = ArgumentNotNull(specification, nameof(specification), EnsureArgumentSatisfiesSpecificationRequired);
@@ -70,7 +58,11 @@ public static partial class Ensure
             return message;
         }
 
-        return Join(message, Environment.NewLine, Environment.NewLine, attribute.Description)
-            .TrimEnd();
+        if (message == Empty)
+        {
+            return attribute.Description;
+        }
+
+        return Join(message, NewLine, NewLine, attribute.Description).TrimEnd();
     }
 }

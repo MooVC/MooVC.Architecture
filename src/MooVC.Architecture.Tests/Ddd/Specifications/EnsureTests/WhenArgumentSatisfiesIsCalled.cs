@@ -12,10 +12,7 @@ public sealed class WhenArgumentSatisfiesIsCalled
     {
         const int Expected = 5;
 
-        int actual = ArgumentSatisifies(
-            Expected,
-            nameof(Expected),
-            new PassingValueSpecification());
+        int actual = ArgumentSatisifies(Expected, nameof(Expected), new PassingValueSpecification());
 
         Assert.Equal(Expected, actual);
     }
@@ -26,11 +23,7 @@ public sealed class WhenArgumentSatisfiesIsCalled
         const int Expected = 5;
         const string Message = "Not going to be seen";
 
-        int actual = ArgumentSatisifies(
-            Expected,
-            nameof(Expected),
-            new PassingValueSpecification(),
-            Message);
+        int actual = ArgumentSatisifies(Expected, nameof(Expected), new PassingValueSpecification(), Message);
 
         Assert.Equal(Expected, actual);
     }
@@ -107,10 +100,7 @@ public sealed class WhenArgumentSatisfiesIsCalled
     {
         const string Expected = "Irrelevant value";
 
-        string actual = ArgumentSatisifies(
-            Expected,
-            nameof(Expected),
-            new PassingReferenceSpecification());
+        string actual = ArgumentSatisifies(Expected, nameof(Expected), new PassingReferenceSpecification());
 
         Assert.Equal(Expected, actual);
     }
@@ -121,11 +111,7 @@ public sealed class WhenArgumentSatisfiesIsCalled
         const string Expected = "Irrelevant value";
         const string Message = "Not going to be seen";
 
-        string actual = ArgumentSatisifies(
-            Expected,
-            nameof(Expected),
-            new PassingReferenceSpecification(),
-            Message);
+        string actual = ArgumentSatisifies(Expected, nameof(Expected), new PassingReferenceSpecification(), Message);
 
         Assert.Equal(Expected, actual);
     }

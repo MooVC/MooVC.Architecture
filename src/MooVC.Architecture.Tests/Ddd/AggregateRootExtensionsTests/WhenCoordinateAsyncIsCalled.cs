@@ -1,22 +1,21 @@
-﻿namespace MooVC.Architecture.Ddd.AggregateRootExtensionsTests
+﻿namespace MooVC.Architecture.Ddd.AggregateRootExtensionsTests;
+
+using System;
+using System.Threading.Tasks;
+using Base = MooVC.Architecture.WhenCoordinateAsyncIsCalled;
+
+public sealed class WhenCoordinateAsyncIsCalled
+    : Base
 {
-    using System;
-    using System.Threading.Tasks;
-    using Base = MooVC.Architecture.WhenCoordinateAsyncIsCalled;
+    private readonly SerializableAggregateRoot aggregate;
 
-    public sealed class WhenCoordinateAsyncIsCalled
-        : Base
+    public WhenCoordinateAsyncIsCalled()
     {
-        private readonly SerializableAggregateRoot aggregate;
+        aggregate = new SerializableAggregateRoot();
+    }
 
-        public WhenCoordinateAsyncIsCalled()
-        {
-            aggregate = new SerializableAggregateRoot();
-        }
-
-        protected override Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default)
-        {
-            return aggregate.CoordinateAsync(operation, timeout: timeout);
-        }
+    protected override Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default)
+    {
+        return aggregate.CoordinateAsync(operation, timeout: timeout);
     }
 }

@@ -1,21 +1,20 @@
-﻿namespace MooVC.Architecture.Ddd.Services.AggregateSavedAsyncEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.AggregateSavedAsyncEventArgsTests;
+
+using MooVC.Architecture.Serialization;
+using Xunit;
+
+public sealed class WhenAggregateSavedAsyncEventArgsIsSerialized
 {
-    using MooVC.Architecture.Serialization;
-    using Xunit;
-
-    public sealed class WhenAggregateSavedAsyncEventArgsIsSerialized
+    [Fact]
+    public void GivenAnInstanceThenAllPropertiesAreSerialized()
     {
-        [Fact]
-        public void GivenAnInstanceThenAllPropertiesAreSerialized()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var @event = new AggregateSavedAsyncEventArgs<SerializableAggregateRoot>(aggregate);
+        var aggregate = new SerializableAggregateRoot();
+        var @event = new AggregateSavedAsyncEventArgs<SerializableAggregateRoot>(aggregate);
 
-            AggregateSavedAsyncEventArgs<SerializableAggregateRoot> deserialized = @event.Clone();
+        AggregateSavedAsyncEventArgs<SerializableAggregateRoot> deserialized = @event.Clone();
 
-            Assert.Equal(@event.Aggregate, deserialized.Aggregate);
-            Assert.NotSame(@event.Aggregate, deserialized.Aggregate);
-            Assert.NotSame(@event, deserialized);
-        }
+        Assert.Equal(@event.Aggregate, deserialized.Aggregate);
+        Assert.NotSame(@event.Aggregate, deserialized.Aggregate);
+        Assert.NotSame(@event, deserialized);
     }
 }

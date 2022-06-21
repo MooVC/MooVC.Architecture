@@ -1,34 +1,33 @@
-﻿namespace MooVC.Architecture.Ddd.Services.CoordinatedOperationHandlerTests
+﻿namespace MooVC.Architecture.Ddd.Services.CoordinatedOperationHandlerTests;
+
+using System;
+
+internal sealed class TestableCoordinatedOperationHandler<TCommand>
+    : CoordinatedOperationHandler<SerializableEventCentricAggregateRoot, TCommand>
+    where TCommand : Message
 {
-    using System;
+    private readonly Guid identity;
 
-    internal sealed class TestableCoordinatedOperationHandler<TCommand>
-        : CoordinatedOperationHandler<SerializableEventCentricAggregateRoot, TCommand>
-        where TCommand : Message
+    public TestableCoordinatedOperationHandler(
+        Guid identity,
+        IRepository<SerializableEventCentricAggregateRoot> repository,
+        TimeSpan? timeout = default)
+        : base(repository, timeout)
     {
-        private readonly Guid identity;
+        this.identity = identity;
+    }
 
-        public TestableCoordinatedOperationHandler(
-            Guid identity,
-            IRepository<SerializableEventCentricAggregateRoot> repository,
-            TimeSpan? timeout = default)
-            : base(repository, timeout)
-        {
-            this.identity = identity;
-        }
+    protected override Reference<SerializableEventCentricAggregateRoot> IdentifyTarget(TCommand message)
+    {
+        return identity.ToReference<SerializableEventCentricAggregateRoot>();
+    }
 
-        protected override Reference<SerializableEventCentricAggregateRoot> IdentifyTarget(TCommand message)
-        {
-            return identity.ToReference<SerializableEventCentricAggregateRoot>();
-        }
+    protected override void PerformCoordinatedOperation(
+        SerializableEventCentricAggregateRoot aggregate,
+        TCommand message)
+    {
+        var request = new SetRequest(message, identity);
 
-        protected override void PerformCoordinatedOperation(
-            SerializableEventCentricAggregateRoot aggregate,
-            TCommand message)
-        {
-            var request = new SetRequest(message, identity);
-
-            aggregate.Set(request);
-        }
+        aggregate.Set(request);
     }
 }

@@ -1,32 +1,31 @@
-namespace MooVC.Architecture.Ddd.AggregateRootTests
+namespace MooVC.Architecture.Ddd.AggregateRootTests;
+
+using System;
+using Xunit;
+
+public sealed class WhenAggregateRootIsConstructed
 {
-    using System;
-    using Xunit;
-
-    public sealed class WhenAggregateRootIsConstructed
+    [Fact]
+    public void GivenAnEmptyIdThenAnArgumentExceptionIsThrown()
     {
-        [Fact]
-        public void GivenAnEmptyIdThenAnArgumentExceptionIsThrown()
-        {
-            _ = Assert.Throws<ArgumentException>(() => new SerializableAggregateRoot(Guid.Empty));
-        }
+        _ = Assert.Throws<ArgumentException>(() => new SerializableAggregateRoot(Guid.Empty));
+    }
 
-        [Fact]
-        public void GivenNoIdThenAnInstanceIsCreated()
-        {
-            var aggregate = new SerializableAggregateRoot();
+    [Fact]
+    public void GivenNoIdThenAnInstanceIsCreated()
+    {
+        var aggregate = new SerializableAggregateRoot();
 
-            Assert.True(aggregate.HasUncommittedChanges);
-        }
+        Assert.True(aggregate.HasUncommittedChanges);
+    }
 
-        [Fact]
-        public void GivenAnIdThenTheIdIsPropagated()
-        {
-            var expectedId = Guid.NewGuid();
-            var aggregate = new SerializableAggregateRoot(expectedId);
+    [Fact]
+    public void GivenAnIdThenTheIdIsPropagated()
+    {
+        var expectedId = Guid.NewGuid();
+        var aggregate = new SerializableAggregateRoot(expectedId);
 
-            Assert.Equal(expectedId, aggregate.Id);
-            Assert.True(aggregate.HasUncommittedChanges);
-        }
+        Assert.Equal(expectedId, aggregate.Id);
+        Assert.True(aggregate.HasUncommittedChanges);
     }
 }

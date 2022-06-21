@@ -1,78 +1,77 @@
-﻿namespace MooVC.Architecture.Ddd.AggregateRootExtensionsTests
+﻿namespace MooVC.Architecture.Ddd.AggregateRootExtensionsTests;
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MooVC.Architecture.Ddd.Services;
+using Moq;
+using Xunit;
+
+public sealed class WhenSaveAsyncIsCalled
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.Services;
-    using Moq;
-    using Xunit;
-
-    public sealed class WhenSaveAsyncIsCalled
+    [Fact]
+    public async Task GivenAnAggregateWithChangesThenSaveIsCalledAsync()
     {
-        [Fact]
-        public async Task GivenAnAggregateWithChangesThenSaveIsCalledAsync()
-        {
-            var repository = new Mock<IRepository<SerializableAggregateRoot>>();
-            var aggregate = new SerializableAggregateRoot();
+        var repository = new Mock<IRepository<SerializableAggregateRoot>>();
+        var aggregate = new SerializableAggregateRoot();
 
-            await aggregate.SaveAsync(repository.Object);
+        await aggregate.SaveAsync(repository.Object);
 
-            repository.Verify(
-                repo => repo.SaveAsync(
-                    It.IsAny<SerializableAggregateRoot>(),
-                    It.IsAny<CancellationToken?>()),
-                Times.Once);
-        }
+        repository.Verify(
+            repo => repo.SaveAsync(
+                It.IsAny<SerializableAggregateRoot>(),
+                It.IsAny<CancellationToken?>()),
+            Times.Once);
+    }
 
-        [Fact]
-        public async Task GivenAnAggregateWithChangesAndANullDestinaionThenAnArgumentNullExceptionIsThrownAsync()
-        {
-            var aggregate = new SerializableAggregateRoot();
+    [Fact]
+    public async Task GivenAnAggregateWithChangesAndANullDestinaionThenAnArgumentNullExceptionIsThrownAsync()
+    {
+        var aggregate = new SerializableAggregateRoot();
 
-            _ = await Assert.ThrowsAsync<ArgumentNullException>(
-                () => aggregate.SaveAsync(default!));
-        }
+        _ = await Assert.ThrowsAsync<ArgumentNullException>(
+            () => aggregate.SaveAsync(default!));
+    }
 
-        [Fact]
-        public async Task GivenAnAggregateWithNoChangesThenSaveIsNotCalledAsync()
-        {
-            var repository = new Mock<IRepository<SerializableAggregateRoot>>();
-            var aggregate = new SerializableAggregateRoot();
+    [Fact]
+    public async Task GivenAnAggregateWithNoChangesThenSaveIsNotCalledAsync()
+    {
+        var repository = new Mock<IRepository<SerializableAggregateRoot>>();
+        var aggregate = new SerializableAggregateRoot();
 
-            aggregate.MarkChangesAsCommitted();
+        aggregate.MarkChangesAsCommitted();
 
-            await aggregate.SaveAsync(repository.Object);
+        await aggregate.SaveAsync(repository.Object);
 
-            repository.Verify(
-                repo => repo.SaveAsync(
-                    It.IsAny<SerializableAggregateRoot>(),
-                    It.IsAny<CancellationToken?>()),
-                Times.Never);
-        }
+        repository.Verify(
+            repo => repo.SaveAsync(
+                It.IsAny<SerializableAggregateRoot>(),
+                It.IsAny<CancellationToken?>()),
+            Times.Never);
+    }
 
-        [Fact]
-        public async Task GivenAnAggregateWithNoChangesAndANullDestinaionThenNoExceptionIsThrownAsync()
-        {
-            var aggregate = new SerializableAggregateRoot();
+    [Fact]
+    public async Task GivenAnAggregateWithNoChangesAndANullDestinaionThenNoExceptionIsThrownAsync()
+    {
+        var aggregate = new SerializableAggregateRoot();
 
-            aggregate.MarkChangesAsCommitted();
+        aggregate.MarkChangesAsCommitted();
 
-            await aggregate.SaveAsync(default!);
-        }
+        await aggregate.SaveAsync(default!);
+    }
 
-        [Fact]
-        public async Task GivenANullAggregateThenSaveIsNotCalledAsync()
-        {
-            var repository = new Mock<IRepository<SerializableAggregateRoot>>();
-            SerializableAggregateRoot? aggregate = default;
+    [Fact]
+    public async Task GivenANullAggregateThenSaveIsNotCalledAsync()
+    {
+        var repository = new Mock<IRepository<SerializableAggregateRoot>>();
+        SerializableAggregateRoot? aggregate = default;
 
-            await aggregate!.SaveAsync(repository.Object);
+        await aggregate!.SaveAsync(repository.Object);
 
-            repository.Verify(
-                repo => repo.SaveAsync(
-                    It.IsAny<SerializableAggregateRoot>(),
-                    It.IsAny<CancellationToken?>()),
-                Times.Never);
-        }
+        repository.Verify(
+            repo => repo.SaveAsync(
+                It.IsAny<SerializableAggregateRoot>(),
+                It.IsAny<CancellationToken?>()),
+            Times.Never);
     }
 }

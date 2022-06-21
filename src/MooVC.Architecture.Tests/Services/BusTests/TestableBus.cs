@@ -1,30 +1,29 @@
-﻿namespace MooVC.Architecture.Services.BusTests
+﻿namespace MooVC.Architecture.Services.BusTests;
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MooVC.Architecture;
+
+public sealed class TestableBus
+    : Bus
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MooVC.Architecture;
+    private readonly bool @throw;
 
-    public sealed class TestableBus
-        : Bus
+    public TestableBus(bool @throw)
     {
-        private readonly bool @throw;
+        this.@throw = @throw;
+    }
 
-        public TestableBus(bool @throw)
+    protected override async Task PerformInvokeAsync(
+        Message message,
+        CancellationToken? cancellationToken = default)
+    {
+        if (@throw)
         {
-            this.@throw = @throw;
+            throw new InvalidOperationException();
         }
 
-        protected override async Task PerformInvokeAsync(
-            Message message,
-            CancellationToken? cancellationToken = default)
-        {
-            if (@throw)
-            {
-                throw new InvalidOperationException();
-            }
-
-            await Task.CompletedTask;
-        }
+        await Task.CompletedTask;
     }
 }

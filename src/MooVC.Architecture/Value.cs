@@ -1,140 +1,139 @@
-﻿namespace MooVC.Architecture
+﻿namespace MooVC.Architecture;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+
+[Serializable]
+public abstract class Value
+    : ISerializable,
+      IEquatable<Value>
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.Serialization;
+    private const int MaximumOffset = 32;
 
-    [Serializable]
-    public abstract class Value
-        : ISerializable,
-          IEquatable<Value>
+    private readonly Lazy<int> hashCode;
+
+    protected Value()
     {
-        private const int MaximumOffset = 32;
+        hashCode = new Lazy<int>(AggregateHashCode);
+    }
 
-        private readonly Lazy<int> hashCode;
+    protected Value(SerializationInfo info, StreamingContext context)
+    {
+        hashCode = new Lazy<int>(AggregateHashCode);
+    }
 
-        protected Value()
+    public static bool operator ==(Value? first, Value? second)
+    {
+        return EqualOperator(first, second);
+    }
+
+    public static bool operator !=(Value? first, Value? second)
+    {
+        return NotEqualOperator(first, second);
+    }
+
+    public override bool Equals(object? other)
+    {
+        if (other is Value value)
         {
-            hashCode = new Lazy<int>(AggregateHashCode);
+            return Equals(value);
         }
 
-        protected Value(SerializationInfo info, StreamingContext context)
+        return false;
+    }
+
+    public virtual bool Equals(Value? other)
+    {
+        if (other is { } && other.GetType() == GetType())
         {
-            hashCode = new Lazy<int>(AggregateHashCode);
+            return other.GetHashCode() == GetHashCode();
         }
 
-        public static bool operator ==(Value? first, Value? second)
-        {
-            return EqualOperator(first, second);
-        }
+        return false;
+    }
 
-        public static bool operator !=(Value? first, Value? second)
-        {
-            return NotEqualOperator(first, second);
-        }
+    public override int GetHashCode()
+    {
+        return hashCode.Value;
+    }
 
-        public override bool Equals(object? other)
+    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+    }
+
+    internal static bool EqualOperator(Value? left, Value? right)
+    {
+        return !(left is null ^ right is null)
+            && (left is null || left.Equals(right));
+    }
+
+    internal static bool NotEqualOperator(Value? left, Value? right)
+    {
+        return !EqualOperator(left, right);
+    }
+
+    protected int AggregateHashCode()
+    {
+        IEnumerable<int> aggregation = AggregateHashCode(GetAtomicValues());
+
+        return aggregation.Any()
+            ? CalculateHashCode(aggregation)
+            : 0;
+    }
+
+    protected IEnumerable<int> AggregateHashCode(IEnumerable<object?> values)
+    {
+        return values.SelectMany(CalculateHashCode);
+    }
+
+    protected abstract IEnumerable<object?> GetAtomicValues();
+
+    private static int CalculateHashCode(IEnumerable<int> aggregation)
+    {
+        int value = 0;
+        int[] hashCodes = aggregation.ToArray();
+
+        for (int index = 0; index < hashCodes.Length; index++)
         {
-            if (other is Value value)
+            int offset = index % MaximumOffset;
+
+            unchecked
             {
-                return Equals(value);
-            }
+                int hashCode = hashCodes[index];
 
-            return false;
-        }
-
-        public virtual bool Equals(Value? other)
-        {
-            if (other is { } && other.GetType() == GetType())
-            {
-                return other.GetHashCode() == GetHashCode();
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return hashCode.Value;
-        }
-
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-        }
-
-        internal static bool EqualOperator(Value? left, Value? right)
-        {
-            return !(left is null ^ right is null)
-                && (left is null || left.Equals(right));
-        }
-
-        internal static bool NotEqualOperator(Value? left, Value? right)
-        {
-            return !EqualOperator(left, right);
-        }
-
-        protected int AggregateHashCode()
-        {
-            IEnumerable<int> aggregation = AggregateHashCode(GetAtomicValues());
-
-            return aggregation.Any()
-                ? CalculateHashCode(aggregation)
-                : 0;
-        }
-
-        protected IEnumerable<int> AggregateHashCode(IEnumerable<object?> values)
-        {
-            return values.SelectMany(CalculateHashCode);
-        }
-
-        protected abstract IEnumerable<object?> GetAtomicValues();
-
-        private static int CalculateHashCode(IEnumerable<int> aggregation)
-        {
-            int value = 0;
-            int[] hashCodes = aggregation.ToArray();
-
-            for (int index = 0; index < hashCodes.Length; index++)
-            {
-                int offset = index % MaximumOffset;
-
-                unchecked
+                if (offset > 0)
                 {
-                    int hashCode = hashCodes[index];
-
-                    if (offset > 0)
+                    if (hashCode == 0)
                     {
-                        if (hashCode == 0)
-                        {
-                            value += index * offset;
-                        }
-                        else
-                        {
-                            int left = hashCode << (MaximumOffset - offset);
-                            int right = hashCode >> offset;
-
-                            value += index * (left | right);
-                        }
+                        value += index * offset;
                     }
                     else
                     {
-                        value += hashCode;
+                        int left = hashCode << (MaximumOffset - offset);
+                        int right = hashCode >> offset;
+
+                        value += index * (left | right);
                     }
                 }
+                else
+                {
+                    value += hashCode;
+                }
             }
-
-            return value;
         }
 
-        private IEnumerable<int> CalculateHashCode(object? value)
+        return value;
+    }
+
+    private IEnumerable<int> CalculateHashCode(object? value)
+    {
+        if (value is Array array)
         {
-            if (value is Array array)
-            {
-                return AggregateHashCode(array.Cast<object>());
-            }
-
-            return new[] { value?.GetHashCode() ?? 0 };
+            return AggregateHashCode(array.Cast<object>());
         }
+
+        return new[] { value?.GetHashCode() ?? 0 };
     }
 }

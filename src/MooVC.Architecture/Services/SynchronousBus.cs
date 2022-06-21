@@ -1,20 +1,19 @@
-namespace MooVC.Architecture.Services
+namespace MooVC.Architecture.Services;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+public abstract class SynchronousBus
+    : Bus
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public abstract class SynchronousBus
-        : Bus
+    protected override Task PerformInvokeAsync(
+        Message message,
+        CancellationToken? cancellationToken = default)
     {
-        protected override Task PerformInvokeAsync(
-            Message message,
-            CancellationToken? cancellationToken = default)
-        {
-            PerformInvoke(message);
+        PerformInvoke(message);
 
-            return Task.CompletedTask;
-        }
-
-        protected abstract void PerformInvoke(Message message);
+        return Task.CompletedTask;
     }
+
+    protected abstract void PerformInvoke(Message message);
 }

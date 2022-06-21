@@ -1,50 +1,49 @@
-namespace MooVC.Architecture.Ddd.Services
+namespace MooVC.Architecture.Ddd.Services;
+
+using System;
+using System.Collections.Generic;
+using MooVC.Serialization;
+
+public abstract class MemoryRepository<TAggregate, TStore>
+    : SynchronousRepository<TAggregate>
+    where TAggregate : AggregateRoot
+    where TStore : IDictionary<Reference<TAggregate>, TAggregate>, new()
 {
-    using System;
-    using System.Collections.Generic;
-    using MooVC.Serialization;
-
-    public abstract class MemoryRepository<TAggregate, TStore>
-        : SynchronousRepository<TAggregate>
-        where TAggregate : AggregateRoot
-        where TStore : IDictionary<Reference<TAggregate>, TAggregate>, new()
+    protected MemoryRepository(ICloner cloner)
+        : base(cloner)
     {
-        protected MemoryRepository(ICloner cloner)
-            : base(cloner)
+    }
+
+    protected TStore Store { get; } = new TStore();
+
+    protected virtual Reference<TAggregate> GetKey(TAggregate aggregate)
+    {
+        return GetKey(aggregate.Id, aggregate.Version);
+    }
+
+    protected abstract Reference<TAggregate> GetKey(Guid id, SignedVersion? version);
+
+    protected override TAggregate? PerformGet(Guid id, SignedVersion? version = default)
+    {
+        Reference<TAggregate>? key = GetKey(id, version);
+
+        if (Store.TryGetValue(key, out TAggregate? aggregate))
         {
-        }
-
-        protected TStore Store { get; } = new TStore();
-
-        protected virtual Reference<TAggregate> GetKey(TAggregate aggregate)
-        {
-            return GetKey(aggregate.Id, aggregate.Version);
-        }
-
-        protected abstract Reference<TAggregate> GetKey(Guid id, SignedVersion? version);
-
-        protected override TAggregate? PerformGet(Guid id, SignedVersion? version = default)
-        {
-            Reference<TAggregate>? key = GetKey(id, version);
-
-            if (Store.TryGetValue(key, out TAggregate? aggregate))
+            if (version is null || version.IsEmpty || version == aggregate.Version)
             {
-                if (version is null || version.IsEmpty || version == aggregate.Version)
-                {
-                    return aggregate;
-                }
+                return aggregate;
             }
-
-            return default;
         }
 
-        protected override void PerformUpdateStore(TAggregate aggregate)
-        {
-            aggregate.MarkChangesAsCommitted();
+        return default;
+    }
 
-            Reference<TAggregate> key = GetKey(aggregate);
+    protected override void PerformUpdateStore(TAggregate aggregate)
+    {
+        aggregate.MarkChangesAsCommitted();
 
-            _ = Store[key] = aggregate;
-        }
+        Reference<TAggregate> key = GetKey(aggregate);
+
+        _ = Store[key] = aggregate;
     }
 }

@@ -1,27 +1,26 @@
-﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
+﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests;
+
+using System.Collections.Generic;
+using Xunit;
+
+public sealed class WhenRemoveIsCalled
+    : UnversionedReferenceDictionaryTests
 {
-    using System.Collections.Generic;
-    using Xunit;
-
-    public sealed class WhenRemoveIsCalled
-        : UnversionedReferenceDictionaryTests
+    [Fact]
+    public void GivenAVersionedReferenceThatExistsThenTheEntryIsRemoved()
     {
-        [Fact]
-        public void GivenAVersionedReferenceThatExistsThenTheEntryIsRemoved()
-        {
-            bool removed = Dictionary.Remove(SecondReference);
+        bool removed = Dictionary.Remove(SecondReference);
 
-            Assert.True(removed);
-        }
+        Assert.True(removed);
+    }
 
-        [Fact]
-        public void GivenAVersionedReferenceThatExistAsAKeyValuePairThenTheEntryIsRemoved()
-        {
-            var item = new KeyValuePair<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>(SecondReference, SecondAggregate);
+    [Fact]
+    public void GivenAVersionedReferenceThatExistAsAKeyValuePairThenTheEntryIsRemoved()
+    {
+        var item = new KeyValuePair<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>(SecondReference, SecondAggregate);
 
-            bool removed = Dictionary.Remove(item);
+        bool removed = Dictionary.Remove(item);
 
-            Assert.True(removed);
-        }
+        Assert.True(removed);
     }
 }

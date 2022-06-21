@@ -1,31 +1,30 @@
-namespace MooVC.Architecture.Ddd
+namespace MooVC.Architecture.Ddd;
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using MooVC.Collections.Generic;
+using MooVC.Serialization;
+
+[Serializable]
+public sealed class ChangesMarkedAsCommittedEventArgs
+    : EventArgs,
+      ISerializable
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-    using MooVC.Collections.Generic;
-    using MooVC.Serialization;
-
-    [Serializable]
-    public sealed class ChangesMarkedAsCommittedEventArgs
-        : EventArgs,
-          ISerializable
+    internal ChangesMarkedAsCommittedEventArgs(IEnumerable<DomainEvent> changes)
     {
-        internal ChangesMarkedAsCommittedEventArgs(IEnumerable<DomainEvent> changes)
-        {
-            Changes = changes.Snapshot();
-        }
+        Changes = changes.Snapshot();
+    }
 
-        private ChangesMarkedAsCommittedEventArgs(SerializationInfo info, StreamingContext context)
-        {
-            Changes = info.TryGetEnumerable<DomainEvent>(nameof(Changes));
-        }
+    private ChangesMarkedAsCommittedEventArgs(SerializationInfo info, StreamingContext context)
+    {
+        Changes = info.TryGetEnumerable<DomainEvent>(nameof(Changes));
+    }
 
-        public IEnumerable<DomainEvent> Changes { get; }
+    public IEnumerable<DomainEvent> Changes { get; }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            _ = info.TryAddEnumerable(nameof(Changes), Changes);
-        }
+    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        _ = info.TryAddEnumerable(nameof(Changes), Changes);
     }
 }

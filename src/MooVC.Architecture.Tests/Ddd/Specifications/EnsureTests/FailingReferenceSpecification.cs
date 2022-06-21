@@ -1,14 +1,13 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests
-{
-    [Requirement(Requirement)]
-    internal sealed class FailingReferenceSpecification
-        : TestSpecification<string>
-    {
-        public const string Requirement = "It fails anyway.";
+﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests;
 
-        public FailingReferenceSpecification()
-            : base(false)
-        {
-        }
+[Requirement(Requirement)]
+internal sealed class FailingReferenceSpecification
+    : TestSpecification<string>
+{
+    public const string Requirement = "It fails anyway.";
+
+    public FailingReferenceSpecification()
+        : base(false)
+    {
     }
 }

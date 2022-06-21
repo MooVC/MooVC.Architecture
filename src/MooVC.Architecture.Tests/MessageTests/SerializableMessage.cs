@@ -1,24 +1,23 @@
-namespace MooVC.Architecture.MessageTests
+namespace MooVC.Architecture.MessageTests;
+
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+internal sealed class SerializableMessage
+    : Message
 {
-    using System;
-    using System.Runtime.Serialization;
-
-    [Serializable]
-    internal sealed class SerializableMessage
-        : Message
+    public SerializableMessage()
     {
-        public SerializableMessage()
-        {
-        }
+    }
 
-        public SerializableMessage(Message context)
-            : base(context)
-        {
-        }
+    public SerializableMessage(Message context)
+        : base(context)
+    {
+    }
 
-        private SerializableMessage(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    private SerializableMessage(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
     }
 }

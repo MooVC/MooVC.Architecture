@@ -1,50 +1,49 @@
-namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
+namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
+
+using System;
+using System.Linq;
+using MooVC.Architecture.MessageTests;
+using Xunit;
+
+public sealed class WhenMarkChangesAsCommittedIsCalled
 {
-    using System;
-    using System.Linq;
-    using MooVC.Architecture.MessageTests;
-    using Xunit;
-
-    public sealed class WhenMarkChangesAsCommittedIsCalled
+    [Fact]
+    public void GivenAnAggregateWithChangesThenTheChangesMarkedAsCommittedEventIsRaisedWithTheChangesAttached()
     {
-        [Fact]
-        public void GivenAnAggregateWithChangesThenTheChangesMarkedAsCommittedEventIsRaisedWithTheChangesAttached()
+        bool wasInvoked = false;
+        var aggregate = new SerializableEventCentricAggregateRoot(Guid.NewGuid());
+        var context = new SerializableMessage();
+        var request = new SetRequest(context, Guid.NewGuid());
+
+        aggregate.Set(request);
+
+        aggregate.ChangesMarkedAsCommitted += (sender, e) =>
         {
-            bool wasInvoked = false;
-            var aggregate = new SerializableEventCentricAggregateRoot(Guid.NewGuid());
-            var context = new SerializableMessage();
-            var request = new SetRequest(context, Guid.NewGuid());
+            var changes = e as ChangesMarkedAsCommittedEventArgs;
 
-            aggregate.Set(request);
+            Assert.NotNull(changes);
+            Assert.True(changes!.Changes.Count() == 1);
+            _ = Assert.IsType<SerializableSetDomainEvent>(changes.Changes.First());
 
-            aggregate.ChangesMarkedAsCommitted += (sender, e) =>
-            {
-                var changes = e as ChangesMarkedAsCommittedEventArgs;
+            wasInvoked = true;
+        };
 
-                Assert.NotNull(changes);
-                Assert.True(changes!.Changes.Count() == 1);
-                _ = Assert.IsType<SerializableSetDomainEvent>(changes.Changes.First());
+        aggregate.MarkChangesAsCommitted();
 
-                wasInvoked = true;
-            };
+        Assert.True(wasInvoked);
+    }
 
-            aggregate.MarkChangesAsCommitted();
+    [Fact]
+    public void GivenAnAggregateWithNoChangesThenTheChangesMarkedAsCommittedEventIsNotRaised()
+    {
+        bool wasInvoked = false;
+        var aggregate = new SerializableEventCentricAggregateRoot(Guid.NewGuid());
 
-            Assert.True(wasInvoked);
-        }
+        aggregate.MarkChangesAsCommitted();
 
-        [Fact]
-        public void GivenAnAggregateWithNoChangesThenTheChangesMarkedAsCommittedEventIsNotRaised()
-        {
-            bool wasInvoked = false;
-            var aggregate = new SerializableEventCentricAggregateRoot(Guid.NewGuid());
+        aggregate.ChangesMarkedAsCommitted += (sender, e) => wasInvoked = true;
+        aggregate.MarkChangesAsCommitted();
 
-            aggregate.MarkChangesAsCommitted();
-
-            aggregate.ChangesMarkedAsCommitted += (sender, e) => wasInvoked = true;
-            aggregate.MarkChangesAsCommitted();
-
-            Assert.False(wasInvoked);
-        }
+        Assert.False(wasInvoked);
     }
 }

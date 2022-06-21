@@ -1,21 +1,20 @@
-﻿namespace MooVC.Architecture.Ddd.Services.SynchronousProjectorTests
+﻿namespace MooVC.Architecture.Ddd.Services.SynchronousProjectorTests;
+
+using System.Threading.Tasks;
+using MooVC.Architecture.Ddd.ProjectionTests;
+using Xunit;
+
+public sealed class WhenProjectAsyncIsCalled
 {
-    using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.ProjectionTests;
-    using Xunit;
-
-    public sealed class WhenProjectAsyncIsCalled
+    [Fact]
+    public async Task GivenASingleAggregateThenASingleProjectionIsReturnedAsync()
     {
-        [Fact]
-        public async Task GivenASingleAggregateThenASingleProjectionIsReturnedAsync()
-        {
-            var projector = new TestableSynchronousProjector<SerializableAggregateRoot>();
-            var aggregate = new SerializableAggregateRoot();
+        var projector = new TestableSynchronousProjector<SerializableAggregateRoot>();
+        var aggregate = new SerializableAggregateRoot();
 
-            SerializableProjection<SerializableAggregateRoot> projection = await projector
-                .ProjectAsync(aggregate);
+        SerializableProjection<SerializableAggregateRoot> projection = await projector
+            .ProjectAsync(aggregate);
 
-            Assert.True(projection.Aggregate.IsMatch(aggregate));
-        }
+        Assert.True(projection.Aggregate.IsMatch(aggregate));
     }
 }

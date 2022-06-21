@@ -1,40 +1,39 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests;
+
+using System;
+using System.Threading.Tasks;
+using Xunit;
+
+public sealed class WhenGetAsyncIsCalled
 {
-    using System;
-    using System.Threading.Tasks;
-    using Xunit;
-
-    public sealed class WhenGetAsyncIsCalled
+    [Fact]
+    public async Task GivenAReferenceThenTheReferenceIsPropagatedAsync()
     {
-        [Fact]
-        public async Task GivenAReferenceThenTheReferenceIsPropagatedAsync()
+        bool wasInvoked = false;
+        var expectedAggregate = new SerializableEventCentricAggregateRoot();
+        var expectedReference = expectedAggregate.ToReference();
+
+        var proxy = new TestableSynchronousAggregateReconciliationProxy(get: actualReference =>
         {
-            bool wasInvoked = false;
-            var expectedAggregate = new SerializableEventCentricAggregateRoot();
-            var expectedReference = expectedAggregate.ToReference();
+            wasInvoked = true;
 
-            var proxy = new TestableSynchronousAggregateReconciliationProxy(get: actualReference =>
-            {
-                wasInvoked = true;
+            Assert.Equal(expectedReference, actualReference);
 
-                Assert.Equal(expectedReference, actualReference);
+            return expectedAggregate;
+        });
 
-                return expectedAggregate;
-            });
+        EventCentricAggregateRoot? actualAggregate = await proxy.GetAsync(expectedReference);
 
-            EventCentricAggregateRoot? actualAggregate = await proxy.GetAsync(expectedReference);
+        Assert.True(wasInvoked);
+        Assert.Equal(expectedAggregate, actualAggregate);
+    }
 
-            Assert.True(wasInvoked);
-            Assert.Equal(expectedAggregate, actualAggregate);
-        }
+    [Fact]
+    public async Task GivenAnExceptionThenTheExceptionIsThrownAsync()
+    {
+        var reconciler = new TestableSynchronousAggregateReconciliationProxy();
 
-        [Fact]
-        public async Task GivenAnExceptionThenTheExceptionIsThrownAsync()
-        {
-            var reconciler = new TestableSynchronousAggregateReconciliationProxy();
-
-            _ = await Assert.ThrowsAsync<NotImplementedException>(
-                () => reconciler.GetAsync(default!));
-        }
+        _ = await Assert.ThrowsAsync<NotImplementedException>(
+            () => reconciler.GetAsync(default!));
     }
 }

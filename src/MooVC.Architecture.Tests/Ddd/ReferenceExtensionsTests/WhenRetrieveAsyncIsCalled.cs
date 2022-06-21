@@ -1,350 +1,349 @@
-﻿namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
+﻿namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using MooVC.Architecture.Ddd.Services;
+using MooVC.Architecture.MessageTests;
+using Moq;
+using Xunit;
+using static MooVC.Architecture.Ddd.Reference;
+
+public sealed class WhenRetrieveAsyncIsCalled
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.Services;
-    using MooVC.Architecture.MessageTests;
-    using Moq;
-    using Xunit;
-    using static MooVC.Architecture.Ddd.Reference;
+    private readonly SerializableMessage context;
+    private readonly Mock<IRepository<SerializableAggregateRoot>> repository;
 
-    public sealed class WhenRetrieveAsyncIsCalled
+    public WhenRetrieveAsyncIsCalled()
     {
-        private readonly SerializableMessage context;
-        private readonly Mock<IRepository<SerializableAggregateRoot>> repository;
+        context = new SerializableMessage();
+        repository = new Mock<IRepository<SerializableAggregateRoot>>();
+    }
 
-        public WhenRetrieveAsyncIsCalled()
+    public static IEnumerable<object[]> GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData()
+    {
+        Reference reference1 = Create<SerializableAggregateRoot>(Guid.NewGuid());
+        Reference reference2 = Create<SerializableAggregateRoot>(Guid.NewGuid());
+
+        yield return new[]
         {
-            context = new SerializableMessage();
-            repository = new Mock<IRepository<SerializableAggregateRoot>>();
-        }
-
-        public static IEnumerable<object[]> GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData()
-        {
-            Reference reference1 = Create<SerializableAggregateRoot>(Guid.NewGuid());
-            Reference reference2 = Create<SerializableAggregateRoot>(Guid.NewGuid());
-
-            yield return new[]
+            new[]
             {
-                new[]
-                {
-                    reference1,
-                    reference2,
-                    Reference<SerializableAggregateRoot>.Empty,
-                },
-            };
-
-            yield return new[]
-            {
-                new[]
-                {
-                    reference1,
-                    Reference<SerializableAggregateRoot>.Empty,
-                    Reference<SerializableAggregateRoot>.Empty,
-                },
-            };
-
-            yield return new[]
-            {
-                new[]
-                {
-                    Reference<SerializableAggregateRoot>.Empty,
-                    Reference<SerializableAggregateRoot>.Empty,
-                    Reference<SerializableAggregateRoot>.Empty,
-                },
-            };
-        }
-
-        public static IEnumerable<object[]> GivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissingData()
-        {
-            Reference reference1 = Create<SerializableAggregateRoot>(Guid.NewGuid());
-            Reference reference2 = Create<SerializableAggregateRoot>(Guid.NewGuid());
-            Reference reference3 = Create<SerializableAggregateRoot>(Guid.NewGuid());
-
-            IEnumerable<IDictionary<Reference, bool>> singles = GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
                 reference1,
                 reference2,
-                reference3);
+                Reference<SerializableAggregateRoot>.Empty,
+            },
+        };
 
-            IEnumerable<IDictionary<Reference, bool>> multiples = GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
-                reference1,
-                reference2,
-                reference3);
-
-            IEnumerable<IDictionary<Reference, bool>> all = new[]
+        yield return new[]
+        {
+            new[]
             {
-                new Dictionary<Reference, bool>
-                {
-                    { reference1, false },
-                    { reference2, false },
-                    { reference3, false },
-                },
-            };
+                reference1,
+                Reference<SerializableAggregateRoot>.Empty,
+                Reference<SerializableAggregateRoot>.Empty,
+            },
+        };
 
-            return singles
-                .Union(multiples)
-                .Union(all)
-                .Select(item => new object[] { item });
-        }
-
-        [Fact]
-        public async Task GivenAnEmptyReferenceThenAnAggregateDoesNotExistExceptionIsThrownAsync()
+        yield return new[]
         {
-            Reference reference = Reference<SerializableAggregateRoot>.Empty;
+            new[]
+            {
+                Reference<SerializableAggregateRoot>.Empty,
+                Reference<SerializableAggregateRoot>.Empty,
+                Reference<SerializableAggregateRoot>.Empty,
+            },
+        };
+    }
 
-            AggregateDoesNotExistException<SerializableAggregateRoot> exception =
-                await Assert.ThrowsAsync<AggregateDoesNotExistException<SerializableAggregateRoot>>(
-                    () => reference.RetrieveAsync(context, repository.Object));
+    public static IEnumerable<object[]> GivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissingData()
+    {
+        Reference reference1 = Create<SerializableAggregateRoot>(Guid.NewGuid());
+        Reference reference2 = Create<SerializableAggregateRoot>(Guid.NewGuid());
+        Reference reference3 = Create<SerializableAggregateRoot>(Guid.NewGuid());
 
-            repository.Verify(
-                repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()),
-                Times.Never);
+        IEnumerable<IDictionary<Reference, bool>> singles = GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
+            reference1,
+            reference2,
+            reference3);
 
-            Assert.Equal(context, exception.Context);
-        }
+        IEnumerable<IDictionary<Reference, bool>> multiples = GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
+            reference1,
+            reference2,
+            reference3);
 
-        [Fact]
-        public async Task GivenAReferenceThatDoesNotExistsThenAnAggregateNotFoundExceptionIsThrownAsync()
+        IEnumerable<IDictionary<Reference, bool>> all = new[]
         {
-            _ = repository
-                .Setup(repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()))
-                .ReturnsAsync(default(SerializableAggregateRoot));
+            new Dictionary<Reference, bool>
+            {
+                { reference1, false },
+                { reference2, false },
+                { reference3, false },
+            },
+        };
 
-            var aggregateId = Guid.NewGuid();
-            var reference = Reference<SerializableAggregateRoot>.Create(aggregateId);
+        return singles
+            .Union(multiples)
+            .Union(all)
+            .Select(item => new object[] { item });
+    }
 
-            AggregateNotFoundException<SerializableAggregateRoot> exception =
-                await Assert.ThrowsAsync<AggregateNotFoundException<SerializableAggregateRoot>>(
-                    () => reference.RetrieveAsync(context, repository.Object));
+    [Fact]
+    public async Task GivenAnEmptyReferenceThenAnAggregateDoesNotExistExceptionIsThrownAsync()
+    {
+        Reference reference = Reference<SerializableAggregateRoot>.Empty;
 
-            repository.Verify(
-                repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()),
-                Times.Once);
-
-            Assert.Equal(reference, exception.Aggregate);
-            Assert.Equal(context, exception.Context);
-        }
-
-        [Fact]
-        public async Task GivenAReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnArgumentExceptionIsThrown()
-        {
-            _ = repository
-                .Setup(repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()))
-                .ReturnsAsync(default(SerializableAggregateRoot));
-
-            var aggregateId = Guid.NewGuid();
-            var reference = Reference<SerializableEventCentricAggregateRoot>.Create(aggregateId);
-
-            ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
+        AggregateDoesNotExistException<SerializableAggregateRoot> exception =
+            await Assert.ThrowsAsync<AggregateDoesNotExistException<SerializableAggregateRoot>>(
                 () => reference.RetrieveAsync(context, repository.Object));
 
-            repository.Verify(
-                repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()),
-                Times.Never);
-        }
+        repository.Verify(
+            repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()),
+            Times.Never);
 
-        [Fact]
-        public async Task GivenAReferenceThatExistsThenTheLatestAggregateIsReturnedAsync()
+        Assert.Equal(context, exception.Context);
+    }
+
+    [Fact]
+    public async Task GivenAReferenceThatDoesNotExistsThenAnAggregateNotFoundExceptionIsThrownAsync()
+    {
+        _ = repository
+            .Setup(repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()))
+            .ReturnsAsync(default(SerializableAggregateRoot));
+
+        var aggregateId = Guid.NewGuid();
+        var reference = Reference<SerializableAggregateRoot>.Create(aggregateId);
+
+        AggregateNotFoundException<SerializableAggregateRoot> exception =
+            await Assert.ThrowsAsync<AggregateNotFoundException<SerializableAggregateRoot>>(
+                () => reference.RetrieveAsync(context, repository.Object));
+
+        repository.Verify(
+            repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()),
+            Times.Once);
+
+        Assert.Equal(reference, exception.Aggregate);
+        Assert.Equal(context, exception.Context);
+    }
+
+    [Fact]
+    public async Task GivenAReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnArgumentExceptionIsThrown()
+    {
+        _ = repository
+            .Setup(repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()))
+            .ReturnsAsync(default(SerializableAggregateRoot));
+
+        var aggregateId = Guid.NewGuid();
+        var reference = Reference<SerializableEventCentricAggregateRoot>.Create(aggregateId);
+
+        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => reference.RetrieveAsync(context, repository.Object));
+
+        repository.Verify(
+            repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()),
+            Times.Never);
+    }
+
+    [Fact]
+    public async Task GivenAReferenceThatExistsThenTheLatestAggregateIsReturnedAsync()
+    {
+        var aggregateId = Guid.NewGuid();
+        var firstAggregate = new Mock<SerializableAggregateRoot>(aggregateId);
+        var secondAggregate = new Mock<SerializableAggregateRoot>(aggregateId);
+        var reference = Reference<SerializableAggregateRoot>.Create(aggregateId);
+
+        _ = repository
+           .Setup(repo => repo.GetAsync(
+               It.Is<Guid>(id => id == aggregateId),
+               It.IsAny<CancellationToken?>(),
+               It.Is<SignedVersion>(v => v == default)))
+           .ReturnsAsync(secondAggregate.Object);
+
+        SerializableAggregateRoot value = await reference.RetrieveAsync(context, repository.Object);
+
+        repository.Verify(
+            repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()),
+            Times.Once);
+
+        Assert.Equal(secondAggregate.Object, value);
+    }
+
+    [Theory]
+    [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
+    public async Task GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEach(IEnumerable<Reference> references)
+    {
+        _ = repository
+            .Setup(repo => repo.GetAsync(
+                It.Is<Guid>(id => id != Guid.Empty),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()))
+            .ReturnsAsync<Guid, CancellationToken?, SignedVersion?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
+                (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
+
+        AggregateException exception = await Assert.ThrowsAsync<AggregateException>(
+            () => references.RetrieveAsync(context, repository.Object));
+
+        int expected = references.Count(item => item == Reference<SerializableAggregateRoot>.Empty);
+
+        repository.Verify(
+            repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()),
+            Times.Exactly(references.Count() - expected));
+
+        int actual = exception
+            .InnerExceptions
+            .Cast<AggregateDoesNotExistException<SerializableAggregateRoot>>()
+            .Count();
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
+    public async Task GivenOneOrMoreReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturned(IEnumerable<Reference> references)
+    {
+        _ = repository
+            .Setup(repo => repo.GetAsync(
+                It.Is<Guid>(id => id != Guid.Empty),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()))
+            .ReturnsAsync<Guid, CancellationToken?, ulong?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
+                (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
+
+        IEnumerable<SerializableAggregateRoot> results = await references
+            .RetrieveAsync(context, repository.Object, ignoreEmpty: true);
+
+        int empties = references.Count(item => item == Reference<SerializableAggregateRoot>.Empty);
+        int expected = references.Count() - empties;
+
+        repository.Verify(
+            repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()),
+            Times.Exactly(expected));
+
+        Assert.Equal(expected, results.Count());
+    }
+
+    [Theory]
+    [MemberData(nameof(GivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissingData))]
+    public async Task GivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissingAsync(
+        IDictionary<Reference, bool> references)
+    {
+        Expression<Func<Guid, bool>> predicate = id => references
+            .Where(item => item.Key.Id == id)
+            .Single()
+            .Value;
+
+        _ = repository
+            .Setup(repo => repo.GetAsync(
+                It.Is(predicate),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()))
+            .ReturnsAsync<Guid, CancellationToken?, ulong?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
+                (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
+
+        AggregateException exception = await Assert.ThrowsAsync<AggregateException>(
+            () => references.Keys.RetrieveAsync(context, repository.Object));
+
+        repository.Verify(
+            repo => repo.GetAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<SignedVersion>()),
+            Times.Exactly(references.Count));
+
+        Guid[] expected = references
+            .Where(item => !item.Value)
+            .Select(item => item.Key.Id)
+            .OrderBy(item => item)
+            .ToArray();
+
+        Guid[] actual = exception
+            .InnerExceptions
+            .Cast<AggregateNotFoundException<SerializableAggregateRoot>>()
+            .Select(aggregate => aggregate.Aggregate.Id)
+            .OrderBy(item => item)
+            .ToArray();
+
+        Assert.Equal(expected, actual);
+    }
+
+    private static IEnumerable<IDictionary<Reference, bool>> GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
+        Reference reference1,
+        Reference reference2,
+        Reference reference3)
+    {
+        yield return new Dictionary<Reference, bool>
         {
-            var aggregateId = Guid.NewGuid();
-            var firstAggregate = new Mock<SerializableAggregateRoot>(aggregateId);
-            var secondAggregate = new Mock<SerializableAggregateRoot>(aggregateId);
-            var reference = Reference<SerializableAggregateRoot>.Create(aggregateId);
+            { reference1, false },
+            { reference2, true },
+            { reference3, true },
+        };
 
-            _ = repository
-               .Setup(repo => repo.GetAsync(
-                   It.Is<Guid>(id => id == aggregateId),
-                   It.IsAny<CancellationToken?>(),
-                   It.Is<SignedVersion>(v => v == default)))
-               .ReturnsAsync(secondAggregate.Object);
-
-            SerializableAggregateRoot value = await reference.RetrieveAsync(context, repository.Object);
-
-            repository.Verify(
-                repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()),
-                Times.Once);
-
-            Assert.Equal(secondAggregate.Object, value);
-        }
-
-        [Theory]
-        [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
-        public async Task GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEach(IEnumerable<Reference> references)
+        yield return new Dictionary<Reference, bool>
         {
-            _ = repository
-                .Setup(repo => repo.GetAsync(
-                    It.Is<Guid>(id => id != Guid.Empty),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()))
-                .ReturnsAsync<Guid, CancellationToken?, SignedVersion?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
-                    (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
+            { reference1, true },
+            { reference2, false },
+            { reference3, true },
+        };
 
-            AggregateException exception = await Assert.ThrowsAsync<AggregateException>(
-                () => references.RetrieveAsync(context, repository.Object));
-
-            int expected = references.Count(item => item == Reference<SerializableAggregateRoot>.Empty);
-
-            repository.Verify(
-                repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()),
-                Times.Exactly(references.Count() - expected));
-
-            int actual = exception
-                .InnerExceptions
-                .Cast<AggregateDoesNotExistException<SerializableAggregateRoot>>()
-                .Count();
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [MemberData(nameof(GivenOneOrMoreReferencesThatAreEmptyThenAnAggregateDoesNotExistExceptionIsThrownForEachData))]
-        public async Task GivenOneOrMoreReferencesThatAreEmptyWhenIgnoreEmptyIsTrueThenOnlyTheAggregatesAreReturned(IEnumerable<Reference> references)
+        yield return new Dictionary<Reference, bool>
         {
-            _ = repository
-                .Setup(repo => repo.GetAsync(
-                    It.Is<Guid>(id => id != Guid.Empty),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()))
-                .ReturnsAsync<Guid, CancellationToken?, ulong?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
-                    (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
+            { reference1, true },
+            { reference2, true },
+            { reference3, false },
+        };
+    }
 
-            IEnumerable<SerializableAggregateRoot> results = await references
-                .RetrieveAsync(context, repository.Object, ignoreEmpty: true);
-
-            int empties = references.Count(item => item == Reference<SerializableAggregateRoot>.Empty);
-            int expected = references.Count() - empties;
-
-            repository.Verify(
-                repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()),
-                Times.Exactly(expected));
-
-            Assert.Equal(expected, results.Count());
-        }
-
-        [Theory]
-        [MemberData(nameof(GivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissingData))]
-        public async Task GivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissingAsync(
-            IDictionary<Reference, bool> references)
+    private static IEnumerable<IDictionary<Reference, bool>> GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
+        Reference reference1,
+        Reference reference2,
+        Reference reference3)
+    {
+        yield return new Dictionary<Reference, bool>
         {
-            Expression<Func<Guid, bool>> predicate = id => references
-                .Where(item => item.Key.Id == id)
-                .Single()
-                .Value;
+            { reference1, true },
+            { reference2, false },
+            { reference3, false },
+        };
 
-            _ = repository
-                .Setup(repo => repo.GetAsync(
-                    It.Is(predicate),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()))
-                .ReturnsAsync<Guid, CancellationToken?, ulong?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
-                    (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
-
-            AggregateException exception = await Assert.ThrowsAsync<AggregateException>(
-                () => references.Keys.RetrieveAsync(context, repository.Object));
-
-            repository.Verify(
-                repo => repo.GetAsync(
-                    It.IsAny<Guid>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<SignedVersion>()),
-                Times.Exactly(references.Count));
-
-            Guid[] expected = references
-                .Where(item => !item.Value)
-                .Select(item => item.Key.Id)
-                .OrderBy(item => item)
-                .ToArray();
-
-            Guid[] actual = exception
-                .InnerExceptions
-                .Cast<AggregateNotFoundException<SerializableAggregateRoot>>()
-                .Select(aggregate => aggregate.Aggregate.Id)
-                .OrderBy(item => item)
-                .ToArray();
-
-            Assert.Equal(expected, actual);
-        }
-
-        private static IEnumerable<IDictionary<Reference, bool>> GenerateSinglesForGivenOneOrMoreReferencesThatDoNotExistsThenAnAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
-            Reference reference1,
-            Reference reference2,
-            Reference reference3)
+        yield return new Dictionary<Reference, bool>
         {
-            yield return new Dictionary<Reference, bool>
-            {
-                { reference1, false },
-                { reference2, true },
-                { reference3, true },
-            };
+            { reference1, false },
+            { reference2, true },
+            { reference3, false },
+        };
 
-            yield return new Dictionary<Reference, bool>
-            {
-                { reference1, true },
-                { reference2, false },
-                { reference3, true },
-            };
-
-            yield return new Dictionary<Reference, bool>
-            {
-                { reference1, true },
-                { reference2, true },
-                { reference3, false },
-            };
-        }
-
-        private static IEnumerable<IDictionary<Reference, bool>> GenerateMultiplesForGivenOneOrMoreReferencesThatDoNotExistsThenAggregateNotFoundExceptionIsThrownForEachThatIsMissing(
-            Reference reference1,
-            Reference reference2,
-            Reference reference3)
+        yield return new Dictionary<Reference, bool>
         {
-            yield return new Dictionary<Reference, bool>
-            {
-                { reference1, true },
-                { reference2, false },
-                { reference3, false },
-            };
-
-            yield return new Dictionary<Reference, bool>
-            {
-                { reference1, false },
-                { reference2, true },
-                { reference3, false },
-            };
-
-            yield return new Dictionary<Reference, bool>
-            {
-                { reference1, false },
-                { reference2, false },
-                { reference3, true },
-            };
-        }
+            { reference1, false },
+            { reference2, false },
+            { reference3, true },
+        };
     }
 }

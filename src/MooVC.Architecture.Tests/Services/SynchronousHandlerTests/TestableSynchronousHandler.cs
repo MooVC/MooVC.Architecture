@@ -1,26 +1,25 @@
-﻿namespace MooVC.Architecture.Services.SynchronousHandlerTests
+﻿namespace MooVC.Architecture.Services.SynchronousHandlerTests;
+
+using System;
+
+public sealed class TestableSynchronousHandler<TMessage>
+    : SynchronousHandler<TMessage>
+    where TMessage : Message
 {
-    using System;
+    private readonly Action<TMessage>? execute;
 
-    public sealed class TestableSynchronousHandler<TMessage>
-        : SynchronousHandler<TMessage>
-        where TMessage : Message
+    public TestableSynchronousHandler(Action<TMessage>? execute = default)
     {
-        private readonly Action<TMessage>? execute;
+        this.execute = execute;
+    }
 
-        public TestableSynchronousHandler(Action<TMessage>? execute = default)
+    protected override void PerformExecute(TMessage message)
+    {
+        if (execute is null)
         {
-            this.execute = execute;
+            throw new NotImplementedException();
         }
 
-        protected override void PerformExecute(TMessage message)
-        {
-            if (execute is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            execute(message);
-        }
+        execute(message);
     }
 }

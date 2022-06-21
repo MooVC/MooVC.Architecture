@@ -1,65 +1,64 @@
-﻿namespace MooVC.Architecture.Ddd.Services
+﻿namespace MooVC.Architecture.Ddd.Services;
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using static MooVC.Architecture.Ddd.Ensure;
+
+public static partial class RepositoryExtensions
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using static MooVC.Architecture.Ddd.Ensure;
-
-    public static partial class RepositoryExtensions
+    public static async Task<TAggregate> GetAsync<TAggregate>(
+        this IRepository<TAggregate> repository,
+        Message context,
+        Guid id,
+        CancellationToken? cancellationToken = default,
+        SignedVersion? version = default)
+        where TAggregate : AggregateRoot
     {
-        public static async Task<TAggregate> GetAsync<TAggregate>(
-            this IRepository<TAggregate> repository,
-            Message context,
-            Guid id,
-            CancellationToken? cancellationToken = default,
-            SignedVersion? version = default)
-            where TAggregate : AggregateRoot
+        TAggregate? aggregate = await repository
+            .GetAsync(id, cancellationToken: cancellationToken, version: version)
+            .ConfigureAwait(false);
+
+        if (aggregate is null)
         {
-            TAggregate? aggregate = await repository
-                .GetAsync(id, cancellationToken: cancellationToken, version: version)
-                .ConfigureAwait(false);
-
-            if (aggregate is null)
+            if (version is null || version.IsEmpty)
             {
-                if (version is null || version.IsEmpty)
-                {
-                    throw new AggregateNotFoundException<TAggregate>(context, id);
-                }
-
-                throw new AggregateVersionNotFoundException<TAggregate>(context, id, version: version);
+                throw new AggregateNotFoundException<TAggregate>(context, id);
             }
 
-            return aggregate;
+            throw new AggregateVersionNotFoundException<TAggregate>(context, id, version: version);
         }
 
-        public static Task<TAggregate> GetAsync<TAggregate>(
-            this IRepository<TAggregate> repository,
-            Message context,
-            Reference reference,
-            CancellationToken? cancellationToken = default,
-            bool latest = true)
-            where TAggregate : AggregateRoot
+        return aggregate;
+    }
+
+    public static Task<TAggregate> GetAsync<TAggregate>(
+        this IRepository<TAggregate> repository,
+        Message context,
+        Reference reference,
+        CancellationToken? cancellationToken = default,
+        bool latest = true)
+        where TAggregate : AggregateRoot
+    {
+        if (reference.IsEmpty)
         {
-            if (reference.IsEmpty)
-            {
-                throw new AggregateDoesNotExistException<TAggregate>(context);
-            }
+            throw new AggregateDoesNotExistException<TAggregate>(context);
+        }
 
-            _ = ReferenceIsOfType<TAggregate>(reference, nameof(reference));
+        _ = ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
-            if (latest || reference.Version.IsEmpty)
-            {
-                return repository.GetAsync(
-                    context,
-                    reference.Id,
-                    cancellationToken: cancellationToken);
-            }
-
+        if (latest || reference.Version.IsEmpty)
+        {
             return repository.GetAsync(
                 context,
                 reference.Id,
-                cancellationToken: cancellationToken,
-                version: reference.Version);
+                cancellationToken: cancellationToken);
         }
+
+        return repository.GetAsync(
+            context,
+            reference.Id,
+            cancellationToken: cancellationToken,
+            version: reference.Version);
     }
 }

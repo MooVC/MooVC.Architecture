@@ -1,14 +1,13 @@
-﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
-{
-    using Xunit;
+﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests;
 
-    public sealed class WhenIsReadOnlyIsCalled
-        : UnversionedReferenceDictionaryTests
+using Xunit;
+
+public sealed class WhenIsReadOnlyIsCalled
+    : UnversionedReferenceDictionaryTests
+{
+    [Fact]
+    public void GivenAPopulatedDictionaryThenANegativeResponseIsReturned()
     {
-        [Fact]
-        public void GivenAPopulatedDictionaryThenANegativeResponseIsReturned()
-        {
-            Assert.False(Dictionary.IsReadOnly);
-        }
+        Assert.False(Dictionary.IsReadOnly);
     }
 }

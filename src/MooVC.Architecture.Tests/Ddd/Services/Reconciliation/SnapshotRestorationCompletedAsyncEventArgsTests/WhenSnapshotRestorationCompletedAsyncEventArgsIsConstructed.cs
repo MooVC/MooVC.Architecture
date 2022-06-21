@@ -1,28 +1,27 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SnapshotRestorationCompletedAsyncEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SnapshotRestorationCompletedAsyncEventArgsTests;
+
+using System;
+using Xunit;
+
+public sealed class WhenSnapshotRestorationCompletedAsyncEventArgsIsConstructed
 {
-    using System;
-    using Xunit;
-
-    public sealed class WhenSnapshotRestorationCompletedAsyncEventArgsIsConstructed
+    [Fact]
+    public void GivenAnEventSequenceThenAnInstanceIsReturnedWithTheSequencePropagated()
     {
-        [Fact]
-        public void GivenAnEventSequenceThenAnInstanceIsReturnedWithTheSequencePropagated()
-        {
-            var sequence = new EventSequence(10);
-            var @event = new SnapshotRestorationCompletedAsyncEventArgs(sequence);
+        var sequence = new EventSequence(10);
+        var @event = new SnapshotRestorationCompletedAsyncEventArgs(sequence);
 
-            Assert.Equal(sequence, @event.Sequence);
-        }
+        Assert.Equal(sequence, @event.Sequence);
+    }
 
-        [Fact]
-        public void GivenANullEventSequenceThenAnArgumentNullExceptionIsThrown()
-        {
-            IEventSequence? sequence = default;
+    [Fact]
+    public void GivenANullEventSequenceThenAnArgumentNullExceptionIsThrown()
+    {
+        IEventSequence? sequence = default;
 
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new SnapshotRestorationCompletedAsyncEventArgs(sequence!));
+        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
+            () => new SnapshotRestorationCompletedAsyncEventArgs(sequence!));
 
-            Assert.Equal(nameof(sequence), exception.ParamName);
-        }
+        Assert.Equal(nameof(sequence), exception.ParamName);
     }
 }

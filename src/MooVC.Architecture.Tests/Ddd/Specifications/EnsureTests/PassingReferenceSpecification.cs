@@ -1,11 +1,10 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests
+﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests;
+
+internal sealed class PassingReferenceSpecification
+    : TestSpecification<string>
 {
-    internal sealed class PassingReferenceSpecification
-        : TestSpecification<string>
+    public PassingReferenceSpecification()
+        : base(true)
     {
-        public PassingReferenceSpecification()
-            : base(true)
-        {
-        }
     }
 }

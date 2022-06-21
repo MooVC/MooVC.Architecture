@@ -1,84 +1,83 @@
-﻿namespace MooVC.Architecture.Ddd.Services.EnsureTests
+﻿namespace MooVC.Architecture.Ddd.Services.EnsureTests;
+
+using MooVC.Architecture.Serialization;
+using Xunit;
+using static MooVC.Architecture.Ddd.Services.Ensure;
+
+public sealed class WhenAggregateDoesNotConflictIsCalled
 {
-    using MooVC.Architecture.Serialization;
-    using Xunit;
-    using static MooVC.Architecture.Ddd.Services.Ensure;
-
-    public sealed class WhenAggregateDoesNotConflictIsCalled
+    [Fact]
+    public void GivenANewAggregateAndAnExistingAggregateThatConflictsThenAnAggregateConflictDetectedExceptionIsThrown()
     {
-        [Fact]
-        public void GivenANewAggregateAndAnExistingAggregateThatConflictsThenAnAggregateConflictDetectedExceptionIsThrown()
-        {
-            var current = new SerializableAggregateRoot();
-            var proposed = new SerializableAggregateRoot();
+        var current = new SerializableAggregateRoot();
+        var proposed = new SerializableAggregateRoot();
 
-            AggregateConflictDetectedException<SerializableAggregateRoot> exception =
-                Assert.Throws<AggregateConflictDetectedException<SerializableAggregateRoot>>(
-                    () => AggregateDoesNotConflict(proposed, current));
+        AggregateConflictDetectedException<SerializableAggregateRoot> exception =
+            Assert.Throws<AggregateConflictDetectedException<SerializableAggregateRoot>>(
+                () => AggregateDoesNotConflict(proposed, current));
 
-            Assert.Equal(proposed.Version, exception.Received);
-            Assert.Equal(current.Version, exception.Persisted);
-        }
+        Assert.Equal(proposed.Version, exception.Received);
+        Assert.Equal(current.Version, exception.Persisted);
+    }
 
-        [Fact]
-        public void GivenANewAggregateAndAnExistingAggregateThatDoesNotConflictThenNoExceptionIsThrown()
-        {
-            var current = new SerializableAggregateRoot();
+    [Fact]
+    public void GivenANewAggregateAndAnExistingAggregateThatDoesNotConflictThenNoExceptionIsThrown()
+    {
+        var current = new SerializableAggregateRoot();
 
-            current.MarkChangesAsCommitted();
+        current.MarkChangesAsCommitted();
 
-            SerializableAggregateRoot proposed = current.Clone();
+        SerializableAggregateRoot proposed = current.Clone();
 
-            proposed.Set();
-            proposed.MarkChangesAsCommitted();
+        proposed.Set();
+        proposed.MarkChangesAsCommitted();
 
-            AggregateDoesNotConflict(proposed, current);
-        }
+        AggregateDoesNotConflict(proposed, current);
+    }
 
-        [Fact]
-        public void GivenANewAggregateAndAnExistingVersionThatConflictsThenAnAggregateConflictDetectedExceptionIsThrown()
-        {
-            var proposed = new SerializableAggregateRoot();
-            SignedVersion current = proposed.Version.Next();
+    [Fact]
+    public void GivenANewAggregateAndAnExistingVersionThatConflictsThenAnAggregateConflictDetectedExceptionIsThrown()
+    {
+        var proposed = new SerializableAggregateRoot();
+        SignedVersion current = proposed.Version.Next();
 
-            AggregateConflictDetectedException<SerializableAggregateRoot> exception =
-                Assert.Throws<AggregateConflictDetectedException<SerializableAggregateRoot>>(
-                    () => AggregateDoesNotConflict(proposed, currentVersion: current));
+        AggregateConflictDetectedException<SerializableAggregateRoot> exception =
+            Assert.Throws<AggregateConflictDetectedException<SerializableAggregateRoot>>(
+                () => AggregateDoesNotConflict(proposed, currentVersion: current));
 
-            Assert.Equal(proposed.Version, exception.Received);
-            Assert.Equal(current, exception.Persisted);
-        }
+        Assert.Equal(proposed.Version, exception.Received);
+        Assert.Equal(current, exception.Persisted);
+    }
 
-        [Fact]
-        public void GivenANewAggregateAndAnExistingVersionThatDoesNotConflictThenNoExceptionIsThrown()
-        {
-            var current = new SerializableAggregateRoot();
+    [Fact]
+    public void GivenANewAggregateAndAnExistingVersionThatDoesNotConflictThenNoExceptionIsThrown()
+    {
+        var current = new SerializableAggregateRoot();
 
-            current.MarkChangesAsCommitted();
+        current.MarkChangesAsCommitted();
 
-            SerializableAggregateRoot proposed = current.Clone();
+        SerializableAggregateRoot proposed = current.Clone();
 
-            proposed.Set();
-            proposed.MarkChangesAsCommitted();
+        proposed.Set();
+        proposed.MarkChangesAsCommitted();
 
-            AggregateDoesNotConflict(proposed, currentVersion: current.Version);
-        }
+        AggregateDoesNotConflict(proposed, currentVersion: current.Version);
+    }
 
-        [Fact]
-        public void GivenANewAggregateAndNoCurrentAggregateThenNoExceptionIsThrown()
-        {
-            var proposed = new SerializableAggregateRoot();
-            SerializableAggregateRoot? current = default;
+    [Fact]
+    public void GivenANewAggregateAndNoCurrentAggregateThenNoExceptionIsThrown()
+    {
+        var proposed = new SerializableAggregateRoot();
+        SerializableAggregateRoot? current = default;
 
-            AggregateDoesNotConflict(proposed, current);
-        }
+        AggregateDoesNotConflict(proposed, current);
+    }
 
-        [Fact]
-        public void GivenANewAggregateAndNoCurrentVersionThenNoExceptionIsThrown()
-        {
-            var aggregate = new SerializableAggregateRoot();
+    [Fact]
+    public void GivenANewAggregateAndNoCurrentVersionThenNoExceptionIsThrown()
+    {
+        var aggregate = new SerializableAggregateRoot();
 
-            AggregateDoesNotConflict(aggregate);
-        }
+        AggregateDoesNotConflict(aggregate);
     }
 }

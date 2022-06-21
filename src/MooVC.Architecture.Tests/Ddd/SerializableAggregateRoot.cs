@@ -1,30 +1,29 @@
-namespace MooVC.Architecture.Ddd
+namespace MooVC.Architecture.Ddd;
+
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public class SerializableAggregateRoot
+    : AggregateRoot
 {
-    using System;
-    using System.Runtime.Serialization;
-
-    [Serializable]
-    public class SerializableAggregateRoot
-        : AggregateRoot
+    public SerializableAggregateRoot()
+        : this(Guid.NewGuid())
     {
-        public SerializableAggregateRoot()
-            : this(Guid.NewGuid())
-        {
-        }
+    }
 
-        public SerializableAggregateRoot(Guid id)
-            : base(id)
-        {
-        }
+    public SerializableAggregateRoot(Guid id)
+        : base(id)
+    {
+    }
 
-        private SerializableAggregateRoot(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    private SerializableAggregateRoot(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        public void Set()
-        {
-            MarkChangesAsUncommitted();
-        }
+    public void Set()
+    {
+        MarkChangesAsUncommitted();
     }
 }

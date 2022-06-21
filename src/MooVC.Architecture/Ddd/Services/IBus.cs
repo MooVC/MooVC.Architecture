@@ -1,17 +1,16 @@
-﻿namespace MooVC.Architecture.Ddd.Services
+﻿namespace MooVC.Architecture.Ddd.Services;
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+public interface IBus
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
+    event DomainEventsPublishedAsyncEventHandler Published;
 
-    public interface IBus
-    {
-        event DomainEventsPublishedAsyncEventHandler Published;
+    event DomainEventsPublishingAsyncEventHandler Publishing;
 
-        event DomainEventsPublishingAsyncEventHandler Publishing;
+    Task PublishAsync(DomainEvent @event, CancellationToken? cancellationToken = default);
 
-        Task PublishAsync(DomainEvent @event, CancellationToken? cancellationToken = default);
-
-        Task PublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
-    }
+    Task PublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
 }

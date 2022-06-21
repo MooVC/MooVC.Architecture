@@ -1,9 +1,8 @@
-namespace MooVC.Architecture.Ddd.Services
-{
-    using System.Threading.Tasks;
+namespace MooVC.Architecture.Ddd.Services;
 
-    public delegate Task AggregateSavedAsyncEventHandler<TAggregate>(
-        IRepository<TAggregate> sender,
-        AggregateSavedAsyncEventArgs<TAggregate> e)
-        where TAggregate : AggregateRoot;
-}
+using System.Threading.Tasks;
+
+public delegate Task AggregateSavedAsyncEventHandler<TAggregate>(
+    IRepository<TAggregate> sender,
+    AggregateSavedAsyncEventArgs<TAggregate> e)
+    where TAggregate : AggregateRoot;

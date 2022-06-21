@@ -1,17 +1,16 @@
-﻿namespace MooVC.Architecture.ValueTests
+﻿namespace MooVC.Architecture.ValueTests;
+
+using System.Collections.Generic;
+
+public sealed class EmptyValue
+    : Value
 {
-    using System.Collections.Generic;
-
-    public sealed class EmptyValue
-        : Value
+    public EmptyValue()
     {
-        public EmptyValue()
-        {
-        }
+    }
 
-        protected override IEnumerable<object> GetAtomicValues()
-        {
-            yield break;
-        }
+    protected override IEnumerable<object> GetAtomicValues()
+    {
+        yield break;
     }
 }

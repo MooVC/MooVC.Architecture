@@ -1,40 +1,39 @@
-﻿namespace MooVC.Architecture.Ddd.ReferenceTests
+﻿namespace MooVC.Architecture.Ddd.ReferenceTests;
+
+using Xunit;
+
+public sealed class WhenImplicitlyCastToSignedVersion
 {
-    using Xunit;
-
-    public sealed class WhenImplicitlyCastToSignedVersion
+    [Fact]
+    public void GivenAnEmptyReferenceThenAnEmptyVersionIsReturned()
     {
-        [Fact]
-        public void GivenAnEmptyReferenceThenAnEmptyVersionIsReturned()
-        {
-            Reference reference = Reference<SerializableAggregateRoot>.Empty;
-            SignedVersion version = reference;
+        Reference reference = Reference<SerializableAggregateRoot>.Empty;
+        SignedVersion version = reference;
 
-            Assert.Equal(reference.Version, version);
-            Assert.True(version.IsEmpty);
-        }
+        Assert.Equal(reference.Version, version);
+        Assert.True(version.IsEmpty);
+    }
 
-        [Fact]
-        public void GivenAnReferenceThenTheVersionOfThatReferenceIsReturned()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var reference = aggregate.ToReference();
-            SignedVersion version = reference;
+    [Fact]
+    public void GivenAnReferenceThenTheVersionOfThatReferenceIsReturned()
+    {
+        var aggregate = new SerializableAggregateRoot();
+        var reference = aggregate.ToReference();
+        SignedVersion version = reference;
 
-            Assert.Equal(reference.Version, version);
-            Assert.Equal(aggregate.Version, version);
-            Assert.False(version.IsEmpty);
-            Assert.True(version.IsNew);
-        }
+        Assert.Equal(reference.Version, version);
+        Assert.Equal(aggregate.Version, version);
+        Assert.False(version.IsEmpty);
+        Assert.True(version.IsNew);
+    }
 
-        [Fact]
-        public void GivenANullReferenceThenAnEmptyVersionIsReturned()
-        {
-            Reference? reference = default;
-            SignedVersion version = reference;
+    [Fact]
+    public void GivenANullReferenceThenAnEmptyVersionIsReturned()
+    {
+        Reference? reference = default;
+        SignedVersion version = reference;
 
-            Assert.Equal(SignedVersion.Empty, version);
-            Assert.True(version.IsEmpty);
-        }
+        Assert.Equal(SignedVersion.Empty, version);
+        Assert.True(version.IsEmpty);
     }
 }

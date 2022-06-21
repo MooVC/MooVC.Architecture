@@ -1,14 +1,13 @@
-﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
-{
-    using Xunit;
+﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests;
 
-    public sealed class WhenCountIsCalled
-        : UnversionedReferenceDictionaryTests
+using Xunit;
+
+public sealed class WhenCountIsCalled
+    : UnversionedReferenceDictionaryTests
+{
+    [Fact]
+    public void GivenAPopulatedDictionaryThenTheExpectedCountIsReturned()
     {
-        [Fact]
-        public void GivenAPopulatedDictionaryThenTheExpectedCountIsReturned()
-        {
-            Assert.Equal(ExpectedCount, Dictionary.Count);
-        }
+        Assert.Equal(ExpectedCount, Dictionary.Count);
     }
 }

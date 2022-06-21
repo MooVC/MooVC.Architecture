@@ -1,16 +1,15 @@
-namespace MooVC.Architecture.Ddd
+namespace MooVC.Architecture.Ddd;
+
+using System;
+
+public sealed class SetRequest
+    : Request
 {
-    using System;
-
-    public sealed class SetRequest
-        : Request
+    public SetRequest(Message context, Guid value)
+        : base(context)
     {
-        public SetRequest(Message context, Guid value)
-            : base(context)
-        {
-            Value = value;
-        }
-
-        public Guid Value { get; }
+        Value = value;
     }
+
+    public Guid Value { get; }
 }

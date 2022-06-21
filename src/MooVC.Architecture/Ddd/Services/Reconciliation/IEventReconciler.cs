@@ -1,19 +1,18 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+public interface IEventReconciler
 {
-    using System.Threading;
-    using System.Threading.Tasks;
+    public event EventsReconciledAsyncEventHandler EventsReconciled;
 
-    public interface IEventReconciler
-    {
-        public event EventsReconciledAsyncEventHandler EventsReconciled;
+    public event EventsReconcilingAsyncEventHandler EventsReconciling;
 
-        public event EventsReconcilingAsyncEventHandler EventsReconciling;
+    public event EventSequenceAdvancedAsyncEventHandler EventSequenceAdvanced;
 
-        public event EventSequenceAdvancedAsyncEventHandler EventSequenceAdvanced;
-
-        Task<ulong?> ReconcileAsync(
-            CancellationToken? cancellationToken = default,
-            ulong? previous = default,
-            ulong? target = default);
-    }
+    Task<ulong?> ReconcileAsync(
+        CancellationToken? cancellationToken = default,
+        ulong? previous = default,
+        ulong? target = default);
 }

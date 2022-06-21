@@ -1,25 +1,24 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Snapshots.SynchronousSnapshotProviderTests
+﻿namespace MooVC.Architecture.Ddd.Services.Snapshots.SynchronousSnapshotProviderTests;
+
+using System;
+
+public sealed class TestableSynchronousSnapshotProvider
+    : SynchronousSnapshotProvider
 {
-    using System;
+    private readonly Func<ulong?, ISnapshot?>? generator;
 
-    public sealed class TestableSynchronousSnapshotProvider
-        : SynchronousSnapshotProvider
+    public TestableSynchronousSnapshotProvider(Func<ulong?, ISnapshot?>? generator = default)
     {
-        private readonly Func<ulong?, ISnapshot?>? generator;
+        this.generator = generator;
+    }
 
-        public TestableSynchronousSnapshotProvider(Func<ulong?, ISnapshot?>? generator = default)
+    protected override ISnapshot? PerformGenerate(ulong? target)
+    {
+        if (generator is null)
         {
-            this.generator = generator;
+            throw new NotImplementedException();
         }
 
-        protected override ISnapshot? PerformGenerate(ulong? target)
-        {
-            if (generator is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            return generator(target);
-        }
+        return generator(target);
     }
 }

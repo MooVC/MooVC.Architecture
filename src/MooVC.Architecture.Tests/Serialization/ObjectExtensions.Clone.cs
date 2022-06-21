@@ -1,12 +1,11 @@
-﻿namespace MooVC.Architecture.Serialization
+﻿namespace MooVC.Architecture.Serialization;
+
+internal static partial class ObjectExtensions
 {
-    internal static partial class ObjectExtensions
+    public static T Clone<T>(this T original)
     {
-        public static T Clone<T>(this T original)
-        {
-            return original
-                .Serialize()
-                .Deserialize<T>();
-        }
+        return original
+            .Serialize()
+            .Deserialize<T>();
     }
 }

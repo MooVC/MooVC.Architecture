@@ -1,20 +1,19 @@
-﻿namespace MooVC.Architecture.Cqrs.Services.ResultTests
+﻿namespace MooVC.Architecture.Cqrs.Services.ResultTests;
+
+using MooVC.Architecture.MessageTests;
+using Xunit;
+
+public sealed class WhenImplicityCastToValue
 {
-    using MooVC.Architecture.MessageTests;
-    using Xunit;
-
-    public sealed class WhenImplicityCastToValue
+    [Fact]
+    public void GivenAResultThenTheValueIsReturned()
     {
-        [Fact]
-        public void GivenAResultThenTheValueIsReturned()
-        {
-            const int Expected = 9;
+        const int Expected = 9;
 
-            var context = new SerializableMessage();
-            var result = new SerializableResult<int>(context, Expected);
-            int actual = result;
+        var context = new SerializableMessage();
+        var result = new SerializableResult<int>(context, Expected);
+        int actual = result;
 
-            Assert.Equal(Expected, actual);
-        }
+        Assert.Equal(Expected, actual);
     }
 }

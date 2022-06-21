@@ -1,30 +1,29 @@
-﻿namespace MooVC.Architecture.Services.MessageInvokedAsyncEventArgsTests
+﻿namespace MooVC.Architecture.Services.MessageInvokedAsyncEventArgsTests;
+
+using System;
+using MooVC.Architecture.MessageTests;
+using Xunit;
+
+public sealed class WhenMessageInvokedAsyncEventArgsIsConstructed
 {
-    using System;
-    using MooVC.Architecture.MessageTests;
-    using Xunit;
-
-    public sealed class WhenMessageInvokedAsyncEventArgsIsConstructed
+    [Fact]
+    public void GivenAnAggregateThenAnInstanceIsCreated()
     {
-        [Fact]
-        public void GivenAnAggregateThenAnInstanceIsCreated()
-        {
-            var message = new SerializableMessage();
-            var @event = new MessageInvokedAsyncEventArgs(message);
+        var message = new SerializableMessage();
+        var @event = new MessageInvokedAsyncEventArgs(message);
 
-            Assert.Equal(message, @event.Message);
-            Assert.Same(message, @event.Message);
-        }
+        Assert.Equal(message, @event.Message);
+        Assert.Same(message, @event.Message);
+    }
 
-        [Fact]
-        public void GivenANullAggregateThenAnArgumentNullExceptionIsThrown()
-        {
-            SerializableMessage? message = default;
+    [Fact]
+    public void GivenANullAggregateThenAnArgumentNullExceptionIsThrown()
+    {
+        SerializableMessage? message = default;
 
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new MessageInvokedAsyncEventArgs(message!));
+        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
+            () => new MessageInvokedAsyncEventArgs(message!));
 
-            Assert.Equal(nameof(message), exception.ParamName);
-        }
+        Assert.Equal(nameof(message), exception.ParamName);
     }
 }

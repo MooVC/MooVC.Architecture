@@ -1,121 +1,120 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MooVC.Persistence;
+using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
+using static MooVC.Ensure;
+
+public sealed class DefaultEventReconciler<TSequencedEvents>
+    : EventReconciler
+    where TSequencedEvents : class, ISequencedEvents
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MooVC.Persistence;
-    using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
-    using static MooVC.Ensure;
+    public const ushort DefaultNumberToRead = 200;
+    public const ushort MinimumNumberToRead = 1;
 
-    public sealed class DefaultEventReconciler<TSequencedEvents>
-        : EventReconciler
-        where TSequencedEvents : class, ISequencedEvents
+    private readonly IEventStore<TSequencedEvents, ulong> eventStore;
+    private readonly IAggregateReconciler reconciler;
+    private readonly ushort numberToRead;
+
+    public DefaultEventReconciler(
+        IEventStore<TSequencedEvents, ulong> eventStore,
+        IAggregateReconciler reconciler,
+        ushort numberToRead = DefaultNumberToRead)
     {
-        public const ushort DefaultNumberToRead = 200;
-        public const ushort MinimumNumberToRead = 1;
+        this.eventStore = ArgumentNotNull(
+            eventStore,
+            nameof(eventStore),
+            DefaultEventReconcilerEventStoreRequired);
 
-        private readonly IEventStore<TSequencedEvents, ulong> eventStore;
-        private readonly IAggregateReconciler reconciler;
-        private readonly ushort numberToRead;
+        this.reconciler = ArgumentNotNull(
+            reconciler,
+            nameof(reconciler),
+            DefaultEventReconcilerReconcilerRequired);
 
-        public DefaultEventReconciler(
-            IEventStore<TSequencedEvents, ulong> eventStore,
-            IAggregateReconciler reconciler,
-            ushort numberToRead = DefaultNumberToRead)
+        this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
+    }
+
+    protected override async Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
+        ulong? previous,
+        CancellationToken? cancellationToken = default,
+        ulong? target = default)
+    {
+        ulong? lastSequence = previous;
+        IEnumerable<DomainEvent> events = Enumerable.Empty<DomainEvent>();
+
+        if (ShouldReadEvents(previous, target, out ushort numberToRead, out ulong start))
         {
-            this.eventStore = ArgumentNotNull(
-                eventStore,
-                nameof(eventStore),
-                DefaultEventReconcilerEventStoreRequired);
+            IEnumerable<TSequencedEvents> sequences = await eventStore
+                .ReadAsync(
+                    start,
+                    cancellationToken: cancellationToken,
+                    numberToRead: numberToRead)
+                .ConfigureAwait(false);
 
-            this.reconciler = ArgumentNotNull(
-                reconciler,
-                nameof(reconciler),
-                DefaultEventReconcilerReconcilerRequired);
+            lastSequence = sequences
+                .Select(sequence => sequence.Sequence)
+                .DefaultIfEmpty()
+                .Max();
 
-            this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
+            events = sequences
+                .SelectMany(sequence => sequence.Events)
+                .ToArray();
         }
 
-        protected override async Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
-            ulong? previous,
-            CancellationToken? cancellationToken = default,
-            ulong? target = default)
-        {
-            ulong? lastSequence = previous;
-            IEnumerable<DomainEvent> events = Enumerable.Empty<DomainEvent>();
+        return (lastSequence, events);
+    }
 
-            if (ShouldReadEvents(previous, target, out ushort numberToRead, out ulong start))
+    protected override async Task ReconcileAsync(
+        IEnumerable<DomainEvent> events,
+        CancellationToken? cancellationToken = default)
+    {
+        foreach (IGrouping<Type, DomainEvent> type in events
+            .GroupBy(@event => @event.Aggregate.Type))
+        {
+            foreach (IGrouping<Guid, DomainEvent> aggregate in type.GroupBy(type => type.Aggregate.Id))
             {
-                IEnumerable<TSequencedEvents> sequences = await eventStore
-                    .ReadAsync(
-                        start,
-                        cancellationToken: cancellationToken,
-                        numberToRead: numberToRead)
+                await PerformReconciliationAsync(aggregate, cancellationToken)
                     .ConfigureAwait(false);
-
-                lastSequence = sequences
-                    .Select(sequence => sequence.Sequence)
-                    .DefaultIfEmpty()
-                    .Max();
-
-                events = sequences
-                    .SelectMany(sequence => sequence.Events)
-                    .ToArray();
             }
-
-            return (lastSequence, events);
         }
+    }
 
-        protected override async Task ReconcileAsync(
-            IEnumerable<DomainEvent> events,
-            CancellationToken? cancellationToken = default)
+    private bool ShouldReadEvents(ulong? previous, ulong? target, out ushort numberToRead, out ulong start)
+    {
+        numberToRead = this.numberToRead;
+        start = previous.GetValueOrDefault();
+
+        if (target.HasValue)
         {
-            foreach (IGrouping<Type, DomainEvent> type in events
-                .GroupBy(@event => @event.Aggregate.Type))
+            if (target.Value <= start)
             {
-                foreach (IGrouping<Guid, DomainEvent> aggregate in type.GroupBy(type => type.Aggregate.Id))
-                {
-                    await PerformReconciliationAsync(aggregate, cancellationToken)
-                        .ConfigureAwait(false);
-                }
-            }
-        }
-
-        private bool ShouldReadEvents(ulong? previous, ulong? target, out ushort numberToRead, out ulong start)
-        {
-            numberToRead = this.numberToRead;
-            start = previous.GetValueOrDefault();
-
-            if (target.HasValue)
-            {
-                if (target.Value <= start)
-                {
-                    return false;
-                }
-
-                ulong difference = target.Value - start;
-
-                numberToRead = (ushort)Math.Min(numberToRead, difference);
+                return false;
             }
 
-            return true;
+            ulong difference = target.Value - start;
+
+            numberToRead = (ushort)Math.Min(numberToRead, difference);
         }
 
-        private async Task PerformReconciliationAsync(
-            IEnumerable<DomainEvent> events,
-            CancellationToken? cancellationToken)
-        {
-            await OnEventsReconcilingAsync(events, cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+        return true;
+    }
 
-            await reconciler
-                .ReconcileAsync(events, cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+    private async Task PerformReconciliationAsync(
+        IEnumerable<DomainEvent> events,
+        CancellationToken? cancellationToken)
+    {
+        await OnEventsReconcilingAsync(events, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
-            await OnEventsReconciledAsync(events, cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
-        }
+        await reconciler
+            .ReconcileAsync(events, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        await OnEventsReconciledAsync(events, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
     }
 }

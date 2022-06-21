@@ -1,200 +1,199 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests
+﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests;
+
+using System;
+using Xunit;
+using static MooVC.Architecture.Ddd.Specifications.Ensure;
+using static MooVC.Architecture.Ddd.Specifications.EnsureTests.Resources;
+
+public sealed class WhenArgumentSatisfiesIsCalled
 {
-    using System;
-    using Xunit;
-    using static MooVC.Architecture.Ddd.Specifications.Ensure;
-    using static MooVC.Architecture.Ddd.Specifications.EnsureTests.Resources;
-
-    public sealed class WhenArgumentSatisfiesIsCalled
+    [Fact]
+    public void GivenAValueTypeWhenTheSpecificationPassesThenTheValueIsReturned()
     {
-        [Fact]
-        public void GivenAValueTypeWhenTheSpecificationPassesThenTheValueIsReturned()
-        {
-            const int Expected = 5;
+        const int Expected = 5;
 
-            int actual = ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new PassingValueSpecification());
+        int actual = ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new PassingValueSpecification());
 
-            Assert.Equal(Expected, actual);
-        }
+        Assert.Equal(Expected, actual);
+    }
 
-        [Fact]
-        public void GivenAValueTypeAndAMessageWhenTheSpecificationPassesThenTheValueIsReturned()
-        {
-            const int Expected = 5;
-            const string Message = "Not going to be seen";
+    [Fact]
+    public void GivenAValueTypeAndAMessageWhenTheSpecificationPassesThenTheValueIsReturned()
+    {
+        const int Expected = 5;
+        const string Message = "Not going to be seen";
 
-            int actual = ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new PassingValueSpecification(),
-                Message);
+        int actual = ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new PassingValueSpecification(),
+            Message);
 
-            Assert.Equal(Expected, actual);
-        }
+        Assert.Equal(Expected, actual);
+    }
 
-        [Fact]
-        public void GivenAValueTypeWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
-        {
-            const int Value = 5;
+    [Fact]
+    public void GivenAValueTypeWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
+    {
+        const int Value = 5;
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Value,
-                nameof(Value),
-                new FailingValueSpecification()));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Value,
+            nameof(Value),
+            new FailingValueSpecification()));
 
-            Assert.Contains(FailingValueSpecification.Requirement, exception.Message);
-        }
+        Assert.Contains(FailingValueSpecification.Requirement, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAValueTypeAndAMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrownWithTheMessage()
-        {
-            const int Value = 5;
-            const string Message = "Will be seen";
+    [Fact]
+    public void GivenAValueTypeAndAMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrownWithTheMessage()
+    {
+        const int Value = 5;
+        const string Message = "Will be seen";
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Value,
-                nameof(Value),
-                new FailingValueSpecification(),
-                Message));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Value,
+            nameof(Value),
+            new FailingValueSpecification(),
+            Message));
 
-            Assert.Contains(FailingValueSpecification.Requirement, exception.Message);
-            Assert.Contains(Message, exception.Message);
-        }
+        Assert.Contains(FailingValueSpecification.Requirement, exception.Message);
+        Assert.Contains(Message, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAValueTypeAndANullMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
-        {
-            const int Value = 5;
+    [Fact]
+    public void GivenAValueTypeAndANullMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
+    {
+        const int Value = 5;
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Value,
-                nameof(Value),
-                new FailingValueSpecification(),
-                default!));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Value,
+            nameof(Value),
+            new FailingValueSpecification(),
+            default!));
 
-            Assert.Contains(FailingValueSpecification.Requirement, exception.Message);
-        }
+        Assert.Contains(FailingValueSpecification.Requirement, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAValueTypeWhenTheSpecificationFailsWithAnEmbeddedMessageThenAnArgumentExceptionIsThrownWithTheMessage()
-        {
-            const int Value = 5;
+    [Fact]
+    public void GivenAValueTypeWhenTheSpecificationFailsWithAnEmbeddedMessageThenAnArgumentExceptionIsThrownWithTheMessage()
+    {
+        const int Value = 5;
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Value,
-                nameof(Value),
-                new EmbeddedFailingValueSpecification()));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Value,
+            nameof(Value),
+            new EmbeddedFailingValueSpecification()));
 
-            Assert.Contains(EmbeddedFailingValueSpecificationRequirement, exception.Message);
-        }
+        Assert.Contains(EmbeddedFailingValueSpecificationRequirement, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAValueTypeWhenTheSpecificationFailsWithAnIncorrectEmbeddedMessageThenAnArgumentExceptionIsThrown()
-        {
-            const int Value = 5;
+    [Fact]
+    public void GivenAValueTypeWhenTheSpecificationFailsWithAnIncorrectEmbeddedMessageThenAnArgumentExceptionIsThrown()
+    {
+        const int Value = 5;
 
-            _ = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Value,
-                nameof(Value),
-                new IncorrectEmbeddedFailingValueSpecification()));
-        }
+        _ = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Value,
+            nameof(Value),
+            new IncorrectEmbeddedFailingValueSpecification()));
+    }
 
-        [Fact]
-        public void GivenAReferenceTypeWhenTheSpecificationPassesThenTheReferenceIsReturned()
-        {
-            const string Expected = "Irrelevant value";
+    [Fact]
+    public void GivenAReferenceTypeWhenTheSpecificationPassesThenTheReferenceIsReturned()
+    {
+        const string Expected = "Irrelevant value";
 
-            string actual = ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new PassingReferenceSpecification());
+        string actual = ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new PassingReferenceSpecification());
 
-            Assert.Equal(Expected, actual);
-        }
+        Assert.Equal(Expected, actual);
+    }
 
-        [Fact]
-        public void GivenAReferenceTypeAndAMessageWhenTheSpecificationPassesThenTheReferenceIsReturned()
-        {
-            const string Expected = "Irrelevant value";
-            const string Message = "Not going to be seen";
+    [Fact]
+    public void GivenAReferenceTypeAndAMessageWhenTheSpecificationPassesThenTheReferenceIsReturned()
+    {
+        const string Expected = "Irrelevant value";
+        const string Message = "Not going to be seen";
 
-            string actual = ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new PassingReferenceSpecification(),
-                Message);
+        string actual = ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new PassingReferenceSpecification(),
+            Message);
 
-            Assert.Equal(Expected, actual);
-        }
+        Assert.Equal(Expected, actual);
+    }
 
-        [Fact]
-        public void GivenAReferenceTypeWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
-        {
-            const string Expected = "Irrelevant value";
+    [Fact]
+    public void GivenAReferenceTypeWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
+    {
+        const string Expected = "Irrelevant value";
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new FailingReferenceSpecification()));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new FailingReferenceSpecification()));
 
-            Assert.Contains(FailingReferenceSpecification.Requirement, exception.Message);
-        }
+        Assert.Contains(FailingReferenceSpecification.Requirement, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAReferenceTypeAndAMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrownWithTheMessage()
-        {
-            const string Expected = "Irrelevant value";
-            const string Message = "Will be seen";
+    [Fact]
+    public void GivenAReferenceTypeAndAMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrownWithTheMessage()
+    {
+        const string Expected = "Irrelevant value";
+        const string Message = "Will be seen";
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new FailingReferenceSpecification(),
-                Message));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new FailingReferenceSpecification(),
+            Message));
 
-            Assert.Contains(FailingReferenceSpecification.Requirement, exception.Message);
-            Assert.Contains(Message, exception.Message);
-        }
+        Assert.Contains(FailingReferenceSpecification.Requirement, exception.Message);
+        Assert.Contains(Message, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAReferenceTypeAndANullMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
-        {
-            const string Expected = "Irrelevant value";
+    [Fact]
+    public void GivenAReferenceTypeAndANullMessageWhenTheSpecificationFailsThenAnArgumentExceptionIsThrown()
+    {
+        const string Expected = "Irrelevant value";
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new FailingReferenceSpecification(),
-                default!));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new FailingReferenceSpecification(),
+            default!));
 
-            Assert.Contains(FailingReferenceSpecification.Requirement, exception.Message);
-        }
+        Assert.Contains(FailingReferenceSpecification.Requirement, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAReferenceTypeWhenTheSpecificationFailsWithAnEmbeddedMessageThenAnArgumentExceptionIsThrownWithTheMessage()
-        {
-            const string Expected = "Irrelevant value";
+    [Fact]
+    public void GivenAReferenceTypeWhenTheSpecificationFailsWithAnEmbeddedMessageThenAnArgumentExceptionIsThrownWithTheMessage()
+    {
+        const string Expected = "Irrelevant value";
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new EmbeddedFailingReferenceSpecification()));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new EmbeddedFailingReferenceSpecification()));
 
-            Assert.Contains(EmbeddedFailingReferenceSpecificationRequirement, exception.Message);
-        }
+        Assert.Contains(EmbeddedFailingReferenceSpecificationRequirement, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAReferenceTypeWhenTheSpecificationFailsWithAnIncorrectEmbeddedMessageThenAnArgumentExceptionIsThrown()
-        {
-            const string Expected = "Irrelevant value";
+    [Fact]
+    public void GivenAReferenceTypeWhenTheSpecificationFailsWithAnIncorrectEmbeddedMessageThenAnArgumentExceptionIsThrown()
+    {
+        const string Expected = "Irrelevant value";
 
-            _ = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
-                Expected,
-                nameof(Expected),
-                new IncorrectEmbeddedFailingReferenceSpecification()));
-        }
+        _ = Assert.Throws<ArgumentException>(() => ArgumentSatisifies(
+            Expected,
+            nameof(Expected),
+            new IncorrectEmbeddedFailingReferenceSpecification()));
     }
 }

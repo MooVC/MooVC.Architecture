@@ -1,11 +1,10 @@
-namespace MooVC.Architecture.RequestTests
+namespace MooVC.Architecture.RequestTests;
+
+internal sealed class TestableRequest
+    : Request
 {
-    internal sealed class TestableRequest
-        : Request
+    public TestableRequest(Message context)
+        : base(context)
     {
-        public TestableRequest(Message context)
-            : base(context)
-        {
-        }
     }
 }

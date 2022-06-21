@@ -1,51 +1,50 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousEventReconcilerTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousEventReconcilerTests;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MooVC.Architecture.Ddd;
+using MooVC.Architecture.MessageTests;
+
+public sealed class TestableSynchronousEventReconciler
+    : SynchronousEventReconciler
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd;
-    using MooVC.Architecture.MessageTests;
+    private readonly Action<IEnumerable<DomainEvent>>? events;
 
-    public sealed class TestableSynchronousEventReconciler
-        : SynchronousEventReconciler
+    public TestableSynchronousEventReconciler(Action<IEnumerable<DomainEvent>>? events = default)
     {
-        private readonly Action<IEnumerable<DomainEvent>>? events;
+        this.events = events;
+    }
 
-        public TestableSynchronousEventReconciler(Action<IEnumerable<DomainEvent>>? events = default)
+    protected override async Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
+        ulong? previous,
+        CancellationToken? cancellationToken = default,
+        ulong? target = default)
+    {
+        if (previous.GetValueOrDefault() == 0)
         {
-            this.events = events;
-        }
-
-        protected override async Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
-            ulong? previous,
-            CancellationToken? cancellationToken = default,
-            ulong? target = default)
-        {
-            if (previous.GetValueOrDefault() == 0)
+            SerializableCreatedDomainEvent[]? events = new[]
             {
-                SerializableCreatedDomainEvent[]? events = new[]
-                {
-                    new SerializableCreatedDomainEvent(
-                        new SerializableMessage(),
-                        new SerializableEventCentricAggregateRoot()),
-                };
+                new SerializableCreatedDomainEvent(
+                    new SerializableMessage(),
+                    new SerializableEventCentricAggregateRoot()),
+            };
 
-                return await Task.FromResult((ulong.MaxValue, events));
-            }
-
-            return await Task.FromResult((ulong.MaxValue, Enumerable.Empty<DomainEvent>()));
+            return await Task.FromResult((ulong.MaxValue, events));
         }
 
-        protected override void PerformReconcile(IEnumerable<DomainEvent> events)
+        return await Task.FromResult((ulong.MaxValue, Enumerable.Empty<DomainEvent>()));
+    }
+
+    protected override void PerformReconcile(IEnumerable<DomainEvent> events)
+    {
+        if (this.events is null)
         {
-            if (this.events is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            this.events(events);
+            throw new NotImplementedException();
         }
+
+        this.events(events);
     }
 }

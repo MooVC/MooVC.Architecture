@@ -1,24 +1,23 @@
-﻿namespace MooVC.Architecture.Ddd
+﻿namespace MooVC.Architecture.Ddd;
+
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class SerializableFailedDomainEvent
+    : DomainEvent<SerializableEventCentricAggregateRoot>
 {
-    using System;
-    using System.Runtime.Serialization;
-
-    [Serializable]
-    public sealed class SerializableFailedDomainEvent
-        : DomainEvent<SerializableEventCentricAggregateRoot>
+    public SerializableFailedDomainEvent(
+        Message context,
+        SerializableEventCentricAggregateRoot aggregate)
+        : base(context, aggregate)
     {
-        public SerializableFailedDomainEvent(
-            Message context,
-            SerializableEventCentricAggregateRoot aggregate)
-            : base(context, aggregate)
-        {
-        }
+    }
 
-        private SerializableFailedDomainEvent(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
+    private SerializableFailedDomainEvent(
+        SerializationInfo info,
+        StreamingContext context)
+        : base(info, context)
+    {
     }
 }

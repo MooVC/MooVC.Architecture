@@ -1,83 +1,82 @@
-﻿namespace MooVC.Architecture.Ddd.SignedVersionTests
+﻿namespace MooVC.Architecture.Ddd.SignedVersionTests;
+
+using Xunit;
+
+public sealed class WhenCompareToIsCalled
 {
-    using Xunit;
+    private readonly SerializableAggregateRoot aggregate;
 
-    public sealed class WhenCompareToIsCalled
+    public WhenCompareToIsCalled()
     {
-        private readonly SerializableAggregateRoot aggregate;
+        aggregate = new SerializableAggregateRoot();
+    }
 
-        public WhenCompareToIsCalled()
-        {
-            aggregate = new SerializableAggregateRoot();
-        }
+    [Fact]
+    public void GivenAnEarlierVersionThenPositiveOneIsReturned()
+    {
+        const int ExpectedValue = 1;
 
-        [Fact]
-        public void GivenAnEarlierVersionThenPositiveOneIsReturned()
-        {
-            const int ExpectedValue = 1;
+        SignedVersion version = aggregate.Version;
+        int actualValue = version.CompareTo(SignedVersion.Empty);
 
-            SignedVersion version = aggregate.Version;
-            int actualValue = version.CompareTo(SignedVersion.Empty);
+        Assert.Equal(ExpectedValue, actualValue);
+    }
 
-            Assert.Equal(ExpectedValue, actualValue);
-        }
+    [Fact]
+    public void GivenALaterVersionThenNegativeOneIsReturned()
+    {
+        const int ExpectedValue = -1;
 
-        [Fact]
-        public void GivenALaterVersionThenNegativeOneIsReturned()
-        {
-            const int ExpectedValue = -1;
+        SignedVersion version = aggregate.Version;
+        int actualValue = SignedVersion.Empty.CompareTo(version);
 
-            SignedVersion version = aggregate.Version;
-            int actualValue = SignedVersion.Empty.CompareTo(version);
+        Assert.Equal(ExpectedValue, actualValue);
+    }
 
-            Assert.Equal(ExpectedValue, actualValue);
-        }
+    [Fact]
+    public void GivenANullVersionThenPositiveOneIsReturned()
+    {
+        const int ExpectedValue = 1;
 
-        [Fact]
-        public void GivenANullVersionThenPositiveOneIsReturned()
-        {
-            const int ExpectedValue = 1;
+        SignedVersion version = aggregate.Version;
+        int actualValue = version.CompareTo(default);
 
-            SignedVersion version = aggregate.Version;
-            int actualValue = version.CompareTo(default);
+        Assert.Equal(ExpectedValue, actualValue);
+    }
 
-            Assert.Equal(ExpectedValue, actualValue);
-        }
+    [Fact]
+    public void GivenAFutureVersionThenNegativeOneIsReturned()
+    {
+        const int ExpectedValue = -1;
 
-        [Fact]
-        public void GivenAFutureVersionThenNegativeOneIsReturned()
-        {
-            const int ExpectedValue = -1;
+        SignedVersion version = aggregate.Version;
+        SignedVersion future = version.Next().Next();
+        int actualValue = version.CompareTo(future);
 
-            SignedVersion version = aggregate.Version;
-            SignedVersion future = version.Next().Next();
-            int actualValue = version.CompareTo(future);
+        Assert.Equal(ExpectedValue, actualValue);
+    }
 
-            Assert.Equal(ExpectedValue, actualValue);
-        }
+    [Fact]
+    public void GivenTheNextVersionThenNegativeOneIsReturned()
+    {
+        const int ExpectedValue = -1;
 
-        [Fact]
-        public void GivenTheNextVersionThenNegativeOneIsReturned()
-        {
-            const int ExpectedValue = -1;
+        SignedVersion version = aggregate.Version;
+        SignedVersion next = version.Next();
+        int actualValue = version.CompareTo(next);
 
-            SignedVersion version = aggregate.Version;
-            SignedVersion next = version.Next();
-            int actualValue = version.CompareTo(next);
+        Assert.Equal(ExpectedValue, actualValue);
+    }
 
-            Assert.Equal(ExpectedValue, actualValue);
-        }
+    [Fact]
+    public void GivenThePreviousVersionThenPositiveOneIsReturned()
+    {
+        const int ExpectedValue = 1;
 
-        [Fact]
-        public void GivenThePreviousVersionThenPositiveOneIsReturned()
-        {
-            const int ExpectedValue = 1;
+        SignedVersion version = aggregate.Version;
+        SignedVersion next = version.Next();
+        int actualValue = next.CompareTo(version);
 
-            SignedVersion version = aggregate.Version;
-            SignedVersion next = version.Next();
-            int actualValue = next.CompareTo(version);
-
-            Assert.Equal(ExpectedValue, actualValue);
-        }
+        Assert.Equal(ExpectedValue, actualValue);
     }
 }

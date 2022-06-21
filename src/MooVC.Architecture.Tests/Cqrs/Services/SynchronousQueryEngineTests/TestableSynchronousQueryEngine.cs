@@ -1,39 +1,38 @@
-﻿namespace MooVC.Architecture.Cqrs.Services.SynchronousQueryEngineTests
+﻿namespace MooVC.Architecture.Cqrs.Services.SynchronousQueryEngineTests;
+
+using System;
+
+public sealed class TestableSynchronousQueryEngine
+    : SynchronousQueryEngine
 {
-    using System;
+    private readonly Func<object>? parameterless;
+    private readonly Func<object, object>? parameters;
 
-    public sealed class TestableSynchronousQueryEngine
-        : SynchronousQueryEngine
+    public TestableSynchronousQueryEngine(
+        Func<object>? parameterless = default,
+        Func<object, object>? parameters = default)
     {
-        private readonly Func<object>? parameterless;
-        private readonly Func<object, object>? parameters;
+        this.parameterless = parameterless;
+        this.parameters = parameters;
+    }
 
-        public TestableSynchronousQueryEngine(
-            Func<object>? parameterless = default,
-            Func<object, object>? parameters = default)
+    protected override TResult PerformQuery<TResult>()
+    {
+        if (parameterless is null)
         {
-            this.parameterless = parameterless;
-            this.parameters = parameters;
+            throw new NotImplementedException();
         }
 
-        protected override TResult PerformQuery<TResult>()
-        {
-            if (parameterless is null)
-            {
-                throw new NotImplementedException();
-            }
+        return (TResult)parameterless();
+    }
 
-            return (TResult)parameterless();
+    protected override TResult PerformQuery<TQuery, TResult>(TQuery query)
+    {
+        if (parameters is null)
+        {
+            throw new NotImplementedException();
         }
 
-        protected override TResult PerformQuery<TQuery, TResult>(TQuery query)
-        {
-            if (parameters is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            return (TResult)parameters(query);
-        }
+        return (TResult)parameters(query);
     }
 }

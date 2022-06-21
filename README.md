@@ -8,9 +8,7 @@ MooVC was originally created as a PHP based framework back in 2009, intended to 
 
 While the original MooVC PHP based framework has long since been deprecated, many of the lessons learned from it have formed the basis of solutions the author has since developed.  This library, and those related to it, are all intended to support the rapid development of high quality software that addresses a variety of use-cases.
 
-# Release v9.1.0
+# Release v9.2.0
 
 ## Enhancements
 
-- Added a new Architecture.ImplicitValue, intended to faciliate generation of domain rich types for properties that are typically represented using primiative types.
-- Added a new Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies that can be used to ensure a argument satifies the conditions associated with a given specification.

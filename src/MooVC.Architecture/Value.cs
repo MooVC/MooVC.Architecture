@@ -63,6 +63,17 @@
         {
         }
 
+        internal static bool EqualOperator(Value? left, Value? right)
+        {
+            return !(left is null ^ right is null)
+                && (left is null || left.Equals(right));
+        }
+
+        internal static bool NotEqualOperator(Value? left, Value? right)
+        {
+            return !EqualOperator(left, right);
+        }
+
         protected int AggregateHashCode()
         {
             IEnumerable<int> aggregation = AggregateHashCode(GetAtomicValues());
@@ -114,17 +125,6 @@
             }
 
             return value;
-        }
-
-        private static bool EqualOperator(Value? left, Value? right)
-        {
-            return !(left is null ^ right is null)
-                && (left is null || left.Equals(right));
-        }
-
-        private static bool NotEqualOperator(Value? left, Value? right)
-        {
-            return !EqualOperator(left, right);
         }
 
         private IEnumerable<int> CalculateHashCode(object? value)

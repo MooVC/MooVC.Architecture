@@ -15,7 +15,7 @@
         private readonly IRepository<TAggregate> repository;
         private readonly TimeSpan? timeout;
 
-        public CoordinatedContextHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
+        protected CoordinatedContextHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
         {
             this.repository = ArgumentNotNull(
                 repository,

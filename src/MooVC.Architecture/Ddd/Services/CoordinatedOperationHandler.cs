@@ -9,7 +9,7 @@
         where TAggregate : AggregateRoot
         where TMessage : Message
     {
-        public CoordinatedOperationHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
+        protected CoordinatedOperationHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
             : base(repository, timeout: timeout)
         {
         }

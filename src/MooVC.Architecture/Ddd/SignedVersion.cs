@@ -93,11 +93,56 @@
             return version?.Signature ?? Guid.Empty;
         }
 
+        public static bool operator ==(SignedVersion? first, SignedVersion? second)
+        {
+            return EqualOperator(first, second);
+        }
+
+        public static bool operator !=(SignedVersion? first, SignedVersion? second)
+        {
+            return NotEqualOperator(first, second);
+        }
+
+        public static bool operator <(SignedVersion left, SignedVersion right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        public static bool operator <=(SignedVersion left, SignedVersion right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >(SignedVersion left, SignedVersion right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        public static bool operator >=(SignedVersion left, SignedVersion right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
+
         public int CompareTo(SignedVersion? other)
         {
             return other is { }
                 ? Number.CompareTo(other.Number)
                 : 1;
+        }
+
+        public override bool Equals(object? other)
+        {
+            if (other is SignedVersion value)
+            {
+                return Equals(value);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

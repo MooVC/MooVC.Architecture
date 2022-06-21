@@ -17,15 +17,10 @@ public sealed class PersistentBus
 
     public PersistentBus(IStore<AtomicUnit, Guid> store)
     {
-        this.store = ArgumentNotNull(
-            store,
-            nameof(store),
-            PersistentBusStoreRequired);
+        this.store = ArgumentNotNull(store, nameof(store), PersistentBusStoreRequired);
     }
 
-    protected override async Task PerformPublishAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    protected override async Task PerformPublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
         var unit = new AtomicUnit(events);
 
@@ -33,9 +28,7 @@ public sealed class PersistentBus
             .ConfigureAwait(false);
     }
 
-    private async Task PerformPersistAsync(
-        AtomicUnit unit,
-        CancellationToken? cancellationToken = default)
+    private async Task PerformPersistAsync(AtomicUnit unit, CancellationToken? cancellationToken = default)
     {
         try
         {

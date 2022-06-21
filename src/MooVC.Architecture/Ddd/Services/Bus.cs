@@ -19,16 +19,12 @@ public abstract class Bus
 
     public event DomainEventsPublishingAsyncEventHandler? Publishing;
 
-    public virtual Task PublishAsync(
-        DomainEvent @event,
-        CancellationToken? cancellationToken = default)
+    public virtual Task PublishAsync(DomainEvent @event, CancellationToken? cancellationToken = default)
     {
         return PublishAsync(new[] { @event }, cancellationToken: cancellationToken);
     }
 
-    public virtual async Task PublishAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    public virtual async Task PublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
         events = events.Snapshot(predicate: value => value is { });
 
@@ -45,9 +41,7 @@ public abstract class Bus
         }
     }
 
-    protected abstract Task PerformPublishAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default);
+    protected abstract Task PerformPublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
 
     protected virtual Task OnDiagnosticsEmittedAsync(
         Level level,
@@ -64,18 +58,14 @@ public abstract class Bus
                 message: message));
     }
 
-    protected virtual Task OnPublishingAsync(
-        IEnumerable<DomainEvent> @events,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnPublishingAsync(IEnumerable<DomainEvent> @events, CancellationToken? cancellationToken = default)
     {
         return Publishing.InvokeAsync(
             this,
             new DomainEventsPublishingAsyncEventArgs(@events, cancellationToken: cancellationToken));
     }
 
-    protected virtual Task OnPublishedAsync(
-        IEnumerable<DomainEvent> @events,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnPublishedAsync(IEnumerable<DomainEvent> @events, CancellationToken? cancellationToken = default)
     {
         return Published.PassiveInvokeAsync(
             this,

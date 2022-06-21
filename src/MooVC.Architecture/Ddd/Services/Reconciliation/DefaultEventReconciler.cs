@@ -25,15 +25,8 @@ public sealed class DefaultEventReconciler<TSequencedEvents>
         IAggregateReconciler reconciler,
         ushort numberToRead = DefaultNumberToRead)
     {
-        this.eventStore = ArgumentNotNull(
-            eventStore,
-            nameof(eventStore),
-            DefaultEventReconcilerEventStoreRequired);
-
-        this.reconciler = ArgumentNotNull(
-            reconciler,
-            nameof(reconciler),
-            DefaultEventReconcilerReconcilerRequired);
+        this.eventStore = ArgumentNotNull(eventStore, nameof(eventStore), DefaultEventReconcilerEventStoreRequired);
+        this.reconciler = ArgumentNotNull(reconciler, nameof(reconciler), DefaultEventReconcilerReconcilerRequired);
 
         this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
     }
@@ -49,10 +42,7 @@ public sealed class DefaultEventReconciler<TSequencedEvents>
         if (ShouldReadEvents(previous, target, out ushort numberToRead, out ulong start))
         {
             IEnumerable<TSequencedEvents> sequences = await eventStore
-                .ReadAsync(
-                    start,
-                    cancellationToken: cancellationToken,
-                    numberToRead: numberToRead)
+                .ReadAsync(start, cancellationToken: cancellationToken, numberToRead: numberToRead)
                 .ConfigureAwait(false);
 
             lastSequence = sequences
@@ -68,9 +58,7 @@ public sealed class DefaultEventReconciler<TSequencedEvents>
         return (lastSequence, events);
     }
 
-    protected override async Task ReconcileAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    protected override async Task ReconcileAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
         foreach (IGrouping<Type, DomainEvent> type in events
             .GroupBy(@event => @event.Aggregate.Type))
@@ -103,9 +91,7 @@ public sealed class DefaultEventReconciler<TSequencedEvents>
         return true;
     }
 
-    private async Task PerformReconciliationAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken)
+    private async Task PerformReconciliationAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken)
     {
         await OnEventsReconcilingAsync(events, cancellationToken: cancellationToken)
             .ConfigureAwait(false);

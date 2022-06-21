@@ -12,11 +12,7 @@ using static MooVC.Ensure;
 public abstract class PaginatedResult<T>
     : EnumerableResult<T>
 {
-    protected PaginatedResult(
-        Message context,
-        Paging paging,
-        ulong total,
-        IEnumerable<T> values)
+    protected PaginatedResult(Message context, Paging paging, ulong total, IEnumerable<T> values)
         : base(context, values)
     {
         Pages = CalculateTotalPages(paging, total);
@@ -44,10 +40,7 @@ public abstract class PaginatedResult<T>
 
     internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)
     {
-        _ = ArgumentNotNull(
-            paging,
-            nameof(paging),
-            PaginatedResultCalculateTotalPagesPagingRequired);
+        _ = ArgumentNotNull(paging, nameof(paging), PaginatedResultCalculateTotalPagesPagingRequired);
 
         decimal requiredPages = (decimal)totalResults / paging.Size;
         ulong totalPages = (ulong)Math.Ceiling(requiredPages);

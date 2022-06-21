@@ -8,10 +8,7 @@ public static partial class ReferenceExtensions
 {
     public static Reference ToUnversioned(this Reference reference)
     {
-        _ = ArgumentNotNull(
-            reference,
-            nameof(reference),
-            ReferenceExtensionsToUnversionedReferenceRequired);
+        _ = ArgumentNotNull(reference, nameof(reference), ReferenceExtensionsToUnversionedReferenceRequired);
 
         if (reference.IsVersioned)
         {
@@ -24,10 +21,7 @@ public static partial class ReferenceExtensions
     public static Reference<TAggregate> ToUnversioned<TAggregate>(this Reference<TAggregate> reference)
         where TAggregate : AggregateRoot
     {
-        _ = ArgumentNotNull(
-            reference,
-            nameof(reference),
-            ReferenceExtensionsToUnversionedReferenceRequired);
+        _ = ArgumentNotNull(reference, nameof(reference), ReferenceExtensionsToUnversionedReferenceRequired);
 
         if (reference.IsVersioned)
         {

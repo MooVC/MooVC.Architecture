@@ -48,20 +48,9 @@ public sealed class AggregateEventSequenceUnorderedException
 
     private static string FormatMessage(Reference aggregate, IEnumerable<DomainEvent> events)
     {
-        _ = ArgumentNotNull(
-            aggregate,
-            nameof(aggregate),
-            AggregateEventSequenceUnorderedExceptionAggregateRequired);
+        _ = ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventSequenceUnorderedExceptionAggregateRequired);
+        _ = ArgumentNotNull(events, nameof(events), AggregateEventSequenceUnorderedExceptionEventsRequired);
 
-        _ = ArgumentNotNull(
-            events,
-            nameof(events),
-            AggregateEventSequenceUnorderedExceptionEventsRequired);
-
-        return Format(
-            AggregateEventSequenceUnorderedExceptionMessage,
-            aggregate.Id,
-            aggregate.Version,
-            aggregate.Type.Name);
+        return Format(AggregateEventSequenceUnorderedExceptionMessage, aggregate.Id, aggregate.Version, aggregate.Type.Name);
     }
 }

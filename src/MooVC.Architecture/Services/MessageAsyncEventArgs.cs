@@ -12,15 +12,10 @@ public abstract class MessageAsyncEventArgs
     : AsyncEventArgs,
       ISerializable
 {
-    protected MessageAsyncEventArgs(
-        Message message,
-        CancellationToken? cancellationToken = default)
+    protected MessageAsyncEventArgs(Message message, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Message = ArgumentNotNull(
-            message,
-            nameof(message),
-            MessageEventArgsMessageRequired);
+        Message = ArgumentNotNull(message, nameof(message), MessageEventArgsMessageRequired);
     }
 
     protected MessageAsyncEventArgs(SerializationInfo info, StreamingContext context)

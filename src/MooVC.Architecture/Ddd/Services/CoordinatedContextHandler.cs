@@ -17,11 +17,7 @@ public abstract class CoordinatedContextHandler<TAggregate, TMessage>
 
     protected CoordinatedContextHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
     {
-        this.repository = ArgumentNotNull(
-            repository,
-            nameof(repository),
-            CoordinatedContextHandlerRepositoryRequired);
-
+        this.repository = ArgumentNotNull(repository, nameof(repository), CoordinatedContextHandlerRepositoryRequired);
         this.timeout = timeout;
     }
 
@@ -45,10 +41,7 @@ public abstract class CoordinatedContextHandler<TAggregate, TMessage>
 
     protected abstract Reference<TAggregate> IdentifyTarget(TMessage message);
 
-    protected virtual async Task PerformCoordinatedExecuteAsync(
-        TMessage message,
-        Reference<TAggregate> reference,
-        CancellationToken cancellationToken)
+    protected virtual async Task PerformCoordinatedExecuteAsync(TMessage message, Reference<TAggregate> reference, CancellationToken cancellationToken)
     {
         TAggregate aggregate = await reference
             .RetrieveAsync(message, repository, cancellationToken: cancellationToken)
@@ -62,8 +55,5 @@ public abstract class CoordinatedContextHandler<TAggregate, TMessage>
             .ConfigureAwait(false);
     }
 
-    protected abstract Task PerformCoordinatedExecuteAsync(
-        TAggregate aggregate,
-        TMessage message,
-        CancellationToken cancellationToken);
+    protected abstract Task PerformCoordinatedExecuteAsync(TAggregate aggregate, TMessage message, CancellationToken cancellationToken);
 }

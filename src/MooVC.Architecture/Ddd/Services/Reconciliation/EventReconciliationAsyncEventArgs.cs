@@ -13,15 +13,10 @@ public sealed class EventReconciliationAsyncEventArgs
     : AsyncEventArgs,
       ISerializable
 {
-    public EventReconciliationAsyncEventArgs(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    public EventReconciliationAsyncEventArgs(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Events = ArgumentNotEmpty(
-            events,
-            nameof(events),
-            EventReconciliationEventArgsEventsRequired);
+        Events = ArgumentNotEmpty(events, nameof(events), EventReconciliationEventArgsEventsRequired);
     }
 
     private EventReconciliationAsyncEventArgs(SerializationInfo info, StreamingContext context)

@@ -13,11 +13,7 @@ public static partial class TypeExtensions
         CancellationToken? cancellationToken = default,
         TimeSpan? timeout = default)
     {
-        return Coordinator.ApplyAsync(
-            type.GenerateContext(),
-            operation,
-            cancellationToken: cancellationToken,
-            timeout: timeout);
+        return Coordinator.ApplyAsync(type.GenerateContext(), operation, cancellationToken: cancellationToken, timeout: timeout);
     }
 
     public static Task CoordinateAsync(
@@ -29,10 +25,6 @@ public static partial class TypeExtensions
     {
         string context = $"{type.GenerateContext()}-{id:N}";
 
-        return Coordinator.ApplyAsync(
-            context,
-            operation,
-            cancellationToken: cancellationToken,
-            timeout: timeout);
+        return Coordinator.ApplyAsync(context, operation, cancellationToken: cancellationToken, timeout: timeout);
     }
 }

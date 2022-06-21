@@ -61,11 +61,56 @@ namespace MooVC.Architecture.Ddd.Specifications {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The left specification must be provided..
+        /// </summary>
+        internal static string AndSpecificationLeftRequired {
+            get {
+                return ResourceManager.GetString("AndSpecificationLeftRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The right specification must be provided..
+        /// </summary>
+        internal static string AndSpecificationRightRequired {
+            get {
+                return ResourceManager.GetString("AndSpecificationRightRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specification to be satisfied must be provided..
         /// </summary>
         internal static string EnsureArgumentSatisfiesSpecificationRequired {
             get {
                 return ResourceManager.GetString("EnsureArgumentSatisfiesSpecificationRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specification to be negated must be provided..
+        /// </summary>
+        internal static string NotSpecificationSpecificationRequired {
+            get {
+                return ResourceManager.GetString("NotSpecificationSpecificationRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The left specification must be provided..
+        /// </summary>
+        internal static string OrSpecificationLeftRequired {
+            get {
+                return ResourceManager.GetString("OrSpecificationLeftRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The right specification must be provided..
+        /// </summary>
+        internal static string OrSpecificationRightRequired {
+            get {
+                return ResourceManager.GetString("OrSpecificationRightRequired", resourceCulture);
             }
         }
     }

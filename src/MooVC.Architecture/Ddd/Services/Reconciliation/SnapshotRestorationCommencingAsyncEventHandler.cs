@@ -2,6 +2,4 @@
 
 using System.Threading.Tasks;
 
-public delegate Task SnapshotRestorationCommencingAsyncEventHandler(
-    IReconciliationOrchestrator orchestrator,
-    AsyncEventArgs e);
+public delegate Task SnapshotRestorationCommencingAsyncEventHandler(IReconciliationOrchestrator orchestrator, AsyncEventArgs e);

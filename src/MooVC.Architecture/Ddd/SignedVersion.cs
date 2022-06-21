@@ -19,9 +19,7 @@ public sealed class SignedVersion
     private const int SplicePortion = 8;
 
     private static readonly byte[] emptySegment = new byte[SplicePortion];
-
-    private static readonly Lazy<SignedVersion> empty = new(
-        () => new SignedVersion(emptySegment, emptySegment, ulong.MinValue));
+    private static readonly Lazy<SignedVersion> empty = new(() => new SignedVersion(emptySegment, emptySegment, ulong.MinValue));
 
     private readonly Lazy<Guid> signature;
 
@@ -32,10 +30,7 @@ public sealed class SignedVersion
 
     internal SignedVersion(SignedVersion previous)
     {
-        _ = ArgumentNotNull(
-            previous,
-            nameof(previous),
-            SignedVersionPreviousRequired);
+        _ = ArgumentNotNull(previous, nameof(previous), SignedVersionPreviousRequired);
 
         _ = ArgumentIsAcceptable(
             previous,

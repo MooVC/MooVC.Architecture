@@ -14,16 +14,10 @@ public sealed class Snapshot
     : ISnapshot,
       ISerializable
 {
-    public Snapshot(
-        IEnumerable<EventCentricAggregateRoot> aggregates,
-        IEventSequence sequence)
+    public Snapshot(IEnumerable<EventCentricAggregateRoot> aggregates, IEventSequence sequence)
     {
         Aggregates = aggregates.Snapshot();
-
-        Sequence = ArgumentNotNull(
-            sequence,
-            nameof(sequence),
-            SnapshotSequenceRequired);
+        Sequence = ArgumentNotNull(sequence, nameof(sequence), SnapshotSequenceRequired);
     }
 
     private Snapshot(SerializationInfo info, StreamingContext context)

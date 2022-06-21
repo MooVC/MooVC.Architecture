@@ -14,10 +14,7 @@ public abstract class CoordinatedOperationHandler<TAggregate, TMessage>
     {
     }
 
-    protected override Task PerformCoordinatedExecuteAsync(
-        TAggregate aggregate,
-        TMessage message,
-        CancellationToken cancellationToken)
+    protected override Task PerformCoordinatedExecuteAsync(TAggregate aggregate, TMessage message, CancellationToken cancellationToken)
     {
         PerformCoordinatedOperation(aggregate, message);
 

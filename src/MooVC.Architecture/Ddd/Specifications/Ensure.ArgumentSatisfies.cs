@@ -9,10 +9,7 @@ using static MooVC.Ensure;
 
 public static partial class Ensure
 {
-    public static T ArgumentSatisifies<T>(
-        [NotNull] T? argument,
-        string argumentName,
-        Specification<T> specification)
+    public static T ArgumentSatisifies<T>([NotNull] T? argument, string argumentName, Specification<T> specification)
         where T : struct
     {
         return ArgumentSatisifies(
@@ -22,17 +19,10 @@ public static partial class Ensure
             Empty);
     }
 
-    public static T ArgumentSatisifies<T>(
-        [NotNull] T? argument,
-        string argumentName,
-        Specification<T> specification)
+    public static T ArgumentSatisifies<T>([NotNull] T? argument, string argumentName, Specification<T> specification)
         where T : class
     {
-        return ArgumentSatisifies(
-            argument,
-            argumentName,
-            specification,
-            Empty);
+        return ArgumentSatisifies(argument, argumentName, specification, Empty);
     }
 
     public static T ArgumentSatisifies<T>(
@@ -42,10 +32,7 @@ public static partial class Ensure
         string message)
         where T : struct
     {
-        _ = ArgumentNotNull(
-            specification,
-            nameof(specification),
-            EnsureArgumentSatisfiesSpecificationRequired);
+        _ = ArgumentNotNull(specification, nameof(specification), EnsureArgumentSatisfiesSpecificationRequired);
 
         return ArgumentIsAcceptable(
             argument,
@@ -61,10 +48,7 @@ public static partial class Ensure
         string message)
         where T : class
     {
-        _ = ArgumentNotNull(
-            specification,
-            nameof(specification),
-            EnsureArgumentSatisfiesSpecificationRequired);
+        _ = ArgumentNotNull(specification, nameof(specification), EnsureArgumentSatisfiesSpecificationRequired);
 
         return ArgumentIsAcceptable(
             argument,

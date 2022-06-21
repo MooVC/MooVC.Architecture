@@ -45,15 +45,8 @@ public sealed class AggregateEventMismatchException
 
     private static string FormatMessage(Reference aggregate, Reference eventAggregate)
     {
-        _ = ArgumentNotNull(
-            aggregate,
-            nameof(aggregate),
-            AggregateEventMismatchExceptionAggregateRequired);
-
-        _ = ArgumentNotNull(
-            eventAggregate,
-            nameof(eventAggregate),
-            AggregateEventMismatchExceptionEventAggregateRequired);
+        _ = ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventMismatchExceptionAggregateRequired);
+        _ = ArgumentNotNull(eventAggregate, nameof(eventAggregate), AggregateEventMismatchExceptionEventAggregateRequired);
 
         return Format(
             AggregateEventMismatchExceptionMessage,

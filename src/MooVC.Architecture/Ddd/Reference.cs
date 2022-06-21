@@ -75,10 +75,7 @@ public abstract class Reference
 
     public static Reference Create(Guid id, Type type, SignedVersion? version = default)
     {
-        _ = ArgumentNotNull(
-            type,
-            nameof(type),
-            ReferenceCreateTypeRequired);
+        _ = ArgumentNotNull(type, nameof(type), ReferenceCreateTypeRequired);
 
         Type reference = typeof(Reference<>);
         Type aggregate = reference.MakeGenericType(type);
@@ -111,10 +108,7 @@ public abstract class Reference
 
     public static Reference Create(AggregateRoot aggregate)
     {
-        _ = ArgumentNotNull(
-            aggregate,
-            nameof(aggregate),
-            ReferenceCreateAggregateRequired);
+        _ = ArgumentNotNull(aggregate, nameof(aggregate), ReferenceCreateAggregateRequired);
 
         return Create(aggregate.Id, aggregate.GetType(), version: aggregate.Version);
     }

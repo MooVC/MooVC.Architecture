@@ -21,14 +21,9 @@ public abstract class Repository<TAggregate>
 
     public abstract Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default);
 
-    public abstract Task<TAggregate?> GetAsync(
-        Guid id,
-        CancellationToken? cancellationToken = default,
-        SignedVersion? version = default);
+    public abstract Task<TAggregate?> GetAsync(Guid id, CancellationToken? cancellationToken = default, SignedVersion? version = default);
 
-    public virtual async Task SaveAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    public virtual async Task SaveAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {
         await OnAggregateSavingAsync(aggregate, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
@@ -42,14 +37,9 @@ public abstract class Repository<TAggregate>
         aggregate.MarkChangesAsCommitted();
     }
 
-    protected virtual async Task<bool> CheckForConflictsAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    protected virtual async Task<bool> CheckForConflictsAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {
-        Reference<TAggregate>? currentVersion = await
-            GetCurrentVersionAsync(
-                aggregate,
-                cancellationToken: cancellationToken)
+        Reference<TAggregate>? currentVersion = await GetCurrentVersionAsync(aggregate, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
         if (aggregate.Version == currentVersion?.Version)
@@ -62,13 +52,9 @@ public abstract class Repository<TAggregate>
         return true;
     }
 
-    protected abstract Task<Reference<TAggregate>?> GetCurrentVersionAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default);
+    protected abstract Task<Reference<TAggregate>?> GetCurrentVersionAsync(TAggregate aggregate, CancellationToken? cancellationToken = default);
 
-    protected virtual Task OnAggregateSavedAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnAggregateSavedAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {
         return AggregateSaved.PassiveInvokeAsync(
             this,
@@ -80,9 +66,7 @@ public abstract class Repository<TAggregate>
                 message: RepositoryOnAggregateSavedAsyncFailure));
     }
 
-    protected virtual Task OnAggregateSavingAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnAggregateSavingAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {
         return AggregateSaving.InvokeAsync(
             this,
@@ -104,9 +88,7 @@ public abstract class Repository<TAggregate>
                 message: message));
     }
 
-    protected virtual async Task PerformSaveAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    protected virtual async Task PerformSaveAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {
         bool isConflictFree = await
             CheckForConflictsAsync(
@@ -124,7 +106,5 @@ public abstract class Repository<TAggregate>
         }
     }
 
-    protected abstract Task UpdateStoreAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default);
+    protected abstract Task UpdateStoreAsync(TAggregate aggregate, CancellationToken? cancellationToken = default);
 }

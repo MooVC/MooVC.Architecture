@@ -16,21 +16,11 @@ public sealed class AggregateReconciledAsyncEventArgs
     : AsyncEventArgs,
       ISerializable
 {
-    internal AggregateReconciledAsyncEventArgs(
-        Reference aggregate,
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    internal AggregateReconciledAsyncEventArgs(Reference aggregate, IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Aggregate = ReferenceIsNotEmpty(
-            aggregate,
-            nameof(aggregate),
-            AggregateReconciledEventArgsAggregateRequired);
-
-        Events = ArgumentNotEmpty(
-            events,
-            nameof(events),
-            AggregateReconciledEventArgsEventsRequired);
+        Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateReconciledEventArgsAggregateRequired);
+        Events = ArgumentNotEmpty(events, nameof(events), AggregateReconciledEventArgsEventsRequired);
     }
 
     private AggregateReconciledAsyncEventArgs(SerializationInfo info, StreamingContext context)

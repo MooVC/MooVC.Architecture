@@ -6,9 +6,7 @@ using System.Linq;
 
 internal static partial class DictionaryExtensions
 {
-    public static Reference<TAggregate>? FindLatestVersion<TAggregate>(
-        this IDictionary<Reference<TAggregate>, TAggregate> source,
-        Guid aggregateId)
+    public static Reference<TAggregate>? FindLatestVersion<TAggregate>(this IDictionary<Reference<TAggregate>, TAggregate> source, Guid aggregateId)
         where TAggregate : AggregateRoot
     {
         return source

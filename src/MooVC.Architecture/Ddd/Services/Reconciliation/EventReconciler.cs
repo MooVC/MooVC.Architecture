@@ -20,20 +20,14 @@ public abstract class EventReconciler
 
     public event EventSequenceAdvancedAsyncEventHandler? EventSequenceAdvanced;
 
-    public async Task<ulong?> ReconcileAsync(
-        CancellationToken? cancellationToken = default,
-        ulong? previous = default,
-        ulong? target = default)
+    public async Task<ulong?> ReconcileAsync(CancellationToken? cancellationToken = default, ulong? previous = default, ulong? target = default)
     {
         bool hasEvents;
 
         do
         {
             (ulong? lastSequence, IEnumerable<DomainEvent> events) = await
-                GetEventsAsync(
-                    previous,
-                    cancellationToken: cancellationToken,
-                    target: target)
+                GetEventsAsync(previous, cancellationToken: cancellationToken, target: target)
                 .ConfigureAwait(false);
 
             hasEvents = events.Any();
@@ -59,9 +53,7 @@ public abstract class EventReconciler
         CancellationToken? cancellationToken = default,
         ulong? target = default);
 
-    protected abstract Task ReconcileAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default);
+    protected abstract Task ReconcileAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
 
     protected virtual Task OnDiagnosticsEmittedAsync(
         Level level,
@@ -78,9 +70,7 @@ public abstract class EventReconciler
                 message: message));
     }
 
-    protected virtual Task OnEventsReconciledAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnEventsReconciledAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
         return EventsReconciled.PassiveInvokeAsync(
             this,
@@ -92,18 +82,14 @@ public abstract class EventReconciler
                 message: EventReconcilerOnEventsReconciledAsyncFailure));
     }
 
-    protected virtual Task OnEventsReconcilingAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnEventsReconcilingAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
         return EventsReconciling.InvokeAsync(
             this,
             new EventReconciliationAsyncEventArgs(events, cancellationToken: cancellationToken));
     }
 
-    protected virtual Task OnEventSequenceAdvancedAsync(
-        ulong current,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnEventSequenceAdvancedAsync(ulong current, CancellationToken? cancellationToken = default)
     {
         return EventSequenceAdvanced.PassiveInvokeAsync(
             this,

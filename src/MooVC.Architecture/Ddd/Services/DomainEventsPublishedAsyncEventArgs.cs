@@ -9,9 +9,7 @@ using System.Threading;
 public sealed class DomainEventsPublishedAsyncEventArgs
     : DomainEventsAsyncEventArgs
 {
-    public DomainEventsPublishedAsyncEventArgs(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    public DomainEventsPublishedAsyncEventArgs(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
         : base(events, cancellationToken: cancellationToken)
     {
     }

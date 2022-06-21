@@ -21,27 +21,19 @@ public abstract class AggregateReconciler
 
     public event UnsupportedAggregateTypeDetectedAsyncEventHandler? UnsupportedAggregateTypeDetected;
 
-    public virtual Task ReconcileAsync(
-        EventCentricAggregateRoot aggregate,
-        CancellationToken? cancellationToken = default)
+    public virtual Task ReconcileAsync(EventCentricAggregateRoot aggregate, CancellationToken? cancellationToken = default)
     {
         return ReconcileAsync(new[] { aggregate }, cancellationToken: cancellationToken);
     }
 
-    public abstract Task ReconcileAsync(
-        IEnumerable<EventCentricAggregateRoot> aggregates,
-        CancellationToken? cancellationToken = default);
+    public abstract Task ReconcileAsync(IEnumerable<EventCentricAggregateRoot> aggregates, CancellationToken? cancellationToken = default);
 
-    public virtual Task ReconcileAsync(
-        DomainEvent @event,
-        CancellationToken? cancellationToken = default)
+    public virtual Task ReconcileAsync(DomainEvent @event, CancellationToken? cancellationToken = default)
     {
         return ReconcileAsync(new[] { @event }, cancellationToken: cancellationToken);
     }
 
-    public abstract Task ReconcileAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default);
+    public abstract Task ReconcileAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
 
     protected virtual async Task<bool> EventsAreNonConflictingAsync(
         Reference aggregate,
@@ -121,18 +113,14 @@ public abstract class AggregateReconciler
                 message: message));
     }
 
-    protected virtual Task OnUnsupportedAggregateTypeDetectedAsync(
-        Type type,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnUnsupportedAggregateTypeDetectedAsync(Type type, CancellationToken? cancellationToken = default)
     {
         return UnsupportedAggregateTypeDetected.InvokeAsync(
             this,
             new UnsupportedAggregateTypeDetectedAsyncEventArgs(type, cancellationToken: cancellationToken));
     }
 
-    protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(
-        IEnumerable<DomainEvent> events,
-        SignedVersion version)
+    protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(IEnumerable<DomainEvent> events, SignedVersion version)
     {
         return events
             .Where(@event => @event.Aggregate.Version.CompareTo(version) > 0)

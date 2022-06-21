@@ -13,18 +13,8 @@ using static MooVC.Architecture.Ddd.Resources;
 public sealed class AggregateInvariantsNotSatisfiedDomainException
     : DomainException
 {
-    public AggregateInvariantsNotSatisfiedDomainException(
-        Request request,
-        Reference aggregate,
-        IEnumerable<string> explainations)
-        : base(
-              request.Context,
-              aggregate,
-              Format(
-                  AggregateInvariantsNotSatisfiedDomainExceptionMessage,
-                  request.GetType().Name,
-                  aggregate.Type.Name,
-                  Join(NewLine, explainations)))
+    public AggregateInvariantsNotSatisfiedDomainException(Request request, Reference aggregate, IEnumerable<string> explainations)
+        : base(request.Context, aggregate, FormatMessage(aggregate, explainations, request))
     {
         Explainations = explainations.Snapshot();
     }
@@ -42,5 +32,14 @@ public sealed class AggregateInvariantsNotSatisfiedDomainException
         base.GetObjectData(info, context);
 
         _ = info.TryAddEnumerable(nameof(Explainations), Explainations);
+    }
+
+    private static string FormatMessage(Reference aggregate, IEnumerable<string> explainations, Request request)
+    {
+        return Format(
+            AggregateInvariantsNotSatisfiedDomainExceptionMessage,
+            request.GetType().Name,
+            aggregate.Type.Name,
+            Join(NewLine, explainations));
     }
 }

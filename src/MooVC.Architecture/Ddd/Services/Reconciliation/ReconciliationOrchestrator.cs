@@ -17,14 +17,10 @@ public abstract class ReconciliationOrchestrator
 
     protected virtual Task OnSnapshotRestorationCommencingAsync(CancellationToken? cancellationToken = default)
     {
-        return SnapshotRestorationCommencing.InvokeAsync(
-            this,
-            AsyncEventArgs.Empty(cancellationToken: cancellationToken));
+        return SnapshotRestorationCommencing.InvokeAsync(this, AsyncEventArgs.Empty(cancellationToken: cancellationToken));
     }
 
-    protected virtual Task OnSnapshotRestorationCompletedAsync(
-        IEventSequence sequence,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnSnapshotRestorationCompletedAsync(IEventSequence sequence, CancellationToken? cancellationToken = default)
     {
         return SnapshotRestorationCompleted.InvokeAsync(
             this,

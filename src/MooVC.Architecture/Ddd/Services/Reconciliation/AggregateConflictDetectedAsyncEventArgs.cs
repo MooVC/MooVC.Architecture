@@ -24,25 +24,10 @@ public sealed class AggregateConflictDetectedAsyncEventArgs
         CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Aggregate = ReferenceIsNotEmpty(
-            aggregate,
-            nameof(aggregate),
-            AggregateConflictDetectedEventArgsAggregateRequired);
-
-        Events = ArgumentNotEmpty(
-            events,
-            nameof(events),
-            AggregateConflictDetectedEventArgsEventsRequired);
-
-        Next = ArgumentNotNull(
-            next,
-            nameof(next),
-            AggregateConflictDetectedEventArgsNextRequired);
-
-        Previous = ArgumentNotNull(
-            previous,
-            nameof(previous),
-            AggregateConflictDetectedEventArgsPreviousRequired);
+        Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedEventArgsAggregateRequired);
+        Events = ArgumentNotEmpty(events, nameof(events), AggregateConflictDetectedEventArgsEventsRequired);
+        Next = ArgumentNotNull(next, nameof(next), AggregateConflictDetectedEventArgsNextRequired);
+        Previous = ArgumentNotNull(previous, nameof(previous), AggregateConflictDetectedEventArgsPreviousRequired);
     }
 
     private AggregateConflictDetectedAsyncEventArgs(SerializationInfo info, StreamingContext context)

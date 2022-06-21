@@ -7,15 +7,10 @@ using static MooVC.Ensure;
 public sealed class SnapshotRestorationCompletedAsyncEventArgs
     : AsyncEventArgs
 {
-    public SnapshotRestorationCompletedAsyncEventArgs(
-        IEventSequence sequence,
-        CancellationToken? cancellationToken = default)
+    public SnapshotRestorationCompletedAsyncEventArgs(IEventSequence sequence, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Sequence = ArgumentNotNull(
-            sequence,
-            nameof(sequence),
-            SnapshotRestorationCompletedEventArgsSequenceRequired);
+        Sequence = ArgumentNotNull(sequence, nameof(sequence), SnapshotRestorationCompletedEventArgsSequenceRequired);
     }
 
     public IEventSequence Sequence { get; }

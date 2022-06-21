@@ -14,17 +14,10 @@ public static partial class AggregateRootExtensions
         CancellationToken? cancellationToken = default,
         TimeSpan? timeout = default)
     {
-        _ = ArgumentNotNull(
-            aggregate,
-            nameof(aggregate),
-            AggregateRootExtensionsCoordinateAsyncAggregateRequired);
+        _ = ArgumentNotNull(aggregate, nameof(aggregate), AggregateRootExtensionsCoordinateAsyncAggregateRequired);
 
         await aggregate
             .GetType()
-            .CoordinateAsync(
-                aggregate.Id,
-                operation,
-                cancellationToken: cancellationToken,
-                timeout: timeout);
+            .CoordinateAsync(aggregate.Id, operation, cancellationToken: cancellationToken, timeout: timeout);
     }
 }

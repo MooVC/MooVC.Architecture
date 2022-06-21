@@ -49,16 +49,9 @@ public static partial class RepositoryExtensions
 
         if (latest || reference.Version.IsEmpty)
         {
-            return repository.GetAsync(
-                context,
-                reference.Id,
-                cancellationToken: cancellationToken);
+            return repository.GetAsync(context, reference.Id, cancellationToken: cancellationToken);
         }
 
-        return repository.GetAsync(
-            context,
-            reference.Id,
-            cancellationToken: cancellationToken,
-            version: reference.Version);
+        return repository.GetAsync(context, reference.Id, cancellationToken: cancellationToken, version: reference.Version);
     }
 }

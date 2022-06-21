@@ -47,19 +47,9 @@ public sealed class AggregateNotFoundException<TAggregate>
 
     private static string FormatMessage(Message context, Reference<TAggregate> aggregate)
     {
-        _ = ArgumentNotNull(
-            context,
-            nameof(context),
-            AggregateNotFoundExceptionContextRequired);
+        _ = ArgumentNotNull(context, nameof(context), AggregateNotFoundExceptionContextRequired);
+        _ = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateNotFoundExceptionAggregateRequired);
 
-        _ = ReferenceIsNotEmpty(
-            aggregate,
-            nameof(aggregate),
-            AggregateNotFoundExceptionAggregateRequired);
-
-        return Format(
-            AggregateNotFoundExceptionMessage,
-            aggregate.Id,
-            aggregate.Type.Name);
+        return Format(AggregateNotFoundExceptionMessage, aggregate.Id, aggregate.Type.Name);
     }
 }

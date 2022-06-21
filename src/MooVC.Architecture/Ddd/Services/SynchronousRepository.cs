@@ -15,16 +15,12 @@ public abstract class SynchronousRepository<TAggregate>
 {
     protected SynchronousRepository(ICloner cloner)
     {
-        Cloner = ArgumentNotNull(
-            cloner,
-            nameof(cloner),
-            SynchronousRepositoryClonerRequired);
+        Cloner = ArgumentNotNull(cloner, nameof(cloner), SynchronousRepositoryClonerRequired);
     }
 
     protected ICloner Cloner { get; }
 
-    public override Task<IEnumerable<TAggregate>> GetAllAsync(
-        CancellationToken? cancellationToken = default)
+    public override Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default)
     {
         IEnumerable<TAggregate> aggregates = PerformGetAll();
 
@@ -32,10 +28,7 @@ public abstract class SynchronousRepository<TAggregate>
             Cloner.CloneAsync(aggregate, cancellationToken: cancellationToken));
     }
 
-    public override async Task<TAggregate?> GetAsync(
-        Guid id,
-        CancellationToken? cancellationToken = default,
-        SignedVersion? version = default)
+    public override async Task<TAggregate?> GetAsync(Guid id, CancellationToken? cancellationToken = default, SignedVersion? version = default)
     {
         TAggregate? aggregate = PerformGet(id, version: version);
 
@@ -49,16 +42,12 @@ public abstract class SynchronousRepository<TAggregate>
         return default;
     }
 
-    protected override Task<Reference<TAggregate>?> GetCurrentVersionAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    protected override Task<Reference<TAggregate>?> GetCurrentVersionAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {
         return Task.FromResult(PerformGetCurrentVersion(aggregate));
     }
 
-    protected override async Task UpdateStoreAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    protected override async Task UpdateStoreAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {
         TAggregate clone = await Cloner
             .CloneAsync(aggregate, cancellationToken: cancellationToken)

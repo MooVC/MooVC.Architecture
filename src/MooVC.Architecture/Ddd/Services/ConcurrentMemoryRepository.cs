@@ -22,19 +22,12 @@ public abstract class ConcurrentMemoryRepository<TAggregate>
         return proposed;
     }
 
-    protected override Task PerformSaveAsync(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    protected override Task PerformSaveAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {
-        return UpdateStoreAsync(
-            aggregate,
-            cancellationToken: cancellationToken);
+        return UpdateStoreAsync(aggregate, cancellationToken: cancellationToken);
     }
 
-    protected virtual TAggregate PerformUpdate(
-        TAggregate existing,
-        Reference<TAggregate> key,
-        TAggregate proposed)
+    protected virtual TAggregate PerformUpdate(TAggregate existing, Reference<TAggregate> key, TAggregate proposed)
     {
         AggregateDoesNotConflict(proposed, currentVersion: existing.Version);
 

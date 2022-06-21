@@ -16,10 +16,7 @@ public static partial class AggregateRootExtensions
     {
         if (aggregate is { } && aggregate.HasUncommittedChanges)
         {
-            _ = ArgumentNotNull(
-                destination,
-                nameof(destination),
-                AggregateRootExtensionsSaveDestinationRequired);
+            _ = ArgumentNotNull(destination, nameof(destination), AggregateRootExtensionsSaveDestinationRequired);
 
             await destination
                 .SaveAsync(aggregate, cancellationToken: cancellationToken)

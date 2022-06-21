@@ -2,6 +2,4 @@
 
 using System.Threading.Tasks;
 
-public delegate Task EventSequenceAdvancedAsyncEventHandler(
-    IEventReconciler sender,
-    EventSequenceAdvancedAsyncEventArgs e);
+public delegate Task EventSequenceAdvancedAsyncEventHandler(IEventReconciler sender, EventSequenceAdvancedAsyncEventArgs e);

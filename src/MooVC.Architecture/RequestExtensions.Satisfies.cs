@@ -15,15 +15,10 @@ public static partial class RequestExtensions
         where TRequest : Request
         where TAggregate : AggregateRoot
     {
-        request.Satisfies(
-            aggregate.ToReference(),
-            invariants);
+        request.Satisfies(aggregate.ToReference(), invariants);
     }
 
-    public static void Satisfies<T>(
-        this T request,
-        Reference aggregate,
-        params (Func<T, bool> IsSatisfied, string Explaination)[] invariants)
+    public static void Satisfies<T>(this T request, Reference aggregate, params (Func<T, bool> IsSatisfied, string Explaination)[] invariants)
         where T : Request
     {
         request.Satisfies(

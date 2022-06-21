@@ -2,6 +2,4 @@
 
 using System.Threading.Tasks;
 
-public delegate Task AggregateConflictDetectedAsyncEventHandler(
-    IAggregateReconciler sender,
-    AggregateConflictDetectedAsyncEventArgs e);
+public delegate Task AggregateConflictDetectedAsyncEventHandler(IAggregateReconciler sender, AggregateConflictDetectedAsyncEventArgs e);

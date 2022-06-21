@@ -14,17 +14,10 @@ public static partial class ReferenceExtensions
         CancellationToken? cancellationToken = default,
         TimeSpan? timeout = default)
     {
-        _ = ArgumentNotNull(
-            reference,
-            nameof(reference),
-            ReferenceExtensionsCoordinateAsyncReferenceRequired);
+        _ = ArgumentNotNull(reference, nameof(reference), ReferenceExtensionsCoordinateAsyncReferenceRequired);
 
         await reference
             .Type
-            .CoordinateAsync(
-                reference.Id,
-                operation,
-                cancellationToken: cancellationToken,
-                timeout: timeout);
+            .CoordinateAsync(reference.Id, operation, cancellationToken: cancellationToken, timeout: timeout);
     }
 }

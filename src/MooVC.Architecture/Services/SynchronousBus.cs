@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 public abstract class SynchronousBus
     : Bus
 {
-    protected override Task PerformInvokeAsync(
-        Message message,
-        CancellationToken? cancellationToken = default)
+    protected override Task PerformInvokeAsync(Message message, CancellationToken? cancellationToken = default)
     {
         PerformInvoke(message);
 

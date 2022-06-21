@@ -26,35 +26,18 @@ public sealed class DefaultSnapshotProvider<TSequencedEvents>
         Func<Func<Type, IAggregateReconciliationProxy?>> proxies,
         ushort numberToRead = DefaultEventReconciler<TSequencedEvents>.DefaultNumberToRead)
     {
-        this.eventStore = ArgumentNotNull(
-            eventStore,
-            nameof(eventStore),
-            DefaultSnapshotProviderEventStoreRequired);
-
-        this.factory = ArgumentNotNull(
-            factory,
-            nameof(factory),
-            DefaultSnapshotProviderFactoryRequired);
-
-        this.proxies = ArgumentNotNull(
-            proxies,
-            nameof(proxies),
-            DefaultSnapshotProviderProxiesRequired);
-
+        this.eventStore = ArgumentNotNull(eventStore, nameof(eventStore), DefaultSnapshotProviderEventStoreRequired);
+        this.factory = ArgumentNotNull(factory, nameof(factory), DefaultSnapshotProviderFactoryRequired);
+        this.proxies = ArgumentNotNull(proxies, nameof(proxies), DefaultSnapshotProviderProxiesRequired);
         this.numberToRead = numberToRead;
     }
 
-    public async Task<ISnapshot?> GenerateAsync(
-        CancellationToken? cancellationToken = default,
-        ulong? target = default)
+    public async Task<ISnapshot?> GenerateAsync(CancellationToken? cancellationToken = default, ulong? target = default)
     {
-        IEventReconciler reconciler = CreateEventReconciler(
-            out Func<Task<IEnumerable<EventCentricAggregateRoot>>> aggregates);
+        IEventReconciler reconciler = CreateEventReconciler(out Func<Task<IEnumerable<EventCentricAggregateRoot>>> aggregates);
 
         ulong? current = await reconciler
-            .ReconcileAsync(
-                cancellationToken: cancellationToken,
-                target: target)
+            .ReconcileAsync(cancellationToken: cancellationToken, target: target)
             .ConfigureAwait(false);
 
         if (current.HasValue)
@@ -70,8 +53,7 @@ public sealed class DefaultSnapshotProvider<TSequencedEvents>
         return default;
     }
 
-    private static async Task<IEnumerable<EventCentricAggregateRoot>> RetrieveAllAggregatesAsync(
-        IEnumerable<IAggregateReconciliationProxy> proxies)
+    private static async Task<IEnumerable<EventCentricAggregateRoot>> RetrieveAllAggregatesAsync(IEnumerable<IAggregateReconciliationProxy> proxies)
     {
         IEnumerable<Task<IEnumerable<EventCentricAggregateRoot>>>? aggregates = proxies
             .Select(async proxy => await proxy.GetAllAsync());
@@ -105,9 +87,6 @@ public sealed class DefaultSnapshotProvider<TSequencedEvents>
 
         aggregates = () => RetrieveAllAggregatesAsync(proxies.Values);
 
-        return new DefaultEventReconciler<TSequencedEvents>(
-            eventStore,
-            aggregateReconciler,
-            numberToRead: numberToRead);
+        return new DefaultEventReconciler<TSequencedEvents>(eventStore, aggregateReconciler, numberToRead: numberToRead);
     }
 }

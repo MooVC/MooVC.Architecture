@@ -14,16 +14,10 @@ public static partial class ObjectExtensions
         CancellationToken? cancellationToken = default,
         TimeSpan? timeout = default)
     {
-        _ = ArgumentNotNull(
-            target,
-            nameof(target),
-            ObjectExtensionsCoordinateAsyncObjectRequired);
+        _ = ArgumentNotNull(target, nameof(target), ObjectExtensionsCoordinateAsyncObjectRequired);
 
         await target
             .GetType()
-            .CoordinateAsync(
-                operation,
-                cancellationToken: cancellationToken,
-                timeout: timeout);
+            .CoordinateAsync(operation, cancellationToken: cancellationToken, timeout: timeout);
     }
 }

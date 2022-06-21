@@ -9,9 +9,7 @@ public sealed class AggregateSavedAsyncEventArgs<TAggregate>
     : AggregateAsyncEventArgs<TAggregate>
     where TAggregate : AggregateRoot
 {
-    public AggregateSavedAsyncEventArgs(
-        TAggregate aggregate,
-        CancellationToken? cancellationToken = default)
+    public AggregateSavedAsyncEventArgs(TAggregate aggregate, CancellationToken? cancellationToken = default)
         : base(aggregate, cancellationToken: cancellationToken)
     {
     }

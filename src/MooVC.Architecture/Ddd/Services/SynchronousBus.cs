@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 public abstract class SynchronousBus
     : Bus
 {
-    protected override Task PerformPublishAsync(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    protected override Task PerformPublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
         PerformPublish(events);
 

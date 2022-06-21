@@ -8,16 +8,12 @@ using System.Threading;
 public sealed class MessageInvokedAsyncEventArgs
     : MessageAsyncEventArgs
 {
-    public MessageInvokedAsyncEventArgs(
-        Message message,
-        CancellationToken? cancellationToken = default)
+    public MessageInvokedAsyncEventArgs(Message message, CancellationToken? cancellationToken = default)
         : base(message, cancellationToken: cancellationToken)
     {
     }
 
-    private MessageInvokedAsyncEventArgs(
-        SerializationInfo info,
-        StreamingContext context)
+    private MessageInvokedAsyncEventArgs(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

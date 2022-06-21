@@ -7,40 +7,31 @@ using System.Threading.Tasks;
 public abstract class SynchronousAggregateReconciliationProxy
     : IAggregateReconciliationProxy
 {
-    public virtual Task<IEnumerable<EventCentricAggregateRoot>> GetAllAsync(
-        CancellationToken? cancellationToken = default)
+    public virtual Task<IEnumerable<EventCentricAggregateRoot>> GetAllAsync(CancellationToken? cancellationToken = default)
     {
         return Task.FromResult(PerformGetAll());
     }
 
-    public virtual Task<EventCentricAggregateRoot?> GetAsync(
-        Reference aggregate,
-        CancellationToken? cancellationToken = default)
+    public virtual Task<EventCentricAggregateRoot?> GetAsync(Reference aggregate, CancellationToken? cancellationToken = default)
     {
         return Task.FromResult(PerformGet(aggregate));
     }
 
-    public virtual Task OverwriteAsync(
-        EventCentricAggregateRoot aggregate,
-        CancellationToken? cancellationToken = default)
+    public virtual Task OverwriteAsync(EventCentricAggregateRoot aggregate, CancellationToken? cancellationToken = default)
     {
         PerformOverwrite(aggregate);
 
         return Task.CompletedTask;
     }
 
-    public virtual Task PurgeAsync(
-        Reference aggregate,
-        CancellationToken? cancellationToken = default)
+    public virtual Task PurgeAsync(Reference aggregate, CancellationToken? cancellationToken = default)
     {
         PerformPurge(aggregate);
 
         return Task.CompletedTask;
     }
 
-    public virtual Task SaveAsync(
-        EventCentricAggregateRoot aggregate,
-        CancellationToken? cancellationToken = default)
+    public virtual Task SaveAsync(EventCentricAggregateRoot aggregate, CancellationToken? cancellationToken = default)
     {
         PerformSave(aggregate);
 

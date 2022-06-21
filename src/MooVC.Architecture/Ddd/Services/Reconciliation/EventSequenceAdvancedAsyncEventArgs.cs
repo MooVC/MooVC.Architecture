@@ -9,9 +9,7 @@ public sealed class EventSequenceAdvancedAsyncEventArgs
     : AsyncEventArgs,
       ISerializable
 {
-    internal EventSequenceAdvancedAsyncEventArgs(
-        ulong sequence,
-        CancellationToken? cancellationToken = default)
+    internal EventSequenceAdvancedAsyncEventArgs(ulong sequence, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
         Sequence = sequence;

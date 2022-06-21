@@ -15,22 +15,15 @@ public abstract class CoordinatedGenerateHandler<TAggregate, TCommand>
 {
     private readonly IRepository<TAggregate> repository;
 
-    protected CoordinatedGenerateHandler(
-        IRepository<TAggregate> repository,
-        TimeSpan? timeout = default)
+    protected CoordinatedGenerateHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
         : base(timeout: timeout)
     {
-        this.repository = ArgumentNotNull(
-            repository,
-            nameof(repository),
-            CoordinatedGenerateHandlerRepositoryRequired);
+        this.repository = ArgumentNotNull(repository, nameof(repository), CoordinatedGenerateHandlerRepositoryRequired);
     }
 
     protected abstract TAggregate PerformCoordinatedGenerate(TCommand command);
 
-    protected override async Task PerformCoordinatedExecuteAsync(
-        TCommand command,
-        CancellationToken cancellationToken)
+    protected override async Task PerformCoordinatedExecuteAsync(TCommand command, CancellationToken cancellationToken)
     {
         TAggregate aggregate = PerformCoordinatedGenerate(command);
 
@@ -42,10 +35,7 @@ public abstract class CoordinatedGenerateHandler<TAggregate, TCommand>
             .ConfigureAwait(false);
     }
 
-    protected virtual Task PerformSupplementalActivitiesAsync(
-        TAggregate aggregate,
-        TCommand context,
-        CancellationToken cancellationToken)
+    protected virtual Task PerformSupplementalActivitiesAsync(TAggregate aggregate, TCommand context, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }

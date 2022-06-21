@@ -11,8 +11,5 @@ public interface IEventReconciler
 
     public event EventSequenceAdvancedAsyncEventHandler EventSequenceAdvanced;
 
-    Task<ulong?> ReconcileAsync(
-        CancellationToken? cancellationToken = default,
-        ulong? previous = default,
-        ulong? target = default);
+    Task<ulong?> ReconcileAsync(CancellationToken? cancellationToken = default, ulong? previous = default, ulong? target = default);
 }

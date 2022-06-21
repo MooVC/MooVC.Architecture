@@ -2,6 +2,4 @@
 
 using System.Threading.Tasks;
 
-public delegate Task UnsupportedAggregateTypeDetectedAsyncEventHandler(
-    object sender,
-    UnsupportedAggregateTypeDetectedAsyncEventArgs e);
+public delegate Task UnsupportedAggregateTypeDetectedAsyncEventHandler(object sender, UnsupportedAggregateTypeDetectedAsyncEventArgs e);

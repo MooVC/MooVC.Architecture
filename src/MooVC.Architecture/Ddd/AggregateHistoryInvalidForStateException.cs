@@ -14,10 +14,7 @@ using static MooVC.Architecture.Ddd.Resources;
 public sealed class AggregateHistoryInvalidForStateException
     : ArgumentException
 {
-    internal AggregateHistoryInvalidForStateException(
-        AggregateRoot aggregate,
-        IEnumerable<DomainEvent> events,
-        SignedVersion startingVersion)
+    internal AggregateHistoryInvalidForStateException(AggregateRoot aggregate, IEnumerable<DomainEvent> events, SignedVersion startingVersion)
         : this(Create(aggregate), events, startingVersion)
     {
     }
@@ -26,12 +23,7 @@ public sealed class AggregateHistoryInvalidForStateException
         Reference aggregate,
         IEnumerable<DomainEvent> events,
         SignedVersion startingVersion)
-        : base(Format(
-            AggregateHistoryInvalidForStateExceptionMessage,
-            aggregate.Id,
-            aggregate.Version,
-            aggregate.Type.Name,
-            startingVersion))
+        : base(Format(AggregateHistoryInvalidForStateExceptionMessage, aggregate.Id, aggregate.Version, aggregate.Type.Name, startingVersion))
     {
         Aggregate = aggregate;
         Events = events.Snapshot();

@@ -7,21 +7,13 @@ using static MooVC.Architecture.Ddd.Resources;
 
 public static partial class Ensure
 {
-    public static T ReferenceIsNotEmpty<T>(
-        [NotNull] T? reference,
-        string argumentName)
+    public static T ReferenceIsNotEmpty<T>([NotNull] T? reference, string argumentName)
         where T : Reference
     {
-        return ReferenceIsNotEmpty(
-            reference,
-            argumentName,
-            Format(EnsureReferenceIsNotEmptyMessage, reference?.Type.Name));
+        return ReferenceIsNotEmpty(reference, argumentName, Format(EnsureReferenceIsNotEmptyMessage, reference?.Type.Name));
     }
 
-    public static T ReferenceIsNotEmpty<T>(
-        [NotNull] T? reference,
-        string argumentName,
-        string message)
+    public static T ReferenceIsNotEmpty<T>([NotNull] T? reference, string argumentName, string message)
         where T : Reference
     {
         if (reference is null || reference.IsEmpty)

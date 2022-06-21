@@ -14,17 +14,10 @@ public static partial class MessageExtensions
         CancellationToken? cancellationToken = default,
         TimeSpan? timeout = default)
     {
-        _ = ArgumentNotNull(
-            message,
-            nameof(message),
-            MessageExtensionsCoordinateAsyncMessageRequired);
+        _ = ArgumentNotNull(message, nameof(message), MessageExtensionsCoordinateAsyncMessageRequired);
 
         await message
             .GetType()
-            .CoordinateAsync(
-                message.Id,
-                operation,
-                cancellationToken: cancellationToken,
-                timeout: timeout);
+            .CoordinateAsync(message.Id, operation, cancellationToken: cancellationToken, timeout: timeout);
     }
 }

@@ -17,11 +17,7 @@ public sealed class AggregateHasUncommittedChangesException
     }
 
     internal AggregateHasUncommittedChangesException(Reference aggregate)
-        : base(Format(
-            AggregateHasUncommittedChangesExceptionMessage,
-            aggregate.Id,
-            aggregate.Version,
-            aggregate.Type.Name))
+        : base(Format(AggregateHasUncommittedChangesExceptionMessage, aggregate.Id, aggregate.Version, aggregate.Type.Name))
     {
         Aggregate = aggregate;
     }

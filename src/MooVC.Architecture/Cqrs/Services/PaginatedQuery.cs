@@ -13,19 +13,13 @@ public abstract class PaginatedQuery
 {
     protected PaginatedQuery(Paging paging)
     {
-        Paging = ArgumentNotNull(
-            paging,
-            nameof(paging),
-            PaginatedQueryPagingRequired);
+        Paging = ArgumentNotNull(paging, nameof(paging), PaginatedQueryPagingRequired);
     }
 
     protected PaginatedQuery(Message context, Paging paging)
         : base(context)
     {
-        Paging = ArgumentNotNull(
-            paging,
-            nameof(paging),
-            PaginatedQueryPagingRequired);
+        Paging = ArgumentNotNull(paging, nameof(paging), PaginatedQueryPagingRequired);
     }
 
     protected PaginatedQuery(SerializationInfo info, StreamingContext context)

@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using static MooVC.Architecture.Ddd.Specifications.Resources;
 using static MooVC.Ensure;
 
 internal sealed class NotSpecification<T>
@@ -12,7 +13,7 @@ internal sealed class NotSpecification<T>
 
     public NotSpecification(Specification<T> specification)
     {
-        this.specification = ArgumentNotNull(specification, nameof(specification));
+        this.specification = ArgumentNotNull(specification, nameof(specification), NotSpecificationSpecificationRequired);
     }
 
     public override Expression<Func<T, bool>> ToExpression()

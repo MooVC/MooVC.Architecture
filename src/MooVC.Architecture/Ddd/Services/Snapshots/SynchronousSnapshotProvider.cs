@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 public abstract class SynchronousSnapshotProvider
     : ISnapshotProvider
 {
-    public virtual Task<ISnapshot?> GenerateAsync(
-        CancellationToken? cancellationToken = default,
-        ulong? target = default)
+    public virtual Task<ISnapshot?> GenerateAsync(CancellationToken? cancellationToken = default, ulong? target = default)
     {
         return Task.FromResult(PerformGenerate(target: target));
     }

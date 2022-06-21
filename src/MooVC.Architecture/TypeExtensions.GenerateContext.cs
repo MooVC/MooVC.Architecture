@@ -8,10 +8,7 @@ public static partial class TypeExtensions
 {
     private static string GenerateContext(this Type type)
     {
-        _ = ArgumentNotNull(
-            type,
-            nameof(type),
-            TypeExtensionsGenerateContextTypeRequired);
+        _ = ArgumentNotNull(type, nameof(type), TypeExtensionsGenerateContextTypeRequired);
 
         return type.FullName ?? type.ToString();
     }

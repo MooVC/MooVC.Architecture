@@ -14,10 +14,7 @@ public abstract partial class AggregateRoot
     protected AggregateRoot(Guid id)
         : base(id)
     {
-        _ = ArgumentNotEmpty(
-            id,
-            nameof(id),
-            AggregateRootIdRequired);
+        _ = ArgumentNotEmpty(id, nameof(id), AggregateRootIdRequired);
 
         State = new AggregateState(new SignedVersion(), SignedVersion.Empty);
     }
@@ -62,9 +59,7 @@ public abstract partial class AggregateRoot
 
     public override bool Equals(object? other)
     {
-        return base.Equals(other) &&
-            other is AggregateRoot aggregate
-            && Version.Equals(aggregate.Version);
+        return base.Equals(other) && other is AggregateRoot aggregate && Version.Equals(aggregate.Version);
     }
 
     public override int GetHashCode()

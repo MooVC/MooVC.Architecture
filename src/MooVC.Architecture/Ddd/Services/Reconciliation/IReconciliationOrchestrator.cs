@@ -9,7 +9,5 @@ public interface IReconciliationOrchestrator
 
     event SnapshotRestorationCompletedAsyncEventHandler SnapshotRestorationCompleted;
 
-    Task ReconcileAsync(
-        CancellationToken? cancellationToken = default,
-        IEventSequence? target = default);
+    Task ReconcileAsync(CancellationToken? cancellationToken = default, IEventSequence? target = default);
 }

@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using static MooVC.Architecture.Ddd.Specifications.Resources;
 using static MooVC.Ensure;
 
 internal sealed class OrSpecification<T>
@@ -13,8 +14,8 @@ internal sealed class OrSpecification<T>
 
     public OrSpecification(Specification<T> left, Specification<T> right)
     {
-        this.left = ArgumentNotNull(left, nameof(left));
-        this.right = ArgumentNotNull(right, nameof(right));
+        this.left = ArgumentNotNull(left, nameof(left), OrSpecificationLeftRequired);
+        this.right = ArgumentNotNull(right, nameof(right), OrSpecificationRightRequired);
     }
 
     public override Expression<Func<T, bool>> ToExpression()

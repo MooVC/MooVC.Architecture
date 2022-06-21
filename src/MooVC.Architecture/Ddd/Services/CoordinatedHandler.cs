@@ -19,9 +19,7 @@ public abstract class CoordinatedHandler<TAggregate, TCommand>
         this.timeout = timeout;
     }
 
-    public virtual Task ExecuteAsync(
-        TCommand command,
-        CancellationToken cancellationToken)
+    public virtual Task ExecuteAsync(TCommand command, CancellationToken cancellationToken)
     {
         return typeof(TAggregate)
             .CoordinateAsync(
@@ -30,7 +28,5 @@ public abstract class CoordinatedHandler<TAggregate, TCommand>
                 timeout: timeout);
     }
 
-    protected abstract Task PerformCoordinatedExecuteAsync(
-        TCommand command,
-        CancellationToken cancellationToken);
+    protected abstract Task PerformCoordinatedExecuteAsync(TCommand command, CancellationToken cancellationToken);
 }

@@ -29,9 +29,6 @@ public static partial class ReferenceExtensions
     {
         return references
             .Where(reference => !(ignoreEmpty && reference.IsEmpty))
-            .ProcessAllAsync(reference => reference.RetrieveAsync(
-                context,
-                repository,
-                cancellationToken: cancellationToken));
+            .ProcessAllAsync(reference => reference.RetrieveAsync(context, repository, cancellationToken: cancellationToken));
     }
 }

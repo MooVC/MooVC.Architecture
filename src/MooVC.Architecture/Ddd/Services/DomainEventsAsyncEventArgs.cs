@@ -12,9 +12,7 @@ public abstract class DomainEventsAsyncEventArgs
     : AsyncEventArgs,
       ISerializable
 {
-    protected DomainEventsAsyncEventArgs(
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    protected DomainEventsAsyncEventArgs(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
         Events = events.Snapshot();

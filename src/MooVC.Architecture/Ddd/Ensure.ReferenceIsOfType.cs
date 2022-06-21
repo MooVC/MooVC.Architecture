@@ -7,9 +7,7 @@ using static MooVC.Architecture.Ddd.Resources;
 
 public static partial class Ensure
 {
-    public static Reference<TAggregate> ReferenceIsOfType<TAggregate>(
-        [NotNull] Reference? reference,
-        string argumentName)
+    public static Reference<TAggregate> ReferenceIsOfType<TAggregate>([NotNull] Reference? reference, string argumentName)
         where TAggregate : AggregateRoot
     {
         return ReferenceIsOfType<TAggregate>(
@@ -18,10 +16,7 @@ public static partial class Ensure
             Format(EnsureReferenceIsOfTypeMessage, reference?.Type.Name, typeof(TAggregate).Name));
     }
 
-    public static Reference<TAggregate> ReferenceIsOfType<TAggregate>(
-        [NotNull] Reference? reference,
-        string argumentName,
-        string message)
+    public static Reference<TAggregate> ReferenceIsOfType<TAggregate>([NotNull] Reference? reference, string argumentName, string message)
         where TAggregate : AggregateRoot
     {
         if (reference is Reference<TAggregate> response)

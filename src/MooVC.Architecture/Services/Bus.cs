@@ -17,9 +17,7 @@ public abstract class Bus
 
     public event MessageInvokingAsyncEventHandler? Invoking;
 
-    public virtual async Task InvokeAsync(
-        Message message,
-        CancellationToken? cancellationToken = default)
+    public virtual async Task InvokeAsync(Message message, CancellationToken? cancellationToken = default)
     {
         _ = ArgumentNotNull(message, nameof(message), BusMessageRequired);
 
@@ -33,9 +31,7 @@ public abstract class Bus
             .ConfigureAwait(false);
     }
 
-    protected abstract Task PerformInvokeAsync(
-        Message message,
-        CancellationToken? cancellationToken = default);
+    protected abstract Task PerformInvokeAsync(Message message, CancellationToken? cancellationToken = default);
 
     protected virtual Task OnDiagnosticsEmittedAsync(
         Level level,
@@ -52,18 +48,14 @@ public abstract class Bus
                 message: message));
     }
 
-    protected virtual Task OnInvokingAsync(
-        Message message,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnInvokingAsync(Message message, CancellationToken? cancellationToken = default)
     {
         return Invoking.InvokeAsync(
             this,
             new MessageInvokingAsyncEventArgs(message, cancellationToken: cancellationToken));
     }
 
-    protected virtual Task OnInvokedAsync(
-        Message message,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnInvokedAsync(Message message, CancellationToken? cancellationToken = default)
     {
         return Invoked.PassiveInvokeAsync(
             this,

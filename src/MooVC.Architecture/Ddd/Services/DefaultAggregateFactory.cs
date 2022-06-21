@@ -1,38 +1,30 @@
-﻿namespace MooVC.Architecture.Ddd.Services
+﻿namespace MooVC.Architecture.Ddd.Services;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MooVC.Linq;
+
+public abstract class DefaultAggregateFactory
+    : IAggregateFactory
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MooVC.Linq;
+    public abstract Task<EventCentricAggregateRoot> CreateAsync(Reference aggregate, CancellationToken? cancellationToken = default);
 
-    public abstract class DefaultAggregateFactory
-        : IAggregateFactory
+    public async Task<EventCentricAggregateRoot> CreateAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
-        public abstract Task<EventCentricAggregateRoot> CreateAsync(
-            Reference aggregate,
-            CancellationToken? cancellationToken = default);
-
-        public async Task<EventCentricAggregateRoot> CreateAsync(
-            IEnumerable<DomainEvent> events,
-            CancellationToken? cancellationToken = default)
+        if (!events.SafeAny())
         {
-            if (!events.SafeAny())
-            {
-                throw new DomainEventsMissingException();
-            }
-
-            Reference aggregate = events.First().Aggregate;
-
-            EventCentricAggregateRoot instance = await
-                CreateAsync(
-                    aggregate,
-                    cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
-
-            instance.LoadFromHistory(events);
-
-            return instance;
+            throw new DomainEventsMissingException();
         }
+
+        Reference aggregate = events.First().Aggregate;
+
+        EventCentricAggregateRoot instance = await CreateAsync(aggregate, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        instance.LoadFromHistory(events);
+
+        return instance;
     }
 }

@@ -117,7 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AndSpecificationLeftRequired" xml:space="preserve">
+    <value>The left specification must be provided.</value>
+  </data>
+  <data name="AndSpecificationRightRequired" xml:space="preserve">
+    <value>The right specification must be provided.</value>
+  </data>
   <data name="EnsureArgumentSatisfiesSpecificationRequired" xml:space="preserve">
     <value>The specification to be satisfied must be provided.</value>
+  </data>
+  <data name="NotSpecificationSpecificationRequired" xml:space="preserve">
+    <value>The specification to be negated must be provided.</value>
+  </data>
+  <data name="OrSpecificationLeftRequired" xml:space="preserve">
+    <value>The left specification must be provided.</value>
+  </data>
+  <data name="OrSpecificationRightRequired" xml:space="preserve">
+    <value>The right specification must be provided.</value>
   </data>
 </root>

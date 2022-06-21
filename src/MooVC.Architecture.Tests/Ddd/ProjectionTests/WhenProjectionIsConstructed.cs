@@ -1,61 +1,60 @@
-﻿namespace MooVC.Architecture.Ddd.ProjectionTests
+﻿namespace MooVC.Architecture.Ddd.ProjectionTests;
+
+using System;
+using Xunit;
+
+public sealed class WhenProjectionIsConstructed
 {
-    using System;
-    using Xunit;
-
-    public sealed class WhenProjectionIsConstructed
+    [Fact]
+    public void GivenAnAggregateThenAnInstanceIsReturnedWithTheAggregateReferenceSet()
     {
-        [Fact]
-        public void GivenAnAggregateThenAnInstanceIsReturnedWithTheAggregateReferenceSet()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var instance = new SerializableProjection<SerializableAggregateRoot>(aggregate);
-            var expected = aggregate.ToReference();
+        var aggregate = new SerializableAggregateRoot();
+        var instance = new SerializableProjection<SerializableAggregateRoot>(aggregate);
+        var expected = aggregate.ToReference();
 
-            Assert.Equal(expected, instance.Aggregate);
-        }
+        Assert.Equal(expected, instance.Aggregate);
+    }
 
-        [Fact]
-        public void GivenAnAggregateReferenceThenAnInstanceIsReturnedWithTheAggregateReferenceSet()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var expected = aggregate.ToReference();
-            var instance = new SerializableProjection<SerializableAggregateRoot>(expected);
+    [Fact]
+    public void GivenAnAggregateReferenceThenAnInstanceIsReturnedWithTheAggregateReferenceSet()
+    {
+        var aggregate = new SerializableAggregateRoot();
+        var expected = aggregate.ToReference();
+        var instance = new SerializableProjection<SerializableAggregateRoot>(expected);
 
-            Assert.Equal(expected, instance.Aggregate);
-        }
+        Assert.Equal(expected, instance.Aggregate);
+    }
 
-        [Fact]
-        public void GivenAnEmptyAggregateReferenceThenAnArgumentExceptionIsThrown()
-        {
-            Reference<SerializableAggregateRoot> aggregate = Reference<SerializableAggregateRoot>.Empty;
+    [Fact]
+    public void GivenAnEmptyAggregateReferenceThenAnArgumentExceptionIsThrown()
+    {
+        Reference<SerializableAggregateRoot> aggregate = Reference<SerializableAggregateRoot>.Empty;
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => new SerializableProjection<SerializableAggregateRoot>(aggregate));
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => new SerializableProjection<SerializableAggregateRoot>(aggregate));
 
-            Assert.Equal(nameof(aggregate), exception.ParamName);
-        }
+        Assert.Equal(nameof(aggregate), exception.ParamName);
+    }
 
-        [Fact]
-        public void GivenAnNullAggregateThenAnArgumentExceptionIsThrown()
-        {
-            SerializableAggregateRoot? aggregate = default;
+    [Fact]
+    public void GivenAnNullAggregateThenAnArgumentExceptionIsThrown()
+    {
+        SerializableAggregateRoot? aggregate = default;
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => new SerializableProjection<SerializableAggregateRoot>(aggregate!));
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => new SerializableProjection<SerializableAggregateRoot>(aggregate!));
 
-            Assert.Equal(nameof(aggregate), exception.ParamName);
-        }
+        Assert.Equal(nameof(aggregate), exception.ParamName);
+    }
 
-        [Fact]
-        public void GivenAnNullAggregateReferenceThenAnArgumentExceptionIsThrown()
-        {
-            Reference<SerializableAggregateRoot>? aggregate = default;
+    [Fact]
+    public void GivenAnNullAggregateReferenceThenAnArgumentExceptionIsThrown()
+    {
+        Reference<SerializableAggregateRoot>? aggregate = default;
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => new SerializableProjection<SerializableAggregateRoot>(aggregate!));
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => new SerializableProjection<SerializableAggregateRoot>(aggregate!));
 
-            Assert.Equal(nameof(aggregate), exception.ParamName);
-        }
+        Assert.Equal(nameof(aggregate), exception.ParamName);
     }
 }

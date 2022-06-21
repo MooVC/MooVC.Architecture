@@ -1,38 +1,37 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests;
+
+using System;
+using System.Threading.Tasks;
+using Xunit;
+
+public sealed class WhenPurgeAsyncIsCalled
 {
-    using System;
-    using System.Threading.Tasks;
-    using Xunit;
-
-    public sealed class WhenPurgeAsyncIsCalled
+    [Fact]
+    public async Task GivenAReferenceThenTheReferenceIsPropagatedAsync()
     {
-        [Fact]
-        public async Task GivenAReferenceThenTheReferenceIsPropagatedAsync()
+        bool wasInvoked = false;
+
+        var expected = new SerializableEventCentricAggregateRoot()
+            .ToReference();
+
+        var proxy = new TestableSynchronousAggregateReconciliationProxy(purge: actual =>
         {
-            bool wasInvoked = false;
+            wasInvoked = true;
 
-            var expected = new SerializableEventCentricAggregateRoot()
-                .ToReference();
+            Assert.Equal(expected, actual);
+        });
 
-            var proxy = new TestableSynchronousAggregateReconciliationProxy(purge: actual =>
-            {
-                wasInvoked = true;
+        await proxy.PurgeAsync(expected);
 
-                Assert.Equal(expected, actual);
-            });
+        Assert.True(wasInvoked);
+    }
 
-            await proxy.PurgeAsync(expected);
+    [Fact]
+    public async Task GivenAnExceptionThenTheExceptionIsThrownAsync()
+    {
+        var reconciler = new TestableSynchronousAggregateReconciliationProxy();
 
-            Assert.True(wasInvoked);
-        }
-
-        [Fact]
-        public async Task GivenAnExceptionThenTheExceptionIsThrownAsync()
-        {
-            var reconciler = new TestableSynchronousAggregateReconciliationProxy();
-
-            _ = await Assert.ThrowsAsync<NotImplementedException>(
-                () => reconciler.PurgeAsync(default!));
-        }
+        _ = await Assert.ThrowsAsync<NotImplementedException>(
+            () => reconciler.PurgeAsync(default!));
     }
 }

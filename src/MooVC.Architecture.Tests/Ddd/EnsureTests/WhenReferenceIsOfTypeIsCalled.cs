@@ -1,80 +1,79 @@
-namespace MooVC.Architecture.Ddd.EnsureTests
+namespace MooVC.Architecture.Ddd.EnsureTests;
+
+using System;
+using MooVC.Architecture.Ddd;
+using Xunit;
+using static MooVC.Architecture.Ddd.Ensure;
+
+public sealed class WhenReferenceIsOfTypeIsCalled
 {
-    using System;
-    using MooVC.Architecture.Ddd;
-    using Xunit;
-    using static MooVC.Architecture.Ddd.Ensure;
-
-    public sealed class WhenReferenceIsOfTypeIsCalled
+    [Fact]
+    public void GivenAMatchingReferenceThenNoExceptionIsThrown()
     {
-        [Fact]
-        public void GivenAMatchingReferenceThenNoExceptionIsThrown()
-        {
-            Reference reference = Reference<SerializableAggregateRoot>.Create(Guid.NewGuid());
+        Reference reference = Reference<SerializableAggregateRoot>.Create(Guid.NewGuid());
 
-            Reference<SerializableAggregateRoot> result = ReferenceIsOfType<SerializableAggregateRoot>(
-                reference,
-                nameof(reference));
+        Reference<SerializableAggregateRoot> result = ReferenceIsOfType<SerializableAggregateRoot>(
+            reference,
+            nameof(reference));
 
-            Assert.Same(reference, result);
-        }
+        Assert.Same(reference, result);
+    }
 
-        [Fact]
-        public void GivenAMatchingEmptyReferenceThenNoExceptionIsThrown()
-        {
-            Reference reference = Reference<SerializableAggregateRoot>.Empty;
+    [Fact]
+    public void GivenAMatchingEmptyReferenceThenNoExceptionIsThrown()
+    {
+        Reference reference = Reference<SerializableAggregateRoot>.Empty;
 
-            Reference<SerializableAggregateRoot> result = ReferenceIsOfType<SerializableAggregateRoot>(
-                reference,
-                nameof(reference));
+        Reference<SerializableAggregateRoot> result = ReferenceIsOfType<SerializableAggregateRoot>(
+            reference,
+            nameof(reference));
 
-            Assert.Same(reference, result);
-        }
+        Assert.Same(reference, result);
+    }
 
-        [Fact]
-        public void GivenAMismatchingReferenceThenAnArgumentExceptionIsThrown()
-        {
-            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Create(Guid.NewGuid());
+    [Fact]
+    public void GivenAMismatchingReferenceThenAnArgumentExceptionIsThrown()
+    {
+        Reference reference = Reference<SerializableEventCentricAggregateRoot>.Create(Guid.NewGuid());
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference)));
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference)));
 
-            Assert.Equal(nameof(reference), exception.ParamName);
-        }
+        Assert.Equal(nameof(reference), exception.ParamName);
+    }
 
-        [Fact]
-        public void GivenAMismatchingEmptyReferenceThenAnArgumentExceptionIsThrown()
-        {
-            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Empty;
+    [Fact]
+    public void GivenAMismatchingEmptyReferenceThenAnArgumentExceptionIsThrown()
+    {
+        Reference reference = Reference<SerializableEventCentricAggregateRoot>.Empty;
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference)));
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference)));
 
-            Assert.Equal(nameof(reference), exception.ParamName);
-        }
+        Assert.Equal(nameof(reference), exception.ParamName);
+    }
 
-        [Fact]
-        public void GivenAMismatchingReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
-        {
-            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Create(Guid.NewGuid());
-            string message = "Some sessage";
+    [Fact]
+    public void GivenAMismatchingReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
+    {
+        Reference reference = Reference<SerializableEventCentricAggregateRoot>.Create(Guid.NewGuid());
+        string message = "Some sessage";
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference), message));
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference), message));
 
-            Assert.StartsWith(message, exception.Message);
-        }
+        Assert.StartsWith(message, exception.Message);
+    }
 
-        [Fact]
-        public void GivenAMismatchingEmptyReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
-        {
-            Reference reference = Reference<SerializableEventCentricAggregateRoot>.Empty;
-            string message = "Some sessage";
+    [Fact]
+    public void GivenAMismatchingEmptyReferenceAndAMessageThenAnArgumentExceptionIsThrownWithTheMessageProvided()
+    {
+        Reference reference = Reference<SerializableEventCentricAggregateRoot>.Empty;
+        string message = "Some sessage";
 
-            ArgumentException exception = Assert.Throws<ArgumentException>(
-                () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference), message));
+        ArgumentException exception = Assert.Throws<ArgumentException>(
+            () => ReferenceIsOfType<SerializableAggregateRoot>(reference, nameof(reference), message));
 
-            Assert.StartsWith(message, exception.Message);
-        }
+        Assert.StartsWith(message, exception.Message);
     }
 }

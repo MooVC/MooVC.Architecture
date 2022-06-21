@@ -1,32 +1,31 @@
-﻿namespace MooVC.Architecture.Ddd
+﻿namespace MooVC.Architecture.Ddd;
+
+using System;
+using System.Collections.Generic;
+using MooVC.Architecture.MessageTests;
+
+internal static class SerializableEventCentricAggregateRootExtensions
 {
-    using System;
-    using System.Collections.Generic;
-    using MooVC.Architecture.MessageTests;
-
-    internal static class SerializableEventCentricAggregateRootExtensions
+    public static IEnumerable<DomainEvent> ApplyChanges(
+        this SerializableEventCentricAggregateRoot original,
+        SerializableMessage context,
+        bool commit = true,
+        int times = 3)
     {
-        public static IEnumerable<DomainEvent> ApplyChanges(
-            this SerializableEventCentricAggregateRoot original,
-            SerializableMessage context,
-            bool commit = true,
-            int times = 3)
+        var events = new List<DomainEvent>();
+
+        for (int index = 0; index < times; index++)
         {
-            var events = new List<DomainEvent>();
+            original.Set(new SetRequest(context, Guid.NewGuid()));
 
-            for (int index = 0; index < times; index++)
+            events.AddRange(original.GetUncommittedChanges());
+
+            if (commit)
             {
-                original.Set(new SetRequest(context, Guid.NewGuid()));
-
-                events.AddRange(original.GetUncommittedChanges());
-
-                if (commit)
-                {
-                    original.MarkChangesAsCommitted();
-                }
+                original.MarkChangesAsCommitted();
             }
-
-            return events;
         }
+
+        return events;
     }
 }

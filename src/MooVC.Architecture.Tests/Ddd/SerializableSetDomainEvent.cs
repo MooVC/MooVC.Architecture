@@ -1,35 +1,34 @@
-namespace MooVC.Architecture.Ddd
+namespace MooVC.Architecture.Ddd;
+
+using System;
+using System.Runtime.Serialization;
+using MooVC.Serialization;
+
+[Serializable]
+public sealed class SerializableSetDomainEvent
+    : DomainEvent<SerializableEventCentricAggregateRoot>
 {
-    using System;
-    using System.Runtime.Serialization;
-    using MooVC.Serialization;
-
-    [Serializable]
-    public sealed class SerializableSetDomainEvent
-        : DomainEvent<SerializableEventCentricAggregateRoot>
+    public SerializableSetDomainEvent(
+        Message context,
+        SerializableEventCentricAggregateRoot aggregate,
+        Guid value)
+        : base(context, aggregate)
     {
-        public SerializableSetDomainEvent(
-            Message context,
-            SerializableEventCentricAggregateRoot aggregate,
-            Guid value)
-            : base(context, aggregate)
-        {
-            Value = value;
-        }
+        Value = value;
+    }
 
-        private SerializableSetDomainEvent(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Value = info.TryGetValue<Guid>(nameof(Value));
-        }
+    private SerializableSetDomainEvent(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+        Value = info.TryGetValue<Guid>(nameof(Value));
+    }
 
-        public Guid Value { get; }
+    public Guid Value { get; }
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
 
-            _ = info.TryAddValue(nameof(Value), Value);
-        }
+        _ = info.TryAddValue(nameof(Value), Value);
     }
 }

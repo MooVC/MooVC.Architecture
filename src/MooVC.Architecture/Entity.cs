@@ -1,73 +1,72 @@
-﻿namespace MooVC.Architecture
+﻿namespace MooVC.Architecture;
+
+using System;
+using System.Runtime.Serialization;
+using MooVC.Serialization;
+
+[Serializable]
+public abstract class Entity<T>
+    : ISerializable,
+      IEquatable<Entity<T>>
+    where T : notnull
 {
-    using System;
-    using System.Runtime.Serialization;
-    using MooVC.Serialization;
-
-    [Serializable]
-    public abstract class Entity<T>
-        : ISerializable,
-          IEquatable<Entity<T>>
-        where T : notnull
+    protected Entity(T id)
     {
-        protected Entity(T id)
+        Id = id;
+    }
+
+    protected Entity(SerializationInfo info, StreamingContext context)
+    {
+        Id = info.GetValue<T>(nameof(Id));
+    }
+
+    public T Id { get; }
+
+    public static bool operator ==(Entity<T>? first, Entity<T>? second)
+    {
+        return EqualOperator(first, second);
+    }
+
+    public static bool operator !=(Entity<T>? first, Entity<T>? second)
+    {
+        return NotEqualOperator(first, second);
+    }
+
+    public override bool Equals(object? other)
+    {
+        if (other is Entity<T> entity)
         {
-            Id = id;
+            return Equals(entity);
         }
 
-        protected Entity(SerializationInfo info, StreamingContext context)
-        {
-            Id = info.GetValue<T>(nameof(Id));
-        }
+        return false;
+    }
 
-        public T Id { get; }
+    public virtual bool Equals(Entity<T>? other)
+    {
+        return other is { }
+            && Id.Equals(other.Id)
+            && GetType() == other.GetType();
+    }
 
-        public static bool operator ==(Entity<T>? first, Entity<T>? second)
-        {
-            return EqualOperator(first, second);
-        }
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 
-        public static bool operator !=(Entity<T>? first, Entity<T>? second)
-        {
-            return NotEqualOperator(first, second);
-        }
+    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue(nameof(Id), Id);
+    }
 
-        public override bool Equals(object? other)
-        {
-            if (other is Entity<T> entity)
-            {
-                return Equals(entity);
-            }
+    private static bool EqualOperator(Entity<T>? left, Entity<T>? right)
+    {
+        return !(left is null ^ right is null)
+            && (left is null || left.Equals(right));
+    }
 
-            return false;
-        }
-
-        public virtual bool Equals(Entity<T>? other)
-        {
-            return other is { }
-                && Id.Equals(other.Id)
-                && GetType() == other.GetType();
-        }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue(nameof(Id), Id);
-        }
-
-        private static bool EqualOperator(Entity<T>? left, Entity<T>? right)
-        {
-            return !(left is null ^ right is null)
-                && (left is null || left.Equals(right));
-        }
-
-        private static bool NotEqualOperator(Entity<T>? left, Entity<T>? right)
-        {
-            return !EqualOperator(left, right);
-        }
+    private static bool NotEqualOperator(Entity<T>? left, Entity<T>? right)
+    {
+        return !EqualOperator(left, right);
     }
 }

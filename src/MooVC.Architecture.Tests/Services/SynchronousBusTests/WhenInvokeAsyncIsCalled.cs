@@ -1,37 +1,36 @@
-﻿namespace MooVC.Architecture.Services.SynchronousBusTests
+﻿namespace MooVC.Architecture.Services.SynchronousBusTests;
+
+using System;
+using System.Threading.Tasks;
+using MooVC.Architecture.MessageTests;
+using Xunit;
+
+public sealed class WhenInvokeAsyncIsCalled
 {
-    using System;
-    using System.Threading.Tasks;
-    using MooVC.Architecture.MessageTests;
-    using Xunit;
-
-    public sealed class WhenInvokeAsyncIsCalled
+    [Fact]
+    public async Task GivenAMessageThenAResultIsReturnedAsync()
     {
-        [Fact]
-        public async Task GivenAMessageThenAResultIsReturnedAsync()
+        bool wasInvoked = false;
+        var expected = new SerializableMessage();
+
+        var handler = new TestableSynchronousBus(invoke: actual =>
         {
-            bool wasInvoked = false;
-            var expected = new SerializableMessage();
+            wasInvoked = true;
 
-            var handler = new TestableSynchronousBus(invoke: actual =>
-            {
-                wasInvoked = true;
+            Assert.Equal(expected, actual);
+        });
 
-                Assert.Equal(expected, actual);
-            });
+        await handler.InvokeAsync(expected);
 
-            await handler.InvokeAsync(expected);
+        Assert.True(wasInvoked);
+    }
 
-            Assert.True(wasInvoked);
-        }
+    [Fact]
+    public async Task GivenAMessageWhenAnExceptionOccursThenTheExceptionIsThrownAsync()
+    {
+        var handler = new TestableSynchronousBus();
 
-        [Fact]
-        public async Task GivenAMessageWhenAnExceptionOccursThenTheExceptionIsThrownAsync()
-        {
-            var handler = new TestableSynchronousBus();
-
-            _ = await Assert.ThrowsAsync<NotImplementedException>(
-                () => handler.InvokeAsync(new SerializableMessage()));
-        }
+        _ = await Assert.ThrowsAsync<NotImplementedException>(
+            () => handler.InvokeAsync(new SerializableMessage()));
     }
 }

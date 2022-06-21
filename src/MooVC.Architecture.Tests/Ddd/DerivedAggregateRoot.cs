@@ -1,13 +1,12 @@
-namespace MooVC.Architecture.Ddd
-{
-    using System;
+namespace MooVC.Architecture.Ddd;
 
-    internal sealed class DerivedAggregateRoot
-        : SerializableAggregateRoot
+using System;
+
+internal sealed class DerivedAggregateRoot
+    : SerializableAggregateRoot
+{
+    public DerivedAggregateRoot(Guid id)
+        : base(id)
     {
-        public DerivedAggregateRoot(Guid id)
-            : base(id)
-        {
-        }
     }
 }

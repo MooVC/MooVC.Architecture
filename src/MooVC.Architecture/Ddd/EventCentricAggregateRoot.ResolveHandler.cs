@@ -1,52 +1,51 @@
-﻿namespace MooVC.Architecture.Ddd
+﻿namespace MooVC.Architecture.Ddd;
+
+using System;
+using System.Collections.Concurrent;
+using System.Reflection;
+
+public partial class EventCentricAggregateRoot
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Reflection;
+    public const string HandlerName = "Handle";
+    private static readonly ConcurrentDictionary<Type, MethodInfo> handlers = new();
 
-    public partial class EventCentricAggregateRoot
+    protected virtual Action<TEvent>? ResolveHandler<TEvent>(DomainEvent @event)
+       where TEvent : DomainEvent
     {
-        public const string HandlerName = "Handle";
-        private static readonly ConcurrentDictionary<Type, MethodInfo> handlers = new();
+        MethodInfo? handler = LocateHandler(@event);
 
-        protected virtual Action<TEvent>? ResolveHandler<TEvent>(DomainEvent @event)
-           where TEvent : DomainEvent
+        if (handler is null)
         {
-            MethodInfo? handler = LocateHandler(@event);
+            return default;
+        }
 
-            if (handler is null)
+        return @event => _ = handler.Invoke(this, new object[] { @event });
+    }
+
+    private static MethodInfo? GenerateHandler(Type aggregateType, Type eventType)
+    {
+        return aggregateType.GetMethod(
+            HandlerName,
+            BindingFlags.NonPublic | BindingFlags.Instance,
+            default,
+            new[] { eventType },
+            default);
+    }
+
+    private static MethodInfo? LocateHandler(DomainEvent @event)
+    {
+        Type eventType = @event.GetType();
+
+        if (!handlers.TryGetValue(eventType, out MethodInfo? handler))
+        {
+            handler = GenerateHandler(@event.Aggregate.Type, eventType);
+
+            if (handler is { })
             {
-                return default;
+                _ = handlers.TryAdd(eventType, handler);
             }
-
-            return @event => _ = handler.Invoke(this, new object[] { @event });
         }
 
-        private static MethodInfo? GenerateHandler(Type aggregateType, Type eventType)
-        {
-            return aggregateType.GetMethod(
-                HandlerName,
-                BindingFlags.NonPublic | BindingFlags.Instance,
-                default,
-                new[] { eventType },
-                default);
-        }
-
-        private static MethodInfo? LocateHandler(DomainEvent @event)
-        {
-            Type eventType = @event.GetType();
-
-            if (!handlers.TryGetValue(eventType, out MethodInfo? handler))
-            {
-                handler = GenerateHandler(@event.Aggregate.Type, eventType);
-
-                if (handler is { })
-                {
-                    _ = handlers.TryAdd(eventType, handler);
-                }
-            }
-
-            return handler;
-        }
+        return handler;
     }
 }

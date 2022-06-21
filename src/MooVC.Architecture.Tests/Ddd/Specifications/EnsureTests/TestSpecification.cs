@@ -1,21 +1,20 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests
+﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests;
+
+using System;
+using System.Linq.Expressions;
+
+internal class TestSpecification<T>
+    : Specification<T>
 {
-    using System;
-    using System.Linq.Expressions;
+    private readonly bool isPassing;
 
-    internal class TestSpecification<T>
-        : Specification<T>
+    public TestSpecification(bool isPassing)
     {
-        private readonly bool isPassing;
+        this.isPassing = isPassing;
+    }
 
-        public TestSpecification(bool isPassing)
-        {
-            this.isPassing = isPassing;
-        }
-
-        public override Expression<Func<T, bool>> ToExpression()
-        {
-            return _ => isPassing;
-        }
+    public override Expression<Func<T, bool>> ToExpression()
+    {
+        return _ => isPassing;
     }
 }

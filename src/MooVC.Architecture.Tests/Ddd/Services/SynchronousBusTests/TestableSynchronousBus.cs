@@ -1,27 +1,26 @@
-﻿namespace MooVC.Architecture.Ddd.Services.SynchronousBusTests
+﻿namespace MooVC.Architecture.Ddd.Services.SynchronousBusTests;
+
+using System;
+using System.Collections.Generic;
+using MooVC.Architecture.Ddd;
+
+public sealed class TestableSynchronousBus
+    : SynchronousBus
 {
-    using System;
-    using System.Collections.Generic;
-    using MooVC.Architecture.Ddd;
+    private readonly Action<IEnumerable<DomainEvent>>? publish;
 
-    public sealed class TestableSynchronousBus
-        : SynchronousBus
+    public TestableSynchronousBus(Action<IEnumerable<DomainEvent>>? publish = default)
     {
-        private readonly Action<IEnumerable<DomainEvent>>? publish;
+        this.publish = publish;
+    }
 
-        public TestableSynchronousBus(Action<IEnumerable<DomainEvent>>? publish = default)
+    protected override void PerformPublish(IEnumerable<DomainEvent> events)
+    {
+        if (publish is null)
         {
-            this.publish = publish;
+            throw new NotImplementedException();
         }
 
-        protected override void PerformPublish(IEnumerable<DomainEvent> events)
-        {
-            if (publish is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            publish(events);
-        }
+        publish(events);
     }
 }

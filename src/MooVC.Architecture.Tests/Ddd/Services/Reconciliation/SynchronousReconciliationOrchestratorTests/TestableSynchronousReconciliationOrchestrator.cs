@@ -1,25 +1,24 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousReconciliationOrchestratorTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousReconciliationOrchestratorTests;
+
+using System;
+
+public sealed class TestableSynchronousReconciliationOrchestrator
+    : SynchronousReconciliationOrchestrator
 {
-    using System;
+    private readonly Action<IEventSequence?>? reconciler;
 
-    public sealed class TestableSynchronousReconciliationOrchestrator
-        : SynchronousReconciliationOrchestrator
+    public TestableSynchronousReconciliationOrchestrator(Action<IEventSequence?>? reconciler = default)
     {
-        private readonly Action<IEventSequence?>? reconciler;
+        this.reconciler = reconciler;
+    }
 
-        public TestableSynchronousReconciliationOrchestrator(Action<IEventSequence?>? reconciler = default)
+    protected override void PerformReconcile(IEventSequence? target = default)
+    {
+        if (reconciler is null)
         {
-            this.reconciler = reconciler;
+            throw new NotImplementedException();
         }
 
-        protected override void PerformReconcile(IEventSequence? target = default)
-        {
-            if (reconciler is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            reconciler(target);
-        }
+        reconciler(target);
     }
 }

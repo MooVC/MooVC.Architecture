@@ -1,17 +1,16 @@
-﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsMissingExceptionTests
+﻿namespace MooVC.Architecture.Ddd.Services.DomainEventsMissingExceptionTests;
+
+using MooVC.Architecture.Serialization;
+using Xunit;
+
+public sealed class WhenDomainEventsMissingExceptionIsSerialized
 {
-    using MooVC.Architecture.Serialization;
-    using Xunit;
-
-    public sealed class WhenDomainEventsMissingExceptionIsSerialized
+    [Fact]
+    public void GivenAnInstanceThenTheInstanceIsSerialized()
     {
-        [Fact]
-        public void GivenAnInstanceThenTheInstanceIsSerialized()
-        {
-            var original = new DomainEventsMissingException();
-            DomainEventsMissingException clone = original.Clone();
+        var original = new DomainEventsMissingException();
+        DomainEventsMissingException clone = original.Clone();
 
-            Assert.NotSame(clone, original);
-        }
+        Assert.NotSame(clone, original);
     }
 }

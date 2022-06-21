@@ -1,78 +1,77 @@
-﻿namespace MooVC.Architecture.Ddd.Serialization.SerializationInfoExtensionsTests
+﻿namespace MooVC.Architecture.Ddd.Serialization.SerializationInfoExtensionsTests;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using MooVC.Serialization;
+using Xunit;
+
+public sealed class WhenTryAddInternalReferenceIsCalled
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using MooVC.Serialization;
-    using Xunit;
+    private readonly SerializationInfo info;
 
-    public sealed class WhenTryAddInternalReferenceIsCalled
+    public WhenTryAddInternalReferenceIsCalled()
     {
-        private readonly SerializationInfo info;
+        info = new SerializationInfo(
+            typeof(WhenTryAddInternalReferenceIsCalled),
+            new FormatterConverter());
+    }
 
-        public WhenTryAddInternalReferenceIsCalled()
-        {
-            info = new SerializationInfo(
-                typeof(WhenTryAddInternalReferenceIsCalled),
-                new FormatterConverter());
-        }
+    [Fact]
+    public void GivenAnEmptyTypedReferenceThenTheValueIsIgnored()
+    {
+        Reference<SerializableAggregateRoot> reference = Reference<SerializableAggregateRoot>.Empty;
+        bool added = info.TryAddInternalReference(nameof(reference), reference);
+        IDictionary<string, object?> contents = info.ToDictionary();
 
-        [Fact]
-        public void GivenAnEmptyTypedReferenceThenTheValueIsIgnored()
-        {
-            Reference<SerializableAggregateRoot> reference = Reference<SerializableAggregateRoot>.Empty;
-            bool added = info.TryAddInternalReference(nameof(reference), reference);
-            IDictionary<string, object?> contents = info.ToDictionary();
+        Assert.False(added);
+        Assert.Empty(contents);
+    }
 
-            Assert.False(added);
-            Assert.Empty(contents);
-        }
+    [Fact]
+    public void GivenAnEmptyUnTypedReferenceThenTheValueIsAddedWithAPrefixedName()
+    {
+        const string ExpectedName = "_reference";
 
-        [Fact]
-        public void GivenAnEmptyUnTypedReferenceThenTheValueIsAddedWithAPrefixedName()
-        {
-            const string ExpectedName = "_reference";
+        Reference reference = Reference<SerializableAggregateRoot>.Empty;
+        bool added = info.TryAddInternalReference(nameof(reference), reference);
+        IDictionary<string, object?> contents = info.ToDictionary();
+        _ = contents.TryGetValue(ExpectedName, out object? actual);
 
-            Reference reference = Reference<SerializableAggregateRoot>.Empty;
-            bool added = info.TryAddInternalReference(nameof(reference), reference);
-            IDictionary<string, object?> contents = info.ToDictionary();
-            _ = contents.TryGetValue(ExpectedName, out object? actual);
+        Assert.True(added);
+        Assert.NotEmpty(contents);
+        Assert.Equal(reference, actual);
+    }
 
-            Assert.True(added);
-            Assert.NotEmpty(contents);
-            Assert.Equal(reference, actual);
-        }
+    [Fact]
+    public void GivenATypedReferenceThenTheValueIsAddedWithAPrefixedName()
+    {
+        const string ExpectedName = "_reference";
 
-        [Fact]
-        public void GivenATypedReferenceThenTheValueIsAddedWithAPrefixedName()
-        {
-            const string ExpectedName = "_reference";
+        var aggregate = new SerializableAggregateRoot();
+        var reference = aggregate.ToReference();
+        bool added = info.TryAddInternalReference(nameof(reference), reference);
+        IDictionary<string, object?> contents = info.ToDictionary();
+        _ = contents.TryGetValue(ExpectedName, out object? actual);
 
-            var aggregate = new SerializableAggregateRoot();
-            var reference = aggregate.ToReference();
-            bool added = info.TryAddInternalReference(nameof(reference), reference);
-            IDictionary<string, object?> contents = info.ToDictionary();
-            _ = contents.TryGetValue(ExpectedName, out object? actual);
+        Assert.True(added);
+        Assert.NotEmpty(contents);
+        Assert.Equal(reference, actual);
+    }
 
-            Assert.True(added);
-            Assert.NotEmpty(contents);
-            Assert.Equal(reference, actual);
-        }
+    [Fact]
+    public void GivenAUnTypedReferenceThenTheValueIsAddedWithAPrefixedName()
+    {
+        const string ExpectedName = "_reference";
 
-        [Fact]
-        public void GivenAUnTypedReferenceThenTheValueIsAddedWithAPrefixedName()
-        {
-            const string ExpectedName = "_reference";
+        var aggregate = new SerializableAggregateRoot();
+        Reference reference = aggregate.ToReference();
+        bool added = info.TryAddInternalReference(nameof(reference), reference);
+        IDictionary<string, object?> contents = info.ToDictionary();
+        _ = contents.TryGetValue(ExpectedName, out object? actual);
 
-            var aggregate = new SerializableAggregateRoot();
-            Reference reference = aggregate.ToReference();
-            bool added = info.TryAddInternalReference(nameof(reference), reference);
-            IDictionary<string, object?> contents = info.ToDictionary();
-            _ = contents.TryGetValue(ExpectedName, out object? actual);
-
-            Assert.True(added);
-            Assert.NotEmpty(contents);
-            Assert.Equal(reference, actual);
-        }
+        Assert.True(added);
+        Assert.NotEmpty(contents);
+        Assert.Equal(reference, actual);
     }
 }

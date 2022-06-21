@@ -1,41 +1,40 @@
-﻿namespace MooVC.Architecture.Ddd.SignedVersionTests
+﻿namespace MooVC.Architecture.Ddd.SignedVersionTests;
+
+using Xunit;
+
+public sealed class WhenNextIsCalled
 {
-    using Xunit;
+    private readonly SerializableAggregateRoot aggregate;
 
-    public sealed class WhenNextIsCalled
+    public WhenNextIsCalled()
     {
-        private readonly SerializableAggregateRoot aggregate;
+        aggregate = new SerializableAggregateRoot();
+    }
 
-        public WhenNextIsCalled()
-        {
-            aggregate = new SerializableAggregateRoot();
-        }
+    [Fact]
+    public void GivenAVersionThenTheNextVersionIsReturned()
+    {
+        SignedVersion version = aggregate.Version;
+        SignedVersion next = version.Next();
 
-        [Fact]
-        public void GivenAVersionThenTheNextVersionIsReturned()
-        {
-            SignedVersion version = aggregate.Version;
-            SignedVersion next = version.Next();
+        Assert.True(next.IsNext(version));
+    }
 
-            Assert.True(next.IsNext(version));
-        }
+    [Fact]
+    public void GivenAVersionThenTheHeaderOfTheNextVersionIsTheFooterOfThePreviousVersion()
+    {
+        SignedVersion version = aggregate.Version;
+        SignedVersion next = version.Next();
 
-        [Fact]
-        public void GivenAVersionThenTheHeaderOfTheNextVersionIsTheFooterOfThePreviousVersion()
-        {
-            SignedVersion version = aggregate.Version;
-            SignedVersion next = version.Next();
+        Assert.Equal(version.Footer, next.Header);
+    }
 
-            Assert.Equal(version.Footer, next.Header);
-        }
+    [Fact]
+    public void GivenAVersionThenTheHeaderOfTheNextVersionNumberIsOneHigherThanThePreviousVersion()
+    {
+        SignedVersion version = aggregate.Version;
+        SignedVersion next = version.Next();
 
-        [Fact]
-        public void GivenAVersionThenTheHeaderOfTheNextVersionNumberIsOneHigherThanThePreviousVersion()
-        {
-            SignedVersion version = aggregate.Version;
-            SignedVersion next = version.Next();
-
-            Assert.True(next.Number - version.Number == 1);
-        }
+        Assert.True(next.Number - version.Number == 1);
     }
 }

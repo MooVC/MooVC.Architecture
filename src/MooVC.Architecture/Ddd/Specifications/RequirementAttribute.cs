@@ -1,38 +1,37 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications
+﻿namespace MooVC.Architecture.Ddd.Specifications;
+
+using System;
+using System.Resources;
+using static System.String;
+
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class RequirementAttribute
+    : Attribute
 {
-    using System;
-    using System.Resources;
-    using static System.String;
+    private readonly Lazy<string> description;
 
-    [AttributeUsage(AttributeTargets.Class)]
-    public sealed class RequirementAttribute
-        : Attribute
+    public RequirementAttribute(string description)
     {
-        private readonly Lazy<string> description;
+        this.description = new(() => description);
+    }
 
-        public RequirementAttribute(string description)
+    public RequirementAttribute(string resourceName, Type resourceType)
+    {
+        description = new(() => GetDescription(resourceName, resourceType));
+    }
+
+    public string Description => description.Value;
+
+    private static string GetDescription(string resourceName, Type resourceType)
+    {
+        ResourceManager manager = new(resourceType);
+        string? description = manager.GetString(resourceName);
+
+        if (description is { })
         {
-            this.description = new(() => description);
+            return description;
         }
 
-        public RequirementAttribute(string resourceName, Type resourceType)
-        {
-            description = new(() => GetDescription(resourceName, resourceType));
-        }
-
-        public string Description => description.Value;
-
-        private static string GetDescription(string resourceName, Type resourceType)
-        {
-            ResourceManager manager = new(resourceType);
-            string? description = manager.GetString(resourceName);
-
-            if (description is { })
-            {
-                return description;
-            }
-
-            return Empty;
-        }
+        return Empty;
     }
 }

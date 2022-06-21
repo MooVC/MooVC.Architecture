@@ -1,26 +1,25 @@
-﻿namespace MooVC.Architecture.Services.SynchronousBusTests
+﻿namespace MooVC.Architecture.Services.SynchronousBusTests;
+
+using System;
+using MooVC.Architecture;
+
+public sealed class TestableSynchronousBus
+    : SynchronousBus
 {
-    using System;
-    using MooVC.Architecture;
+    private readonly Action<Message>? invoke;
 
-    public sealed class TestableSynchronousBus
-        : SynchronousBus
+    public TestableSynchronousBus(Action<Message>? invoke = default)
     {
-        private readonly Action<Message>? invoke;
+        this.invoke = invoke;
+    }
 
-        public TestableSynchronousBus(Action<Message>? invoke = default)
+    protected override void PerformInvoke(Message message)
+    {
+        if (invoke is null)
         {
-            this.invoke = invoke;
+            throw new NotImplementedException();
         }
 
-        protected override void PerformInvoke(Message message)
-        {
-            if (invoke is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            invoke(message);
-        }
+        invoke(message);
     }
 }

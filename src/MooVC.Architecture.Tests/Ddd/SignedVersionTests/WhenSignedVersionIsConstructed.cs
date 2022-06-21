@@ -1,36 +1,35 @@
-﻿namespace MooVC.Architecture.Ddd.SignedVersionTests
+﻿namespace MooVC.Architecture.Ddd.SignedVersionTests;
+
+using Xunit;
+
+public sealed class WhenSignedVersionIsConstructed
 {
-    using Xunit;
+    private readonly SerializableAggregateRoot aggregate;
 
-    public sealed class WhenSignedVersionIsConstructed
+    public WhenSignedVersionIsConstructed()
     {
-        private readonly SerializableAggregateRoot aggregate;
+        aggregate = new SerializableAggregateRoot();
+    }
 
-        public WhenSignedVersionIsConstructed()
-        {
-            aggregate = new SerializableAggregateRoot();
-        }
+    [Fact]
+    public void GivenANewVersionThenTheVersionIsFlaggedAsNew()
+    {
+        Assert.True(aggregate.Version.IsNew);
+    }
 
-        [Fact]
-        public void GivenANewVersionThenTheVersionIsFlaggedAsNew()
-        {
-            Assert.True(aggregate.Version.IsNew);
-        }
+    [Fact]
+    public void GivenANewVersionThenTheVersionNumberIsSetToOne()
+    {
+        const ulong ExpectedVersionNumber = 1;
 
-        [Fact]
-        public void GivenANewVersionThenTheVersionNumberIsSetToOne()
-        {
-            const ulong ExpectedVersionNumber = 1;
+        Assert.Equal(ExpectedVersionNumber, aggregate.Version.Number);
+    }
 
-            Assert.Equal(ExpectedVersionNumber, aggregate.Version.Number);
-        }
+    [Fact]
+    public void GivenANewVersionThenTheHeaderIsSetToAllZeros()
+    {
+        byte[] expectedHeader = new byte[8];
 
-        [Fact]
-        public void GivenANewVersionThenTheHeaderIsSetToAllZeros()
-        {
-            byte[] expectedHeader = new byte[8];
-
-            Assert.Equal(expectedHeader, aggregate.Version.Header);
-        }
+        Assert.Equal(expectedHeader, aggregate.Version.Header);
     }
 }

@@ -1,16 +1,15 @@
-﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
+﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests;
+
+using Xunit;
+
+public sealed class WhenClearIsCalled
+    : UnversionedReferenceDictionaryTests
 {
-    using Xunit;
-
-    public sealed class WhenClearIsCalled
-        : UnversionedReferenceDictionaryTests
+    [Fact]
+    public void GivenAPopulatedDictionaryThenTheContentsAreRemoved()
     {
-        [Fact]
-        public void GivenAPopulatedDictionaryThenTheContentsAreRemoved()
-        {
-            Dictionary.Clear();
+        Dictionary.Clear();
 
-            Assert.Empty(Dictionary);
-        }
+        Assert.Empty(Dictionary);
     }
 }

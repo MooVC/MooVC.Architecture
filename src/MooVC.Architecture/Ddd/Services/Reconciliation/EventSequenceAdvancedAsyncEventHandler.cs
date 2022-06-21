@@ -1,8 +1,5 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
-{
-    using System.Threading.Tasks;
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation;
 
-    public delegate Task EventSequenceAdvancedAsyncEventHandler(
-        IEventReconciler sender,
-        EventSequenceAdvancedAsyncEventArgs e);
-}
+using System.Threading.Tasks;
+
+public delegate Task EventSequenceAdvancedAsyncEventHandler(IEventReconciler sender, EventSequenceAdvancedAsyncEventArgs e);

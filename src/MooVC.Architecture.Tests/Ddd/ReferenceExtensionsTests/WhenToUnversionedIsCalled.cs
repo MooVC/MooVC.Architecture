@@ -1,67 +1,66 @@
-﻿namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests
+﻿namespace MooVC.Architecture.Ddd.ReferenceExtensionsTests;
+
+using Xunit;
+
+public sealed class WhenToUnversionedIsCalled
 {
-    using Xunit;
-
-    public sealed class WhenToUnversionedIsCalled
+    [Fact]
+    public void GivenAnUntypedVersionedReferenceThenAnUntypedUnversionedReferenceIsReturned()
     {
-        [Fact]
-        public void GivenAnUntypedVersionedReferenceThenAnUntypedUnversionedReferenceIsReturned()
-        {
-            var aggregate = new SerializableAggregateRoot();
+        var aggregate = new SerializableAggregateRoot();
 
-            var original = Reference.Create(
-                aggregate.Id,
-                aggregate.GetType(),
-                version: aggregate.Version);
+        var original = Reference.Create(
+            aggregate.Id,
+            aggregate.GetType(),
+            version: aggregate.Version);
 
-            Reference unversioned = original.ToUnversioned();
+        Reference unversioned = original.ToUnversioned();
 
-            Assert.Equal(original, unversioned);
-            Assert.NotSame(original, unversioned);
-            Assert.True(original.IsVersioned);
-            Assert.False(unversioned.IsVersioned);
-        }
+        Assert.Equal(original, unversioned);
+        Assert.NotSame(original, unversioned);
+        Assert.True(original.IsVersioned);
+        Assert.False(unversioned.IsVersioned);
+    }
 
-        [Fact]
-        public void GivenAnUntypedUnversionedReferenceThenTheSameInstanceIsReturned()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var original = Reference.Create(aggregate.Id, aggregate.GetType());
+    [Fact]
+    public void GivenAnUntypedUnversionedReferenceThenTheSameInstanceIsReturned()
+    {
+        var aggregate = new SerializableAggregateRoot();
+        var original = Reference.Create(aggregate.Id, aggregate.GetType());
 
-            Reference unversioned = original.ToUnversioned();
+        Reference unversioned = original.ToUnversioned();
 
-            Assert.Equal(original, unversioned);
-            Assert.Same(original, unversioned);
-            Assert.False(original.IsVersioned);
-            Assert.False(unversioned.IsVersioned);
-        }
+        Assert.Equal(original, unversioned);
+        Assert.Same(original, unversioned);
+        Assert.False(original.IsVersioned);
+        Assert.False(unversioned.IsVersioned);
+    }
 
-        [Fact]
-        public void GivenATypedVersionedReferenceThenAnUntypedUnversionedReferenceIsReturned()
-        {
-            var aggregate = new SerializableAggregateRoot();
+    [Fact]
+    public void GivenATypedVersionedReferenceThenAnUntypedUnversionedReferenceIsReturned()
+    {
+        var aggregate = new SerializableAggregateRoot();
 
-            var original = aggregate.ToReference();
-            Reference unversioned = original.ToUnversioned();
+        var original = aggregate.ToReference();
+        Reference unversioned = original.ToUnversioned();
 
-            Assert.Equal(original, unversioned);
-            Assert.NotSame(original, unversioned);
-            Assert.True(original.IsVersioned);
-            Assert.False(unversioned.IsVersioned);
-        }
+        Assert.Equal(original, unversioned);
+        Assert.NotSame(original, unversioned);
+        Assert.True(original.IsVersioned);
+        Assert.False(unversioned.IsVersioned);
+    }
 
-        [Fact]
-        public void GivenATypedUnversionedReferenceThenTheSameInstanceIsReturned()
-        {
-            var aggregate = new SerializableAggregateRoot();
+    [Fact]
+    public void GivenATypedUnversionedReferenceThenTheSameInstanceIsReturned()
+    {
+        var aggregate = new SerializableAggregateRoot();
 
-            var original = aggregate.ToReference(unversioned: true);
-            Reference unversioned = original.ToUnversioned();
+        var original = aggregate.ToReference(unversioned: true);
+        Reference unversioned = original.ToUnversioned();
 
-            Assert.Equal(original, unversioned);
-            Assert.Same(original, unversioned);
-            Assert.False(original.IsVersioned);
-            Assert.False(unversioned.IsVersioned);
-        }
+        Assert.Equal(original, unversioned);
+        Assert.Same(original, unversioned);
+        Assert.False(original.IsVersioned);
+        Assert.False(unversioned.IsVersioned);
     }
 }

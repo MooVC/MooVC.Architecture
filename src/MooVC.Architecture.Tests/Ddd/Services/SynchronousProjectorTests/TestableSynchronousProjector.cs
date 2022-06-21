@@ -1,18 +1,17 @@
-﻿namespace MooVC.Architecture.Ddd.Services.SynchronousProjectorTests
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using MooVC.Architecture.Ddd.ProjectionTests;
+﻿namespace MooVC.Architecture.Ddd.Services.SynchronousProjectorTests;
 
-    public sealed class TestableSynchronousProjector<TAggregate>
-        : SynchronousProjector<TAggregate, SerializableProjection<TAggregate>>
-        where TAggregate : AggregateRoot
+using System.Collections.Generic;
+using System.Linq;
+using MooVC.Architecture.Ddd.ProjectionTests;
+
+public sealed class TestableSynchronousProjector<TAggregate>
+    : SynchronousProjector<TAggregate, SerializableProjection<TAggregate>>
+    where TAggregate : AggregateRoot
+{
+    protected override IEnumerable<SerializableProjection<TAggregate>> PerformProject(IEnumerable<TAggregate> aggregates)
     {
-        protected override IEnumerable<SerializableProjection<TAggregate>> PerformProject(IEnumerable<TAggregate> aggregates)
-        {
-            return aggregates
-                .Select(aggregate => new SerializableProjection<TAggregate>(aggregate))
-                .ToArray();
-        }
+        return aggregates
+            .Select(aggregate => new SerializableProjection<TAggregate>(aggregate))
+            .ToArray();
     }
 }

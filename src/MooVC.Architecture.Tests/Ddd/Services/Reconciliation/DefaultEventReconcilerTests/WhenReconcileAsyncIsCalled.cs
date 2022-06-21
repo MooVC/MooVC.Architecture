@@ -1,333 +1,332 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.DefaultEventReconcilerTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.DefaultEventReconcilerTests;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MooVC.Architecture.Ddd.DomainEventTests;
+using MooVC.Architecture.MessageTests;
+using Moq;
+using Xunit;
+
+public sealed class WhenReconcileAsyncIsCalled
+    : DefaultEventReconcilerTests
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd.DomainEventTests;
-    using MooVC.Architecture.MessageTests;
-    using Moq;
-    using Xunit;
+    private readonly DefaultEventReconciler<SequencedEvents> instance;
 
-    public sealed class WhenReconcileAsyncIsCalled
-        : DefaultEventReconcilerTests
+    public WhenReconcileAsyncIsCalled()
     {
-        private readonly DefaultEventReconciler<SequencedEvents> instance;
+        instance = new DefaultEventReconciler<SequencedEvents>(EventStore.Object, Reconciler.Object);
+    }
 
-        public WhenReconcileAsyncIsCalled()
-        {
-            instance = new DefaultEventReconciler<SequencedEvents>(EventStore.Object, Reconciler.Object);
-        }
+    [Fact]
+    public async Task GivenNoSequenceThenAZeroSequenceIsRequestedAsync()
+    {
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.IsAny<ulong>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-        [Fact]
-        public async Task GivenNoSequenceThenAZeroSequenceIsRequestedAsync()
-        {
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.IsAny<ulong>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
+        _ = await instance.ReconcileAsync();
 
-            _ = await instance.ReconcileAsync();
+        EventStore.Verify(
+            store => store.ReadAsync(
+                It.IsAny<ulong>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()),
+            times: Times.Once);
 
-            EventStore.Verify(
-                store => store.ReadAsync(
-                    It.IsAny<ulong>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()),
-                times: Times.Once);
+        EventStore.Verify(
+            store => store.ReadAsync(
+                It.Is<ulong>(value => value == default),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()),
+            times: Times.Once);
+    }
 
-            EventStore.Verify(
-                store => store.ReadAsync(
-                    It.Is<ulong>(value => value == default),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()),
-                times: Times.Once);
-        }
+    [Theory]
+    [InlineData(ulong.MinValue)]
+    [InlineData(5)]
+    [InlineData(ulong.MaxValue)]
+    public async Task GivenASequenceThenEventsFromThatSequenceAreRequestedAsync(ulong sequence)
+    {
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.IsAny<ulong>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-        [Theory]
-        [InlineData(ulong.MinValue)]
-        [InlineData(5)]
-        [InlineData(ulong.MaxValue)]
-        public async Task GivenASequenceThenEventsFromThatSequenceAreRequestedAsync(ulong sequence)
-        {
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.IsAny<ulong>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
+        _ = await instance.ReconcileAsync(previous: sequence);
 
-            _ = await instance.ReconcileAsync(previous: sequence);
+        EventStore.Verify(
+            store => store.ReadAsync(
+                It.IsAny<ulong>(),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()),
+            times: Times.Once);
 
-            EventStore.Verify(
-                store => store.ReadAsync(
-                    It.IsAny<ulong>(),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()),
-                times: Times.Once);
+        EventStore.Verify(
+            store => store.ReadAsync(
+                It.Is<ulong>(value => value == sequence),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()),
+            times: Times.Once);
+    }
 
-            EventStore.Verify(
-                store => store.ReadAsync(
-                    It.Is<ulong>(value => value == sequence),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()),
-                times: Times.Once);
-        }
+    [Theory]
+    [InlineData(ulong.MinValue, 1)]
+    [InlineData(5, 10)]
+    [InlineData(100, 1000)]
+    public async Task GivenSequencesThenTheSequenceIsAdvancedToTheHighestSequenceAsync(ulong lowSequence, ulong highSequence)
+    {
+        bool wasInvoked = false;
 
-        [Theory]
-        [InlineData(ulong.MinValue, 1)]
-        [InlineData(5, 10)]
-        [InlineData(100, 1000)]
-        public async Task GivenSequencesThenTheSequenceIsAdvancedToTheHighestSequenceAsync(ulong lowSequence, ulong highSequence)
-        {
-            bool wasInvoked = false;
-
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value == ulong.MinValue),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(new[]
-                {
-                    new SequencedEvents(lowSequence, CreateEvents()),
-                    new SequencedEvents(highSequence, CreateEvents()),
-                });
-
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value > ulong.MinValue),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
-
-            instance.EventSequenceAdvanced += (sender, e) => Task.FromResult(wasInvoked = true);
-
-            ulong? current = await instance.ReconcileAsync();
-
-            Assert.True(wasInvoked);
-            Assert.Equal(highSequence, current);
-        }
-
-        [Fact]
-        public async Task GivenSequencesThenTheReconcilerIsInvokedOnceForEachAggregate()
-        {
-            const int ExpectedInvocations = 1;
-            int eventsReconciling = 0;
-            int eventsReconciled = 0;
-
-            SequencedEvents[] sequences = new[]
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value == ulong.MinValue),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(new[]
             {
-                new SequencedEvents(1, CreateEvents()),
-                new SequencedEvents(2, CreateEvents()),
-                new SequencedEvents(3, CreateEvents()),
-            };
+                new SequencedEvents(lowSequence, CreateEvents()),
+                new SequencedEvents(highSequence, CreateEvents()),
+            });
 
-            var aggregates = sequences.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value > ulong.MinValue),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value == ulong.MinValue),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(sequences);
+        instance.EventSequenceAdvanced += (sender, e) => Task.FromResult(wasInvoked = true);
 
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value > ulong.MinValue),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
+        ulong? current = await instance.ReconcileAsync();
 
-            _ = Reconciler
-               .Setup(reconciler => reconciler.ReconcileAsync(
-                   It.IsAny<IEnumerable<DomainEvent>>(),
-                   It.IsAny<CancellationToken?>()))
-               .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
+        Assert.True(wasInvoked);
+        Assert.Equal(highSequence, current);
+    }
 
-            instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
-            instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+    [Fact]
+    public async Task GivenSequencesThenTheReconcilerIsInvokedOnceForEachAggregate()
+    {
+        const int ExpectedInvocations = 1;
+        int eventsReconciling = 0;
+        int eventsReconciled = 0;
 
-            _ = await instance.ReconcileAsync();
-
-            Assert.Equal(sequences.Length, eventsReconciling);
-            Assert.Equal(sequences.Length, eventsReconciled);
-            Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
-        }
-
-        [Fact]
-        public async Task GivenSequencesWithAPreviousAndTargetSequenceThenTheReconcilerIsInvokedOnceForEachAggregateAboveThePreviousAndBelowTheTargetSequenceAsync()
+        SequencedEvents[] sequences = new[]
         {
-            const int ExpectedInvocations = 1;
-            int eventsReconciling = 0;
-            int eventsReconciled = 0;
+            new SequencedEvents(1, CreateEvents()),
+            new SequencedEvents(2, CreateEvents()),
+            new SequencedEvents(3, CreateEvents()),
+        };
 
-            SequencedEvents[] sequences = new[]
-            {
-                new SequencedEvents(1, CreateEvents()),
-                new SequencedEvents(2, CreateEvents()),
-                new SequencedEvents(3, CreateEvents()),
-                new SequencedEvents(4, CreateEvents()),
-                new SequencedEvents(5, CreateEvents()),
-            };
+        var aggregates = sequences.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
 
-            ulong previous = 1;
-            ulong target = 4;
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value == ulong.MinValue),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(sequences);
 
-            SequencedEvents[] expected = sequences
-                .Where(aggregate => aggregate.Sequence > previous && aggregate.Sequence <= target)
-                .ToArray();
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value > ulong.MinValue),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-            var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
+        _ = Reconciler
+           .Setup(reconciler => reconciler.ReconcileAsync(
+               It.IsAny<IEnumerable<DomainEvent>>(),
+               It.IsAny<CancellationToken?>()))
+           .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
 
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value == previous),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(expected);
+        instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+        instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value > previous),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
+        _ = await instance.ReconcileAsync();
 
-            _ = Reconciler
-               .Setup(reconciler => reconciler.ReconcileAsync(
-                   It.IsAny<IEnumerable<DomainEvent>>(),
-                   It.IsAny<CancellationToken?>()))
-               .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
+        Assert.Equal(sequences.Length, eventsReconciling);
+        Assert.Equal(sequences.Length, eventsReconciled);
+        Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
+    }
 
-            instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
-            instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+    [Fact]
+    public async Task GivenSequencesWithAPreviousAndTargetSequenceThenTheReconcilerIsInvokedOnceForEachAggregateAboveThePreviousAndBelowTheTargetSequenceAsync()
+    {
+        const int ExpectedInvocations = 1;
+        int eventsReconciling = 0;
+        int eventsReconciled = 0;
 
-            _ = await instance.ReconcileAsync(previous: previous, target: target);
-
-            int invocations = expected.Length;
-            int skips = sequences.Length - invocations;
-
-            Assert.Equal(invocations, eventsReconciling);
-            Assert.Equal(invocations, eventsReconciled);
-            Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
-        }
-
-        [Fact]
-        public async Task GivenSequencesWithAPreviousSequenceThenTheReconcilerIsInvokedOnceForEachAggregateAboveTheLastSequenceAsync()
+        SequencedEvents[] sequences = new[]
         {
-            const int ExpectedInvocations = 1;
-            int eventsReconciling = 0;
-            int eventsReconciled = 0;
+            new SequencedEvents(1, CreateEvents()),
+            new SequencedEvents(2, CreateEvents()),
+            new SequencedEvents(3, CreateEvents()),
+            new SequencedEvents(4, CreateEvents()),
+            new SequencedEvents(5, CreateEvents()),
+        };
 
-            SequencedEvents[] sequences = new[]
-            {
-                new SequencedEvents(1, CreateEvents()),
-                new SequencedEvents(2, CreateEvents()),
-                new SequencedEvents(3, CreateEvents()),
-                new SequencedEvents(4, CreateEvents()),
-                new SequencedEvents(7, CreateEvents()),
-            };
+        ulong previous = 1;
+        ulong target = 4;
 
-            ulong previous = 2;
-            SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence > previous).ToArray();
-            var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
+        SequencedEvents[] expected = sequences
+            .Where(aggregate => aggregate.Sequence > previous && aggregate.Sequence <= target)
+            .ToArray();
 
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value == previous),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(expected);
+        var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
 
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value > previous),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value == previous),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(expected);
 
-            _ = Reconciler
-               .Setup(reconciler => reconciler.ReconcileAsync(
-                   It.IsAny<IEnumerable<DomainEvent>>(),
-                   It.IsAny<CancellationToken?>()))
-               .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value > previous),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-            instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
-            instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+        _ = Reconciler
+           .Setup(reconciler => reconciler.ReconcileAsync(
+               It.IsAny<IEnumerable<DomainEvent>>(),
+               It.IsAny<CancellationToken?>()))
+           .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
 
-            _ = await instance.ReconcileAsync(previous: previous);
+        instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+        instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
-            int invocations = expected.Length;
-            int skips = sequences.Length - invocations;
+        _ = await instance.ReconcileAsync(previous: previous, target: target);
 
-            Assert.Equal(invocations, eventsReconciling);
-            Assert.Equal(invocations, eventsReconciled);
-            Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
-        }
+        int invocations = expected.Length;
+        int skips = sequences.Length - invocations;
 
-        [Fact]
-        public async Task GivenSequencesWithATargetSequenceThenTheReconcilerIsInvokedOnceForEachAggregateBelowTheTargetSequenceAsync()
+        Assert.Equal(invocations, eventsReconciling);
+        Assert.Equal(invocations, eventsReconciled);
+        Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
+    }
+
+    [Fact]
+    public async Task GivenSequencesWithAPreviousSequenceThenTheReconcilerIsInvokedOnceForEachAggregateAboveTheLastSequenceAsync()
+    {
+        const int ExpectedInvocations = 1;
+        int eventsReconciling = 0;
+        int eventsReconciled = 0;
+
+        SequencedEvents[] sequences = new[]
         {
-            const int ExpectedInvocations = 1;
-            int eventsReconciling = 0;
-            int eventsReconciled = 0;
+            new SequencedEvents(1, CreateEvents()),
+            new SequencedEvents(2, CreateEvents()),
+            new SequencedEvents(3, CreateEvents()),
+            new SequencedEvents(4, CreateEvents()),
+            new SequencedEvents(7, CreateEvents()),
+        };
 
-            SequencedEvents[] sequences = new[]
-            {
-                new SequencedEvents(1, CreateEvents()),
-                new SequencedEvents(2, CreateEvents()),
-                new SequencedEvents(3, CreateEvents()),
-                new SequencedEvents(4, CreateEvents()),
-                new SequencedEvents(5, CreateEvents()),
-            };
+        ulong previous = 2;
+        SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence > previous).ToArray();
+        var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
 
-            ulong target = 3;
-            SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence <= target).ToArray();
-            var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value == previous),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(expected);
 
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value == ulong.MinValue),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(expected);
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value > previous),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-            _ = EventStore
-                .Setup(store => store.ReadAsync(
-                    It.Is<ulong>(value => value > ulong.MinValue),
-                    It.IsAny<CancellationToken?>(),
-                    It.IsAny<ushort>()))
-                .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
+        _ = Reconciler
+           .Setup(reconciler => reconciler.ReconcileAsync(
+               It.IsAny<IEnumerable<DomainEvent>>(),
+               It.IsAny<CancellationToken?>()))
+           .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
 
-            _ = Reconciler
-               .Setup(reconciler => reconciler.ReconcileAsync(
-                   It.IsAny<IEnumerable<DomainEvent>>(),
-                   It.IsAny<CancellationToken?>()))
-               .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
+        instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+        instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
-            instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
-            instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+        _ = await instance.ReconcileAsync(previous: previous);
 
-            _ = await instance.ReconcileAsync(target: target);
+        int invocations = expected.Length;
+        int skips = sequences.Length - invocations;
 
-            int invocations = expected.Length;
-            int skips = sequences.Length - invocations;
+        Assert.Equal(invocations, eventsReconciling);
+        Assert.Equal(invocations, eventsReconciled);
+        Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
+    }
 
-            Assert.Equal(invocations, eventsReconciling);
-            Assert.Equal(invocations, eventsReconciled);
-            Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
-        }
+    [Fact]
+    public async Task GivenSequencesWithATargetSequenceThenTheReconcilerIsInvokedOnceForEachAggregateBelowTheTargetSequenceAsync()
+    {
+        const int ExpectedInvocations = 1;
+        int eventsReconciling = 0;
+        int eventsReconciled = 0;
 
-        private static DomainEvent[] CreateEvents()
+        SequencedEvents[] sequences = new[]
         {
-            var aggregate = new SerializableAggregateRoot();
-            var context = new SerializableMessage();
-            var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
-            var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+            new SequencedEvents(1, CreateEvents()),
+            new SequencedEvents(2, CreateEvents()),
+            new SequencedEvents(3, CreateEvents()),
+            new SequencedEvents(4, CreateEvents()),
+            new SequencedEvents(5, CreateEvents()),
+        };
 
-            return new[] { firstEvent, secondEvent };
-        }
+        ulong target = 3;
+        SequencedEvents[] expected = sequences.Where(aggregate => aggregate.Sequence <= target).ToArray();
+        var aggregates = expected.ToDictionary(sequence => sequence.Aggregate, sequence => 0);
+
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value == ulong.MinValue),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(expected);
+
+        _ = EventStore
+            .Setup(store => store.ReadAsync(
+                It.Is<ulong>(value => value > ulong.MinValue),
+                It.IsAny<CancellationToken?>(),
+                It.IsAny<ushort>()))
+            .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
+
+        _ = Reconciler
+           .Setup(reconciler => reconciler.ReconcileAsync(
+               It.IsAny<IEnumerable<DomainEvent>>(),
+               It.IsAny<CancellationToken?>()))
+           .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
+
+        instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+        instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+
+        _ = await instance.ReconcileAsync(target: target);
+
+        int invocations = expected.Length;
+        int skips = sequences.Length - invocations;
+
+        Assert.Equal(invocations, eventsReconciling);
+        Assert.Equal(invocations, eventsReconciled);
+        Assert.All(aggregates.Values, value => Assert.Equal(ExpectedInvocations, value));
+    }
+
+    private static DomainEvent[] CreateEvents()
+    {
+        var aggregate = new SerializableAggregateRoot();
+        var context = new SerializableMessage();
+        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+
+        return new[] { firstEvent, secondEvent };
     }
 }

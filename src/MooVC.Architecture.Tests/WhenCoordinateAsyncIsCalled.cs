@@ -1,51 +1,50 @@
-﻿namespace MooVC.Architecture
+﻿namespace MooVC.Architecture;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Xunit;
+
+public abstract class WhenCoordinateAsyncIsCalled
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Xunit;
-
-    public abstract class WhenCoordinateAsyncIsCalled
+    [Fact]
+    public async Task GivenAnEmptyOperationThenAnArgumentNullExceptionIsThrownAsync()
     {
-        [Fact]
-        public async Task GivenAnEmptyOperationThenAnArgumentNullExceptionIsThrownAsync()
+        _ = await Assert.ThrowsAsync<ArgumentNullException>(() => CoordinateAsync(default!));
+    }
+
+    [Fact]
+    public async Task GivenMultipleThreadsNoConcurrencyExceptionsAreThrownAsync()
+    {
+        const int ExpectedCount = 5;
+
+        int counter = 0;
+
+        Task Operation()
         {
-            _ = await Assert.ThrowsAsync<ArgumentNullException>(() => CoordinateAsync(default!));
+            counter++;
+
+            return Task.CompletedTask;
         }
 
-        [Fact]
-        public async Task GivenMultipleThreadsNoConcurrencyExceptionsAreThrownAsync()
+        Task[] tasks = CreateTasks(() => CoordinateAsync(Operation), ExpectedCount);
+
+        await Task.WhenAll(tasks);
+
+        Assert.Equal(ExpectedCount, counter);
+    }
+
+    protected abstract Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default);
+
+    private static Task[] CreateTasks(Func<Task> operation, int total)
+    {
+        var tasks = new List<Task>();
+
+        for (int index = 0; index < total; index++)
         {
-            const int ExpectedCount = 5;
-
-            int counter = 0;
-
-            Task Operation()
-            {
-                counter++;
-
-                return Task.CompletedTask;
-            }
-
-            Task[] tasks = CreateTasks(() => CoordinateAsync(Operation), ExpectedCount);
-
-            await Task.WhenAll(tasks);
-
-            Assert.Equal(ExpectedCount, counter);
+            tasks.Add(operation());
         }
 
-        protected abstract Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default);
-
-        private static Task[] CreateTasks(Func<Task> operation, int total)
-        {
-            var tasks = new List<Task>();
-
-            for (int index = 0; index < total; index++)
-            {
-                tasks.Add(operation());
-            }
-
-            return tasks.ToArray();
-        }
+        return tasks.ToArray();
     }
 }

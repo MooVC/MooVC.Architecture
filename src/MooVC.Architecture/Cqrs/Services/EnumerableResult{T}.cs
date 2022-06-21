@@ -1,55 +1,54 @@
-namespace MooVC.Architecture.Cqrs.Services
+namespace MooVC.Architecture.Cqrs.Services;
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Runtime.Serialization;
+using MooVC.Collections.Generic;
+
+[Serializable]
+public abstract class EnumerableResult<T>
+    : Result<IEnumerable<T>>
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using MooVC.Collections.Generic;
+    private readonly Lazy<ulong> count;
 
-    [Serializable]
-    public abstract class EnumerableResult<T>
-        : Result<IEnumerable<T>>
+    protected EnumerableResult(Message context, IEnumerable<T> values)
+        : base(context, values.Snapshot())
     {
-        private readonly Lazy<ulong> count;
+        count = new(CalculateCount);
+    }
 
-        protected EnumerableResult(Message context, IEnumerable<T> values)
-            : base(context, values.Snapshot())
+    protected EnumerableResult(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+        count = new(CalculateCount);
+    }
+
+    public ulong Count => count.Value;
+
+    public bool HasResults => Count > 0;
+
+    public T this[int index] => Value.ElementAt(index);
+
+    [return: NotNullIfNotNull("result")]
+    public static implicit operator T[](EnumerableResult<T>? result)
+    {
+        if (result is null)
         {
-            count = new(CalculateCount);
+            return Array.Empty<T>();
         }
 
-        protected EnumerableResult(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            count = new(CalculateCount);
-        }
+        return result.Value.ToArray();
+    }
 
-        public ulong Count => count.Value;
+    public IEnumerator<T> GetEnumerator()
+    {
+        return Value.GetEnumerator();
+    }
 
-        public bool HasResults => Count > 0;
-
-        public T this[int index] => Value.ElementAt(index);
-
-        [return: NotNullIfNotNull("result")]
-        public static implicit operator T[](EnumerableResult<T>? result)
-        {
-            if (result is null)
-            {
-                return Array.Empty<T>();
-            }
-
-            return result.Value.ToArray();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return Value.GetEnumerator();
-        }
-
-        private ulong CalculateCount()
-        {
-            return (ulong)Value.LongCount();
-        }
+    private ulong CalculateCount()
+    {
+        return (ulong)Value.LongCount();
     }
 }

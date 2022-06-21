@@ -1,8 +1,5 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
-{
-    using System.Threading.Tasks;
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation;
 
-    public delegate Task AggregateConflictDetectedAsyncEventHandler(
-        IAggregateReconciler sender,
-        AggregateConflictDetectedAsyncEventArgs e);
-}
+using System.Threading.Tasks;
+
+public delegate Task AggregateConflictDetectedAsyncEventHandler(IAggregateReconciler sender, AggregateConflictDetectedAsyncEventArgs e);

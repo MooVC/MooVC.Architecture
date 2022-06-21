@@ -1,17 +1,16 @@
-﻿namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests
+﻿namespace MooVC.Architecture.Ddd.EventCentricAggregateRootTests;
+
+using System;
+using Xunit;
+
+public sealed class WhenMarkChangesAsUncommittedIsCalled
 {
-    using System;
-    using Xunit;
-
-    public sealed class WhenMarkChangesAsUncommittedIsCalled
+    [Fact]
+    public void WhenInvokedThenAnInvalidOperationExceptionIsThrown()
     {
-        [Fact]
-        public void WhenInvokedThenAnInvalidOperationExceptionIsThrown()
-        {
-            var aggregate = new SerializableEventCentricAggregateRoot();
+        var aggregate = new SerializableEventCentricAggregateRoot();
 
-            _ = Assert.Throws<InvalidOperationException>(
-                () => aggregate.TriggerMarkChangesAsUncommitted());
-        }
+        _ = Assert.Throws<InvalidOperationException>(
+            () => aggregate.TriggerMarkChangesAsUncommitted());
     }
 }

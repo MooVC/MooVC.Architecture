@@ -1,11 +1,10 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation;
+
+using System;
+
+public interface IEventSequence
 {
-    using System;
+    public ulong Sequence { get; }
 
-    public interface IEventSequence
-    {
-        public ulong Sequence { get; }
-
-        public DateTimeOffset TimeStamp { get; }
-    }
+    public DateTimeOffset TimeStamp { get; }
 }

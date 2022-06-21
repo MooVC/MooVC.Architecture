@@ -1,27 +1,27 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications
+﻿namespace MooVC.Architecture.Ddd.Specifications;
+
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using static MooVC.Architecture.Ddd.Specifications.Resources;
+using static MooVC.Ensure;
+
+internal sealed class NotSpecification<T>
+    : Specification<T>
 {
-    using System;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using static MooVC.Ensure;
+    private readonly Specification<T> specification;
 
-    internal sealed class NotSpecification<T>
-        : Specification<T>
+    public NotSpecification(Specification<T> specification)
     {
-        private readonly Specification<T> specification;
+        this.specification = ArgumentNotNull(specification, nameof(specification), NotSpecificationSpecificationRequired);
+    }
 
-        public NotSpecification(Specification<T> specification)
-        {
-            this.specification = ArgumentNotNull(specification, nameof(specification));
-        }
+    public override Expression<Func<T, bool>> ToExpression()
+    {
+        var specification = this.specification.ToExpression();
 
-        public override Expression<Func<T, bool>> ToExpression()
-        {
-            var specification = this.specification.ToExpression();
+        UnaryExpression not = Expression.Not(specification.Body);
 
-            UnaryExpression not = Expression.Not(specification.Body);
-
-            return Expression.Lambda<Func<T, bool>>(not, specification.Parameters.Single());
-        }
+        return Expression.Lambda<Func<T, bool>>(not, specification.Parameters.Single());
     }
 }

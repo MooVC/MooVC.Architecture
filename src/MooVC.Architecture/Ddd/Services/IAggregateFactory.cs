@@ -1,17 +1,12 @@
-﻿namespace MooVC.Architecture.Ddd.Services
+﻿namespace MooVC.Architecture.Ddd.Services;
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+public interface IAggregateFactory
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
+    Task<EventCentricAggregateRoot> CreateAsync(Reference aggregate, CancellationToken? cancellationToken = default);
 
-    public interface IAggregateFactory
-    {
-        Task<EventCentricAggregateRoot> CreateAsync(
-            Reference aggregate,
-            CancellationToken? cancellationToken = default);
-
-        Task<EventCentricAggregateRoot> CreateAsync(
-            IEnumerable<DomainEvent> events,
-            CancellationToken? cancellationToken = default);
-    }
+    Task<EventCentricAggregateRoot> CreateAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
 }

@@ -1,16 +1,15 @@
-﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
-{
-    using Xunit;
+﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests;
 
-    public sealed class WhenValuesIsCalled
-        : UnversionedReferenceDictionaryTests
+using Xunit;
+
+public sealed class WhenValuesIsCalled
+    : UnversionedReferenceDictionaryTests
+{
+    [Fact]
+    public void GivenAPopulatedDictionaryThenAllValuesAreReturn()
     {
-        [Fact]
-        public void GivenAPopulatedDictionaryThenAllValuesAreReturn()
-        {
-            Assert.Equal(ExpectedCount, Dictionary.Values.Count);
-            Assert.Contains(Dictionary.Values, element => element == FirstAggregate);
-            Assert.Contains(Dictionary.Values, element => element == SecondAggregate);
-        }
+        Assert.Equal(ExpectedCount, Dictionary.Values.Count);
+        Assert.Contains(Dictionary.Values, element => element == FirstAggregate);
+        Assert.Contains(Dictionary.Values, element => element == SecondAggregate);
     }
 }

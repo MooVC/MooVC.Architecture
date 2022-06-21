@@ -1,23 +1,22 @@
-﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
+﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests;
+
+using System.Collections.Generic;
+using Xunit;
+
+public sealed class WhenContainsIsCalled
+    : UnversionedReferenceDictionaryTests
 {
-    using System.Collections.Generic;
-    using Xunit;
-
-    public sealed class WhenContainsIsCalled
-        : UnversionedReferenceDictionaryTests
+    [Fact]
+    public void GivenAVersionedReferenceThatExistThenAPositiveResponseIsReturned()
     {
-        [Fact]
-        public void GivenAVersionedReferenceThatExistThenAPositiveResponseIsReturned()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var reference = aggregate.ToReference();
-            var item = new KeyValuePair<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>(reference, aggregate);
+        var aggregate = new SerializableAggregateRoot();
+        var reference = aggregate.ToReference();
+        var item = new KeyValuePair<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>(reference, aggregate);
 
-            Dictionary.Add(item);
+        Dictionary.Add(item);
 
-            bool exists = Dictionary.Contains(item);
+        bool exists = Dictionary.Contains(item);
 
-            Assert.True(exists);
-        }
+        Assert.True(exists);
     }
 }

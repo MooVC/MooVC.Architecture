@@ -1,40 +1,30 @@
-namespace MooVC.Architecture.Ddd.Services
+namespace MooVC.Architecture.Ddd.Services;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using static MooVC.Architecture.Ddd.Services.Resources;
+using static MooVC.Ensure;
+
+public sealed class DomainEventPropagator<TAggregate>
+    where TAggregate : EventCentricAggregateRoot
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using static MooVC.Architecture.Ddd.Services.Resources;
-    using static MooVC.Ensure;
+    private readonly IBus bus;
+    private readonly IRepository<TAggregate> repository;
 
-    public sealed class DomainEventPropagator<TAggregate>
-        where TAggregate : EventCentricAggregateRoot
+    public DomainEventPropagator(IBus bus, IRepository<TAggregate> repository)
     {
-        private readonly IBus bus;
-        private readonly IRepository<TAggregate> repository;
+        this.bus = ArgumentNotNull(bus, nameof(bus), DomainEventPropagatorBusRequired);
+        this.repository = ArgumentNotNull(repository, nameof(repository), DomainEventPropagatorRepositoryRequired);
 
-        public DomainEventPropagator(IBus bus, IRepository<TAggregate> repository)
-        {
-            this.bus = ArgumentNotNull(
-                bus,
-                nameof(bus),
-                DomainEventPropagatorBusRequired);
+        this.repository.AggregateSaved += Repository_AggregateSaved;
+    }
 
-            this.repository = ArgumentNotNull(
-                repository,
-                nameof(repository),
-                DomainEventPropagatorRepositoryRequired);
+    private async Task Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedAsyncEventArgs<TAggregate> e)
+    {
+        IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
 
-            this.repository.AggregateSaved += Repository_AggregateSaved;
-        }
-
-        private async Task Repository_AggregateSaved(
-            IRepository<TAggregate> sender,
-            AggregateSavedAsyncEventArgs<TAggregate> e)
-        {
-            IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
-
-            await bus
-                .PublishAsync(changes, cancellationToken: e.CancellationToken)
-                .ConfigureAwait(false);
-        }
+        await bus
+            .PublishAsync(changes, cancellationToken: e.CancellationToken)
+            .ConfigureAwait(false);
     }
 }

@@ -1,21 +1,20 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications.SpecificationExtensionsTests
+﻿namespace MooVC.Architecture.Ddd.Specifications.SpecificationExtensionsTests;
+
+using System;
+using System.Linq.Expressions;
+
+public sealed class TestableSpecification
+    : Specification<int>
 {
-    using System;
-    using System.Linq.Expressions;
+    private readonly bool isSatisified;
 
-    public sealed class TestableSpecification
-        : Specification<int>
+    public TestableSpecification(bool isSatisified)
     {
-        private readonly bool isSatisified;
+        this.isSatisified = isSatisified;
+    }
 
-        public TestableSpecification(bool isSatisified)
-        {
-            this.isSatisified = isSatisified;
-        }
-
-        public override Expression<Func<int, bool>> ToExpression()
-        {
-            return value => isSatisified;
-        }
+    public override Expression<Func<int, bool>> ToExpression()
+    {
+        return value => isSatisified;
     }
 }

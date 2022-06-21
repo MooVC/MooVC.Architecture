@@ -1,18 +1,17 @@
-﻿namespace MooVC.Architecture.Ddd.Services.DefaultAggregateFactoryTests
-{
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MooVC.Architecture.Ddd;
+﻿namespace MooVC.Architecture.Ddd.Services.DefaultAggregateFactoryTests;
 
-    public sealed class TestableDefaultAggregateFactory
-        : DefaultAggregateFactory
+using System.Threading;
+using System.Threading.Tasks;
+using MooVC.Architecture.Ddd;
+
+public sealed class TestableDefaultAggregateFactory
+    : DefaultAggregateFactory
+{
+    public override Task<EventCentricAggregateRoot> CreateAsync(
+        Reference aggregate,
+        CancellationToken? cancellationToken = default)
     {
-        public override Task<EventCentricAggregateRoot> CreateAsync(
-            Reference aggregate,
-            CancellationToken? cancellationToken = default)
-        {
-            return Task.FromResult<EventCentricAggregateRoot>(
-                new SerializableEventCentricAggregateRoot(aggregate.Id));
-        }
+        return Task.FromResult<EventCentricAggregateRoot>(
+            new SerializableEventCentricAggregateRoot(aggregate.Id));
     }
 }

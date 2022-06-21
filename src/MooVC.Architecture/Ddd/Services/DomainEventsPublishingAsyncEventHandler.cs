@@ -1,6 +1,5 @@
-namespace MooVC.Architecture.Ddd.Services
-{
-    using System.Threading.Tasks;
+namespace MooVC.Architecture.Ddd.Services;
 
-    public delegate Task DomainEventsPublishingAsyncEventHandler(IBus sender, DomainEventsPublishingAsyncEventArgs e);
-}
+using System.Threading.Tasks;
+
+public delegate Task DomainEventsPublishingAsyncEventHandler(IBus sender, DomainEventsPublishingAsyncEventArgs e);

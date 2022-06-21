@@ -1,14 +1,13 @@
-namespace MooVC.Architecture.Ddd.Services.UnversionedConcurrentMemoryRepositoryTests
-{
-    using MooVC.Serialization;
-    using Base = MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests.WhenGetAsyncIsCalled;
+namespace MooVC.Architecture.Ddd.Services.UnversionedConcurrentMemoryRepositoryTests;
 
-    public sealed class WhenGetAsyncIsCalled
-        : Base
+using MooVC.Serialization;
+using Base = MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests.WhenGetAsyncIsCalled;
+
+public sealed class WhenGetAsyncIsCalled
+    : Base
+{
+    protected override IRepository<TAggregate> Create<TAggregate>(ICloner cloner)
     {
-        protected override IRepository<TAggregate> Create<TAggregate>(ICloner cloner)
-        {
-            return new UnversionedConcurrentMemoryRepository<TAggregate>(cloner);
-        }
+        return new UnversionedConcurrentMemoryRepository<TAggregate>(cloner);
     }
 }

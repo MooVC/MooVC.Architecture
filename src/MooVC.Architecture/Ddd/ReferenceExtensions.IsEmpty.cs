@@ -1,12 +1,11 @@
-﻿namespace MooVC.Architecture.Ddd
-{
-    using System.Diagnostics.CodeAnalysis;
+﻿namespace MooVC.Architecture.Ddd;
 
-    public static partial class ReferenceExtensions
+using System.Diagnostics.CodeAnalysis;
+
+public static partial class ReferenceExtensions
+{
+    public static bool IsEmpty([NotNullWhen(false)] this Reference? reference)
     {
-        public static bool IsEmpty([NotNullWhen(false)] this Reference? reference)
-        {
-            return reference?.IsEmpty ?? true;
-        }
+        return reference?.IsEmpty ?? true;
     }
 }

@@ -1,23 +1,22 @@
-namespace MooVC.Architecture.Cqrs.Services.EnumerableResultTests
+namespace MooVC.Architecture.Cqrs.Services.EnumerableResultTests;
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+[Serializable]
+internal sealed class SerializableEnumerableResult<T>
+    : EnumerableResult<T>
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-
-    [Serializable]
-    internal sealed class SerializableEnumerableResult<T>
-        : EnumerableResult<T>
+    public SerializableEnumerableResult(Message context, IEnumerable<T> results)
+        : base(context, results)
     {
-        public SerializableEnumerableResult(Message context, IEnumerable<T> results)
-            : base(context, results)
-        {
-        }
+    }
 
-        private SerializableEnumerableResult(
-            SerializationInfo info,
-            StreamingContext context)
-            : base(info, context)
-        {
-        }
+    private SerializableEnumerableResult(
+        SerializationInfo info,
+        StreamingContext context)
+        : base(info, context)
+    {
     }
 }

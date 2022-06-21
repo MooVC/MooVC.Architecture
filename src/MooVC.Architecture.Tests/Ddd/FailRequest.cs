@@ -1,11 +1,10 @@
-﻿namespace MooVC.Architecture.Ddd
+﻿namespace MooVC.Architecture.Ddd;
+
+public sealed class FailRequest
+    : Request
 {
-    public sealed class FailRequest
-        : Request
+    public FailRequest(Message context)
+        : base(context)
     {
-        public FailRequest(Message context)
-            : base(context)
-        {
-        }
     }
 }

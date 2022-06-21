@@ -1,13 +1,12 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation;
+
+using System.Collections.Generic;
+
+public interface ISequencedEvents
 {
-    using System.Collections.Generic;
+    Reference Aggregate { get; }
 
-    public interface ISequencedEvents
-    {
-        Reference Aggregate { get; }
+    public IEnumerable<DomainEvent> Events { get; }
 
-        public IEnumerable<DomainEvent> Events { get; }
-
-        ulong Sequence { get; }
-    }
+    ulong Sequence { get; }
 }

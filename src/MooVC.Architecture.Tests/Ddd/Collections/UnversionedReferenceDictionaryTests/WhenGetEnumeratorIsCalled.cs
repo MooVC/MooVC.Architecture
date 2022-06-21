@@ -1,36 +1,35 @@
-﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
+﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests;
+
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
+
+public sealed class WhenGetEnumeratorIsCalled
+    : UnversionedReferenceDictionaryTests
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using Xunit;
-
-    public sealed class WhenGetEnumeratorIsCalled
-        : UnversionedReferenceDictionaryTests
+    [Fact]
+    public void GivenAPopulatedDictionaryWhenVersionedReferencesThenTheEnumeratorContainsUnversionedElements()
     {
-        [Fact]
-        public void GivenAPopulatedDictionaryWhenVersionedReferencesThenTheEnumeratorContainsUnversionedElements()
+        IEnumerator<KeyValuePair<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>> enumerator = Dictionary.GetEnumerator();
+
+        int count = 0;
+        var aggregates = Dictionary.Values.ToList();
+        var references = Dictionary.Keys.ToList();
+
+        while (enumerator.MoveNext())
         {
-            IEnumerator<KeyValuePair<Reference<SerializableAggregateRoot>, SerializableAggregateRoot>> enumerator = Dictionary.GetEnumerator();
+            Assert.False(enumerator.Current.Key.IsVersioned);
+            Assert.Contains(aggregates, element => element == enumerator.Current.Value);
+            Assert.Contains(references, element => element == enumerator.Current.Key);
 
-            int count = 0;
-            var aggregates = Dictionary.Values.ToList();
-            var references = Dictionary.Keys.ToList();
+            _ = aggregates.Remove(enumerator.Current.Value);
+            _ = references.Remove(enumerator.Current.Key);
 
-            while (enumerator.MoveNext())
-            {
-                Assert.False(enumerator.Current.Key.IsVersioned);
-                Assert.Contains(aggregates, element => element == enumerator.Current.Value);
-                Assert.Contains(references, element => element == enumerator.Current.Key);
-
-                _ = aggregates.Remove(enumerator.Current.Value);
-                _ = references.Remove(enumerator.Current.Key);
-
-                count++;
-            }
-
-            Assert.Equal(ExpectedCount, count);
-            Assert.Empty(aggregates);
-            Assert.Empty(references);
+            count++;
         }
+
+        Assert.Equal(ExpectedCount, count);
+        Assert.Empty(aggregates);
+        Assert.Empty(references);
     }
 }

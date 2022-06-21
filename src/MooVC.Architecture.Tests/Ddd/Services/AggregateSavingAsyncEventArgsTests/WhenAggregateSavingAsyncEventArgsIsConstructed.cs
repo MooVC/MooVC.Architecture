@@ -1,29 +1,28 @@
-﻿namespace MooVC.Architecture.Ddd.Services.AggregateSavingAsyncEventArgsTests
+﻿namespace MooVC.Architecture.Ddd.Services.AggregateSavingAsyncEventArgsTests;
+
+using System;
+using Xunit;
+
+public sealed class WhenAggregateSavingAsyncEventArgsIsConstructed
 {
-    using System;
-    using Xunit;
-
-    public sealed class WhenAggregateSavingAsyncEventArgsIsConstructed
+    [Fact]
+    public void GivenAnAggregateThenAnInstanceIsCreated()
     {
-        [Fact]
-        public void GivenAnAggregateThenAnInstanceIsCreated()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var @event = new AggregateSavingAsyncEventArgs<SerializableAggregateRoot>(aggregate);
+        var aggregate = new SerializableAggregateRoot();
+        var @event = new AggregateSavingAsyncEventArgs<SerializableAggregateRoot>(aggregate);
 
-            Assert.Equal(aggregate, @event.Aggregate);
-            Assert.Same(aggregate, @event.Aggregate);
-        }
+        Assert.Equal(aggregate, @event.Aggregate);
+        Assert.Same(aggregate, @event.Aggregate);
+    }
 
-        [Fact]
-        public void GivenANullAggregateThenAnArgumentNullExceptionIsThrown()
-        {
-            SerializableAggregateRoot? aggregate = default;
+    [Fact]
+    public void GivenANullAggregateThenAnArgumentNullExceptionIsThrown()
+    {
+        SerializableAggregateRoot? aggregate = default;
 
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-                () => new AggregateSavingAsyncEventArgs<SerializableAggregateRoot>(aggregate!));
+        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
+            () => new AggregateSavingAsyncEventArgs<SerializableAggregateRoot>(aggregate!));
 
-            Assert.Equal(nameof(aggregate), exception.ParamName);
-        }
+        Assert.Equal(nameof(aggregate), exception.ParamName);
     }
 }

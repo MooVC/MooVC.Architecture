@@ -1,46 +1,45 @@
-﻿namespace MooVC.Architecture.Ddd.ProjectionTests
+﻿namespace MooVC.Architecture.Ddd.ProjectionTests;
+
+using Xunit;
+
+public sealed class WhenImplicitlyCastToReference
 {
-    using Xunit;
-
-    public sealed class WhenImplicitlyCastToReference
+    [Fact]
+    public void GivenAProjectionWhenCastToAnUntypedReferenceThenTheUntypedReferenceForItsAggregateIsReturned()
     {
-        [Fact]
-        public void GivenAProjectionWhenCastToAnUntypedReferenceThenTheUntypedReferenceForItsAggregateIsReturned()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var projection = new SerializableProjection<SerializableAggregateRoot>(aggregate);
-            Reference reference = projection;
+        var aggregate = new SerializableAggregateRoot();
+        var projection = new SerializableProjection<SerializableAggregateRoot>(aggregate);
+        Reference reference = projection;
 
-            Assert.True(reference.IsMatch(aggregate));
-        }
+        Assert.True(reference.IsMatch(aggregate));
+    }
 
-        [Fact]
-        public void GivenAProjectionWhenCastToAnTypedReferenceThenTheTypedReferenceForItsAggregateIsReturned()
-        {
-            var aggregate = new SerializableAggregateRoot();
-            var projection = new SerializableProjection<SerializableAggregateRoot>(aggregate);
-            Reference<SerializableAggregateRoot> reference = projection;
+    [Fact]
+    public void GivenAProjectionWhenCastToAnTypedReferenceThenTheTypedReferenceForItsAggregateIsReturned()
+    {
+        var aggregate = new SerializableAggregateRoot();
+        var projection = new SerializableProjection<SerializableAggregateRoot>(aggregate);
+        Reference<SerializableAggregateRoot> reference = projection;
 
-            Assert.True(reference.IsMatch(aggregate));
-        }
+        Assert.True(reference.IsMatch(aggregate));
+    }
 
-        [Fact]
-        public void GivenANullProjectionWhenCastToAnTypedReferenceThenAnEmptyTypedReferenceIsReturned()
-        {
-            SerializableProjection<SerializableAggregateRoot>? projection = default;
-            Reference<SerializableAggregateRoot> reference = projection;
+    [Fact]
+    public void GivenANullProjectionWhenCastToAnTypedReferenceThenAnEmptyTypedReferenceIsReturned()
+    {
+        SerializableProjection<SerializableAggregateRoot>? projection = default;
+        Reference<SerializableAggregateRoot> reference = projection;
 
-            Assert.True(reference.IsEmpty);
-        }
+        Assert.True(reference.IsEmpty);
+    }
 
-        [Fact]
-        public void GivenANullProjectionWhenCastToAnUntypedReferenceThenAnEmptyUntypedReferenceIsReturned()
-        {
-            SerializableProjection<SerializableAggregateRoot>? projection = default;
-            Reference reference = projection;
+    [Fact]
+    public void GivenANullProjectionWhenCastToAnUntypedReferenceThenAnEmptyUntypedReferenceIsReturned()
+    {
+        SerializableProjection<SerializableAggregateRoot>? projection = default;
+        Reference reference = projection;
 
-            Assert.True(reference.IsEmpty);
-            Assert.Equal(typeof(SerializableAggregateRoot), reference.Type);
-        }
+        Assert.True(reference.IsEmpty);
+        Assert.Equal(typeof(SerializableAggregateRoot), reference.Type);
     }
 }

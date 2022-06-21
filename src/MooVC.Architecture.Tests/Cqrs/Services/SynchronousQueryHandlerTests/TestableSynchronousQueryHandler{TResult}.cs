@@ -1,26 +1,25 @@
-﻿namespace MooVC.Architecture.Cqrs.Services.SynchronousQueryHandlerTests
+﻿namespace MooVC.Architecture.Cqrs.Services.SynchronousQueryHandlerTests;
+
+using System;
+
+public sealed class TestableSynchronousQueryHandler<TResult>
+    : SynchronousQueryHandler<TResult>
+    where TResult : Message
 {
-    using System;
+    private readonly Func<TResult>? execute;
 
-    public sealed class TestableSynchronousQueryHandler<TResult>
-        : SynchronousQueryHandler<TResult>
-        where TResult : Message
+    public TestableSynchronousQueryHandler(Func<TResult>? execute = default)
     {
-        private readonly Func<TResult>? execute;
+        this.execute = execute;
+    }
 
-        public TestableSynchronousQueryHandler(Func<TResult>? execute = default)
+    protected override TResult PerformExecute()
+    {
+        if (execute is null)
         {
-            this.execute = execute;
+            throw new NotImplementedException();
         }
 
-        protected override TResult PerformExecute()
-        {
-            if (execute is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            return execute();
-        }
+        return execute();
     }
 }

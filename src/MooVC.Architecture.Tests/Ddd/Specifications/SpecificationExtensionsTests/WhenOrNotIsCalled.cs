@@ -1,58 +1,57 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications.SpecificationExtensionsTests
+﻿namespace MooVC.Architecture.Ddd.Specifications.SpecificationExtensionsTests;
+
+using System;
+using System.Collections.Generic;
+using Moq;
+using Xunit;
+
+public sealed class WhenOrNotIsCalled
 {
-    using System;
-    using System.Collections.Generic;
-    using Moq;
-    using Xunit;
-
-    public sealed class WhenOrNotIsCalled
+    public static IEnumerable<object?[]> GivenANullSpecificationThenAnArgumentNullExceptionIsThrownData()
     {
-        public static IEnumerable<object?[]> GivenANullSpecificationThenAnArgumentNullExceptionIsThrownData()
+        var specification = new Mock<Specification<int>>();
+
+        return new[]
         {
-            var specification = new Mock<Specification<int>>();
+            new object?[] { default, default },
+            new object?[] { default, specification.Object },
+            new object?[] { specification.Object, default },
+        };
+    }
 
-            return new[]
-            {
-                new object?[] { default, default },
-                new object?[] { default, specification.Object },
-                new object?[] { specification.Object, default },
-            };
-        }
+    public static IEnumerable<object[]> GivenTwoSpecificationsThenTheExpressionResultMatchesTheConditionalOrNotOutcomeForBothValuesData()
+    {
+        var positive = new Mock<Specification<int>>();
+        var negative = new Mock<Specification<int>>();
 
-        public static IEnumerable<object[]> GivenTwoSpecificationsThenTheExpressionResultMatchesTheConditionalOrNotOutcomeForBothValuesData()
+        _ = positive.Setup(spec => spec.ToExpression()).Returns(spec => true);
+        _ = negative.Setup(spec => spec.ToExpression()).Returns(spec => false);
+
+        return new[]
         {
-            var positive = new Mock<Specification<int>>();
-            var negative = new Mock<Specification<int>>();
+            new object[] { negative.Object, negative.Object, true },
+            new object[] { negative.Object, positive.Object, false },
+            new object[] { positive.Object, negative.Object, true },
+            new object[] { positive.Object, positive.Object, true },
+        };
+    }
 
-            _ = positive.Setup(spec => spec.ToExpression()).Returns(spec => true);
-            _ = negative.Setup(spec => spec.ToExpression()).Returns(spec => false);
+    [Theory]
+    [MemberData(nameof(GivenANullSpecificationThenAnArgumentNullExceptionIsThrownData))]
+    public void GivenANullSpecificationThenAnArgumentNullExceptionIsThrown(Specification<int>? first, Specification<int>? second)
+    {
+        _ = Assert.Throws<ArgumentNullException>(() => first!.OrNot(second!));
+    }
 
-            return new[]
-            {
-                new object[] { negative.Object, negative.Object, true },
-                new object[] { negative.Object, positive.Object, false },
-                new object[] { positive.Object, negative.Object, true },
-                new object[] { positive.Object, positive.Object, true },
-            };
-        }
+    [Theory]
+    [MemberData(nameof(GivenTwoSpecificationsThenTheExpressionResultMatchesTheConditionalOrNotOutcomeForBothValuesData))]
+    public void GivenTwoSpecificationsThenTheExpressionResultMatchesTheConditionalOrNotOutcomeForBothValues(
+        Specification<int> first,
+        Specification<int> second,
+        bool expectedOutcome)
+    {
+        Specification<int> result = first.OrNot(second);
 
-        [Theory]
-        [MemberData(nameof(GivenANullSpecificationThenAnArgumentNullExceptionIsThrownData))]
-        public void GivenANullSpecificationThenAnArgumentNullExceptionIsThrown(Specification<int>? first, Specification<int>? second)
-        {
-            _ = Assert.Throws<ArgumentNullException>(() => first!.OrNot(second!));
-        }
-
-        [Theory]
-        [MemberData(nameof(GivenTwoSpecificationsThenTheExpressionResultMatchesTheConditionalOrNotOutcomeForBothValuesData))]
-        public void GivenTwoSpecificationsThenTheExpressionResultMatchesTheConditionalOrNotOutcomeForBothValues(
-            Specification<int> first,
-            Specification<int> second,
-            bool expectedOutcome)
-        {
-            Specification<int> result = first.OrNot(second);
-
-            Assert.Equal(expectedOutcome, result.IsSatisfiedBy(1));
-        }
+        Assert.Equal(expectedOutcome, result.IsSatisfiedBy(1));
     }
 }

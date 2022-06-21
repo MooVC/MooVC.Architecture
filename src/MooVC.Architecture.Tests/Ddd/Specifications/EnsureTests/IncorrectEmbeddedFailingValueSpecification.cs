@@ -1,12 +1,11 @@
-﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests
+﻿namespace MooVC.Architecture.Ddd.Specifications.EnsureTests;
+
+[Requirement("Does Not Exist", typeof(Resources))]
+internal sealed class IncorrectEmbeddedFailingValueSpecification
+    : TestSpecification<int>
 {
-    [Requirement("Does Not Exist", typeof(Resources))]
-    internal sealed class IncorrectEmbeddedFailingValueSpecification
-        : TestSpecification<int>
+    public IncorrectEmbeddedFailingValueSpecification()
+        : base(false)
     {
-        public IncorrectEmbeddedFailingValueSpecification()
-            : base(false)
-        {
-        }
     }
 }

@@ -1,11 +1,10 @@
-﻿namespace MooVC.Architecture.Services
-{
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿namespace MooVC.Architecture.Services;
 
-    public interface IHandler<TMessage>
-        where TMessage : Message
-    {
-        Task ExecuteAsync(TMessage message, CancellationToken cancellationToken);
-    }
+using System.Threading;
+using System.Threading.Tasks;
+
+public interface IHandler<TMessage>
+    where TMessage : Message
+{
+    Task ExecuteAsync(TMessage message, CancellationToken cancellationToken);
 }

@@ -1,37 +1,36 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests;
+
+using System;
+using System.Threading.Tasks;
+using Xunit;
+
+public sealed class WhenSaveAsyncIsCalled
 {
-    using System;
-    using System.Threading.Tasks;
-    using Xunit;
-
-    public sealed class WhenSaveAsyncIsCalled
+    [Fact]
+    public async Task GivenAnAggregateThenTheAggregateIsPropagatedAsync()
     {
-        [Fact]
-        public async Task GivenAnAggregateThenTheAggregateIsPropagatedAsync()
+        bool wasInvoked = false;
+
+        var expected = new SerializableEventCentricAggregateRoot();
+
+        var proxy = new TestableSynchronousAggregateReconciliationProxy(save: actual =>
         {
-            bool wasInvoked = false;
+            wasInvoked = true;
 
-            var expected = new SerializableEventCentricAggregateRoot();
+            Assert.Equal(expected, actual);
+        });
 
-            var proxy = new TestableSynchronousAggregateReconciliationProxy(save: actual =>
-            {
-                wasInvoked = true;
+        await proxy.SaveAsync(expected);
 
-                Assert.Equal(expected, actual);
-            });
+        Assert.True(wasInvoked);
+    }
 
-            await proxy.SaveAsync(expected);
+    [Fact]
+    public async Task GivenAnExceptionThenTheExceptionIsThrownAsync()
+    {
+        var reconciler = new TestableSynchronousAggregateReconciliationProxy();
 
-            Assert.True(wasInvoked);
-        }
-
-        [Fact]
-        public async Task GivenAnExceptionThenTheExceptionIsThrownAsync()
-        {
-            var reconciler = new TestableSynchronousAggregateReconciliationProxy();
-
-            _ = await Assert.ThrowsAsync<NotImplementedException>(
-                () => reconciler.SaveAsync(default!));
-        }
+        _ = await Assert.ThrowsAsync<NotImplementedException>(
+            () => reconciler.SaveAsync(default!));
     }
 }

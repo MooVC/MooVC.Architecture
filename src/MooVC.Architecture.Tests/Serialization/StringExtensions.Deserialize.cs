@@ -1,12 +1,11 @@
-﻿namespace MooVC.Architecture.Serialization
-{
-    using Newtonsoft.Json;
+﻿namespace MooVC.Architecture.Serialization;
 
-    internal static partial class EnumerableExtensions
+using Newtonsoft.Json;
+
+internal static partial class EnumerableExtensions
+{
+    public static T Deserialize<T>(this string data)
     {
-        public static T Deserialize<T>(this string data)
-        {
-            return JsonConvert.DeserializeObject<T>(data, Settings.Default)!;
-        }
+        return JsonConvert.DeserializeObject<T>(data, Settings.Default)!;
     }
 }

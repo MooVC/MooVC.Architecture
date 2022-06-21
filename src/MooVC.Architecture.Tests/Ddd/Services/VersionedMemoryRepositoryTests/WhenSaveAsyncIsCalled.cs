@@ -1,14 +1,13 @@
-namespace MooVC.Architecture.Ddd.Services.VersionedMemoryRepositoryTests
-{
-    using MooVC.Serialization;
-    using Base = MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests.WhenSaveAsyncIsCalled;
+namespace MooVC.Architecture.Ddd.Services.VersionedMemoryRepositoryTests;
 
-    public class WhenSaveAsyncIsCalled
-        : Base
+using MooVC.Serialization;
+using Base = MooVC.Architecture.Ddd.Services.UnversionedMemoryRepositoryTests.WhenSaveAsyncIsCalled;
+
+public class WhenSaveAsyncIsCalled
+    : Base
+{
+    protected override IRepository<TAggregate> Create<TAggregate>(ICloner cloner)
     {
-        protected override IRepository<TAggregate> Create<TAggregate>(ICloner cloner)
-        {
-            return new VersionedMemoryRepository<TAggregate>(cloner);
-        }
+        return new VersionedMemoryRepository<TAggregate>(cloner);
     }
 }

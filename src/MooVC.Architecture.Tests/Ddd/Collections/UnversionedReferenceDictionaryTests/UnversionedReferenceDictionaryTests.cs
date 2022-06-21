@@ -1,31 +1,30 @@
-﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests
+﻿namespace MooVC.Architecture.Ddd.Collections.UnversionedReferenceDictionaryTests;
+
+public abstract class UnversionedReferenceDictionaryTests
 {
-    public abstract class UnversionedReferenceDictionaryTests
+    public const int ExpectedCount = 2;
+
+    protected UnversionedReferenceDictionaryTests()
     {
-        public const int ExpectedCount = 2;
+        FirstAggregate = new SerializableAggregateRoot();
+        SecondAggregate = new SerializableAggregateRoot();
+        FirstReference = FirstAggregate.ToReference();
+        SecondReference = SecondAggregate.Id.ToReference<SerializableAggregateRoot>(version: SecondAggregate.Version.Next());
 
-        protected UnversionedReferenceDictionaryTests()
+        Dictionary = new UnversionedReferenceDictionary<SerializableAggregateRoot, SerializableAggregateRoot>
         {
-            FirstAggregate = new SerializableAggregateRoot();
-            SecondAggregate = new SerializableAggregateRoot();
-            FirstReference = FirstAggregate.ToReference();
-            SecondReference = SecondAggregate.Id.ToReference<SerializableAggregateRoot>(version: SecondAggregate.Version.Next());
-
-            Dictionary = new UnversionedReferenceDictionary<SerializableAggregateRoot, SerializableAggregateRoot>
-            {
-                { FirstReference, FirstAggregate },
-                { SecondReference, SecondAggregate },
-            };
-        }
-
-        public UnversionedReferenceDictionary<SerializableAggregateRoot, SerializableAggregateRoot> Dictionary { get; }
-
-        public SerializableAggregateRoot FirstAggregate { get; }
-
-        public Reference<SerializableAggregateRoot> FirstReference { get; }
-
-        public SerializableAggregateRoot SecondAggregate { get; }
-
-        public Reference<SerializableAggregateRoot> SecondReference { get; }
+            { FirstReference, FirstAggregate },
+            { SecondReference, SecondAggregate },
+        };
     }
+
+    public UnversionedReferenceDictionary<SerializableAggregateRoot, SerializableAggregateRoot> Dictionary { get; }
+
+    public SerializableAggregateRoot FirstAggregate { get; }
+
+    public Reference<SerializableAggregateRoot> FirstReference { get; }
+
+    public SerializableAggregateRoot SecondAggregate { get; }
+
+    public Reference<SerializableAggregateRoot> SecondReference { get; }
 }

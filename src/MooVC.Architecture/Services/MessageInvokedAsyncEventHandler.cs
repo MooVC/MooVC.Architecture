@@ -1,6 +1,5 @@
-﻿namespace MooVC.Architecture.Services
-{
-    using System.Threading.Tasks;
+﻿namespace MooVC.Architecture.Services;
 
-    public delegate Task MessageInvokedAsyncEventHandler(IBus bus, MessageInvokedAsyncEventArgs e);
-}
+using System.Threading.Tasks;
+
+public delegate Task MessageInvokedAsyncEventHandler(IBus bus, MessageInvokedAsyncEventArgs e);

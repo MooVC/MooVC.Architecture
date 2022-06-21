@@ -1,42 +1,41 @@
-﻿namespace MooVC.Architecture.Ddd
+﻿namespace MooVC.Architecture.Ddd;
+
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public abstract class DomainEvent<TAggregate>
+    : DomainEvent
+    where TAggregate : AggregateRoot
 {
-    using System;
-    using System.Runtime.Serialization;
+    private readonly Lazy<Reference<TAggregate>> aggregate;
 
-    [Serializable]
-    public abstract class DomainEvent<TAggregate>
-        : DomainEvent
-        where TAggregate : AggregateRoot
+    protected DomainEvent(Message context, TAggregate aggregate)
+        : base(context, aggregate.ToReference())
     {
-        private readonly Lazy<Reference<TAggregate>> aggregate;
+        this.aggregate = new(GetTypedReference);
+    }
 
-        protected DomainEvent(Message context, TAggregate aggregate)
-            : base(context, aggregate.ToReference())
-        {
-            this.aggregate = new(GetTypedReference);
-        }
+    protected DomainEvent(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+        aggregate = new(GetTypedReference);
+    }
 
-        protected DomainEvent(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            aggregate = new(GetTypedReference);
-        }
+    public new Reference<TAggregate> Aggregate => aggregate.Value;
 
-        public new Reference<TAggregate> Aggregate => aggregate.Value;
+    public static implicit operator Reference(DomainEvent<TAggregate>? @event)
+    {
+        return @event?.Aggregate ?? Reference<TAggregate>.Empty;
+    }
 
-        public static implicit operator Reference(DomainEvent<TAggregate>? @event)
-        {
-            return @event?.Aggregate ?? Reference<TAggregate>.Empty;
-        }
+    public static implicit operator Reference<TAggregate>(DomainEvent<TAggregate>? @event)
+    {
+        return @event?.Aggregate ?? Reference<TAggregate>.Empty;
+    }
 
-        public static implicit operator Reference<TAggregate>(DomainEvent<TAggregate>? @event)
-        {
-            return @event?.Aggregate ?? Reference<TAggregate>.Empty;
-        }
-
-        private Reference<TAggregate> GetTypedReference()
-        {
-            return base.Aggregate.ToTyped<TAggregate>();
-        }
+    private Reference<TAggregate> GetTypedReference()
+    {
+        return base.Aggregate.ToTyped<TAggregate>();
     }
 }

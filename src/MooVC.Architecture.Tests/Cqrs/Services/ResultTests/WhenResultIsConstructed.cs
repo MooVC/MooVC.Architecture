@@ -1,29 +1,28 @@
-﻿namespace MooVC.Architecture.Cqrs.Services.ResultTests
+﻿namespace MooVC.Architecture.Cqrs.Services.ResultTests;
+
+using System;
+using MooVC.Architecture.MessageTests;
+using Xunit;
+
+public sealed class WhenResultIsConstructed
 {
-    using System;
-    using MooVC.Architecture.MessageTests;
-    using Xunit;
-
-    public sealed class WhenResultIsConstructed
+    [Fact]
+    public void GivenANullContextThenAnArgumentNullExceptionIsThrown()
     {
-        [Fact]
-        public void GivenANullContextThenAnArgumentNullExceptionIsThrown()
-        {
-            _ = Assert.Throws<ArgumentNullException>(
-                () => new SerializableResult<int>(default!, default));
-        }
+        _ = Assert.Throws<ArgumentNullException>(
+            () => new SerializableResult<int>(default!, default));
+    }
 
-        [Fact]
-        public void GivenContextAndAValueThenTheContextAndValuePropertiesAreSetToMatch()
-        {
-            const int ExpectedValue = 5;
+    [Fact]
+    public void GivenContextAndAValueThenTheContextAndValuePropertiesAreSetToMatch()
+    {
+        const int ExpectedValue = 5;
 
-            var context = new SerializableMessage();
-            var result = new SerializableResult<int>(context, ExpectedValue);
+        var context = new SerializableMessage();
+        var result = new SerializableResult<int>(context, ExpectedValue);
 
-            Assert.Equal(context.Id, result.CausationId);
-            Assert.Equal(context.CorrelationId, result.CorrelationId);
-            Assert.Equal(ExpectedValue, result.Value);
-        }
+        Assert.Equal(context.Id, result.CausationId);
+        Assert.Equal(context.CorrelationId, result.CorrelationId);
+        Assert.Equal(ExpectedValue, result.Value);
     }
 }

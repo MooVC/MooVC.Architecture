@@ -1,23 +1,22 @@
-﻿namespace MooVC.Architecture.MessageExtensionsTests
+﻿namespace MooVC.Architecture.MessageExtensionsTests;
+
+using System;
+using System.Threading.Tasks;
+using MooVC.Architecture.MessageTests;
+using Base = MooVC.Architecture.WhenCoordinateAsyncIsCalled;
+
+public sealed class WhenCoordinateAsyncIsCalled
+    : Base
 {
-    using System;
-    using System.Threading.Tasks;
-    using MooVC.Architecture.MessageTests;
-    using Base = MooVC.Architecture.WhenCoordinateAsyncIsCalled;
+    private readonly SerializableMessage message;
 
-    public sealed class WhenCoordinateAsyncIsCalled
-        : Base
+    public WhenCoordinateAsyncIsCalled()
     {
-        private readonly SerializableMessage message;
+        message = new SerializableMessage();
+    }
 
-        public WhenCoordinateAsyncIsCalled()
-        {
-            message = new SerializableMessage();
-        }
-
-        protected override Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default)
-        {
-            return message.CoordinateAsync(operation, timeout: timeout);
-        }
+    protected override Task CoordinateAsync(Func<Task> operation, TimeSpan? timeout = default)
+    {
+        return message.CoordinateAsync(operation, timeout: timeout);
     }
 }

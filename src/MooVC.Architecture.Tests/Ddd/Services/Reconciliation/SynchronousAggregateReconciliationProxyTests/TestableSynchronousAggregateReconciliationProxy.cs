@@ -1,80 +1,79 @@
-﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests
+﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation.SynchronousAggregateReconciliationProxyTests;
+
+using System;
+using System.Collections.Generic;
+using MooVC.Architecture.Ddd;
+
+public sealed class TestableSynchronousAggregateReconciliationProxy
+    : SynchronousAggregateReconciliationProxy
 {
-    using System;
-    using System.Collections.Generic;
-    using MooVC.Architecture.Ddd;
+    private readonly Func<Reference, EventCentricAggregateRoot?>? get;
+    private readonly Func<IEnumerable<EventCentricAggregateRoot>>? getAll;
+    private readonly Action<EventCentricAggregateRoot>? overwrite;
+    private readonly Action<Reference>? purge;
+    private readonly Action<EventCentricAggregateRoot>? save;
 
-    public sealed class TestableSynchronousAggregateReconciliationProxy
-        : SynchronousAggregateReconciliationProxy
+    public TestableSynchronousAggregateReconciliationProxy(
+        Func<Reference, EventCentricAggregateRoot?>? get = default,
+        Func<IEnumerable<EventCentricAggregateRoot>>? getAll = default,
+        Action<EventCentricAggregateRoot>? overwrite = default,
+        Action<Reference>? purge = default,
+        Action<EventCentricAggregateRoot>? save = default)
     {
-        private readonly Func<Reference, EventCentricAggregateRoot?>? get;
-        private readonly Func<IEnumerable<EventCentricAggregateRoot>>? getAll;
-        private readonly Action<EventCentricAggregateRoot>? overwrite;
-        private readonly Action<Reference>? purge;
-        private readonly Action<EventCentricAggregateRoot>? save;
+        this.get = get;
+        this.getAll = getAll;
+        this.overwrite = overwrite;
+        this.purge = purge;
+        this.save = save;
+    }
 
-        public TestableSynchronousAggregateReconciliationProxy(
-            Func<Reference, EventCentricAggregateRoot?>? get = default,
-            Func<IEnumerable<EventCentricAggregateRoot>>? getAll = default,
-            Action<EventCentricAggregateRoot>? overwrite = default,
-            Action<Reference>? purge = default,
-            Action<EventCentricAggregateRoot>? save = default)
+    protected override EventCentricAggregateRoot? PerformGet(Reference aggregate)
+    {
+        if (get is null)
         {
-            this.get = get;
-            this.getAll = getAll;
-            this.overwrite = overwrite;
-            this.purge = purge;
-            this.save = save;
+            throw new NotImplementedException();
         }
 
-        protected override EventCentricAggregateRoot? PerformGet(Reference aggregate)
-        {
-            if (get is null)
-            {
-                throw new NotImplementedException();
-            }
+        return get(aggregate);
+    }
 
-            return get(aggregate);
+    protected override IEnumerable<EventCentricAggregateRoot> PerformGetAll()
+    {
+        if (getAll is null)
+        {
+            throw new NotImplementedException();
         }
 
-        protected override IEnumerable<EventCentricAggregateRoot> PerformGetAll()
-        {
-            if (getAll is null)
-            {
-                throw new NotImplementedException();
-            }
+        return getAll();
+    }
 
-            return getAll();
+    protected override void PerformOverwrite(EventCentricAggregateRoot aggregate)
+    {
+        if (overwrite is null)
+        {
+            throw new NotImplementedException();
         }
 
-        protected override void PerformOverwrite(EventCentricAggregateRoot aggregate)
-        {
-            if (overwrite is null)
-            {
-                throw new NotImplementedException();
-            }
+        overwrite(aggregate);
+    }
 
-            overwrite(aggregate);
+    protected override void PerformPurge(Reference aggregate)
+    {
+        if (purge is null)
+        {
+            throw new NotImplementedException();
         }
 
-        protected override void PerformPurge(Reference aggregate)
-        {
-            if (purge is null)
-            {
-                throw new NotImplementedException();
-            }
+        purge(aggregate);
+    }
 
-            purge(aggregate);
+    protected override void PerformSave(EventCentricAggregateRoot aggregate)
+    {
+        if (save is null)
+        {
+            throw new NotImplementedException();
         }
 
-        protected override void PerformSave(EventCentricAggregateRoot aggregate)
-        {
-            if (save is null)
-            {
-                throw new NotImplementedException();
-            }
-
-            save(aggregate);
-        }
+        save(aggregate);
     }
 }

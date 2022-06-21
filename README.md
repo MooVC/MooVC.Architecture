@@ -12,6 +12,7 @@ While the original MooVC PHP based framework has long since been deprecated, man
 
 ## Enhancements
 
+- Added a new Ddd.Collections.EnumerableExtensions.ToReferences extension that will return an enumerable of references based on a collection of aggregates.
 - Added a new Request<T> that serves as a derivation of Request capable of supporting explicit specification of the context type.
 - Changed Request so that it can now be implicit cast to the Message that serves as the Context.
 

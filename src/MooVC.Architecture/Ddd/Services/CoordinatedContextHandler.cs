@@ -43,17 +43,32 @@ public abstract class CoordinatedContextHandler<TAggregate, TMessage>
 
     protected virtual async Task PerformCoordinatedExecuteAsync(TMessage message, Reference<TAggregate> reference, CancellationToken cancellationToken)
     {
-        TAggregate aggregate = await reference
-            .RetrieveAsync(message, repository, cancellationToken: cancellationToken)
+        TAggregate aggregate = await PerformCoordinatedRetrieveAsync(message, reference, cancellationToken)
             .ConfigureAwait(false);
 
         await PerformCoordinatedExecuteAsync(aggregate, message, cancellationToken)
             .ConfigureAwait(false);
 
-        await aggregate
-            .SaveAsync(repository, cancellationToken: cancellationToken)
+        await PerformCoordinatedSaveAsync(aggregate, message, repository, cancellationToken)
             .ConfigureAwait(false);
     }
 
+    protected virtual Task<TAggregate> PerformCoordinatedRetrieveAsync(
+        TMessage message,
+        Reference<TAggregate> reference,
+        CancellationToken cancellationToken)
+    {
+        return reference.RetrieveAsync(message, repository, cancellationToken: cancellationToken);
+    }
+
     protected abstract Task PerformCoordinatedExecuteAsync(TAggregate aggregate, TMessage message, CancellationToken cancellationToken);
+
+    protected virtual Task PerformCoordinatedSaveAsync(
+        TAggregate aggregate,
+        TMessage message,
+        IRepository<TAggregate> repository,
+        CancellationToken cancellationToken)
+    {
+        return aggregate.SaveAsync(repository, cancellationToken: cancellationToken);
+    }
 }

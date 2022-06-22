@@ -43,7 +43,7 @@ public abstract class CoordinatedContextHandler<TAggregate, TMessage>
 
     protected virtual async Task PerformCoordinatedExecuteAsync(TMessage message, Reference<TAggregate> reference, CancellationToken cancellationToken)
     {
-        TAggregate aggregate = await PerformCoordinatedRetrieveAsync(message, reference, cancellationToken)
+        TAggregate aggregate = await PerformCoordinatedRetrieveAsync(message, reference, repository, cancellationToken)
             .ConfigureAwait(false);
 
         await PerformCoordinatedExecuteAsync(aggregate, message, cancellationToken)
@@ -56,6 +56,7 @@ public abstract class CoordinatedContextHandler<TAggregate, TMessage>
     protected virtual Task<TAggregate> PerformCoordinatedRetrieveAsync(
         TMessage message,
         Reference<TAggregate> reference,
+        IRepository<TAggregate> repository,
         CancellationToken cancellationToken)
     {
         return reference.RetrieveAsync(message, repository, cancellationToken: cancellationToken);

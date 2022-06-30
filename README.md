@@ -8,8 +8,8 @@ MooVC was originally created as a PHP based framework back in 2009, intended to 
 
 While the original MooVC PHP based framework has long since been deprecated, many of the lessons learned from it have formed the basis of solutions the author has since developed.  This library, and those related to it, are all intended to support the rapid development of high quality software that addresses a variety of use-cases.
 
-# Release v9.3.0
+# Release v10.0.0
 
 ## Enhancements
 
-- Changed Ddd.Services.CoordinatedContextHandler so that the Retrieve and Save behaviors can now be overridden.
+- Changed to target v7.x of MooVC (**Breaking Change**).

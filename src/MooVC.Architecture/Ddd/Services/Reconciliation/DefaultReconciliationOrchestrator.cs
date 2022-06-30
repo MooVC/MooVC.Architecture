@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,7 +78,7 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
 
     private async Task<IEventSequence?> GetPreviousSequenceAsync(CancellationToken? cancellationToken)
     {
-        IEnumerable<TEventSequence>? last = await sequenceStore
+        TEventSequence[] last = await sequenceStore
             .GetAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 

@@ -12,4 +12,13 @@ While the original MooVC PHP based framework has long since been deprecated, man
 
 ## Enhancements
 
+- Added a new constructor variant to Architecture.Cqrs..Services.PaginatedResult<TQuery, T>, enable initialization via an instance of Linq.PagedResult<TQuery, T>.
+- Changed Architecture.Message so that constructor parameter context (of type Message) is now an optional parameter.
+- Changed Architecture.Ddd.Collections.EnumerableExtensions.ToReferences to accept an optional parameter named unversioned with a default value of false that will determine the versioned state of the references generated (**Breaking Change**).
+- Removed Architecture.Cqrs.Services.EnumerableResult<T> in favour of Architecture.Cqrs.Services.EnumerableResult<TQuery, T> (**Breaking Change**).
+- Removed Architecture.Cqrs.Services.PaginatedQuery so that favour of Architecture.Cqrs.Services.PaginatedResult<TQuery, T> (**Breaking Change**).
+- Removed Architecture.Cqrs.Services.PaginatedResult<T> in favour of Architecture.Cqrs.Services.PaginatedResult<TQuery, T> (**Breaking Change**).
+- Removed Architecture.Cqrs.Services.Result<T> in favour of Architecture.Cqrs.Services.Result<TQuery, T> (**Breaking Change**).
+- Removed Architecture.Cqrs.Services.IQueryHandler<TResult> in favour of Architecture.Cqrs.Services.IQueryHandler<TQuery, TResult> (**Breaking Change**).
+- Removed Architecture.Cqrs.Services.SynchronousQueryHandler<TResult> in favour of Architecture.Cqrs.Services.SynchronousQueryHandler<TQuery, TResult> (**Breaking Change**).
 - Changed to target v7.x of MooVC (**Breaking Change**).

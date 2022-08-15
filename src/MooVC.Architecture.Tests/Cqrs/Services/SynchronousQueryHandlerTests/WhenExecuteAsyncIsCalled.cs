@@ -9,25 +9,6 @@ using Xunit;
 public sealed class WhenExecuteAsyncIsCalled
 {
     [Fact]
-    public async Task GivenNoQueryThenAResultIsReturnedAsync()
-    {
-        bool wasInvoked = false;
-        var expected = new SerializableMessage();
-
-        var handler = new TestableSynchronousQueryHandler<SerializableMessage>(execute: () =>
-        {
-            wasInvoked = true;
-
-            return expected;
-        });
-
-        SerializableMessage? actual = await handler.ExecuteAsync(CancellationToken.None);
-
-        Assert.True(wasInvoked);
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
     public async Task GivenAQueryThenAResultIsReturnedAsync()
     {
         bool wasInvoked = false;
@@ -47,15 +28,6 @@ public sealed class WhenExecuteAsyncIsCalled
 
         Assert.True(wasInvoked);
         Assert.Equal(expectedResult, actualResult);
-    }
-
-    [Fact]
-    public async Task GivenNoQueryWhenAnExceptionOccursThenTheExceptionIsThrownAsync()
-    {
-        var handler = new TestableSynchronousQueryHandler<SerializableMessage>();
-
-        _ = await Assert.ThrowsAsync<NotImplementedException>(
-            () => handler.ExecuteAsync(CancellationToken.None));
     }
 
     [Fact]

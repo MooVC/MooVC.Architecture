@@ -6,9 +6,7 @@ internal sealed class TestableCoordinatedGenerateHandler<TCommand>
     : CoordinatedGenerateHandler<AggregateRoot, TCommand>
     where TCommand : Message
 {
-    public TestableCoordinatedGenerateHandler(
-        IRepository<AggregateRoot> repository,
-        TimeSpan? timeout = default)
+    public TestableCoordinatedGenerateHandler(IRepository<AggregateRoot> repository, TimeSpan? timeout = default)
         : base(repository, timeout)
     {
     }

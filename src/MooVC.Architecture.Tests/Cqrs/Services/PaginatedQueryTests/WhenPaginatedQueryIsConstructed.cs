@@ -12,7 +12,7 @@ public sealed class WhenPaginatedQueryIsConstructed
     {
         var paging = new Paging();
         var context = new SerializableMessage();
-        var query = new SerializablePaginatedQuery(context, paging);
+        var query = new SerializablePaginatedQuery(context: context, paging: paging);
 
         Assert.Equal(context.CorrelationId, query.CorrelationId);
         Assert.Equal(context.Id, query.CausationId);
@@ -20,38 +20,24 @@ public sealed class WhenPaginatedQueryIsConstructed
     }
 
     [Fact]
-    public void GivenAContextAndNullPagingThenAnArgumentNullExceptionIsThrown()
+    public void GivenAContextAndNullPagingThenPagingIsSetToDefault()
     {
+        Paging? paging = default;
         var context = new SerializableMessage();
-        Paging? paging = default;
+        var query = new SerializablePaginatedQuery(context: context, paging: paging);
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-            () => new SerializablePaginatedQuery(context, paging!));
-
-        Assert.Equal(nameof(paging), exception.ParamName);
+        Assert.Equal(context.CorrelationId, query.CorrelationId);
+        Assert.Equal(context.Id, query.CausationId);
+        Assert.Equal(Paging.Default, query.Paging);
     }
 
     [Fact]
-    public void GivenANullPagingThenAnArgumentNullExceptionIsThrown()
+    public void GivenANullPagingThenPagingIsSetToDefault()
     {
         Paging? paging = default;
+        var query = new SerializablePaginatedQuery(paging: paging);
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-            () => new SerializablePaginatedQuery(paging!));
-
-        Assert.Equal(nameof(paging), exception.ParamName);
-    }
-
-    [Fact]
-    public void GivenANullContextAndPagingThenAnArgumentNullExceptionIsThrown()
-    {
-        Message? context = default;
-        var paging = new Paging();
-
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-            () => new SerializablePaginatedQuery(context!, paging));
-
-        Assert.Equal(nameof(context), exception.ParamName);
+        Assert.Equal(Paging.Default, query.Paging);
     }
 
     [Fact]

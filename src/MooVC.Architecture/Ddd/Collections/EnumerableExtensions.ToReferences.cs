@@ -5,7 +5,7 @@ using System.Linq;
 
 public static partial class EnumerableExtensions
 {
-    public static IEnumerable<Reference<TAggregate>> ToReferences<TAggregate>(this IEnumerable<TAggregate>? aggregates)
+    public static IEnumerable<Reference<TAggregate>> ToReferences<TAggregate>(this IEnumerable<TAggregate>? aggregates, bool unversioned = false)
         where TAggregate : AggregateRoot
     {
         if (aggregates is null)
@@ -14,7 +14,7 @@ public static partial class EnumerableExtensions
         }
 
         return aggregates
-            .Select(aggregate => aggregate.ToReference())
+            .Select(aggregate => aggregate.ToReference(unversioned: unversioned))
             .ToArray();
     }
 }

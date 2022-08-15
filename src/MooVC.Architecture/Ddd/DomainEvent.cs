@@ -17,9 +17,10 @@ public abstract class DomainEvent
     }
 
     private protected DomainEvent(Message context, Reference aggregate)
-        : base(context)
+        : base(context: context)
     {
         Aggregate = ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);
+        _ = ArgumentNotNull(context, nameof(context), DomainEventContextRequired);
     }
 
     public Reference Aggregate { get; }

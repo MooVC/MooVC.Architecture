@@ -176,6 +176,9 @@
   <data name="DomainEventAggregateRequired" xml:space="preserve">
     <value>A versioned reference for the aggregate must be provided.</value>
   </data>
+  <data name="DomainEventContextRequired" xml:space="preserve">
+    <value>The context in which the event was raised must be provided.</value>
+  </data>
   <data name="EnsureReferenceIsNotEmptyMessage" xml:space="preserve">
     <value>A non-empty reference of aggregate type {0} is required.</value>
   </data>

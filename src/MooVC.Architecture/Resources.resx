@@ -123,9 +123,6 @@
   <data name="EntityMaximumIdValueExceededExceptionTypeRequired" xml:space="preserve">
     <value>The type of the entity must be provided.</value>
   </data>
-  <data name="MessageContextRequired" xml:space="preserve">
-    <value>The context of the message must be provided.</value>
-  </data>
   <data name="MessageExtensionsCoordinateAsyncMessageRequired" xml:space="preserve">
     <value>The message that serves as the context for coordination must be provided.</value>
   </data>

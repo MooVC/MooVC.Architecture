@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 [Serializable]
 internal sealed class SerializableResult<T>
-    : Result<T>
+    : Result<Message, T>
     where T : notnull
 {
     public SerializableResult(Message context, T value)
@@ -13,9 +13,7 @@ internal sealed class SerializableResult<T>
     {
     }
 
-    private SerializableResult(
-        SerializationInfo info,
-        StreamingContext context)
+    private SerializableResult(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

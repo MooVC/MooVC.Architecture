@@ -10,11 +10,7 @@ using MooVC.Serialization;
 internal sealed class SerializableValue
     : Value
 {
-    public SerializableValue(
-        int first = 0,
-        string? second = default,
-        Value? third = default,
-        IEnumerable<string>? fourth = default)
+    public SerializableValue(int first = 0, string? second = default, Value? third = default, IEnumerable<string>? fourth = default)
     {
         First = first;
         Second = second;

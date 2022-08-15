@@ -3,7 +3,7 @@
     <Authors>Paul Martins;ControlSoft Automation Systems Limited</Authors>
     <CodeAnalysisRuleSet>../../stylecop.analyzers.ruleset</CodeAnalysisRuleSet>
     <Company>MooVC</Company>
-    <Copyright>MooVC © 2019-2021</Copyright>
+    <Copyright>MooVC © 2019-2022</Copyright>
     <Description>Tests a framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

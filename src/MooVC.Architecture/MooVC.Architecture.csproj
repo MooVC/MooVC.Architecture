@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AnalysisMode>Recommended</AnalysisMode>
-    <Authors>Paul Martins;ControlSoft Automation Systems Limited</Authors>
+    <Authors>Paul Martins</Authors>
     <CodeAnalysisRuleSet>../../stylecop.analyzers.ruleset</CodeAnalysisRuleSet>
     <Company>MooVC</Company>
     <Copyright>MooVC © 2019-2022</Copyright>

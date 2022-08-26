@@ -12,7 +12,8 @@ public sealed class TestableProjector<TAggregate>
 {
     public override async Task<IEnumerable<SerializableProjection<TAggregate>>> ProjectAsync(
         IEnumerable<TAggregate> aggregates,
-        CancellationToken? cancellationToken = default)
+        CancellationToken? cancellationToken = default,
+        Message? context = default)
     {
         SerializableProjection<TAggregate>[] projections = aggregates
             .Select(aggregate => new SerializableProjection<TAggregate>(aggregate))

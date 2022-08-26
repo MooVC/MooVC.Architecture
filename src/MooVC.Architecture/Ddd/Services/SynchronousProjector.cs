@@ -9,7 +9,10 @@ public abstract class SynchronousProjector<TAggregate, TProjection>
     where TAggregate : AggregateRoot
     where TProjection : Projection<TAggregate>
 {
-    public override Task<IEnumerable<TProjection>> ProjectAsync(IEnumerable<TAggregate> aggregates, CancellationToken? cancellationToken = default)
+    public override Task<IEnumerable<TProjection>> ProjectAsync(
+        IEnumerable<TAggregate> aggregates,
+        CancellationToken? cancellationToken = default,
+        Message? context = default)
     {
         return Task.FromResult(PerformProject(aggregates));
     }

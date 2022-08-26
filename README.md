@@ -15,6 +15,7 @@ While the original MooVC PHP based framework has long since been deprecated, man
 - Added a new constructor variant to Architecture.Cqrs..Services.PaginatedResult<TQuery, T>, enable initialization via an instance of Linq.PagedResult<TQuery, T>.
 - Changed Architecture.Message so that constructor parameter context (of type Message) is now an optional parameter.
 - Changed Architecture.Ddd.Collections.EnumerableExtensions.ToReferences to accept an optional parameter named unversioned with a default value of false that will determine the versioned state of the references generated (**Breaking Change**).
+- Changed Architecture.Ddd.Services.IProjector<TAggregate, TProjection>.ProjectAsync to include an optional context parameter (**Breaking Change**).- 
 - Removed Architecture.Cqrs.Services.EnumerableResult<T> in favour of Architecture.Cqrs.Services.EnumerableResult<TQuery, T> (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.IQueryEngine.QueryAsync<TResult> in favour of Architecture.Cqrs.Services.IQueryEngine.QueryAsync<TQuery, TResult>(**Breaking Change**).
 - Removed Architecture.Cqrs.Services.PaginatedQuery in favour of Architecture.Cqrs.Services.PaginatedResult<TQuery, T> (**Breaking Change**).

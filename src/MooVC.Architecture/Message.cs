@@ -3,10 +3,12 @@
 using System;
 using System.Runtime.Serialization;
 using MooVC.Serialization;
+using MooVC.Threading;
 
 [Serializable]
 public abstract class Message
-    : Entity<Guid>
+    : Entity<Guid>,
+      ICoordinatable<Guid>
 {
     protected Message(Message? context = default)
         : base(Guid.NewGuid())
@@ -40,6 +42,11 @@ public abstract class Message
         SerializeCorrelationId(info, context);
 
         info.AddValue(nameof(TimeStamp), TimeStamp);
+    }
+
+    Guid ICoordinatable<Guid>.GetKey()
+    {
+        return CorrelationId;
     }
 
     protected virtual Guid DeserializeCausationId(SerializationInfo info, StreamingContext context)

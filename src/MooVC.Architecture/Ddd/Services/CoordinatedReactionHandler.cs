@@ -1,18 +1,18 @@
 ﻿namespace MooVC.Architecture.Ddd.Services;
 
-using System;
+using MooVC.Architecture.Ddd.Threading;
 
 public abstract class CoordinatedReactionHandler<TAggregate, TEvent>
     : CoordinatedContextHandler<TAggregate, TEvent>
     where TAggregate : AggregateRoot
     where TEvent : DomainEvent<TAggregate>
 {
-    protected CoordinatedReactionHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
-        : base(repository, timeout)
+    protected CoordinatedReactionHandler(IAggregateCoordinator<TAggregate> coordinator, IRepository<TAggregate> repository)
+        : base(coordinator, repository)
     {
     }
 
-    protected override Reference<TAggregate> IdentifyTarget(TEvent @event)
+    protected override Reference<TAggregate> IdentifyCoordinationContext(TEvent @event)
     {
         return @event.Aggregate;
     }

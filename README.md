@@ -10,17 +10,47 @@ While the original MooVC PHP based framework has long since been deprecated, man
 
 # Release v10.0.0
 
+This release focuses on adding a greater degree of flexibility into the framework, following feedback gained from years of successful implementations.  Features that have resulted in unneccessary overhead have been removed, with additional features added to support automation and reduce the overall code footprint required.
+
 ## Enhancements
 
-- Added a new constructor variant to Architecture.Cqrs..Services.PaginatedResult<TQuery, T>, enable initialization via an instance of Linq.PagedResult<TQuery, T>.
-- Changed Architecture.Message so that constructor parameter context (of type Message) is now an optional parameter.
+- Added a new constructor variant to Architecture.Cqrs.Services.PaginatedResult<TQuery, T>, enable initialization via an instance of Linq.PagedResult<TQuery, T>.
+- Added Architecture.Ddd.ReferenceExtensions.Is extension to determine if an instance of Ddd.Reference is of a specific aggregate type.
+- Added Ddd.Threading.AggregateCoordinator to provide a more concise implementation to coordination in the context of a specific aggregate.
+- Added Ddd.Threading.IAggregateCoordinator to provide a more concise approach to coordinating in the context of a specific aggregate.
 - Changed Architecture.Ddd.Collections.EnumerableExtensions.ToReferences to accept an optional parameter named unversioned with a default value of false that will determine the versioned state of the references generated (**Breaking Change**).
+- Changed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand> so that it now requires an instance of Ddd.Threading.IAggregateCoordinator<TAggregate> as a parameter on construction (**Breaking Change**).
+- Changed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand> so that it is now possible to override the save behavior via SaveAsync.
+- Changed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand> so that it now requires an instance of Ddd.Threading.IAggregateCoordinator<TAggregate> as a parameter on construction (**Breaking Change**).
+- Changed Architecture.Ddd.Services.CoordinatedHandler<TAggregate, TCommand> so that it now requires an instance of Ddd.Threading.IAggregateCoordinator<TAggregate> as its sole parameter on construction (**Breaking Change**).
+- Changed Architecture.Ddd.Services.CoordinatedHandler<TAggregate, TCommand>.ExecuteAsync so that it now obtains the coordination context from a virtual new method named IdentifyCoordinationContextAsync (**Breaking Change**).
+- Changed Architecture.Ddd.Services.CoordinatedReactionHandler<TAggregate, TCommand> so that it now requires an instance of Ddd.Threading.IAggregateCoordinator<TAggregate> as a parameter on construction (**Breaking Change**).
 - Changed Architecture.Ddd.Services.IProjector<TAggregate, TProjection>.ProjectAsync to include an optional context parameter (**Breaking Change**).- 
+- Changed Architecture.Ddd.Services.Reconciliation.DefaultAggregateReconciler so that it no longer accepts a coordination timeout (it is now up to the proxies to coordinate if required) (**Breaking Change**).
+- Changed Architecture.Entity<T> to implement Threading.ICoordinatable<T> via the Id property.
+- Changed Architecture.Entity<T>.ToString so that the call is now forwarded to the ToString method for the instance held by the Id property.
+- Changed Architecture.Message so that constructor parameter context (of type Message) is now an optional parameter.
+- Changed Architecture.Message to implement Threading.ICoordinatable<Guid> via the CorrelationId property.
+- Changed Architecture.Reference<T> to implement Threading.ICoordinatable<Guid> via the Id property.
+- Changed to target v7.x of MooVC (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.EnumerableResult<T> in favour of Architecture.Cqrs.Services.EnumerableResult<TQuery, T> (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.IQueryEngine.QueryAsync<TResult> in favour of Architecture.Cqrs.Services.IQueryEngine.QueryAsync<TQuery, TResult>(**Breaking Change**).
+- Removed Architecture.Cqrs.Services.IQueryHandler<TResult> in favour of Architecture.Cqrs.Services.IQueryHandler<TQuery, TResult> (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.PaginatedQuery in favour of Architecture.Cqrs.Services.PaginatedResult<TQuery, T> (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.PaginatedResult<T> in favour of Architecture.Cqrs.Services.PaginatedResult<TQuery, T> (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.Result<T> in favour of Architecture.Cqrs.Services.Result<TQuery, T> (**Breaking Change**).
-- Removed Architecture.Cqrs.Services.IQueryHandler<TResult> in favour of Architecture.Cqrs.Services.IQueryHandler<TQuery, TResult> (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.SynchronousQueryHandler<TResult> in favour of Architecture.Cqrs.Services.SynchronousQueryHandler<TQuery, TResult> (**Breaking Change**).
-- Changed to target v7.x of MooVC (**Breaking Change**).
+- Removed Architecture.Ddd.AggregateRootExtensions.CoordinateAsync  (**Breaking Change**).
+- Removed Architecture.Ddd.ReferenceExtensions.CoordinateAsync (**Breaking Change**).
+- Removed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.IdentifyTarget in favour of IdentifyCoordinationContextAsync or IdentifyCoordinationContext (**Breaking Change**).
+- Removed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync in favor of PerformExecuteAsync (**Breaking Change**).
+- Removed Architecture.MessageExtensions.CoordinateAsync (**Breaking Change**).
+- Removed Architecture.ObjectExtensions.CoordinateAsync (**Breaking Change**).
+- Removed Architecture.TypeExtensions.CoordinateAsync (**Breaking Change**).
+- Renamed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync to PerformExecuteAsync (**Breaking Change**).
+- Renamed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedRetrieveAsync to RetrieveAsync (**Breaking Change**).
+- Renamed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedSaveAsync to SaveAsync (**Breaking Change**).
+- Renamed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand>.PerformCoordinatedGenerate to Generate (**Breaking Change**).
+- Renamed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand>.PerformSupplementalActivitiesAsync to VerifyAsync (**Breaking Change**).
+- Renamed Architecture.Ddd.Services.CoordinatedHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync to PerformExecuteAsync (**Breaking Change**).
+- Renamed Architecture.Ddd.Services.CoordinatedOperationHandler.PerformCoordinatedOperation to Apply (**Breaking Change**).

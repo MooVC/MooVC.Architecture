@@ -180,15 +180,6 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The aggregate that serves as the context for coordination must be provided..
-        /// </summary>
-        internal static string AggregateRootExtensionsCoordinateAsyncAggregateRequired {
-            get {
-                return ResourceManager.GetString("AggregateRootExtensionsCoordinateAsyncAggregateRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The destination must be provided..
         /// </summary>
         internal static string AggregateRootExtensionsSaveDestinationRequired {
@@ -270,6 +261,15 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The aggregate of type {0} that serves as the subject of the message must be provided..
+        /// </summary>
+        internal static string MessageAggregateRequired {
+            get {
+                return ResourceManager.GetString("MessageAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A reference to the aggregate must be provided..
         /// </summary>
         internal static string ProjectionAggregateRequired {
@@ -302,15 +302,6 @@ namespace MooVC.Architecture.Ddd {
         internal static string ReferenceDeserializeTypeTypeIndeterminate {
             get {
                 return ResourceManager.GetString("ReferenceDeserializeTypeTypeIndeterminate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
-        /// </summary>
-        internal static string ReferenceExtensionsCoordinateAsyncReferenceRequired {
-            get {
-                return ResourceManager.GetString("ReferenceExtensionsCoordinateAsyncReferenceRequired", resourceCulture);
             }
         }
         

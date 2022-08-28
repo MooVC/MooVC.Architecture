@@ -3,23 +3,24 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MooVC.Architecture.Ddd.Threading;
 
 public abstract class CoordinatedOperationHandler<TAggregate, TMessage>
     : CoordinatedContextHandler<TAggregate, TMessage>
     where TAggregate : AggregateRoot
     where TMessage : Message
 {
-    protected CoordinatedOperationHandler(IRepository<TAggregate> repository, TimeSpan? timeout = default)
-        : base(repository, timeout: timeout)
+    protected CoordinatedOperationHandler(IAggregateCoordinator<TAggregate> coordinator, IRepository<TAggregate> repository)
+        : base(coordinator, repository)
     {
     }
 
-    protected override Task PerformCoordinatedExecuteAsync(TAggregate aggregate, TMessage message, CancellationToken cancellationToken)
+    protected override Task PerformExecuteAsync(TAggregate aggregate, TMessage message, CancellationToken cancellationToken)
     {
-        PerformCoordinatedOperation(aggregate, message);
+        Apply(aggregate, message);
 
         return Task.CompletedTask;
     }
 
-    protected abstract void PerformCoordinatedOperation(TAggregate aggregate, TMessage message);
+    protected abstract void Apply(TAggregate aggregate, TMessage message);
 }

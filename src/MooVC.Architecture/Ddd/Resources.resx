@@ -158,9 +158,6 @@
   <data name="AggregateReferenceMismatchExceptionReferenceRequired" xml:space="preserve">
     <value>The reference that serves as the subject of the conversion must be provided.</value>
   </data>
-  <data name="AggregateRootExtensionsCoordinateAsyncAggregateRequired" xml:space="preserve">
-    <value>The aggregate that serves as the context for coordination must be provided.</value>
-  </data>
   <data name="AggregateRootExtensionsSaveDestinationRequired" xml:space="preserve">
     <value>The destination must be provided.</value>
   </data>
@@ -188,6 +185,9 @@
   <data name="EventCentricAggregateRootStateChangesDenied" xml:space="preserve">
     <value>Changed to the state of an aggregate of type {0} must be made through ApplyChanges.</value>
   </data>
+  <data name="MessageAggregateRequired" xml:space="preserve">
+    <value>The aggregate of type {0} that serves as the subject of the message must be provided.</value>
+  </data>
   <data name="ProjectionAggregateRequired" xml:space="preserve">
     <value>A reference to the aggregate must be provided.</value>
   </data>
@@ -199,9 +199,6 @@
   </data>
   <data name="ReferenceDeserializeTypeTypeIndeterminate" xml:space="preserve">
     <value>The type of the reference could not be determined.</value>
-  </data>
-  <data name="ReferenceExtensionsCoordinateAsyncReferenceRequired" xml:space="preserve">
-    <value>The reference that serves as the context for coordination must be provided.</value>
   </data>
   <data name="ReferenceExtensionsToUnversionedReferenceRequired" xml:space="preserve">
     <value>The reference to be unversioned must be provided.</value>

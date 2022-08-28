@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MooVC.Architecture {
+namespace MooVC.Architecture.Ddd.Threading {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MooVC.Architecture {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MooVC.Architecture.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MooVC.Architecture.Ddd.Threading.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The maximum supported ID of {0} for entity of type {1} has been exceeded..
+        ///   Looks up a localized string similar to The reference coordinator must be provided..
         /// </summary>
-        internal static string EntityMaximumIdValueExceededExceptionMessage {
+        internal static string AggregateCoordinatorCoordinatorRequired {
             get {
-                return ResourceManager.GetString("EntityMaximumIdValueExceededExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The type of the entity must be provided..
-        /// </summary>
-        internal static string EntityMaximumIdValueExceededExceptionTypeRequired {
-            get {
-                return ResourceManager.GetString("EntityMaximumIdValueExceededExceptionTypeRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The context of the request must be provided..
-        /// </summary>
-        internal static string RequestContextRequired {
-            get {
-                return ResourceManager.GetString("RequestContextRequired", resourceCulture);
+                return ResourceManager.GetString("AggregateCoordinatorCoordinatorRequired", resourceCulture);
             }
         }
     }

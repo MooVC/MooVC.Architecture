@@ -123,16 +123,7 @@
   <data name="EntityMaximumIdValueExceededExceptionTypeRequired" xml:space="preserve">
     <value>The type of the entity must be provided.</value>
   </data>
-  <data name="MessageExtensionsCoordinateAsyncMessageRequired" xml:space="preserve">
-    <value>The message that serves as the context for coordination must be provided.</value>
-  </data>
-  <data name="ObjectExtensionsCoordinateAsyncObjectRequired" xml:space="preserve">
-    <value>The object that serves as the context for coordination must be provided.</value>
-  </data>
   <data name="RequestContextRequired" xml:space="preserve">
     <value>The context of the request must be provided.</value>
-  </data>
-  <data name="TypeExtensionsGenerateContextTypeRequired" xml:space="preserve">
-    <value>The type that serves as the context for coordination must be provided.</value>
   </data>
 </root>

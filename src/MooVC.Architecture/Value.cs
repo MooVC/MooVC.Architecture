@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using MooVC.Collections.Generic;
 
 [Serializable]
 public abstract class Value
@@ -134,6 +135,8 @@ public abstract class Value
             return AggregateHashCode(array.Cast<object>());
         }
 
-        return new[] { value?.GetHashCode() ?? 0 };
+        int code = value?.GetHashCode() ?? 0;
+
+        return code.AsEnumerable();
     }
 }

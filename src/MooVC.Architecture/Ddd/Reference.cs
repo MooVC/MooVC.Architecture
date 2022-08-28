@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.Serialization;
 using MooVC.Serialization;
+using MooVC.Threading;
 using static System.String;
 using static MooVC.Architecture.Ddd.Resources;
 using static MooVC.Ensure;
@@ -13,6 +14,7 @@ using static MooVC.Ensure;
 [Serializable]
 public abstract class Reference
     : Value,
+      ICoordinatable<Guid>,
       IEquatable<Reference>
 {
     private protected Reference(Guid id, Type type, SignedVersion? version)
@@ -162,6 +164,11 @@ public abstract class Reference
         }
 
         return $"{Type.FullName} [{Id:P}, {Version}]";
+    }
+
+    Guid ICoordinatable<Guid>.GetKey()
+    {
+        return Id;
     }
 
     protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)

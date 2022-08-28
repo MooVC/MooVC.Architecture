@@ -4,6 +4,7 @@ using System;
 using System.Runtime.Serialization;
 using MooVC.Serialization;
 using MooVC.Threading;
+using static System.String;
 
 [Serializable]
 public abstract class Entity<T>
@@ -63,7 +64,7 @@ public abstract class Entity<T>
 
     public override string ToString()
     {
-        return Id.ToString();
+        return Id.ToString() ?? Empty;
     }
 
     T ICoordinatable<T>.GetKey()

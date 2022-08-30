@@ -15,6 +15,7 @@ This release focuses on adding a greater degree of flexibility into the framewor
 ## Enhancements
 
 - Added a new constructor variant to Architecture.Cqrs.Services.PaginatedResult<TQuery, T>, enable initialization via an instance of Linq.PagedResult<TQuery, T>.
+- Added Architecture.Ddd.MessageExtensions.TryIdentify extension to determine the contextual refernece with a message (if applicable).
 - Added Architecture.Ddd.ReferenceExtensions.Is extension to determine if an instance of Ddd.Reference is of a specific aggregate type.
 - Added Ddd.Threading.AggregateCoordinator to provide a more concise implementation to coordination in the context of a specific aggregate.
 - Added Ddd.Threading.IAggregateCoordinator to provide a more concise approach to coordinating in the context of a specific aggregate.

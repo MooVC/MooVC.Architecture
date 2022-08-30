@@ -16,7 +16,7 @@ public abstract class DomainEvent
         Aggregate = info.GetValue<Reference>(nameof(Aggregate));
     }
 
-    private protected DomainEvent(Message context, Reference aggregate)
+    private protected DomainEvent(Reference aggregate, Message context)
         : base(context: context)
     {
         Aggregate = ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);

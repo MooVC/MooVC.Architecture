@@ -41,17 +41,9 @@ public abstract class CoordinatedHandler<TAggregate, TMessage>
 
     protected virtual Reference<TAggregate> IdentifyCoordinationContext(TMessage message)
     {
-        if (message is Message<TAggregate> contextual)
-        {
-            return contextual.Aggregate;
-        }
+        _ = message.TryIdentify(out Reference<TAggregate> context);
 
-        if (message is DomainEvent @event && @event.Aggregate.Is(out Reference<TAggregate>? source))
-        {
-            return source;
-        }
-
-        return Reference<TAggregate>.Empty;
+        return context;
     }
 
     protected virtual Task<Reference<TAggregate>> IdentifyCoordinationContextAsync(TMessage message, CancellationToken cancellationToken)

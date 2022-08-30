@@ -11,7 +11,7 @@ public abstract class DomainEvent<TAggregate>
     private readonly Lazy<Reference<TAggregate>> aggregate;
 
     protected DomainEvent(Message context, TAggregate aggregate)
-        : base(context, aggregate.ToReference())
+        : base(aggregate.ToReference(), context)
     {
         this.aggregate = new(GetTypedReference);
     }

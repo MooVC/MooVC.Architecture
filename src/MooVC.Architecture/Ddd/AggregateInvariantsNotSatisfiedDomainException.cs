@@ -14,7 +14,7 @@ public sealed class AggregateInvariantsNotSatisfiedDomainException
     : DomainException
 {
     public AggregateInvariantsNotSatisfiedDomainException(Request request, Reference aggregate, IEnumerable<string> explainations)
-        : base(request.Context, aggregate, FormatMessage(aggregate, explainations, request))
+        : base(aggregate, request, FormatMessage(aggregate, explainations, request))
     {
         Explainations = explainations.Snapshot();
     }

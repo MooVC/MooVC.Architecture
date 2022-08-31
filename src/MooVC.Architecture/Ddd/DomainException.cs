@@ -17,7 +17,7 @@ public abstract class DomainException
         TimeStamp = info.GetValue<DateTimeOffset>(nameof(TimeStamp));
     }
 
-    private protected DomainException(Message context, Reference aggregate, string message)
+    private protected DomainException(Reference aggregate, Message context, string message)
         : base(message)
     {
         Aggregate = aggregate;

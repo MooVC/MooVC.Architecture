@@ -21,6 +21,7 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Added Ddd.Threading.IAggregateCoordinator to provide a more concise approach to coordinating in the context of a specific aggregate.
 - Changed Architecture.Ddd.Collections.EnumerableExtensions.ToReferences to accept an optional parameter named unversioned with a default value of false that will determine the versioned state of the references generated (**Breaking Change**).
 - Changed Architecture.Ddd.DomainException<TAggregate> so that the order of construction parameters is now alphabetic (**Breaking Change**).
+- Changed Architecture.Ddd.Services.AtomicUnit<T> so that the order of construction parameters is now alphabetic (**Breaking Change**).
 - Changed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand> so that it now requires an instance of Ddd.Threading.IAggregateCoordinator<TAggregate> as a parameter on construction (**Breaking Change**).
 - Changed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand>.Generate so that an aggregate is no longer required in return.
 - Changed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand> so that it is now possible to override the generate behavior via GenerateAsync.

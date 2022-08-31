@@ -111,7 +111,7 @@ public sealed class WhenSatisfiesIsCalled
         var context = new SerializableMessage();
         var request = new TestableRequest(context);
         var aggregate = new SerializableAggregateRoot();
-        var expected = new Mock<DomainException<SerializableAggregateRoot>>(context, aggregate, string.Empty);
+        var expected = new Mock<DomainException<SerializableAggregateRoot>>(aggregate, context, string.Empty);
 
         bool wasInvoked = false;
 

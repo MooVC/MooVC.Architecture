@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using MooVC.Architecture.Ddd;
+using MooVC.Collections.Generic;
 using MooVC.Serialization;
 using static MooVC.Architecture.Ddd.Services.Resources;
 using static MooVC.Ensure;
@@ -15,12 +16,12 @@ public abstract class AtomicUnit<T>
 {
     private readonly Lazy<Reference> aggregate;
 
-    protected AtomicUnit(T id, DomainEvent @event)
-        : this(id, new[] { @event })
+    protected AtomicUnit(DomainEvent @event, T id)
+        : this(@event.AsEnumerable(), id)
     {
     }
 
-    protected AtomicUnit(T id, IEnumerable<DomainEvent> events)
+    protected AtomicUnit(IEnumerable<DomainEvent> events, T id)
     {
         Events = ArgumentNotEmpty(events, nameof(events), AtomicUnitEventsRequired, predicate: value => value is { });
 

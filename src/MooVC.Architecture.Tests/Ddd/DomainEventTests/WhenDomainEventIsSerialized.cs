@@ -12,7 +12,7 @@ public sealed class WhenDomainEventIsSerialized
     {
         var aggregate = new SerializableAggregateRoot();
         var expectedContext = new SerializableMessage();
-        var original = new SerializableDomainEvent<SerializableAggregateRoot>(expectedContext, aggregate);
+        var original = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, expectedContext);
         SerializableDomainEvent<SerializableAggregateRoot> deserialized = original.Clone();
 
         Assert.Equal(original, deserialized);

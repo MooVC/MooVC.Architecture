@@ -11,7 +11,7 @@ public sealed class WhenEventReconciliationAsyncEventArgsIsSerialized
     {
         var aggregate = new SerializableEventCentricAggregateRoot();
         var context = new SerializableMessage();
-        SerializableCreatedDomainEvent[] events = new[] { new SerializableCreatedDomainEvent(context, aggregate) };
+        SerializableCreatedDomainEvent[] events = new[] { new SerializableCreatedDomainEvent(aggregate, context) };
         var original = new EventReconciliationAsyncEventArgs(events);
         EventReconciliationAsyncEventArgs deserialized = original.Clone();
 

@@ -15,7 +15,7 @@ public sealed class SerializableEventCentricAggregateRoot
     public SerializableEventCentricAggregateRoot(Message context)
         : this(Guid.NewGuid())
     {
-        ApplyChange(() => new SerializableCreatedDomainEvent(context, this), Handle);
+        ApplyChange(() => new SerializableCreatedDomainEvent(this, context), Handle);
     }
 
     public SerializableEventCentricAggregateRoot(Guid id)
@@ -32,12 +32,12 @@ public sealed class SerializableEventCentricAggregateRoot
 
     public void Fail(FailRequest request)
     {
-        ApplyChange(() => new SerializableFailedDomainEvent(request.Context, this), Handle);
+        ApplyChange(() => new SerializableFailedDomainEvent(this, request), Handle);
     }
 
     public void Set(SetRequest request)
     {
-        ApplyChange(() => new SerializableSetDomainEvent(request.Context, this, request.Value), Handle);
+        ApplyChange(() => new SerializableSetDomainEvent(this, request, request.Value), Handle);
     }
 
     public void TriggerMarkChangesAsUncommitted()

@@ -14,7 +14,7 @@ public abstract class DomainEventsAsyncEventArgsBase
 
         return Enumerable
             .Range(0, count)
-            .Select(_ => new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate))
+            .Select(_ => new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context))
             .ToArray();
     }
 }

@@ -36,15 +36,15 @@ public sealed class WhenPublishAsyncIsCalled
             .Throws<InvalidOperationException>();
 
         _ = await Assert.ThrowsAsync<InvalidOperationException>(() => bus.PublishAsync(
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate)));
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context)));
     }
 
     [Fact]
     public async Task GivenMultipleEventsThenCreateIsCalledOnceAsync()
     {
         await GivenOneOrMoreEventsThenCreateIsCalledOnceAsync(
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate));
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context),
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context));
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public sealed class WhenPublishAsyncIsCalled
     public async Task GivenOneEventThenCreateIsCalledOnceAsync()
     {
         await GivenOneOrMoreEventsThenCreateIsCalledOnceAsync(
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate));
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context));
     }
 
     [Fact]
@@ -129,8 +129,8 @@ public sealed class WhenPublishAsyncIsCalled
 
         await bus.PublishAsync(new[]
         {
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context),
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context),
         });
 
         Assert.Equal(ExpectedInvocationCount, invocationCounter);
@@ -143,7 +143,7 @@ public sealed class WhenPublishAsyncIsCalled
         @event();
 
         await bus.PublishAsync(
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate));
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context));
 
         Assert.Equal(ExpectedInvocationCount, invocationCounter);
     }

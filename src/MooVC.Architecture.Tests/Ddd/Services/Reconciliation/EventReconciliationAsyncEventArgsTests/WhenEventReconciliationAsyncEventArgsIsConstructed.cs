@@ -13,7 +13,7 @@ public sealed class WhenEventReconciliationAsyncEventArgsIsConstructed
     {
         var aggregate = new SerializableEventCentricAggregateRoot();
         var context = new SerializableMessage();
-        SerializableCreatedDomainEvent[] events = new[] { new SerializableCreatedDomainEvent(context, aggregate) };
+        SerializableCreatedDomainEvent[] events = new[] { new SerializableCreatedDomainEvent(aggregate, context) };
         var @event = new EventReconciliationAsyncEventArgs(events);
 
         Assert.Equal(events, @event.Events);

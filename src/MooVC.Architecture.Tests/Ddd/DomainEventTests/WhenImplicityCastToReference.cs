@@ -10,7 +10,7 @@ public sealed class WhenImplicityCastToReference
     {
         var aggregate = new SerializableEventCentricAggregateRoot();
         var message = new SerializableMessage();
-        var @event = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(message, aggregate);
+        var @event = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(aggregate, message);
         Reference<SerializableEventCentricAggregateRoot> reference = @event;
 
         Assert.True(reference.IsMatch(aggregate));
@@ -21,7 +21,7 @@ public sealed class WhenImplicityCastToReference
     {
         var aggregate = new SerializableEventCentricAggregateRoot();
         var message = new SerializableMessage();
-        var @event = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(message, aggregate);
+        var @event = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(aggregate, message);
         Reference reference = @event;
 
         Assert.True(reference.IsMatch(aggregate));

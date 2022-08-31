@@ -12,7 +12,7 @@ public sealed class WhenDomainEventIsConstructed
         var aggregate = new SerializableAggregateRoot();
         var context = new SerializableMessage();
 
-        var @event = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+        var @event = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
 
         Assert.True(@event.Aggregate.IsMatch(aggregate));
         Assert.Equal(context.Id, @event.CausationId);
@@ -24,8 +24,8 @@ public sealed class WhenDomainEventIsConstructed
     {
         var context = new SerializableMessage();
 
-        _ = Assert.Throws<ArgumentNullException>(
-            () => new SerializableDomainEvent<SerializableAggregateRoot>(context, default!));
+        _ = Assert.Throws<ArgumentNullException>(() =>
+            new SerializableDomainEvent<SerializableAggregateRoot>(default!, context));
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public sealed class WhenDomainEventIsConstructed
     {
         var aggregate = new SerializableAggregateRoot();
 
-        _ = Assert.Throws<ArgumentNullException>(
-            () => new SerializableDomainEvent<SerializableAggregateRoot>(default!, aggregate));
+        _ = Assert.Throws<ArgumentNullException>(() =>
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, default!));
     }
 }

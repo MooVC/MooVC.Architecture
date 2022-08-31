@@ -27,9 +27,7 @@ public sealed class TestableSynchronousEventReconciler
         {
             SerializableCreatedDomainEvent[]? events = new[]
             {
-                new SerializableCreatedDomainEvent(
-                    new SerializableMessage(),
-                    new SerializableEventCentricAggregateRoot()),
+                new SerializableCreatedDomainEvent(new SerializableEventCentricAggregateRoot(), new SerializableMessage()),
             };
 
             return await Task.FromResult((ulong.MaxValue, events));

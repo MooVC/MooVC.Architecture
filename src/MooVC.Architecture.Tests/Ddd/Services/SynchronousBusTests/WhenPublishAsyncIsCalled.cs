@@ -14,9 +14,7 @@ public sealed class WhenPublishAsyncIsCalled
 
         DomainEvent[] expected = new[]
         {
-            new SerializableCreatedDomainEvent(
-                new SerializableMessage(),
-                new SerializableEventCentricAggregateRoot()),
+            new SerializableCreatedDomainEvent(new SerializableEventCentricAggregateRoot(), new SerializableMessage()),
         };
 
         var handler = new TestableSynchronousBus(publish: actual =>
@@ -38,9 +36,7 @@ public sealed class WhenPublishAsyncIsCalled
 
         DomainEvent[] expected = new[]
         {
-            new SerializableCreatedDomainEvent(
-                new SerializableMessage(),
-                new SerializableEventCentricAggregateRoot()),
+            new SerializableCreatedDomainEvent(new SerializableEventCentricAggregateRoot(), new SerializableMessage()),
         };
 
         _ = await Assert.ThrowsAsync<NotImplementedException>(

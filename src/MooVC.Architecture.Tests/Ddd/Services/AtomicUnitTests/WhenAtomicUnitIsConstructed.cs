@@ -34,8 +34,8 @@ public sealed class WhenAtomicUnitIsConstructed
 
         var aggregate = new SerializableAggregateRoot();
         var context = new SerializableMessage();
-        var first = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
-        var second = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+        var first = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
+        var second = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
 
         var unit = new AtomicUnit(new[] { first, second });
 
@@ -50,8 +50,8 @@ public sealed class WhenAtomicUnitIsConstructed
         var aggregate = new SerializableAggregateRoot();
         var firstContext = new SerializableMessage();
         var secondContext = new SerializableMessage();
-        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(firstContext, aggregate);
-        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(secondContext, aggregate);
+        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, firstContext);
+        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, secondContext);
 
         _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(new[] { firstEvent, secondEvent }));
     }
@@ -62,8 +62,8 @@ public sealed class WhenAtomicUnitIsConstructed
         var firstAggregate = new SerializableAggregateRoot();
         var secondAggregate = new SerializableAggregateRoot();
         var context = new SerializableMessage();
-        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, firstAggregate);
-        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, secondAggregate);
+        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(firstAggregate, context);
+        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(secondAggregate, context);
 
         _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(new[] { firstEvent, secondEvent }));
     }
@@ -73,12 +73,12 @@ public sealed class WhenAtomicUnitIsConstructed
     {
         var aggregate = new SerializableEventCentricAggregateRoot();
         var context = new SerializableMessage();
-        var firstEvent = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(context, aggregate);
+        var firstEvent = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(aggregate, context);
 
         aggregate.MarkChangesAsCommitted();
         aggregate.Set(new SetRequest(context, Guid.NewGuid()));
 
-        var secondEvent = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(context, aggregate);
+        var secondEvent = new SerializableDomainEvent<SerializableEventCentricAggregateRoot>(aggregate, context);
 
         _ = Assert.Throws<ArgumentException>(() => new AtomicUnit(new[] { firstEvent, secondEvent }));
     }

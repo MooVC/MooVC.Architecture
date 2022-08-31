@@ -324,8 +324,8 @@ public sealed class WhenReconcileAsyncIsCalled
     {
         var aggregate = new SerializableAggregateRoot();
         var context = new SerializableMessage();
-        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
-        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
+        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
 
         return new[] { firstEvent, secondEvent };
     }

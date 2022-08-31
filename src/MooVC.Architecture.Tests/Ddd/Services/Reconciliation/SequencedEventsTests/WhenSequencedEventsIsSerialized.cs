@@ -17,7 +17,7 @@ public sealed class WhenSequencedEventsIsSerialized
 
         SerializableDomainEvent<SerializableAggregateRoot>[] events = new[]
         {
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context),
         };
 
         var original = new SequencedEvents(sequence, events);

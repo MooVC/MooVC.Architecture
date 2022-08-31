@@ -9,7 +9,7 @@ internal sealed class ContextualEvent
     : DomainEvent<SerializableAggregateRoot>
 {
     public ContextualEvent(SerializableAggregateRoot aggregate, Message context)
-        : base(context, aggregate)
+        : base(aggregate, context)
     {
     }
 

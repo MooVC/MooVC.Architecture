@@ -15,7 +15,7 @@ public sealed class WhenAtomicUnitIsSerialized
 
         SerializableDomainEvent<SerializableAggregateRoot>[] events = new[]
         {
-            new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate),
+            new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context),
         };
 
         var original = new AtomicUnit(events);

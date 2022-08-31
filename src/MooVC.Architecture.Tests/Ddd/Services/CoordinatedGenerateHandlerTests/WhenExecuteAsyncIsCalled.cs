@@ -17,9 +17,9 @@ public sealed class WhenExecuteAsyncIsCalled
         var coordinator = new AggregateCoordinator<AggregateRoot>(new Coordinator<Guid>());
         var repository = new Mock<IRepository<AggregateRoot>>();
         var handler = new TestableCoordinatedGenerateHandler<Message>(coordinator, repository.Object);
-        var command = new SerializableMessage();
+        var message = new SerializableMessage();
 
-        await handler.ExecuteAsync(command, CancellationToken.None);
+        await handler.ExecuteAsync(message, CancellationToken.None);
 
         repository.Verify(
             repository => repository.SaveAsync(

@@ -3,9 +3,9 @@
 using System;
 using MooVC.Architecture.Ddd.Threading;
 
-internal sealed class TestableCoordinatedOperationHandler<TCommand>
-    : CoordinatedOperationHandler<SerializableEventCentricAggregateRoot, TCommand>
-    where TCommand : Message
+internal sealed class TestableCoordinatedOperationHandler<TMessage>
+    : CoordinatedOperationHandler<SerializableEventCentricAggregateRoot, TMessage>
+    where TMessage : Message
 {
     private readonly Guid identity;
 
@@ -18,12 +18,12 @@ internal sealed class TestableCoordinatedOperationHandler<TCommand>
         this.identity = identity;
     }
 
-    protected override Reference<SerializableEventCentricAggregateRoot> IdentifyCoordinationContext(TCommand message)
+    protected override Reference<SerializableEventCentricAggregateRoot> IdentifyCoordinationContext(TMessage message)
     {
         return identity.ToReference<SerializableEventCentricAggregateRoot>();
     }
 
-    protected override void Apply(SerializableEventCentricAggregateRoot aggregate, TCommand message)
+    protected override void Apply(SerializableEventCentricAggregateRoot aggregate, TMessage message)
     {
         var request = new SetRequest(message, identity);
 

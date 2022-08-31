@@ -8,10 +8,10 @@ using MooVC.Architecture.Ddd.Threading;
 using static MooVC.Architecture.Ddd.Services.Resources;
 using static MooVC.Ensure;
 
-public abstract class CoordinatedGenerateHandler<TAggregate, TCommand>
-    : CoordinatedHandler<TAggregate, TCommand>
+public abstract class CoordinatedGenerateHandler<TAggregate, TMessage>
+    : CoordinatedHandler<TAggregate, TMessage>
     where TAggregate : AggregateRoot
-    where TCommand : Message
+    where TMessage : Message
 {
     private readonly IRepository<TAggregate> repository;
 
@@ -21,29 +21,42 @@ public abstract class CoordinatedGenerateHandler<TAggregate, TCommand>
         this.repository = ArgumentNotNull(repository, nameof(repository), CoordinatedGenerateHandlerRepositoryRequired);
     }
 
-    protected abstract TAggregate Generate(TCommand command);
-
-    protected override async Task PerformExecuteAsync(Reference<TAggregate> context, TCommand command, CancellationToken cancellationToken)
+    protected virtual TAggregate? Generate(TMessage message)
     {
-        TAggregate aggregate = Generate(command);
+        return default;
+    }
 
-        await VerifyAsync(aggregate, command, cancellationToken)
-            .ConfigureAwait(false);
+    protected virtual Task<TAggregate?> GenerateAsync(TMessage message, CancellationToken cancellationToken)
+    {
+        TAggregate? aggregate = Generate(message);
 
-        await SaveAsync(aggregate, command, repository, cancellationToken)
-            .ConfigureAwait(false);
+        return Task.FromResult(aggregate);
+    }
+
+    protected override async Task PerformExecuteAsync(Reference<TAggregate> context, TMessage message, CancellationToken cancellationToken)
+    {
+        TAggregate? aggregate = await GenerateAsync(message, cancellationToken);
+
+        if (aggregate is { })
+        {
+            await VerifyAsync(aggregate, message, cancellationToken)
+                .ConfigureAwait(false);
+
+            await SaveAsync(aggregate, message, repository, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 
     protected virtual Task SaveAsync(
         TAggregate aggregate,
-        TCommand context,
+        TMessage context,
         IRepository<TAggregate> repository,
         CancellationToken cancellationToken)
     {
         return repository.SaveAsync(aggregate, cancellationToken: cancellationToken);
     }
 
-    protected virtual Task VerifyAsync(TAggregate aggregate, TCommand context, CancellationToken cancellationToken)
+    protected virtual Task VerifyAsync(TAggregate aggregate, TMessage context, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }

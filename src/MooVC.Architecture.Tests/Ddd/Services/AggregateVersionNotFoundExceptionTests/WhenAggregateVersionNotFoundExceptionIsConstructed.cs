@@ -12,7 +12,7 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         var subject = new SerializableAggregateRoot();
         var aggregate = subject.ToReference();
         var context = new SerializableMessage();
-        var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(context, aggregate);
+        var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregate, context);
 
         Assert.Equal(aggregate, instance.Aggregate);
         Assert.Equal(context, instance.Context);
@@ -24,8 +24,8 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         Reference<AggregateRoot> aggregate = Reference<AggregateRoot>.Empty;
         var context = new SerializableMessage();
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(
-            () => new AggregateVersionNotFoundException<AggregateRoot>(context, aggregate));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+            new AggregateVersionNotFoundException<AggregateRoot>(aggregate, context));
 
         Assert.Equal(nameof(aggregate), exception.ParamName);
     }
@@ -36,8 +36,8 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         Reference<AggregateRoot>? aggregate = default;
         var context = new SerializableMessage();
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(
-            () => new AggregateVersionNotFoundException<AggregateRoot>(context, aggregate!));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+            new AggregateVersionNotFoundException<AggregateRoot>(aggregate!, context));
 
         Assert.Equal(nameof(aggregate), exception.ParamName);
     }
@@ -49,8 +49,8 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         var aggregate = subject.ToReference();
         Message? context = default;
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-            () => new AggregateVersionNotFoundException<SerializableAggregateRoot>(context!, aggregate));
+        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
+            new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregate, context!));
 
         Assert.Equal(nameof(context), exception.ParamName);
     }
@@ -63,10 +63,7 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         var context = new SerializableMessage();
         SignedVersion version = subject.Version;
 
-        var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(
-            context,
-            aggregateId,
-            version: version);
+        var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregateId, context, version: version);
 
         Assert.Equal(aggregateId, instance.Aggregate.Id);
         Assert.Equal(context, instance.Context);
@@ -81,8 +78,8 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         var context = new SerializableMessage();
         SignedVersion version = subject.Version;
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(
-            () => new AggregateVersionNotFoundException<AggregateRoot>(context, id, version: version));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+            new AggregateVersionNotFoundException<AggregateRoot>(id, context, version: version));
 
         Assert.Equal(nameof(id), exception.ParamName);
     }
@@ -95,8 +92,8 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         Message? context = default;
         SignedVersion version = subject.Version;
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-            () => new AggregateVersionNotFoundException<SerializableAggregateRoot>(context!, aggregateId, version: version));
+        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
+            new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregateId, context!, version: version));
 
         Assert.Equal(nameof(context), exception.ParamName);
     }
@@ -108,7 +105,7 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         Guid aggregateId = subject.Id;
         var context = new SerializableMessage();
         SignedVersion? version = default;
-        var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(context, aggregateId, version: version);
+        var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregateId, context, version: version);
 
         Assert.False(instance.Aggregate.IsVersioned);
     }

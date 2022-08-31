@@ -26,7 +26,7 @@ public static partial class RepositoryExtensions
                 throw new AggregateNotFoundException<TAggregate>(id, context);
             }
 
-            throw new AggregateVersionNotFoundException<TAggregate>(context, id, version: version);
+            throw new AggregateVersionNotFoundException<TAggregate>(id, context, version: version);
         }
 
         return aggregate;

@@ -23,7 +23,7 @@ public static partial class RepositoryExtensions
         {
             if (version is null || version.IsEmpty)
             {
-                throw new AggregateNotFoundException<TAggregate>(context, id);
+                throw new AggregateNotFoundException<TAggregate>(id, context);
             }
 
             throw new AggregateVersionNotFoundException<TAggregate>(context, id, version: version);

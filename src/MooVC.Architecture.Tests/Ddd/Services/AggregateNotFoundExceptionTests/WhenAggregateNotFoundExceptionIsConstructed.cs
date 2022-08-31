@@ -12,9 +12,7 @@ public sealed class WhenAggregateNotFoundExceptionIsConstructed
         var aggregate = Guid.NewGuid().ToReference<SerializableAggregateRoot>();
         var context = new SerializableMessage();
 
-        var instance = new AggregateNotFoundException<SerializableAggregateRoot>(
-            context,
-            aggregate);
+        var instance = new AggregateNotFoundException<SerializableAggregateRoot>(aggregate, context);
 
         Assert.Equal(aggregate, instance.Aggregate);
         Assert.Equal(context, instance.Context);
@@ -26,8 +24,8 @@ public sealed class WhenAggregateNotFoundExceptionIsConstructed
         var aggregate = Guid.NewGuid().ToReference<SerializableAggregateRoot>();
         Message? context = default;
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-            () => new AggregateNotFoundException<SerializableAggregateRoot>(context!, aggregate));
+        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
+            new AggregateNotFoundException<SerializableAggregateRoot>(aggregate, context!));
 
         Assert.Equal(nameof(context), exception.ParamName);
     }
@@ -38,9 +36,7 @@ public sealed class WhenAggregateNotFoundExceptionIsConstructed
         var aggregateId = Guid.NewGuid();
         var context = new SerializableMessage();
 
-        var instance = new AggregateNotFoundException<SerializableAggregateRoot>(
-            context,
-            aggregateId);
+        var instance = new AggregateNotFoundException<SerializableAggregateRoot>(aggregateId, context);
 
         Assert.Equal(aggregateId, instance.Aggregate.Id);
         Assert.Equal(context, instance.Context);
@@ -52,8 +48,8 @@ public sealed class WhenAggregateNotFoundExceptionIsConstructed
         var aggregateId = Guid.NewGuid();
         Message? context = default;
 
-        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-            () => new AggregateNotFoundException<SerializableAggregateRoot>(context!, aggregateId));
+        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
+            new AggregateNotFoundException<SerializableAggregateRoot>(aggregateId, context!));
 
         Assert.Equal(nameof(context), exception.ParamName);
     }
@@ -64,8 +60,8 @@ public sealed class WhenAggregateNotFoundExceptionIsConstructed
         Reference<AggregateRoot> aggregate = Reference<AggregateRoot>.Empty;
         var context = new SerializableMessage();
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(
-            () => new AggregateNotFoundException<AggregateRoot>(context, aggregate));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+            new AggregateNotFoundException<AggregateRoot>(aggregate, context));
 
         Assert.Equal(nameof(aggregate), exception.ParamName);
     }
@@ -76,8 +72,8 @@ public sealed class WhenAggregateNotFoundExceptionIsConstructed
         Guid aggregate = Guid.Empty;
         var context = new SerializableMessage();
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(
-            () => new AggregateNotFoundException<AggregateRoot>(context, aggregate));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+            new AggregateNotFoundException<AggregateRoot>(aggregate, context));
 
         Assert.Equal(nameof(aggregate), exception.ParamName);
     }
@@ -88,8 +84,8 @@ public sealed class WhenAggregateNotFoundExceptionIsConstructed
         Reference<AggregateRoot>? aggregate = default;
         var context = new SerializableMessage();
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(
-            () => new AggregateNotFoundException<AggregateRoot>(context, aggregate!));
+        ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+            new AggregateNotFoundException<AggregateRoot>(aggregate!, context));
 
         Assert.Equal(nameof(aggregate), exception.ParamName);
     }

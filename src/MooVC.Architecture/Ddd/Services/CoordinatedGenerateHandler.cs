@@ -49,14 +49,14 @@ public abstract class CoordinatedGenerateHandler<TAggregate, TMessage>
 
     protected virtual Task SaveAsync(
         TAggregate aggregate,
-        TMessage context,
+        TMessage message,
         IRepository<TAggregate> repository,
         CancellationToken cancellationToken)
     {
         return repository.SaveAsync(aggregate, cancellationToken: cancellationToken);
     }
 
-    protected virtual Task VerifyAsync(TAggregate aggregate, TMessage context, CancellationToken cancellationToken)
+    protected virtual Task VerifyAsync(TAggregate aggregate, TMessage message, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }

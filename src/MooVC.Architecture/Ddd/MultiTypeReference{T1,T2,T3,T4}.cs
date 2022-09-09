@@ -23,8 +23,7 @@ public abstract class MultiTypeReference<T1, T2, T3, T4>
     {
     }
 
-    protected MultiTypeReference(Reference? subject)
-        : base(subject)
+    protected MultiTypeReference()
     {
         fourth = new(ToTyped<T4>);
     }
@@ -45,6 +44,11 @@ public abstract class MultiTypeReference<T1, T2, T3, T4>
 
     protected Reference<T4> Fourth => fourth.Value;
 
+    public static implicit operator Reference(MultiTypeReference<T1, T2, T3, T4> reference)
+    {
+        return reference.Subject;
+    }
+
     public static implicit operator Reference<T4>(MultiTypeReference<T1, T2, T3, T4> reference)
     {
         return reference.Fourth;
@@ -57,7 +61,7 @@ public abstract class MultiTypeReference<T1, T2, T3, T4>
 
     public static bool operator !=(MultiTypeReference<T1, T2, T3, T4> reference, Reference<T4>? other)
     {
-        return reference.Equals(other);
+        return !reference.Equals(other);
     }
 
     public bool Equals(Reference<T4>? other)

@@ -14,8 +14,16 @@ internal sealed class TestableMultiTypeReference<T1, T2>
     {
     }
 
+    public TestableMultiTypeReference()
+    {
+    }
+
     private TestableMultiTypeReference(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
+
+    public new bool IsFirst => base.IsFirst;
+
+    public new bool IsSecond => base.IsSecond;
 }

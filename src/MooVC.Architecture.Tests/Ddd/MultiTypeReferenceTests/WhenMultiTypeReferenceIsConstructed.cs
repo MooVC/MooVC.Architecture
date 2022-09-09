@@ -7,27 +7,63 @@ using static MooVC.Architecture.Ddd.MultiTypeReferenceTests.TestableAggregate;
 public sealed class WhenMultiTypeReferenceIsConstructed
 {
     [Fact]
+    public void GivenADefaultInvocationWhenTwoTypesArePermittedThenAnEmptyReferenceIsCreated()
+    {
+        var empty = new TestableMultiTypeReference<One, Two>();
+        Reference reference = empty;
+
+        Assert.True(reference.IsEmpty);
+    }
+
+    [Fact]
+    public void GivenADefaultInvocationWhenThreeTypesArePermittedThenAnEmptyReferenceIsCreated()
+    {
+        var empty = new TestableMultiTypeReference<One, Two, Three>();
+        Reference reference = empty;
+
+        Assert.True(reference.IsEmpty);
+    }
+
+    [Fact]
+    public void GivenADefaultInvocationWhenFourTypesArePermittedThenAnEmptyReferenceIsCreated()
+    {
+        var empty = new TestableMultiTypeReference<One, Two, Three, Four>();
+        Reference reference = empty;
+
+        Assert.True(reference.IsEmpty);
+    }
+
+    [Fact]
+    public void GivenADefaultInvocationWhenFiveTypesArePermittedThenAnEmptyReferenceIsCreated()
+    {
+        var empty = new TestableMultiTypeReference<One, Two, Three, Four, Five>();
+        Reference reference = empty;
+
+        Assert.True(reference.IsEmpty);
+    }
+
+    [Fact]
     public void GivenNoReferencesWhenTwoTypesArePermittedThenAnArgumentExceptionIsThrown()
     {
-        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two>());
+        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two>(first: default));
     }
 
     [Fact]
     public void GivenNoReferencesWhenThreeTypesArePermittedThenAnArgumentExceptionIsThrown()
     {
-        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two, Three>());
+        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two, Three>(first: default));
     }
 
     [Fact]
     public void GivenNoReferencesWhenFourTypesArePermittedThenAnArgumentExceptionIsThrown()
     {
-        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two, Three, Four>());
+        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two, Three, Four>(first: default));
     }
 
     [Fact]
     public void GivenNoReferencesWhenFiveTypesArePermittedThenAnArgumentExceptionIsThrown()
     {
-        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two, Three, Four, Five>());
+        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: default));
     }
 
     [Fact]
@@ -38,6 +74,8 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two>(first: reference);
 
         Assert.Equal(reference, multi);
+        Assert.True(multi.IsFirst);
+        Assert.False(multi.IsSecond);
     }
 
     [Fact]
@@ -48,6 +86,9 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three>(first: reference);
 
         Assert.Equal(reference, multi);
+        Assert.True(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.False(multi.IsThird);
     }
 
     [Fact]
@@ -58,6 +99,10 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four>(first: reference);
 
         Assert.Equal(reference, multi);
+        Assert.True(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.False(multi.IsThird);
+        Assert.False(multi.IsFourth);
     }
 
     [Fact]
@@ -68,6 +113,11 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: reference);
 
         Assert.Equal(reference, multi);
+        Assert.True(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.False(multi.IsThird);
+        Assert.False(multi.IsFourth);
+        Assert.False(multi.IsFifth);
     }
 
     [Fact]
@@ -78,6 +128,8 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two>(second: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.True(multi.IsSecond);
     }
 
     [Fact]
@@ -88,6 +140,9 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three>(second: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.True(multi.IsSecond);
+        Assert.False(multi.IsThird);
     }
 
     [Fact]
@@ -98,6 +153,10 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four>(second: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.True(multi.IsSecond);
+        Assert.False(multi.IsThird);
+        Assert.False(multi.IsFourth);
     }
 
     [Fact]
@@ -108,6 +167,11 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(second: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.True(multi.IsSecond);
+        Assert.False(multi.IsThird);
+        Assert.False(multi.IsFourth);
+        Assert.False(multi.IsFifth);
     }
 
     [Fact]
@@ -118,6 +182,9 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three>(third: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.True(multi.IsThird);
     }
 
     [Fact]
@@ -128,6 +195,10 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four>(third: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.True(multi.IsThird);
+        Assert.False(multi.IsFourth);
     }
 
     [Fact]
@@ -138,6 +209,11 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(third: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.True(multi.IsThird);
+        Assert.False(multi.IsFourth);
+        Assert.False(multi.IsFifth);
     }
 
     [Fact]
@@ -148,6 +224,10 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four>(fourth: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.False(multi.IsThird);
+        Assert.True(multi.IsFourth);
     }
 
     [Fact]
@@ -158,6 +238,11 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fourth: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.False(multi.IsThird);
+        Assert.True(multi.IsFourth);
+        Assert.False(multi.IsFifth);
     }
 
     [Fact]
@@ -168,6 +253,11 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fifth: reference);
 
         Assert.Equal(reference, multi);
+        Assert.False(multi.IsFirst);
+        Assert.False(multi.IsSecond);
+        Assert.False(multi.IsThird);
+        Assert.False(multi.IsFourth);
+        Assert.True(multi.IsFifth);
     }
 
     [Fact]

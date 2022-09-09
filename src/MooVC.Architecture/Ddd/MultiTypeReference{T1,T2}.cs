@@ -16,34 +16,35 @@ public abstract class MultiTypeReference<T1, T2>
 {
     private readonly Lazy<Reference<T1>> first;
     private readonly Lazy<Reference<T2>> second;
-    private readonly Reference subject;
 
     protected MultiTypeReference(Reference<T1>? first = default, Reference<T2>? second = default)
         : this(new Reference?[] { first, second })
     {
     }
 
-    protected MultiTypeReference(Reference? subject)
+    protected MultiTypeReference()
     {
-        this.subject = subject ?? Reference<T1>.Empty;
+        Subject = Reference<T1>.Empty;
 
         first = new(ToTyped<T1>);
         second = new(ToTyped<T2>);
     }
 
     protected MultiTypeReference(SerializationInfo info, StreamingContext context)
-        : this(default(Reference))
+        : this()
     {
-        subject = info.TryGetInternalReference(nameof(subject));
+        Subject = info.TryGetInternalReference(nameof(Subject));
     }
 
     private protected MultiTypeReference(IEnumerable<Reference?> references, params Func<Reference, bool>[] validations)
-        : this(Validate(
-            references,
-            validations: validations
-                .Prepend(subject => subject.Is<T2>(out _))
-                .Prepend(subject => subject.Is<T1>(out _))))
+        : this()
     {
+        validations = validations
+            .Prepend(subject => subject.Is<T2>(out _))
+            .Prepend(subject => subject.Is<T1>(out _))
+            .ToArray();
+
+        Subject = Validate(references, validations: validations);
     }
 
     protected bool IsFirst => !First.IsEmpty;
@@ -53,6 +54,13 @@ public abstract class MultiTypeReference<T1, T2>
     protected Reference<T1> First => first.Value;
 
     protected Reference<T2> Second => second.Value;
+
+    private protected Reference Subject { get; }
+
+    public static implicit operator Reference(MultiTypeReference<T1, T2> reference)
+    {
+        return reference.Subject;
+    }
 
     public static implicit operator Reference<T1>(MultiTypeReference<T1, T2> reference)
     {
@@ -76,19 +84,19 @@ public abstract class MultiTypeReference<T1, T2>
 
     public static bool operator !=(MultiTypeReference<T1, T2> reference, Reference<T1>? other)
     {
-        return reference.Equals(other);
+        return !reference.Equals(other);
     }
 
     public static bool operator !=(MultiTypeReference<T1, T2> reference, Reference<T2>? other)
     {
-        return reference.Equals(other);
+        return !reference.Equals(other);
     }
 
     public override bool Equals(object? other)
     {
         if (other is Reference refernece)
         {
-            return refernece == subject;
+            return refernece == Subject;
         }
 
         return base.Equals(other);
@@ -108,29 +116,47 @@ public abstract class MultiTypeReference<T1, T2>
     {
         base.GetObjectData(info, context);
 
-        _ = info.TryAddInternalReference(nameof(subject), subject);
+        _ = info.TryAddInternalReference(nameof(Subject), Subject);
     }
 
     public override int GetHashCode()
     {
-        return subject.GetHashCode();
+        return Subject.GetHashCode();
     }
 
     protected static Reference<T> ToTyped<T>(int index, params Reference[] references)
         where T : AggregateRoot
     {
-        return references.ElementAtOrDefault(index).ToTyped<T>();
+        Reference? reference = references.ElementAtOrDefault(index);
+
+        if (reference.Is(out Reference<T>? typed))
+        {
+            return typed;
+        }
+
+        return Reference<T>.Empty;
+    }
+
+    protected static Reference<T> ToTyped<T>(Reference? reference)
+        where T : AggregateRoot
+    {
+        if (reference.Is(out Reference<T>? typed))
+        {
+            return typed;
+        }
+
+        return Reference<T>.Empty;
     }
 
     protected override IEnumerable<object> GetAtomicValues()
     {
-        yield return subject;
+        yield return Subject;
     }
 
     protected Reference<T> ToTyped<T>()
         where T : AggregateRoot
     {
-        return subject.ToTyped<T>();
+        return ToTyped<T>(Subject);
     }
 
     private static Reference Select(IEnumerable<Reference?> references)

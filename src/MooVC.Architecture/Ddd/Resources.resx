@@ -188,6 +188,9 @@
   <data name="MessageAggregateRequired" xml:space="preserve">
     <value>The aggregate of type {0} that serves as the subject of the message must be provided.</value>
   </data>
+  <data name="MultiTypeReferenceReferenceRequired" xml:space="preserve">
+    <value>A single, non-empty reference, must be provided.</value>
+  </data>
   <data name="ProjectionAggregateRequired" xml:space="preserve">
     <value>A reference to the aggregate must be provided.</value>
   </data>

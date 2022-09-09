@@ -270,6 +270,15 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A single, non-empty reference, must be provided..
+        /// </summary>
+        internal static string MultiTypeReferenceReferenceRequired {
+            get {
+                return ResourceManager.GetString("MultiTypeReferenceReferenceRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A reference to the aggregate must be provided..
         /// </summary>
         internal static string ProjectionAggregateRequired {

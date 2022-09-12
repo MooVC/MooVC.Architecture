@@ -9,8 +9,11 @@ internal sealed class TestableMultiTypeReference<T1, T2>
     where T1 : AggregateRoot
     where T2 : AggregateRoot
 {
-    public TestableMultiTypeReference(Reference<T1>? first = default, Reference<T2>? second = default)
-        : base(first: first, second: second)
+    public TestableMultiTypeReference(
+        Reference<T1>? first = default,
+        Reference<T2>? second = default,
+        bool unversioned = true)
+        : base(first: first, second: second, unversioned: unversioned)
     {
     }
 

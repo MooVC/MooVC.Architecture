@@ -20,8 +20,9 @@ public abstract class MultiTypeReference<T1, T2, T3, T4, T5>
         Reference<T2>? second = default,
         Reference<T3>? third = default,
         Reference<T4>? fourth = default,
-        Reference<T5>? fifth = default)
-        : this(new Reference?[] { first, second, third, fourth, fifth })
+        Reference<T5>? fifth = default,
+        bool unversioned = true)
+        : this(new Reference?[] { first, second, third, fourth, fifth }, unversioned)
     {
     }
 
@@ -36,8 +37,8 @@ public abstract class MultiTypeReference<T1, T2, T3, T4, T5>
         fifth = new(ToTyped<T5>);
     }
 
-    private protected MultiTypeReference(IEnumerable<Reference?> references, params Func<Reference, bool>[] validations)
-        : base(references, validations: validations.Prepend(subject => subject.Is<T5>(out _)))
+    private protected MultiTypeReference(IEnumerable<Reference?> references, bool unversioned, params Func<Reference, bool>[] validations)
+        : base(references, unversioned, validations: validations.Prepend(subject => subject.Is<T5>(out _)))
     {
         fifth = new(ToTyped<T5>);
     }

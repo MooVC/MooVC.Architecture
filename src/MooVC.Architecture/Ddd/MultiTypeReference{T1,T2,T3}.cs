@@ -13,8 +13,12 @@ public abstract class MultiTypeReference<T1, T2, T3>
 {
     private readonly Lazy<Reference<T3>> third;
 
-    protected MultiTypeReference(Reference<T1>? first = default, Reference<T2>? second = default, Reference<T3>? third = default)
-        : this(new Reference?[] { first, second, third })
+    protected MultiTypeReference(
+        Reference<T1>? first = default,
+        Reference<T2>? second = default,
+        Reference<T3>? third = default,
+        bool unversioned = true)
+        : this(new Reference?[] { first, second, third }, unversioned)
     {
     }
 
@@ -29,8 +33,8 @@ public abstract class MultiTypeReference<T1, T2, T3>
         third = new(ToTyped<T3>);
     }
 
-    private protected MultiTypeReference(IEnumerable<Reference?> references, params Func<Reference, bool>[] validations)
-        : base(references, validations: validations.Prepend(subject => subject.Is<T3>(out _)))
+    private protected MultiTypeReference(IEnumerable<Reference?> references, bool unversioned, params Func<Reference, bool>[] validations)
+        : base(references, unversioned, validations: validations.Prepend(subject => subject.Is<T3>(out _)))
     {
         third = new(ToTyped<T3>);
     }

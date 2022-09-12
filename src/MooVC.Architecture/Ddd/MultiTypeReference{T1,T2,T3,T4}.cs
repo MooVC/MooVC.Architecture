@@ -18,8 +18,9 @@ public abstract class MultiTypeReference<T1, T2, T3, T4>
         Reference<T1>? first = default,
         Reference<T2>? second = default,
         Reference<T3>? third = default,
-        Reference<T4>? fourth = default)
-        : this(new Reference?[] { first, second, third, fourth })
+        Reference<T4>? fourth = default,
+        bool unversioned = true)
+        : this(new Reference?[] { first, second, third, fourth }, unversioned)
     {
     }
 
@@ -34,8 +35,8 @@ public abstract class MultiTypeReference<T1, T2, T3, T4>
         fourth = new(ToTyped<T4>);
     }
 
-    private protected MultiTypeReference(IEnumerable<Reference?> references, params Func<Reference, bool>[] validations)
-        : base(references, validations: validations.Prepend(subject => subject.Is<T4>(out _)))
+    private protected MultiTypeReference(IEnumerable<Reference?> references, bool unversioned, params Func<Reference, bool>[] validations)
+        : base(references, unversioned, validations: validations.Prepend(subject => subject.Is<T4>(out _)))
     {
         fourth = new(ToTyped<T4>);
     }

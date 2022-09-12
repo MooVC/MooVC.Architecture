@@ -15,8 +15,9 @@ internal sealed class TestableMultiTypeReference<T1, T2, T3, T4>
         Reference<T1>? first = default,
         Reference<T2>? second = default,
         Reference<T3>? third = default,
-        Reference<T4>? fourth = default)
-        : base(first: first, second: second, third: third, fourth: fourth)
+        Reference<T4>? fourth = default,
+        bool unversioned = true)
+        : base(first: first, second: second, third: third, fourth: fourth, unversioned: unversioned)
     {
     }
 

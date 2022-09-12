@@ -17,8 +17,8 @@ public abstract class MultiTypeReference<T1, T2>
     private readonly Lazy<Reference<T1>> first;
     private readonly Lazy<Reference<T2>> second;
 
-    protected MultiTypeReference(Reference<T1>? first = default, Reference<T2>? second = default)
-        : this(new Reference?[] { first, second })
+    protected MultiTypeReference(Reference<T1>? first = default, Reference<T2>? second = default, bool unversioned = true)
+        : this(new Reference?[] { first, second }, unversioned)
     {
     }
 
@@ -36,7 +36,7 @@ public abstract class MultiTypeReference<T1, T2>
         Subject = info.TryGetInternalReference(nameof(Subject));
     }
 
-    private protected MultiTypeReference(IEnumerable<Reference?> references, params Func<Reference, bool>[] validations)
+    private protected MultiTypeReference(IEnumerable<Reference?> references, bool unversioned, params Func<Reference, bool>[] validations)
         : this()
     {
         validations = validations
@@ -44,7 +44,7 @@ public abstract class MultiTypeReference<T1, T2>
             .Prepend(subject => subject.Is<T1>(out _))
             .ToArray();
 
-        Subject = Validate(references, validations: validations);
+        Subject = Validate(references, unversioned, validations: validations);
     }
 
     protected bool IsFirst => !First.IsEmpty;
@@ -171,12 +171,20 @@ public abstract class MultiTypeReference<T1, T2>
         }
     }
 
-    private static Reference Validate(IEnumerable<Reference?> references, IEnumerable<Func<Reference, bool>> validations)
+    private static Reference Validate(
+        IEnumerable<Reference?> references,
+        bool unversioned,
+        IEnumerable<Func<Reference, bool>> validations)
     {
         Reference subject = Select(references);
 
         if (validations.Any(validation => validation(subject)))
         {
+            if (unversioned)
+            {
+                return subject.ToUnversioned();
+            }
+
             return subject;
         }
 

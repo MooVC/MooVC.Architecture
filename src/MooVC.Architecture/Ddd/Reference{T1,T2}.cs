@@ -4,47 +4,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using MooVC.Architecture;
-using MooVC.Architecture.Ddd.Serialization;
 using static MooVC.Architecture.Ddd.Resources;
 
 [Serializable]
-public abstract class MultiTypeReference<T1, T2>
-    : Value
+public abstract class Reference<T1, T2>
+    : Reference
     where T1 : AggregateRoot
     where T2 : AggregateRoot
 {
     private readonly Lazy<Reference<T1>> first;
     private readonly Lazy<Reference<T2>> second;
 
-    protected MultiTypeReference(Reference<T1>? first = default, Reference<T2>? second = default, bool unversioned = true)
+    protected Reference(Reference<T1>? first = default, Reference<T2>? second = default, bool unversioned = true)
         : this(new Reference?[] { first, second }, unversioned)
     {
     }
 
-    protected MultiTypeReference()
+    protected Reference()
+        : base(Guid.Empty, typeof(T1), SignedVersion.Empty)
     {
-        Subject = Reference<T1>.Empty;
-
         first = new(ToTyped<T1>);
         second = new(ToTyped<T2>);
     }
 
-    protected MultiTypeReference(SerializationInfo info, StreamingContext context)
-        : this()
+    protected Reference(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
-        Subject = info.TryGetInternalReference(nameof(Subject));
+        first = new(ToTyped<T1>);
+        second = new(ToTyped<T2>);
     }
 
-    private protected MultiTypeReference(IEnumerable<Reference?> references, bool unversioned, params Func<Reference, bool>[] validations)
-        : this()
+    private protected Reference(IEnumerable<Reference?> references, bool unversioned, params Func<Reference, bool>[] validations)
+        : base(Validate(
+            references,
+            unversioned,
+            validations
+                .Prepend(subject => subject.Is<T2>(out _))
+                .Prepend(subject => subject.Is<T1>(out _))))
     {
-        validations = validations
-            .Prepend(subject => subject.Is<T2>(out _))
-            .Prepend(subject => subject.Is<T1>(out _))
-            .ToArray();
-
-        Subject = Validate(references, unversioned, validations: validations);
+        first = new(ToTyped<T1>);
+        second = new(ToTyped<T2>);
     }
 
     protected bool IsFirst => !First.IsEmpty;
@@ -55,51 +54,34 @@ public abstract class MultiTypeReference<T1, T2>
 
     protected Reference<T2> Second => second.Value;
 
-    private protected Reference Subject { get; }
-
-    public static implicit operator Reference(MultiTypeReference<T1, T2> reference)
-    {
-        return reference.Subject;
-    }
-
-    public static implicit operator Reference<T1>(MultiTypeReference<T1, T2> reference)
+    public static implicit operator Reference<T1>(Reference<T1, T2> reference)
     {
         return reference.First;
     }
 
-    public static implicit operator Reference<T2>(MultiTypeReference<T1, T2> reference)
+    public static implicit operator Reference<T2>(Reference<T1, T2> reference)
     {
         return reference.Second;
     }
 
-    public static bool operator ==(MultiTypeReference<T1, T2> reference, Reference<T1>? other)
+    public static bool operator ==(Reference<T1, T2> reference, Reference<T1>? other)
     {
         return reference.Equals(other);
     }
 
-    public static bool operator ==(MultiTypeReference<T1, T2> reference, Reference<T2>? other)
+    public static bool operator ==(Reference<T1, T2> reference, Reference<T2>? other)
     {
         return reference.Equals(other);
     }
 
-    public static bool operator !=(MultiTypeReference<T1, T2> reference, Reference<T1>? other)
+    public static bool operator !=(Reference<T1, T2> reference, Reference<T1>? other)
     {
         return !reference.Equals(other);
     }
 
-    public static bool operator !=(MultiTypeReference<T1, T2> reference, Reference<T2>? other)
+    public static bool operator !=(Reference<T1, T2> reference, Reference<T2>? other)
     {
         return !reference.Equals(other);
-    }
-
-    public override bool Equals(object? other)
-    {
-        if (other is Reference refernece)
-        {
-            return refernece == Subject;
-        }
-
-        return base.Equals(other);
     }
 
     public bool Equals(Reference<T1>? other)
@@ -112,16 +94,14 @@ public abstract class MultiTypeReference<T1, T2>
         return Second == other;
     }
 
-    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    public sealed override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         base.GetObjectData(info, context);
-
-        _ = info.TryAddInternalReference(nameof(Subject), Subject);
     }
 
-    public override int GetHashCode()
+    public sealed override int GetHashCode()
     {
-        return Subject.GetHashCode();
+        return base.GetHashCode();
     }
 
     protected static Reference<T> ToTyped<T>(int index, params Reference[] references)
@@ -148,15 +128,15 @@ public abstract class MultiTypeReference<T1, T2>
         return Reference<T>.Empty;
     }
 
-    protected override IEnumerable<object> GetAtomicValues()
+    protected sealed override IEnumerable<object> GetAtomicValues()
     {
-        yield return Subject;
+        return base.GetAtomicValues();
     }
 
     protected Reference<T> ToTyped<T>()
         where T : AggregateRoot
     {
-        return ToTyped<T>(Subject);
+        return ToTyped<T>(this);
     }
 
     private static Reference Select(IEnumerable<Reference?> references)

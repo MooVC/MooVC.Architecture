@@ -1,7 +1,7 @@
-﻿namespace MooVC.Architecture.Ddd.MultiTypeReferenceTests;
+﻿namespace MooVC.Architecture.Ddd.ReferenceTests;
 
 using Xunit;
-using static MooVC.Architecture.Ddd.MultiTypeReferenceTests.TestableAggregate;
+using static MooVC.Architecture.Ddd.ReferenceTests.TestableAggregate;
 
 public sealed class WhenEqualtyIsChecked
 {
@@ -10,7 +10,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(first: reference);
+        var multi = new TestableReference<One, Two>(first: reference);
 
         Assert.True(multi == reference);
     }
@@ -20,7 +20,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(first: reference);
+        var multi = new TestableReference<One, Two, Three>(first: reference);
 
         Assert.True(multi == reference);
     }
@@ -30,7 +30,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(first: reference);
+        var multi = new TestableReference<One, Two, Three, Four>(first: reference);
 
         Assert.True(multi == reference);
     }
@@ -40,7 +40,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: reference);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(first: reference);
 
         Assert.True(multi == reference);
     }
@@ -50,7 +50,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(second: reference);
+        var multi = new TestableReference<One, Two>(second: reference);
 
         Assert.True(multi == reference);
     }
@@ -60,7 +60,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(second: reference);
+        var multi = new TestableReference<One, Two, Three>(second: reference);
 
         Assert.True(multi == reference);
     }
@@ -70,7 +70,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(second: reference);
+        var multi = new TestableReference<One, Two, Three, Four>(second: reference);
 
         Assert.True(multi == reference);
     }
@@ -80,7 +80,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(second: reference);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(second: reference);
 
         Assert.True(multi == reference);
     }
@@ -90,7 +90,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(third: reference);
+        var multi = new TestableReference<One, Two, Three>(third: reference);
 
         Assert.True(multi == reference);
     }
@@ -100,7 +100,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(third: reference);
+        var multi = new TestableReference<One, Two, Three, Four>(third: reference);
 
         Assert.True(multi == reference);
     }
@@ -110,7 +110,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(third: reference);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(third: reference);
 
         Assert.True(multi == reference);
     }
@@ -120,7 +120,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Four();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(fourth: reference);
+        var multi = new TestableReference<One, Two, Three, Four>(fourth: reference);
 
         Assert.True(multi == reference);
     }
@@ -130,7 +130,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Four();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fourth: reference);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(fourth: reference);
 
         Assert.True(multi == reference);
     }
@@ -140,7 +140,7 @@ public sealed class WhenEqualtyIsChecked
     {
         var aggregate = new Five();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fifth: reference);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(fifth: reference);
 
         Assert.True(multi == reference);
     }

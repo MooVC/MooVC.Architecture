@@ -24,6 +24,12 @@ public abstract class Reference
         Version = version ?? SignedVersion.Empty;
     }
 
+    private protected Reference(Reference other)
+        : this(other.Id, other.Type, other.Version)
+    {
+        _ = ArgumentIsAcceptable(other, nameof(other), _ => !other.IsEmpty, ReferenceNonEmptyRequired);
+    }
+
     private protected Reference(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

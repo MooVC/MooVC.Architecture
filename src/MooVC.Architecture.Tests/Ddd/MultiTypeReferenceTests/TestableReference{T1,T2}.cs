@@ -1,15 +1,15 @@
-﻿namespace MooVC.Architecture.Ddd.MultiTypeReferenceTests;
+﻿namespace MooVC.Architecture.Ddd.ReferenceTests;
 
 using System;
 using System.Runtime.Serialization;
 
 [Serializable]
-internal sealed class TestableMultiTypeReference<T1, T2>
-    : MultiTypeReference<T1, T2>
+internal sealed class TestableReference<T1, T2>
+    : Reference<T1, T2>
     where T1 : AggregateRoot
     where T2 : AggregateRoot
 {
-    public TestableMultiTypeReference(
+    public TestableReference(
         Reference<T1>? first = default,
         Reference<T2>? second = default,
         bool unversioned = true)
@@ -17,11 +17,11 @@ internal sealed class TestableMultiTypeReference<T1, T2>
     {
     }
 
-    public TestableMultiTypeReference()
+    public TestableReference()
     {
     }
 
-    private TestableMultiTypeReference(SerializationInfo info, StreamingContext context)
+    private TestableReference(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

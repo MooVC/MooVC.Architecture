@@ -1,15 +1,15 @@
-﻿namespace MooVC.Architecture.Ddd.MultiTypeReferenceTests;
+﻿namespace MooVC.Architecture.Ddd.ReferenceTests;
 
 using System;
 using Xunit;
-using static MooVC.Architecture.Ddd.MultiTypeReferenceTests.TestableAggregate;
+using static MooVC.Architecture.Ddd.ReferenceTests.TestableAggregate;
 
 public sealed class WhenMultiTypeReferenceIsConstructed
 {
     [Fact]
     public void GivenADefaultInvocationWhenTwoTypesArePermittedThenAnEmptyReferenceIsCreated()
     {
-        var empty = new TestableMultiTypeReference<One, Two>();
+        var empty = new TestableReference<One, Two>();
         Reference reference = empty;
 
         Assert.True(reference.IsEmpty);
@@ -18,7 +18,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     [Fact]
     public void GivenADefaultInvocationWhenThreeTypesArePermittedThenAnEmptyReferenceIsCreated()
     {
-        var empty = new TestableMultiTypeReference<One, Two, Three>();
+        var empty = new TestableReference<One, Two, Three>();
         Reference reference = empty;
 
         Assert.True(reference.IsEmpty);
@@ -27,7 +27,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     [Fact]
     public void GivenADefaultInvocationWhenFourTypesArePermittedThenAnEmptyReferenceIsCreated()
     {
-        var empty = new TestableMultiTypeReference<One, Two, Three, Four>();
+        var empty = new TestableReference<One, Two, Three, Four>();
         Reference reference = empty;
 
         Assert.True(reference.IsEmpty);
@@ -36,7 +36,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     [Fact]
     public void GivenADefaultInvocationWhenFiveTypesArePermittedThenAnEmptyReferenceIsCreated()
     {
-        var empty = new TestableMultiTypeReference<One, Two, Three, Four, Five>();
+        var empty = new TestableReference<One, Two, Three, Four, Five>();
         Reference reference = empty;
 
         Assert.True(reference.IsEmpty);
@@ -47,7 +47,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     [InlineData(false)]
     public void GivenNoReferencesWhenTwoTypesArePermittedThenAnArgumentExceptionIsThrown(bool unversioned)
     {
-        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two>(first: default, unversioned: unversioned));
+        _ = Assert.Throws<ArgumentException>(() => new TestableReference<One, Two>(first: default, unversioned: unversioned));
     }
 
     [Theory]
@@ -55,7 +55,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     [InlineData(false)]
     public void GivenNoReferencesWhenThreeTypesArePermittedThenAnArgumentExceptionIsThrown(bool unversioned)
     {
-        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two, Three>(first: default, unversioned: unversioned));
+        _ = Assert.Throws<ArgumentException>(() => new TestableReference<One, Two, Three>(first: default, unversioned: unversioned));
     }
 
     [Theory]
@@ -63,7 +63,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     [InlineData(false)]
     public void GivenNoReferencesWhenFourTypesArePermittedThenAnArgumentExceptionIsThrown(bool unversioned)
     {
-        _ = Assert.Throws<ArgumentException>(() => new TestableMultiTypeReference<One, Two, Three, Four>(first: default, unversioned: unversioned));
+        _ = Assert.Throws<ArgumentException>(() => new TestableReference<One, Two, Three, Four>(first: default, unversioned: unversioned));
     }
 
     [Theory]
@@ -72,7 +72,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     public void GivenNoReferencesWhenFiveTypesArePermittedThenAnArgumentExceptionIsThrown(bool unversioned)
     {
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: default, unversioned: unversioned));
+            new TestableReference<One, Two, Three, Four, Five>(first: default, unversioned: unversioned));
     }
 
     [Theory]
@@ -82,7 +82,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(first: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two>(first: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.True(multi.IsFirst);
@@ -96,7 +96,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(first: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three>(first: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.True(multi.IsFirst);
@@ -111,7 +111,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(first: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four>(first: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.True(multi.IsFirst);
@@ -127,7 +127,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(first: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.True(multi.IsFirst);
@@ -144,7 +144,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(second: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two>(second: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -158,7 +158,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(second: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three>(second: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -173,7 +173,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(second: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four>(second: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -189,7 +189,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(second: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(second: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -206,7 +206,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(third: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three>(third: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -221,7 +221,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(third: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four>(third: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -237,7 +237,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(third: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(third: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -254,7 +254,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Four();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(fourth: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four>(fourth: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -270,7 +270,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Four();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fourth: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(fourth: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -287,7 +287,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
     {
         var aggregate = new Five();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fifth: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(fifth: reference, unversioned: unversioned);
 
         Assert.Equal(reference, multi);
         Assert.False(multi.IsFirst);
@@ -308,7 +308,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two>(first: reference1, second: reference2, unversioned: unversioned));
+            new TestableReference<One, Two>(first: reference1, second: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -322,7 +322,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three>(first: reference1, second: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three>(first: reference1, second: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -336,7 +336,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three, Four>(first: reference1, second: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three, Four>(first: reference1, second: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -350,7 +350,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: reference1, second: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three, Four, Five>(first: reference1, second: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -364,7 +364,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three>(first: reference1, third: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three>(first: reference1, third: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -378,7 +378,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three, Four>(first: reference1, third: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three, Four>(first: reference1, third: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -392,7 +392,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: reference1, third: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three, Four, Five>(first: reference1, third: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -406,7 +406,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three, Four>(first: reference1, fourth: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three, Four>(first: reference1, fourth: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -420,7 +420,7 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: reference1, fourth: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three, Four, Five>(first: reference1, fourth: reference2, unversioned: unversioned));
     }
 
     [Theory]
@@ -434,6 +434,6 @@ public sealed class WhenMultiTypeReferenceIsConstructed
         var reference2 = aggregate2.ToReference();
 
         _ = Assert.Throws<ArgumentException>(() =>
-            new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: reference1, fifth: reference2, unversioned: unversioned));
+            new TestableReference<One, Two, Three, Four, Five>(first: reference1, fifth: reference2, unversioned: unversioned));
     }
 }

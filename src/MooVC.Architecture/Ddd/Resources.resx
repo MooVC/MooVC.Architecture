@@ -209,6 +209,9 @@
   <data name="ReferenceIdRequired" xml:space="preserve">
     <value>A non-empty ID for the aggregate this reference represents must be provided.</value>
   </data>
+  <data name="ReferenceNonEmptyRequired" xml:space="preserve">
+    <value>A non-empty reference is required.</value>
+  </data>
   <data name="ReferenceTypeRequired" xml:space="preserve">
     <value>The type of the reference must be concrete.</value>
   </data>

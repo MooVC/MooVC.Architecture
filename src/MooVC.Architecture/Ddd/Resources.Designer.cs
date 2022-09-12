@@ -333,6 +333,15 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A non-empty reference is required..
+        /// </summary>
+        internal static string ReferenceNonEmptyRequired {
+            get {
+                return ResourceManager.GetString("ReferenceNonEmptyRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The type of the reference must be concrete..
         /// </summary>
         internal static string ReferenceTypeRequired {

@@ -1,4 +1,4 @@
-﻿namespace MooVC.Architecture.Ddd.MultiTypeReferenceTests;
+﻿namespace MooVC.Architecture.Ddd.ReferenceTests;
 
 using System;
 

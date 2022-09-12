@@ -1,8 +1,8 @@
-﻿namespace MooVC.Architecture.Ddd.MultiTypeReferenceTests;
+﻿namespace MooVC.Architecture.Ddd.ReferenceTests;
 
 using MooVC.Architecture.Serialization;
 using Xunit;
-using static MooVC.Architecture.Ddd.MultiTypeReferenceTests.TestableAggregate;
+using static MooVC.Architecture.Ddd.ReferenceTests.TestableAggregate;
 
 public sealed class WhenMultiTypeReferenceIsSerialized
 {
@@ -13,9 +13,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(first: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two>(first: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two> clone = multi.Clone();
+        TestableReference<One, Two> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -27,9 +27,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(first: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three>(first: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three> clone = multi.Clone();
+        TestableReference<One, Two, Three> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -41,9 +41,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(first: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four>(first: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -55,9 +55,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new One();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(first: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(first: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four, Five> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four, Five> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -69,9 +69,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(second: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two>(second: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two> clone = multi.Clone();
+        TestableReference<One, Two> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -83,9 +83,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(second: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three>(second: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three> clone = multi.Clone();
+        TestableReference<One, Two, Three> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -97,9 +97,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(second: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four>(second: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -111,9 +111,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Two();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(second: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(second: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four, Five> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four, Five> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -125,9 +125,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(third: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three>(third: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three> clone = multi.Clone();
+        TestableReference<One, Two, Three> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -139,9 +139,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(third: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four>(third: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -153,9 +153,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Three();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(third: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(third: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four, Five> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four, Five> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -167,9 +167,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Four();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(fourth: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four>(fourth: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -181,9 +181,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Four();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fourth: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(fourth: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four, Five> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four, Five> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }
@@ -195,9 +195,9 @@ public sealed class WhenMultiTypeReferenceIsSerialized
     {
         var aggregate = new Five();
         var reference = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fifth: reference, unversioned: unversioned);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(fifth: reference, unversioned: unversioned);
 
-        TestableMultiTypeReference<One, Two, Three, Four, Five> clone = multi.Clone();
+        TestableReference<One, Two, Three, Four, Five> clone = multi.Clone();
 
         Assert.Equal(multi, clone);
     }

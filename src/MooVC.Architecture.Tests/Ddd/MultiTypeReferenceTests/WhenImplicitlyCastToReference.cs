@@ -1,7 +1,7 @@
-﻿namespace MooVC.Architecture.Ddd.MultiTypeReferenceTests;
+﻿namespace MooVC.Architecture.Ddd.ReferenceTests;
 
 using Xunit;
-using static MooVC.Architecture.Ddd.MultiTypeReferenceTests.TestableAggregate;
+using static MooVC.Architecture.Ddd.ReferenceTests.TestableAggregate;
 
 public sealed class WhenImplicitlyCastToReference
 {
@@ -10,7 +10,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new One();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(first: expected);
+        var multi = new TestableReference<One, Two>(first: expected);
 
         Reference actual = multi;
 
@@ -22,7 +22,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new Two();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(second: expected);
+        var multi = new TestableReference<One, Two>(second: expected);
 
         Reference actual = multi;
 
@@ -34,7 +34,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new Three();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(third: expected);
+        var multi = new TestableReference<One, Two, Three>(third: expected);
 
         Reference actual = multi;
 
@@ -46,7 +46,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new Four();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(fourth: expected);
+        var multi = new TestableReference<One, Two, Three, Four>(fourth: expected);
 
         Reference actual = multi;
 
@@ -58,7 +58,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new Five();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fifth: expected);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(fifth: expected);
 
         Reference actual = multi;
 
@@ -70,7 +70,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new One();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(first: expected);
+        var multi = new TestableReference<One, Two>(first: expected);
 
         Reference<One> actual = multi;
 
@@ -82,7 +82,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new Two();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two>(second: expected);
+        var multi = new TestableReference<One, Two>(second: expected);
 
         Reference<Two> actual = multi;
 
@@ -94,7 +94,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new Three();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three>(third: expected);
+        var multi = new TestableReference<One, Two, Three>(third: expected);
 
         Reference<Three> actual = multi;
 
@@ -106,7 +106,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new Four();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four>(fourth: expected);
+        var multi = new TestableReference<One, Two, Three, Four>(fourth: expected);
 
         Reference<Four> actual = multi;
 
@@ -118,7 +118,7 @@ public sealed class WhenImplicitlyCastToReference
     {
         var aggregate = new Five();
         var expected = aggregate.ToReference();
-        var multi = new TestableMultiTypeReference<One, Two, Three, Four, Five>(fifth: expected);
+        var multi = new TestableReference<One, Two, Three, Four, Five>(fifth: expected);
 
         Reference<Five> actual = multi;
 

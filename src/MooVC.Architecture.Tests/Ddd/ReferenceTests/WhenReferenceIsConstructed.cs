@@ -4,7 +4,7 @@ using System;
 using Xunit;
 using static MooVC.Architecture.Ddd.ReferenceTests.TestableAggregate;
 
-public sealed class WhenMultiTypeReferenceIsConstructed
+public sealed class WhenReferenceIsConstructed
 {
     [Fact]
     public void GivenADefaultInvocationWhenTwoTypesArePermittedThenAnEmptyReferenceIsCreated()

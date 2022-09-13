@@ -203,9 +203,6 @@
   <data name="ReferenceDeserializeTypeTypeIndeterminate" xml:space="preserve">
     <value>The type of the reference could not be determined.</value>
   </data>
-  <data name="ReferenceExtensionsToUnversionedReferenceRequired" xml:space="preserve">
-    <value>The reference to be unversioned must be provided.</value>
-  </data>
   <data name="ReferenceIdRequired" xml:space="preserve">
     <value>A non-empty ID for the aggregate this reference represents must be provided.</value>
   </data>

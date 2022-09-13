@@ -15,6 +15,8 @@ This release focuses on adding a greater degree of flexibility into the framewor
 ## Enhancements
 
 - Added a new constructor variant to Architecture.Cqrs.Services.PaginatedResult<TQuery, T>, enable initialization via an instance of Linq.PagedResult<TQuery, T>.
+- Added Architecture.Ddd.Collections.EnumerableExtensions.ToUnversioned extension to convert a collection of references into their unversioned equivilent.
+- Added Architecture.Ddd.Collections.EnumerableExtensions.ToUnversioned<TAggregate> extension to convert a collection of typed references into their unversioned equivilent.
 - Added Architecture.Ddd.MessageExtensions.TryIdentify extension to determine the contextual refernece with a message (if applicable).
 - Added Architecture.Ddd.Reference<T1-5> to support situations where a reference may be required to be within a subset of types.  The classes are abstract to ensure the implementation provides meaningful accessors, rather than the internal generic accessors like 'first/second etc'.
 - Added Architecture.Ddd.ReferenceExtensions.Is extension to determine if an instance of Ddd.Reference is of a specific aggregate type.
@@ -23,6 +25,8 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Changed Architecture.Ddd.Collections.EnumerableExtensions.ToReferences to accept an optional parameter named unversioned with a default value of false that will determine the versioned state of the references generated (**Breaking Change**).
 - Changed Architecture.Ddd.DomainEvent<TAggregate> so that the order of construction parameters is now alphabetic (**Breaking Change**).
 - Changed Architecture.Ddd.DomainException<TAggregate> so that the order of construction parameters is now alphabetic (**Breaking Change**).
+- Changed Architecture.Ddd.ReferenceExtensions.ToUnversioned to allow for a null reference.
+- Changed Architecture.Ddd.ReferenceExtensions.ToUnversioned<TAggregate> to allow for a null reference.
 - Changed Architecture.Ddd.Services.AggregateNotFoundException<TAggregate>  so that the order of construction parameters is now alphabetic (**Breaking Change**).
 - Changed Architecture.Ddd.Services.AggregateVersionNotFoundException<TAggregate>  so that the order of construction parameters is now alphabetic (**Breaking Change**).
 - Changed Architecture.Ddd.Services.AtomicUnit<T> so that the order of construction parameters is now alphabetic (**Breaking Change**).

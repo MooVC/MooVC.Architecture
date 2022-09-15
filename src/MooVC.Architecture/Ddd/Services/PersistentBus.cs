@@ -15,7 +15,8 @@ public sealed class PersistentBus
 {
     private readonly IStore<AtomicUnit, Guid> store;
 
-    public PersistentBus(IStore<AtomicUnit, Guid> store)
+    public PersistentBus(IStore<AtomicUnit, Guid> store, IDiagnosticsProxy? diagnostics = default)
+        : base(diagnostics: diagnostics)
     {
         this.store = ArgumentNotNull(store, nameof(store), PersistentBusStoreRequired);
     }
@@ -40,7 +41,6 @@ public sealed class PersistentBus
         {
             await
                 OnDiagnosticsEmittedAsync(
-                    Level.Error,
                     cancellationToken: cancellationToken,
                     cause: ex,
                     message: Format(PersistentBusPublishFailure, unit.Id))

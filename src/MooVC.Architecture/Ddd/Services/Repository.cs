@@ -13,11 +13,22 @@ public abstract class Repository<TAggregate>
       IEmitDiagnostics
     where TAggregate : AggregateRoot
 {
+    private readonly IDiagnosticsProxy diagnostics;
+
+    protected Repository(IDiagnosticsProxy? diagnostics = default)
+    {
+        this.diagnostics = diagnostics ?? new DiagnosticsProxy();
+    }
+
     public event AggregateSavedAsyncEventHandler<TAggregate>? AggregateSaved;
 
     public event AggregateSavingAsyncEventHandler<TAggregate>? AggregateSaving;
 
-    public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
+    public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
+    {
+        add => diagnostics.DiagnosticsEmitted += value;
+        remove => diagnostics.DiagnosticsEmitted -= value;
+    }
 
     public abstract Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default);
 
@@ -60,9 +71,9 @@ public abstract class Repository<TAggregate>
             this,
             new AggregateSavedAsyncEventArgs<TAggregate>(aggregate, cancellationToken: cancellationToken),
             onFailure: failure => OnDiagnosticsEmittedAsync(
-                Level.Warning,
                 cancellationToken: cancellationToken,
                 cause: failure,
+                level: Level.Warning,
                 message: RepositoryOnAggregateSavedAsyncFailure));
     }
 
@@ -74,18 +85,12 @@ public abstract class Repository<TAggregate>
     }
 
     protected virtual Task OnDiagnosticsEmittedAsync(
-        Level level,
         CancellationToken? cancellationToken = default,
         Exception? cause = default,
+        Level? level = default,
         string? message = default)
     {
-        return DiagnosticsEmitted.PassiveInvokeAsync(
-            this,
-            new DiagnosticsEmittedAsyncEventArgs(
-                cancellationToken: cancellationToken,
-                cause: cause,
-                level: level,
-                message: message));
+        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, level: level, message: message);
     }
 
     protected virtual async Task PerformSaveAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)

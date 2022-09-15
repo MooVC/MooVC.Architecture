@@ -11,7 +11,18 @@ public abstract class Bus
     : IBus,
       IEmitDiagnostics
 {
-    public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
+    private readonly IDiagnosticsProxy diagnostics;
+
+    protected Bus(IDiagnosticsProxy? diagnostics = default)
+    {
+        this.diagnostics = diagnostics ?? new DiagnosticsProxy();
+    }
+
+    public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
+    {
+        add => diagnostics.DiagnosticsEmitted += value;
+        remove => diagnostics.DiagnosticsEmitted -= value;
+    }
 
     public event MessageInvokedAsyncEventHandler? Invoked;
 
@@ -34,18 +45,12 @@ public abstract class Bus
     protected abstract Task PerformInvokeAsync(Message message, CancellationToken? cancellationToken = default);
 
     protected virtual Task OnDiagnosticsEmittedAsync(
-        Level level,
         CancellationToken? cancellationToken = default,
         Exception? cause = default,
+        Level? level = default,
         string? message = default)
     {
-        return DiagnosticsEmitted.PassiveInvokeAsync(
-            this,
-            new DiagnosticsEmittedAsyncEventArgs(
-                cancellationToken: cancellationToken,
-                cause: cause,
-                level: level,
-                message: message));
+        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, level: level, message: message);
     }
 
     protected virtual Task OnInvokingAsync(Message message, CancellationToken? cancellationToken = default)
@@ -61,9 +66,9 @@ public abstract class Bus
             this,
             new MessageInvokedAsyncEventArgs(message, cancellationToken: cancellationToken),
             onFailure: failure => OnDiagnosticsEmittedAsync(
-                Level.Warning,
                 cancellationToken: cancellationToken,
                 cause: failure,
+                level: Level.Warning,
                 message: BusOnInvokedAsyncFailure));
     }
 }

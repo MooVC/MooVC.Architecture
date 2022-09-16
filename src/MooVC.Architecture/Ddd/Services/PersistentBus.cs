@@ -43,6 +43,7 @@ public sealed class PersistentBus
                 OnDiagnosticsEmittedAsync(
                     cancellationToken: cancellationToken,
                     cause: ex,
+                    impact: Impact.Unrecoverable,
                     message: Format(PersistentBusPublishFailure, unit.Id))
                 .ConfigureAwait(false);
 

@@ -57,10 +57,11 @@ public abstract class Bus
     protected virtual Task OnDiagnosticsEmittedAsync(
         CancellationToken? cancellationToken = default,
         Exception? cause = default,
+        Impact? impact = default,
         Level? level = default,
         string? message = default)
     {
-        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, level: level, message: message);
+        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, impact: impact, level: level, message: message);
     }
 
     protected virtual Task OnPublishingAsync(IEnumerable<DomainEvent> @events, CancellationToken? cancellationToken = default)
@@ -78,6 +79,7 @@ public abstract class Bus
             onFailure: failure => OnDiagnosticsEmittedAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
+                impact: Impact.None,
                 level: Level.Warning,
                 message: BusOnPublishedAsyncFailure));
     }

@@ -73,7 +73,7 @@ public abstract class Repository<TAggregate>
             onFailure: failure => OnDiagnosticsEmittedAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
-                level: Level.Warning,
+                impact: Impact.None,
                 message: RepositoryOnAggregateSavedAsyncFailure));
     }
 
@@ -87,10 +87,11 @@ public abstract class Repository<TAggregate>
     protected virtual Task OnDiagnosticsEmittedAsync(
         CancellationToken? cancellationToken = default,
         Exception? cause = default,
+        Impact? impact = default,
         Level? level = default,
         string? message = default)
     {
-        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, level: level, message: message);
+        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, impact: Impact.None, level: level, message: message);
     }
 
     protected virtual async Task PerformSaveAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)

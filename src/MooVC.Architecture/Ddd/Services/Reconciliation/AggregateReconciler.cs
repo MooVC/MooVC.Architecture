@@ -105,17 +105,18 @@ public abstract class AggregateReconciler
             onFailure: failure => OnDiagnosticsEmittedAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
-                level: Level.Warning,
+                impact: Impact.None,
                 message: AggregateReconcilerOnAggregateReconciledAsyncFailure));
     }
 
     protected virtual Task OnDiagnosticsEmittedAsync(
         CancellationToken? cancellationToken = default,
         Exception? cause = default,
+        Impact? impact = default,
         Level? level = default,
         string? message = default)
     {
-        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, level: level, message: message);
+        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, impact: impact, level: level, message: message);
     }
 
     protected virtual Task OnUnsupportedAggregateTypeDetectedAsync(Type type, CancellationToken? cancellationToken = default)

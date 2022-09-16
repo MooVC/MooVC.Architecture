@@ -12,7 +12,18 @@ public abstract class EventReconciler
     : IEventReconciler,
       IEmitDiagnostics
 {
-    public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
+    private readonly IDiagnosticsProxy diagnostics;
+
+    protected EventReconciler(IDiagnosticsProxy? diagnostics = default)
+    {
+        this.diagnostics = diagnostics ?? new DiagnosticsProxy();
+    }
+
+    public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
+    {
+        add => diagnostics.DiagnosticsEmitted += value;
+        remove => diagnostics.DiagnosticsEmitted -= value;
+    }
 
     public event EventsReconciledAsyncEventHandler? EventsReconciled;
 
@@ -56,18 +67,13 @@ public abstract class EventReconciler
     protected abstract Task ReconcileAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
 
     protected virtual Task OnDiagnosticsEmittedAsync(
-        Level level,
         CancellationToken? cancellationToken = default,
         Exception? cause = default,
+        Impact? impact = default,
+        Level? level = default,
         string? message = default)
     {
-        return DiagnosticsEmitted.PassiveInvokeAsync(
-            this,
-            new DiagnosticsEmittedAsyncEventArgs(
-                cancellationToken: cancellationToken,
-                cause: cause,
-                level: level,
-                message: message));
+        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, impact: impact, level: level, message: message);
     }
 
     protected virtual Task OnEventsReconciledAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
@@ -76,9 +82,9 @@ public abstract class EventReconciler
             this,
             new EventReconciliationAsyncEventArgs(events, cancellationToken: cancellationToken),
             onFailure: failure => OnDiagnosticsEmittedAsync(
-                Level.Warning,
                 cancellationToken: cancellationToken,
                 cause: failure,
+                impact: Impact.None,
                 message: EventReconcilerOnEventsReconciledAsyncFailure));
     }
 
@@ -95,9 +101,9 @@ public abstract class EventReconciler
             this,
             new EventSequenceAdvancedAsyncEventArgs(current, cancellationToken: cancellationToken),
             onFailure: failure => OnDiagnosticsEmittedAsync(
-                Level.Warning,
                 cancellationToken: cancellationToken,
                 cause: failure,
+                impact: Impact.None,
                 message: EventReconcilerOnEventSequenceAdvancedAsyncFailure));
     }
 }

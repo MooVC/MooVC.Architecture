@@ -13,11 +13,9 @@ public abstract class Repository<TAggregate>
       IEmitDiagnostics
     where TAggregate : AggregateRoot
 {
-    private readonly IDiagnosticsProxy diagnostics;
-
     protected Repository(IDiagnosticsProxy? diagnostics = default)
     {
-        this.diagnostics = diagnostics ?? new DiagnosticsProxy();
+        Diagnostics = new DiagnosticsEmitter<Repository<TAggregate>>(this, diagnostics: diagnostics);
     }
 
     public event AggregateSavedAsyncEventHandler<TAggregate>? AggregateSaved;
@@ -26,9 +24,11 @@ public abstract class Repository<TAggregate>
 
     public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
     {
-        add => diagnostics.DiagnosticsEmitted += value;
-        remove => diagnostics.DiagnosticsEmitted -= value;
+        add => Diagnostics.DiagnosticsEmitted += value;
+        remove => Diagnostics.DiagnosticsEmitted -= value;
     }
+
+    protected IDiagnosticsEmitter Diagnostics { get; }
 
     public abstract Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default);
 
@@ -70,7 +70,7 @@ public abstract class Repository<TAggregate>
         return AggregateSaved.PassiveInvokeAsync(
             this,
             new AggregateSavedAsyncEventArgs<TAggregate>(aggregate, cancellationToken: cancellationToken),
-            onFailure: failure => OnDiagnosticsEmittedAsync(
+            onFailure: failure => Diagnostics.EmitAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
                 impact: Impact.None,
@@ -82,16 +82,6 @@ public abstract class Repository<TAggregate>
         return AggregateSaving.InvokeAsync(
             this,
             new AggregateSavingAsyncEventArgs<TAggregate>(aggregate, cancellationToken: cancellationToken));
-    }
-
-    protected virtual Task OnDiagnosticsEmittedAsync(
-        CancellationToken? cancellationToken = default,
-        Exception? cause = default,
-        Impact? impact = default,
-        Level? level = default,
-        string? message = default)
-    {
-        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, impact: Impact.None, level: level, message: message);
     }
 
     protected virtual async Task PerformSaveAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)

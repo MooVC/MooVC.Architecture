@@ -39,8 +39,8 @@ public sealed class PersistentBus
         }
         catch (Exception ex)
         {
-            await
-                OnDiagnosticsEmittedAsync(
+            await Diagnostics
+                .EmitAsync(
                     cancellationToken: cancellationToken,
                     cause: ex,
                     impact: Impact.Unrecoverable,

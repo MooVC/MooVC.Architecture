@@ -13,11 +13,9 @@ public abstract class AggregateReconciler
     : IAggregateReconciler,
       IEmitDiagnostics
 {
-    private readonly IDiagnosticsProxy diagnostics;
-
     protected AggregateReconciler(IDiagnosticsProxy? diagnostics = default)
     {
-        this.diagnostics = diagnostics ?? new DiagnosticsProxy();
+        Diagnostics = new DiagnosticsEmitter<AggregateReconciler>(this, diagnostics: diagnostics);
     }
 
     public event AggregateConflictDetectedAsyncEventHandler? AggregateConflictDetected;
@@ -26,11 +24,13 @@ public abstract class AggregateReconciler
 
     public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
     {
-        add => diagnostics.DiagnosticsEmitted += value;
-        remove => diagnostics.DiagnosticsEmitted -= value;
+        add => Diagnostics.DiagnosticsEmitted += value;
+        remove => Diagnostics.DiagnosticsEmitted -= value;
     }
 
     public event UnsupportedAggregateTypeDetectedAsyncEventHandler? UnsupportedAggregateTypeDetected;
+
+    protected IDiagnosticsEmitter Diagnostics { get; }
 
     public virtual Task ReconcileAsync(EventCentricAggregateRoot aggregate, CancellationToken? cancellationToken = default)
     {
@@ -102,21 +102,11 @@ public abstract class AggregateReconciler
         return AggregateReconciled.PassiveInvokeAsync(
             this,
             new AggregateReconciledAsyncEventArgs(aggregate, events, cancellationToken: cancellationToken),
-            onFailure: failure => OnDiagnosticsEmittedAsync(
+            onFailure: failure => Diagnostics.EmitAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
                 impact: Impact.None,
                 message: AggregateReconcilerOnAggregateReconciledAsyncFailure));
-    }
-
-    protected virtual Task OnDiagnosticsEmittedAsync(
-        CancellationToken? cancellationToken = default,
-        Exception? cause = default,
-        Impact? impact = default,
-        Level? level = default,
-        string? message = default)
-    {
-        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, impact: impact, level: level, message: message);
     }
 
     protected virtual Task OnUnsupportedAggregateTypeDetectedAsync(Type type, CancellationToken? cancellationToken = default)

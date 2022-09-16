@@ -31,7 +31,6 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Changed Architecture.Ddd.Services.AggregateVersionNotFoundException<TAggregate>  so that the order of construction parameters is now alphabetic (**Breaking Change**).
 - Changed Architecture.Ddd.Services.AtomicUnit<T> so that the order of construction parameters is now alphabetic (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Bus so that it now accepts an optional IDiagnosticsProxy.
-- Changed Architecture.Ddd.Services.Bus.OnDiagnosticsEmittedAsync so that the level is now optional  (**Breaking Change**).
 - Changed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand> so that it now requires an instance of Ddd.Threading.IAggregateCoordinator<TAggregate> as a parameter on construction (**Breaking Change**).
 - Changed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand>.Generate so that an aggregate is no longer required in return.
 - Changed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand> so that it is now possible to override the generate behavior via GenerateAsync.
@@ -42,12 +41,9 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Changed Architecture.Ddd.Services.CoordinatedReactionHandler<TAggregate, TCommand> so that it now requires an instance of Ddd.Threading.IAggregateCoordinator<TAggregate> as a parameter on construction (**Breaking Change**).
 - Changed Architecture.Ddd.Services.IProjector<TAggregate, TProjection>.ProjectAsync to include an optional context parameter (**Breaking Change**).- 
 - Changed Architecture.Ddd.Services.Reconciliation.AggregateReconciler so that it now accepts an optional IDiagnosticsProxy.
-- Changed Architecture.Ddd.Services.Reconciliation.AggregateReconciler.OnDiagnosticsEmittedAsync so that the level is now optional  (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Reconciliation.DefaultAggregateReconciler so that it no longer accepts a coordination timeout (it is now up to the proxies to coordinate if required) (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Repository<TAggregate> so that it now accepts an optional IDiagnosticsProxy.
-- Changed Architecture.Ddd.Services.Repository<TAggregate>.OnDiagnosticsEmittedAsync so that the level is now optional  (**Breaking Change**).
 - Changed Architecture.Services.Bus so that it now accepts an optional IDiagnosticsProxy.
-- Changed Architecture.Services.Bus.OnDiagnosticsEmittedAsync so that the level is now optional  (**Breaking Change**).
 - Changed Architecture.Entity<T> to implement Threading.ICoordinatable<T> via the Id property.
 - Changed Architecture.Entity<T>.ToString so that the call is now forwarded to the ToString method for the instance held by the Id property.
 - Changed Architecture.Message so that constructor parameter context (of type Message) is now an optional parameter.
@@ -63,10 +59,14 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Removed Architecture.Cqrs.Services.SynchronousQueryHandler<TResult> in favour of Architecture.Cqrs.Services.SynchronousQueryHandler<TQuery, TResult> (**Breaking Change**).
 - Removed Architecture.Ddd.AggregateRootExtensions.CoordinateAsync  (**Breaking Change**).
 - Removed Architecture.Ddd.ReferenceExtensions.CoordinateAsync (**Breaking Change**).
+- Removed Architecture.Ddd.Services.Bus.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
 - Removed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.IdentifyTarget in favour of IdentifyCoordinationContextAsync or IdentifyCoordinationContext (**Breaking Change**).
 - Removed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync in favor of PerformExecuteAsync (**Breaking Change**).
+- Removed Architecture.Ddd.Services.Reconciliation.AggregateReconciler.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
+- Removed Architecture.Ddd.Services.Repository<TAggregate>.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
 - Removed Architecture.MessageExtensions.CoordinateAsync (**Breaking Change**).
 - Removed Architecture.ObjectExtensions.CoordinateAsync (**Breaking Change**).
+- Removed Architecture.Services.Bus.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
 - Removed Architecture.TypeExtensions.CoordinateAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync to PerformExecuteAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedRetrieveAsync to RetrieveAsync (**Breaking Change**).

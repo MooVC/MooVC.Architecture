@@ -1,6 +1,5 @@
 namespace MooVC.Architecture.Services;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MooVC.Diagnostics;
@@ -11,22 +10,22 @@ public abstract class Bus
     : IBus,
       IEmitDiagnostics
 {
-    private readonly IDiagnosticsProxy diagnostics;
-
     protected Bus(IDiagnosticsProxy? diagnostics = default)
     {
-        this.diagnostics = diagnostics ?? new DiagnosticsProxy();
+        Diagnostics = new DiagnosticsEmitter<Bus>(this, diagnostics: diagnostics);
     }
 
     public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
     {
-        add => diagnostics.DiagnosticsEmitted += value;
-        remove => diagnostics.DiagnosticsEmitted -= value;
+        add => Diagnostics.DiagnosticsEmitted += value;
+        remove => Diagnostics.DiagnosticsEmitted -= value;
     }
 
     public event MessageInvokedAsyncEventHandler? Invoked;
 
     public event MessageInvokingAsyncEventHandler? Invoking;
+
+    protected IDiagnosticsEmitter Diagnostics { get; }
 
     public virtual async Task InvokeAsync(Message message, CancellationToken? cancellationToken = default)
     {
@@ -44,16 +43,6 @@ public abstract class Bus
 
     protected abstract Task PerformInvokeAsync(Message message, CancellationToken? cancellationToken = default);
 
-    protected virtual Task OnDiagnosticsEmittedAsync(
-        CancellationToken? cancellationToken = default,
-        Exception? cause = default,
-        Impact? impact = default,
-        Level? level = default,
-        string? message = default)
-    {
-        return diagnostics.EmitAsync(this, cancellationToken: cancellationToken, cause: cause, impact: impact, level: level, message: message);
-    }
-
     protected virtual Task OnInvokingAsync(Message message, CancellationToken? cancellationToken = default)
     {
         return Invoking.InvokeAsync(
@@ -66,7 +55,7 @@ public abstract class Bus
         return Invoked.PassiveInvokeAsync(
             this,
             new MessageInvokedAsyncEventArgs(message, cancellationToken: cancellationToken),
-            onFailure: failure => OnDiagnosticsEmittedAsync(
+            onFailure: failure => Diagnostics.EmitAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
                 impact: Impact.None,

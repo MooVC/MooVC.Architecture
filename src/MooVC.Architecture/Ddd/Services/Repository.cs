@@ -15,7 +15,7 @@ public abstract class Repository<TAggregate>
 {
     protected Repository(IDiagnosticsProxy? diagnostics = default)
     {
-        Diagnostics = new DiagnosticsEmitter<Repository<TAggregate>>(this, diagnostics: diagnostics);
+        Diagnostics = new DiagnosticsRelay(this, diagnostics: diagnostics);
     }
 
     public event AggregateSavedAsyncEventHandler<TAggregate>? AggregateSaved;
@@ -28,7 +28,7 @@ public abstract class Repository<TAggregate>
         remove => Diagnostics.DiagnosticsEmitted -= value;
     }
 
-    protected IDiagnosticsEmitter Diagnostics { get; }
+    protected IDiagnosticsRelay Diagnostics { get; }
 
     public abstract Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default);
 

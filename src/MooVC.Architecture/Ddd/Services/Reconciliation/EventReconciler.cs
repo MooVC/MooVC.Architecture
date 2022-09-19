@@ -14,7 +14,7 @@ public abstract class EventReconciler
 {
     protected EventReconciler(IDiagnosticsProxy? diagnostics = default)
     {
-        Diagnostics = new DiagnosticsEmitter<EventReconciler>(this, diagnostics: diagnostics);
+        Diagnostics = new DiagnosticsRelay(this, diagnostics: diagnostics);
     }
 
     public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
@@ -29,7 +29,7 @@ public abstract class EventReconciler
 
     public event EventSequenceAdvancedAsyncEventHandler? EventSequenceAdvanced;
 
-    protected IDiagnosticsEmitter Diagnostics { get; }
+    protected IDiagnosticsRelay Diagnostics { get; }
 
     public async Task<ulong?> ReconcileAsync(CancellationToken? cancellationToken = default, ulong? previous = default, ulong? target = default)
     {

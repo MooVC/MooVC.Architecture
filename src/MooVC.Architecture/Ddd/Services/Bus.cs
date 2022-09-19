@@ -14,7 +14,7 @@ public abstract class Bus
 {
     protected Bus(IDiagnosticsProxy? diagnostics = default)
     {
-        Diagnostics = new DiagnosticsEmitter<Bus>(this, diagnostics: diagnostics);
+        Diagnostics = new DiagnosticsRelay(this, diagnostics: diagnostics);
     }
 
     public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
@@ -27,7 +27,7 @@ public abstract class Bus
 
     public event DomainEventsPublishingAsyncEventHandler? Publishing;
 
-    protected IDiagnosticsEmitter Diagnostics { get; }
+    protected IDiagnosticsRelay Diagnostics { get; }
 
     public virtual Task PublishAsync(DomainEvent @event, CancellationToken? cancellationToken = default)
     {

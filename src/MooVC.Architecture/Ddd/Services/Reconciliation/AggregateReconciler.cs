@@ -15,7 +15,7 @@ public abstract class AggregateReconciler
 {
     protected AggregateReconciler(IDiagnosticsProxy? diagnostics = default)
     {
-        Diagnostics = new DiagnosticsEmitter<AggregateReconciler>(this, diagnostics: diagnostics);
+        Diagnostics = new DiagnosticsRelay(this, diagnostics: diagnostics);
     }
 
     public event AggregateConflictDetectedAsyncEventHandler? AggregateConflictDetected;
@@ -30,7 +30,7 @@ public abstract class AggregateReconciler
 
     public event UnsupportedAggregateTypeDetectedAsyncEventHandler? UnsupportedAggregateTypeDetected;
 
-    protected IDiagnosticsEmitter Diagnostics { get; }
+    protected IDiagnosticsRelay Diagnostics { get; }
 
     public virtual Task ReconcileAsync(EventCentricAggregateRoot aggregate, CancellationToken? cancellationToken = default)
     {

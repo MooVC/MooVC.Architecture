@@ -40,12 +40,10 @@ public static partial class RepositoryExtensions
         bool latest = true)
         where TAggregate : AggregateRoot
     {
-        if (reference.IsEmpty)
+        if (reference.IsEmpty || !reference.Is<TAggregate>(out _))
         {
             throw new AggregateDoesNotExistException<TAggregate>(context);
         }
-
-        _ = ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
         if (latest || reference.Version.IsEmpty)
         {

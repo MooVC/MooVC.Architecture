@@ -7,6 +7,6 @@ public static partial class ReferenceExtensions
     public static Reference<TAggregate> ToTyped<TAggregate>(this Reference? reference)
         where TAggregate : AggregateRoot
     {
-        return ReferenceIsOfType<TAggregate>(reference, nameof(reference));
+        return IsOfType<TAggregate>(reference);
     }
 }

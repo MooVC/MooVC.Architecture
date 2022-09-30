@@ -18,7 +18,7 @@ public abstract class CoordinatedGenerateHandler<TAggregate, TMessage>
     protected CoordinatedGenerateHandler(IAggregateCoordinator<TAggregate> coordinator, IRepository<TAggregate> repository)
         : base(coordinator)
     {
-        this.repository = ArgumentNotNull(repository, nameof(repository), CoordinatedGenerateHandlerRepositoryRequired);
+        this.repository = IsNotNull(repository, message: CoordinatedGenerateHandlerRepositoryRequired);
     }
 
     protected virtual TAggregate? Generate(TMessage message)

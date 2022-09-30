@@ -14,8 +14,8 @@ internal sealed class AndSpecification<T>
 
     public AndSpecification(Specification<T> left, Specification<T> right)
     {
-        this.left = ArgumentNotNull(left, nameof(left), AndSpecificationLeftRequired);
-        this.right = ArgumentNotNull(right, nameof(right), AndSpecificationRightRequired);
+        this.left = IsNotNull(left, message: AndSpecificationLeftRequired);
+        this.right = IsNotNull(right, message: AndSpecificationRightRequired);
     }
 
     public override Expression<Func<T, bool>> ToExpression()

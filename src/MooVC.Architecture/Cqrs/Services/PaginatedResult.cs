@@ -52,7 +52,7 @@ public abstract class PaginatedResult<TQuery, T>
 
     internal static ushort CalculateTotalPages(Paging paging, ulong totalResults)
     {
-        _ = ArgumentNotNull(paging, nameof(paging), PaginatedResultCalculateTotalPagesPagingRequired);
+        _ = IsNotNull(paging, message: PaginatedResultCalculateTotalPagesPagingRequired);
 
         decimal requiredPages = (decimal)totalResults / paging.Size;
         ulong totalPages = (ulong)Math.Ceiling(requiredPages);

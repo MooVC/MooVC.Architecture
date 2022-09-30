@@ -13,8 +13,8 @@ public sealed class DomainEventPropagator<TAggregate>
 
     public DomainEventPropagator(IBus bus, IRepository<TAggregate> repository)
     {
-        this.bus = ArgumentNotNull(bus, nameof(bus), DomainEventPropagatorBusRequired);
-        this.repository = ArgumentNotNull(repository, nameof(repository), DomainEventPropagatorRepositoryRequired);
+        this.bus = IsNotNull(bus, message: DomainEventPropagatorBusRequired);
+        this.repository = IsNotNull(repository, message: DomainEventPropagatorRepositoryRequired);
 
         this.repository.AggregateSaved += Repository_AggregateSaved;
     }

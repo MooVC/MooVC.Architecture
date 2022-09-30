@@ -18,15 +18,14 @@ public sealed class PersistentBus
     public PersistentBus(IStore<AtomicUnit, Guid> store, IDiagnosticsProxy? diagnostics = default)
         : base(diagnostics: diagnostics)
     {
-        this.store = ArgumentNotNull(store, nameof(store), PersistentBusStoreRequired);
+        this.store = IsNotNull(store, message: PersistentBusStoreRequired);
     }
 
-    protected override async Task PerformPublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
+    protected override Task PerformPublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
         var unit = new AtomicUnit(events);
 
-        await PerformPersistAsync(unit, cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+        return PerformPersistAsync(unit, cancellationToken: cancellationToken);
     }
 
     private async Task PerformPersistAsync(AtomicUnit unit, CancellationToken? cancellationToken = default)

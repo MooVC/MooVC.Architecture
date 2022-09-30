@@ -48,7 +48,7 @@ public sealed class AggregateVersionNotFoundException<TAggregate>
     private static string FormatMessage(Reference<TAggregate> aggregate, Message context)
     {
         _ = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateVersionNotFoundExceptionAggregateRequired);
-        _ = ArgumentNotNull(context, nameof(context), AggregateVersionNotFoundExceptionContextRequired);
+        _ = IsNotNull(context, message: AggregateVersionNotFoundExceptionContextRequired);
 
         return Format(AggregateVersionNotFoundExceptionMessage, aggregate.Id, aggregate.Type.Name, aggregate.Version);
     }

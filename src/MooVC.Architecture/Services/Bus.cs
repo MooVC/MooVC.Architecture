@@ -29,7 +29,7 @@ public abstract class Bus
 
     public virtual async Task InvokeAsync(Message message, CancellationToken? cancellationToken = default)
     {
-        _ = ArgumentNotNull(message, nameof(message), BusMessageRequired);
+        _ = IsNotNull(message, message: BusMessageRequired);
 
         await OnInvokingAsync(message, cancellationToken: cancellationToken)
             .ConfigureAwait(false);

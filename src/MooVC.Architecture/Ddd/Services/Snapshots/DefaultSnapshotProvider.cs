@@ -26,9 +26,9 @@ public sealed class DefaultSnapshotProvider<TSequencedEvents>
         Func<Func<Type, IAggregateReconciliationProxy?>> proxies,
         ushort numberToRead = DefaultEventReconciler<TSequencedEvents>.DefaultNumberToRead)
     {
-        this.eventStore = ArgumentNotNull(eventStore, nameof(eventStore), DefaultSnapshotProviderEventStoreRequired);
-        this.factory = ArgumentNotNull(factory, nameof(factory), DefaultSnapshotProviderFactoryRequired);
-        this.proxies = ArgumentNotNull(proxies, nameof(proxies), DefaultSnapshotProviderProxiesRequired);
+        this.eventStore = IsNotNull(eventStore, message: DefaultSnapshotProviderEventStoreRequired);
+        this.factory = IsNotNull(factory, message: DefaultSnapshotProviderFactoryRequired);
+        this.proxies = IsNotNull(proxies, message: DefaultSnapshotProviderProxiesRequired);
         this.numberToRead = numberToRead;
     }
 

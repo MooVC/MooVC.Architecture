@@ -14,8 +14,8 @@ internal sealed class OrSpecification<T>
 
     public OrSpecification(Specification<T> left, Specification<T> right)
     {
-        this.left = ArgumentNotNull(left, nameof(left), OrSpecificationLeftRequired);
-        this.right = ArgumentNotNull(right, nameof(right), OrSpecificationRightRequired);
+        this.left = IsNotNull(left, message: OrSpecificationLeftRequired);
+        this.right = IsNotNull(right, message: OrSpecificationRightRequired);
     }
 
     public override Expression<Func<T, bool>> ToExpression()

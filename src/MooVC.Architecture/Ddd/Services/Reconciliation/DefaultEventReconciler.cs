@@ -25,8 +25,8 @@ public sealed class DefaultEventReconciler<TSequencedEvents>
         IAggregateReconciler reconciler,
         ushort numberToRead = DefaultNumberToRead)
     {
-        this.eventStore = ArgumentNotNull(eventStore, nameof(eventStore), DefaultEventReconcilerEventStoreRequired);
-        this.reconciler = ArgumentNotNull(reconciler, nameof(reconciler), DefaultEventReconcilerReconcilerRequired);
+        this.eventStore = IsNotNull(eventStore, message: DefaultEventReconcilerEventStoreRequired);
+        this.reconciler = IsNotNull(reconciler, message: DefaultEventReconcilerReconcilerRequired);
 
         this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
     }

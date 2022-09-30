@@ -7,7 +7,7 @@ public abstract class Request
 {
     protected Request(Message context)
     {
-        Context = ArgumentNotNull(context, nameof(context), RequestContextRequired);
+        Context = IsNotNull(context, message: RequestContextRequired);
     }
 
     public Message Context { get; }

@@ -15,7 +15,7 @@ public abstract class Result<TQuery, T>
 {
     protected Result(TQuery query, T value)
     {
-        Query = ArgumentNotNull(query, nameof(query), ResultQueryRequired);
+        Query = IsNotNull(query, message: ResultQueryRequired);
         Value = value;
     }
 

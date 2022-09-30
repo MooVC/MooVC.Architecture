@@ -10,7 +10,7 @@ public sealed class SnapshotRestorationCompletedAsyncEventArgs
     public SnapshotRestorationCompletedAsyncEventArgs(IEventSequence sequence, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Sequence = ArgumentNotNull(sequence, nameof(sequence), SnapshotRestorationCompletedEventArgsSequenceRequired);
+        Sequence = IsNotNull(sequence, message: SnapshotRestorationCompletedEventArgsSequenceRequired);
     }
 
     public IEventSequence Sequence { get; }

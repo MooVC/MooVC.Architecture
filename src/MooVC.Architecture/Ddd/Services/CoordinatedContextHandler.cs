@@ -16,7 +16,7 @@ public abstract class CoordinatedContextHandler<TAggregate, TMessage>
     protected CoordinatedContextHandler(IAggregateCoordinator<TAggregate> coordinator, IRepository<TAggregate> repository)
         : base(coordinator)
     {
-        this.repository = ArgumentNotNull(repository, nameof(repository), CoordinatedContextHandlerRepositoryRequired);
+        this.repository = IsNotNull(repository, message: CoordinatedContextHandlerRepositoryRequired);
     }
 
     protected abstract Task PerformExecuteAsync(TAggregate aggregate, TMessage message, CancellationToken cancellationToken);

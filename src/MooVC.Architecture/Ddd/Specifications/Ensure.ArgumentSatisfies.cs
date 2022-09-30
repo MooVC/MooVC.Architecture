@@ -24,9 +24,9 @@ public static partial class Ensure
     public static T ArgumentSatisifies<T>([NotNull] T? argument, string argumentName, Specification<T> specification, string message)
         where T : struct
     {
-        _ = ArgumentNotNull(specification, nameof(specification), EnsureArgumentSatisfiesSpecificationRequired);
+        _ = IsNotNull(specification, message: EnsureArgumentSatisfiesSpecificationRequired);
 
-        return ArgumentIsAcceptable(
+        return Satisfies(
             argument,
             argumentName,
             value => specification.IsSatisfiedBy(value),
@@ -36,9 +36,9 @@ public static partial class Ensure
     public static T ArgumentSatisifies<T>([NotNull] T? argument, string argumentName, Specification<T> specification, string message)
         where T : class
     {
-        _ = ArgumentNotNull(specification, nameof(specification), EnsureArgumentSatisfiesSpecificationRequired);
+        _ = IsNotNull(specification, message: EnsureArgumentSatisfiesSpecificationRequired);
 
-        return ArgumentIsAcceptable(
+        return Satisfies(
             argument,
             argumentName,
             value => specification.IsSatisfiedBy(value),

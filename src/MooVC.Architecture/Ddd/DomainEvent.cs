@@ -19,8 +19,8 @@ public abstract class DomainEvent
     private protected DomainEvent(Reference aggregate, Message context)
         : base(context: context)
     {
-        Aggregate = ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);
-        _ = ArgumentNotNull(context, nameof(context), DomainEventContextRequired);
+        Aggregate = IsNotNull(aggregate, message: DomainEventAggregateRequired);
+        _ = IsNotNull(context, message: DomainEventContextRequired);
     }
 
     public Reference Aggregate { get; }

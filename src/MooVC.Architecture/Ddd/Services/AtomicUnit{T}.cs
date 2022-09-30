@@ -23,10 +23,9 @@ public abstract class AtomicUnit<T>
 
     protected AtomicUnit(IEnumerable<DomainEvent> events, T id)
     {
-        Events = ArgumentNotEmpty(events, nameof(events), AtomicUnitEventsRequired, predicate: value => value is { });
-
-        _ = ArgumentIsAcceptable(Events, nameof(events), HasSameAggregate, AtomicUnitDistinctAggregateVersionRequired);
-        _ = ArgumentIsAcceptable(Events, nameof(events), HasSameContext, AtomicUnitDistinctContextRequired);
+        events = ArgumentNotEmpty(events, nameof(events), AtomicUnitEventsRequired, predicate: value => value is { });
+        _ = Satisfies(events, HasSameAggregate, message: AtomicUnitDistinctAggregateVersionRequired);
+        Events = Satisfies(events, HasSameContext, message: AtomicUnitDistinctContextRequired);
 
         aggregate = new Lazy<Reference>(IdentifyAggregate);
         Id = id;

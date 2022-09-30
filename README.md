@@ -75,3 +75,5 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Renamed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand>.PerformSupplementalActivitiesAsync to VerifyAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync to PerformExecuteAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedOperationHandler.PerformCoordinatedOperation to Apply (**Breaking Change**).
+- Removed support for .Net Standard 2.1 (**Breaking Change**).
+- Removed support for .Net 5 (**Breaking Change**).

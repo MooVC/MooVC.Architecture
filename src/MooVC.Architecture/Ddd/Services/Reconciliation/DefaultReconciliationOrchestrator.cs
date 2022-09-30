@@ -28,35 +28,12 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
         IStore<TEventSequence, ulong> sequenceStore,
         Func<ISnapshot> snapshotSource)
     {
-        this.aggregateReconciler = ArgumentNotNull(
-            aggregateReconciler,
-            nameof(aggregateReconciler),
-            DefaultReconciliationOrchestratorAggregateReconcilerRequired);
-
-        this.aggregateSource = ArgumentNotNull(
-            aggregateSource,
-            nameof(aggregateSource),
-            DefaultReconciliationOrchestratorAggregateSourceRequired);
-
-        this.eventReconciler = ArgumentNotNull(
-            eventReconciler,
-            nameof(eventReconciler),
-            DefaultReconciliationOrchestratorEventReconcilerRequired);
-
-        this.sequenceFactory = ArgumentNotNull(
-            sequenceFactory,
-            nameof(sequenceFactory),
-            DefaultReconciliationOrchestratorSequenceFactoryRequired);
-
-        this.sequenceStore = ArgumentNotNull(
-            sequenceStore,
-            nameof(sequenceStore),
-            DefaultReconciliationOrchestratorSequenceStoreRequired);
-
-        this.snapshotSource = ArgumentNotNull(
-            snapshotSource,
-            nameof(snapshotSource),
-            DefaultReconciliationOrchestratorSnapshotSourceRequired);
+        this.aggregateReconciler = IsNotNull(aggregateReconciler, message: DefaultReconciliationOrchestratorAggregateReconcilerRequired);
+        this.aggregateSource = IsNotNull(aggregateSource, message: DefaultReconciliationOrchestratorAggregateSourceRequired);
+        this.eventReconciler = IsNotNull(eventReconciler, message: DefaultReconciliationOrchestratorEventReconcilerRequired);
+        this.sequenceFactory = IsNotNull(sequenceFactory, message: DefaultReconciliationOrchestratorSequenceFactoryRequired);
+        this.sequenceStore = IsNotNull(sequenceStore, message: DefaultReconciliationOrchestratorSequenceStoreRequired);
+        this.snapshotSource = IsNotNull(snapshotSource, message: DefaultReconciliationOrchestratorSnapshotSourceRequired);
 
         this.aggregateReconciler.AggregateConflictDetected += AggregateReconciler_AggregateConflictDetected;
         this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;

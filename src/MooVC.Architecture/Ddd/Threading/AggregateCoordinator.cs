@@ -15,7 +15,7 @@ public sealed class AggregateCoordinator<TAggregate>
 
     public AggregateCoordinator(ICoordinator<Guid> coordinator)
     {
-        this.coordinator = ArgumentNotNull(coordinator, nameof(coordinator), AggregateCoordinatorCoordinatorRequired);
+        this.coordinator = IsNotNull(coordinator, message: AggregateCoordinatorCoordinatorRequired);
     }
 
     public Task<ICoordinationContext<Guid>> ApplyAsync(CancellationToken? cancellationToken = default, TimeSpan? timeout = default)

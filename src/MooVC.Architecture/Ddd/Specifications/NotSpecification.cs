@@ -13,7 +13,7 @@ internal sealed class NotSpecification<T>
 
     public NotSpecification(Specification<T> specification)
     {
-        this.specification = ArgumentNotNull(specification, nameof(specification), NotSpecificationSpecificationRequired);
+        this.specification = IsNotNull(specification, message: NotSpecificationSpecificationRequired);
     }
 
     public override Expression<Func<T, bool>> ToExpression()

@@ -27,7 +27,7 @@ public sealed class EntityMaximumIdValueExceededException
 
     private static string FormatMessage(string max, Type type)
     {
-        _ = ArgumentNotNull(type, nameof(type), EntityMaximumIdValueExceededExceptionTypeRequired);
+        _ = IsNotNull(type, message: EntityMaximumIdValueExceededExceptionTypeRequired);
 
         return Format(EntityMaximumIdValueExceededExceptionMessage, max, type.Name);
     }

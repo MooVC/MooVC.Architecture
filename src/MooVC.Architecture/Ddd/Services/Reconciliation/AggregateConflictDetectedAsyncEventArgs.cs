@@ -26,8 +26,8 @@ public sealed class AggregateConflictDetectedAsyncEventArgs
     {
         Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedEventArgsAggregateRequired);
         Events = ArgumentNotEmpty(events, nameof(events), AggregateConflictDetectedEventArgsEventsRequired);
-        Next = ArgumentNotNull(next, nameof(next), AggregateConflictDetectedEventArgsNextRequired);
-        Previous = ArgumentNotNull(previous, nameof(previous), AggregateConflictDetectedEventArgsPreviousRequired);
+        Next = IsNotNull(next, message: AggregateConflictDetectedEventArgsNextRequired);
+        Previous = IsNotNull(previous, message: AggregateConflictDetectedEventArgsPreviousRequired);
     }
 
     private AggregateConflictDetectedAsyncEventArgs(SerializationInfo info, StreamingContext context)

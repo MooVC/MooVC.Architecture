@@ -17,7 +17,7 @@ public abstract class SynchronousRepository<TAggregate>
     protected SynchronousRepository(ICloner cloner, IDiagnosticsProxy? diagnostics = default)
         : base(diagnostics: diagnostics)
     {
-        Cloner = ArgumentNotNull(cloner, nameof(cloner), SynchronousRepositoryClonerRequired);
+        Cloner = IsNotNull(cloner, message: SynchronousRepositoryClonerRequired);
     }
 
     protected ICloner Cloner { get; }

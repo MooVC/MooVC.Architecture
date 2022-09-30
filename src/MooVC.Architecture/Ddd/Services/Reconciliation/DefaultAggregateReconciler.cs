@@ -21,8 +21,8 @@ public sealed class DefaultAggregateReconciler
         Func<Type, IAggregateReconciliationProxy?> proxies,
         bool ignorePreviousVersions = true)
     {
-        this.factory = ArgumentNotNull(factory, nameof(factory), DefaultAggregateReconcilerFactoryRequired);
-        this.proxies = ArgumentNotNull(proxies, nameof(proxies), DefaultAggregateReconcilerProxiesRequired);
+        this.factory = IsNotNull(factory, message: DefaultAggregateReconcilerFactoryRequired);
+        this.proxies = IsNotNull(proxies, message: DefaultAggregateReconcilerProxiesRequired);
         this.ignorePreviousVersions = ignorePreviousVersions;
     }
 

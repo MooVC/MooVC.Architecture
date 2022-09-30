@@ -15,7 +15,7 @@ public abstract class MessageAsyncEventArgs
     protected MessageAsyncEventArgs(Message message, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Message = ArgumentNotNull(message, nameof(message), MessageEventArgsMessageRequired);
+        Message = IsNotNull(message, message: MessageEventArgsMessageRequired);
     }
 
     protected MessageAsyncEventArgs(SerializationInfo info, StreamingContext context)

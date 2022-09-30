@@ -20,7 +20,7 @@ public abstract class CoordinatedHandler<TAggregate, TMessage>
 
     protected CoordinatedHandler(IAggregateCoordinator<TAggregate> coordinator)
     {
-        this.coordinator = ArgumentNotNull(coordinator, nameof(coordinator), CoordinatedHandlerCoordinatorRequired);
+        this.coordinator = IsNotNull(coordinator, message: CoordinatedHandlerCoordinatorRequired);
     }
 
     public virtual async Task ExecuteAsync(TMessage message, CancellationToken cancellationToken)

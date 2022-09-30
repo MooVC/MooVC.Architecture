@@ -27,7 +27,7 @@ public abstract class Reference
     private protected Reference(Reference other)
         : this(other.Id, other.Type, other.Version)
     {
-        _ = ArgumentIsAcceptable(other, nameof(other), _ => !other.IsEmpty, ReferenceNonEmptyRequired);
+        _ = Satisfies(other, _ => !other.IsEmpty, message: ReferenceNonEmptyRequired);
     }
 
     private protected Reference(SerializationInfo info, StreamingContext context)
@@ -83,7 +83,7 @@ public abstract class Reference
 
     public static Reference Create(Guid id, Type type, SignedVersion? version = default)
     {
-        _ = ArgumentNotNull(type, nameof(type), ReferenceCreateTypeRequired);
+        _ = IsNotNull(type, message: ReferenceCreateTypeRequired);
 
         Type reference = typeof(Reference<>);
         Type aggregate = reference.MakeGenericType(type);
@@ -116,7 +116,7 @@ public abstract class Reference
 
     public static Reference Create(AggregateRoot aggregate)
     {
-        _ = ArgumentNotNull(aggregate, nameof(aggregate), ReferenceCreateAggregateRequired);
+        _ = IsNotNull(aggregate, message: ReferenceCreateAggregateRequired);
 
         return Create(aggregate.Id, aggregate.GetType(), version: aggregate.Version);
     }

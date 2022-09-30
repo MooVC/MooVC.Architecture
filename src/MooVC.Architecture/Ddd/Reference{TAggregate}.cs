@@ -26,7 +26,7 @@ public sealed class Reference<TAggregate>
        : base(id, type, version: version)
     {
         _ = ArgumentNotEmpty(id, nameof(id), ReferenceIdRequired);
-        _ = ArgumentIsAcceptable(type, nameof(type), value => !value.IsAbstract, ReferenceTypeRequired);
+        _ = Satisfies(type, value => !value.IsAbstract, message: ReferenceTypeRequired);
     }
 
     private Reference()

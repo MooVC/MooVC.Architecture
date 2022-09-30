@@ -58,7 +58,7 @@ public abstract class Repository<TAggregate>
             return false;
         }
 
-        AggregateDoesNotConflict(aggregate, currentVersion: currentVersion?.Version);
+        DoesNotConflict(aggregate, currentVersion: currentVersion?.Version);
 
         return true;
     }

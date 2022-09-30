@@ -78,6 +78,7 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Removed Architecture.ObjectExtensions.CoordinateAsync (**Breaking Change**).
 - Removed Architecture.Services.Bus.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
 - Removed Architecture.TypeExtensions.CoordinateAsync (**Breaking Change**).
+- Renamed Architecture.Ddd.Services.Ensure.AggregateDoesNotConflict to Architecture.Ddd.Services.Ensure.DoesNotConflict (**Breaking Change**).
 - Renamed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies to Architecture.Ddd.Specifications.Ensure.Satisifies (**Breaking Change**).
 - Removed support for .Net Standard 2.1 (**Breaking Change**).
 - Removed support for .Net 5 (**Breaking Change**).

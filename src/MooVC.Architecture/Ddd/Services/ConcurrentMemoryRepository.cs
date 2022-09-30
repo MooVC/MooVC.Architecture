@@ -17,7 +17,7 @@ public abstract class ConcurrentMemoryRepository<TAggregate>
 
     protected virtual TAggregate PerformAdd(Reference<TAggregate> key, TAggregate proposed)
     {
-        AggregateDoesNotConflict(proposed);
+        DoesNotConflict(proposed);
 
         return proposed;
     }
@@ -29,7 +29,7 @@ public abstract class ConcurrentMemoryRepository<TAggregate>
 
     protected virtual TAggregate PerformUpdate(TAggregate existing, Reference<TAggregate> key, TAggregate proposed)
     {
-        AggregateDoesNotConflict(proposed, currentVersion: existing.Version);
+        DoesNotConflict(proposed, currentVersion: existing.Version);
 
         return proposed;
     }

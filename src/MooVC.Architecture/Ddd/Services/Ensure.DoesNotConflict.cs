@@ -2,7 +2,7 @@ namespace MooVC.Architecture.Ddd.Services;
 
 public static class Ensure
 {
-    public static void AggregateDoesNotConflict<TAggregate>(TAggregate proposed, SignedVersion? currentVersion = default)
+    public static void DoesNotConflict<TAggregate>(TAggregate proposed, SignedVersion? currentVersion = default)
         where TAggregate : AggregateRoot
     {
         if (currentVersion is { } && !currentVersion.IsEmpty)
@@ -18,9 +18,9 @@ public static class Ensure
         }
     }
 
-    public static void AggregateDoesNotConflict<TAggregate>(TAggregate proposed, TAggregate? current)
+    public static void DoesNotConflict<TAggregate>(TAggregate proposed, TAggregate? current)
         where TAggregate : AggregateRoot
     {
-        AggregateDoesNotConflict(proposed, currentVersion: current?.Version);
+        DoesNotConflict(proposed, currentVersion: current?.Version);
     }
 }

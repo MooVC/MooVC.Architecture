@@ -43,12 +43,15 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Changed Architecture.Ddd.Services.Reconciliation.AggregateReconciler so that it now accepts an optional IDiagnosticsProxy.
 - Changed Architecture.Ddd.Services.Reconciliation.DefaultAggregateReconciler so that it no longer accepts a coordination timeout (it is now up to the proxies to coordinate if required) (**Breaking Change**).
 - Changed Architecture.Ddd.Services.Repository<TAggregate> so that it now accepts an optional IDiagnosticsProxy.
-- Changed Architecture.Services.Bus so that it now accepts an optional IDiagnosticsProxy.
 - Changed Architecture.Entity<T> to implement Threading.ICoordinatable<T> via the Id property.
 - Changed Architecture.Entity<T>.ToString so that the call is now forwarded to the ToString method for the instance held by the Id property.
 - Changed Architecture.Message so that constructor parameter context (of type Message) is now an optional parameter.
 - Changed Architecture.Message to implement Threading.ICoordinatable<Guid> via the CorrelationId property.
 - Changed Architecture.Reference<T> to implement Threading.ICoordinatable<Guid> via the Id property.
+- Changed Architecture.Services.Bus so that it now accepts an optional IDiagnosticsProxy.
+- Changed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies (now Satisifies) so that a default value can now be passed and used if the argument fails to pass the assertion.
+- Changed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies (now Satisifies) so that the message is now a named optional parameter (**Breaking Change**).
+- Changed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies (now Satisifies) so that the name of the argument is now optional (**Breaking Change**).
 - Changed to target v7.x of MooVC (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.EnumerableResult<T> in favour of Architecture.Cqrs.Services.EnumerableResult<TQuery, T> (**Breaking Change**).
 - Removed Architecture.Cqrs.Services.IQueryEngine.QueryAsync<TResult> in favour of Architecture.Cqrs.Services.IQueryEngine.QueryAsync<TQuery, TResult>(**Breaking Change**).
@@ -62,12 +65,6 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Removed Architecture.Ddd.Services.Bus.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
 - Removed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.IdentifyTarget in favour of IdentifyCoordinationContextAsync or IdentifyCoordinationContext (**Breaking Change**).
 - Removed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync in favor of PerformExecuteAsync (**Breaking Change**).
-- Removed Architecture.Ddd.Services.Reconciliation.AggregateReconciler.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
-- Removed Architecture.Ddd.Services.Repository<TAggregate>.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
-- Removed Architecture.MessageExtensions.CoordinateAsync (**Breaking Change**).
-- Removed Architecture.ObjectExtensions.CoordinateAsync (**Breaking Change**).
-- Removed Architecture.Services.Bus.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
-- Removed Architecture.TypeExtensions.CoordinateAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync to PerformExecuteAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedRetrieveAsync to RetrieveAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedContextHandler<TAggregate, TCommand>.PerformCoordinatedSaveAsync to SaveAsync (**Breaking Change**).
@@ -75,5 +72,12 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Renamed Architecture.Ddd.Services.CoordinatedGenerateHandler<TAggregate, TCommand>.PerformSupplementalActivitiesAsync to VerifyAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedHandler<TAggregate, TCommand>.PerformCoordinatedExecuteAsync to PerformExecuteAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.CoordinatedOperationHandler.PerformCoordinatedOperation to Apply (**Breaking Change**).
+- Removed Architecture.Ddd.Services.Reconciliation.AggregateReconciler.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
+- Removed Architecture.Ddd.Services.Repository<TAggregate>.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
+- Removed Architecture.MessageExtensions.CoordinateAsync (**Breaking Change**).
+- Removed Architecture.ObjectExtensions.CoordinateAsync (**Breaking Change**).
+- Removed Architecture.Services.Bus.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
+- Removed Architecture.TypeExtensions.CoordinateAsync (**Breaking Change**).
+- Renamed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies to Architecture.Ddd.Specifications.Ensure.Satisifies (**Breaking Change**).
 - Removed support for .Net Standard 2.1 (**Breaking Change**).
 - Removed support for .Net 5 (**Breaking Change**).

@@ -20,7 +20,7 @@ public sealed class AggregateReconciledAsyncEventArgs
         : base(cancellationToken: cancellationToken)
     {
         Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateReconciledEventArgsAggregateRequired);
-        Events = ArgumentNotEmpty(events, nameof(events), AggregateReconciledEventArgsEventsRequired);
+        Events = IsNotEmpty(events, message: AggregateReconciledEventArgsEventsRequired);
     }
 
     private AggregateReconciledAsyncEventArgs(SerializationInfo info, StreamingContext context)

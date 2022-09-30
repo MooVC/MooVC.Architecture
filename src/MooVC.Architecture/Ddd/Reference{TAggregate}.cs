@@ -25,7 +25,7 @@ public sealed class Reference<TAggregate>
     internal Reference(Guid id, Type type, SignedVersion? version = default)
        : base(id, type, version: version)
     {
-        _ = ArgumentNotEmpty(id, nameof(id), ReferenceIdRequired);
+        _ = IsNotEmpty(id, message: ReferenceIdRequired);
         _ = Satisfies(type, value => !value.IsAbstract, message: ReferenceTypeRequired);
     }
 

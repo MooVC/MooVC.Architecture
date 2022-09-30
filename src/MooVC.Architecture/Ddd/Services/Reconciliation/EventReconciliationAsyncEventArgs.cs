@@ -16,7 +16,7 @@ public sealed class EventReconciliationAsyncEventArgs
     public EventReconciliationAsyncEventArgs(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Events = ArgumentNotEmpty(events, nameof(events), EventReconciliationEventArgsEventsRequired);
+        Events = IsNotEmpty(events, message: EventReconciliationEventArgsEventsRequired);
     }
 
     private EventReconciliationAsyncEventArgs(SerializationInfo info, StreamingContext context)

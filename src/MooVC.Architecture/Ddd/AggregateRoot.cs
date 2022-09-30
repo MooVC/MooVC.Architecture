@@ -14,7 +14,7 @@ public abstract partial class AggregateRoot
     protected AggregateRoot(Guid id)
         : base(id)
     {
-        _ = ArgumentNotEmpty(id, nameof(id), AggregateRootIdRequired);
+        _ = IsNotEmpty(id, message: AggregateRootIdRequired);
 
         State = new AggregateState(new SignedVersion(), SignedVersion.Empty);
     }

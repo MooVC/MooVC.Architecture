@@ -49,6 +49,9 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Changed Architecture.Message to implement Threading.ICoordinatable<Guid> via the CorrelationId property.
 - Changed Architecture.Reference<T> to implement Threading.ICoordinatable<Guid> via the Id property.
 - Changed Architecture.Services.Bus so that it now accepts an optional IDiagnosticsProxy.
+- Changed Architecture.Ddd.Ensure.ReferenceIsNotEmpty (now IsNotEmpty) so that a default value can now be passed and used if the argument fails to pass the assertion.
+- Changed Architecture.Ddd.Ensure.ReferenceIsNotEmpty (now IsNotEmpty) so that the message is now a named optional parameter (**Breaking Change**).
+- Changed Architecture.Ddd.Ensure.ReferenceIsNotEmpty (now IsNotEmpty) so that the name of the argument is now optional (**Breaking Change**).
 - Changed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies (now Satisifies) so that a default value can now be passed and used if the argument fails to pass the assertion.
 - Changed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies (now Satisifies) so that the message is now a named optional parameter (**Breaking Change**).
 - Changed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies (now Satisifies) so that the name of the argument is now optional (**Breaking Change**).
@@ -79,6 +82,7 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Removed Architecture.Services.Bus.OnDiagnosticsEmittedAsync in favour of a new protected Diagnostics property that enabled access to diagnostics emission (**Breaking Change**).
 - Removed Architecture.TypeExtensions.CoordinateAsync (**Breaking Change**).
 - Renamed Architecture.Ddd.Services.Ensure.AggregateDoesNotConflict to Architecture.Ddd.Services.Ensure.DoesNotConflict (**Breaking Change**).
+- Renamed Architecture.Ddd.Ensure.ReferenceIsNotEmpty to Architecture.Ddd.Ensure.IsNotEmpty (**Breaking Change**).
 - Renamed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies to Architecture.Ddd.Specifications.Ensure.Satisifies (**Breaking Change**).
 - Removed support for .Net Standard 2.1 (**Breaking Change**).
 - Removed support for .Net 5 (**Breaking Change**).

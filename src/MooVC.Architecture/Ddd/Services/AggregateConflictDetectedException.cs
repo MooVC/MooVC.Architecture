@@ -58,7 +58,7 @@ public abstract class AggregateConflictDetectedException
         SignedVersion? persisted = default,
         bool persistedRequired = false)
     {
-        _ = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedExceptionAggregateRequired);
+        _ = IsNotEmpty(aggregate, message: AggregateConflictDetectedExceptionAggregateRequired);
         _ = IsNotNull(received, message: AggregateConflictDetectedExceptionReceivedRequired);
 
         if (persistedRequired)

@@ -19,7 +19,7 @@ public abstract class Projection<TAggregate>
 
     protected Projection(Reference<TAggregate> aggregate)
     {
-        Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), ProjectionAggregateRequired);
+        Aggregate = IsNotEmpty(aggregate, message: ProjectionAggregateRequired);
     }
 
     protected Projection(SerializationInfo info, StreamingContext context)

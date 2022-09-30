@@ -13,7 +13,7 @@ public abstract class Message<TAggregate>
     protected Message(Reference<TAggregate> aggregate, Message? context = default)
         : base(context: context)
     {
-        Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), Format(MessageAggregateRequired, typeof(TAggregate).Name));
+        Aggregate = IsNotEmpty(aggregate, message: Format(MessageAggregateRequired, typeof(TAggregate).Name));
     }
 
     protected Message(SerializationInfo info, StreamingContext context)

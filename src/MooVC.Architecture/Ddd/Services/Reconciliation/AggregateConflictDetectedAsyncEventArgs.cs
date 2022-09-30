@@ -24,7 +24,7 @@ public sealed class AggregateConflictDetectedAsyncEventArgs
         CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedEventArgsAggregateRequired);
+        Aggregate = IsNotEmpty(aggregate, message: AggregateConflictDetectedEventArgsAggregateRequired);
         Events = IsNotEmpty(events, message: AggregateConflictDetectedEventArgsEventsRequired);
         Next = IsNotNull(next, message: AggregateConflictDetectedEventArgsNextRequired);
         Previous = IsNotNull(previous, message: AggregateConflictDetectedEventArgsPreviousRequired);

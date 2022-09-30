@@ -19,7 +19,7 @@ public sealed class AggregateReconciledAsyncEventArgs
     internal AggregateReconciledAsyncEventArgs(Reference aggregate, IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateReconciledEventArgsAggregateRequired);
+        Aggregate = IsNotEmpty(aggregate, message: AggregateReconciledEventArgsAggregateRequired);
         Events = IsNotEmpty(events, message: AggregateReconciledEventArgsEventsRequired);
     }
 

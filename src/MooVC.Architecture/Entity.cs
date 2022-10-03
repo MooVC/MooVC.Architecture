@@ -4,7 +4,6 @@ using System;
 using System.Runtime.Serialization;
 using MooVC.Serialization;
 using MooVC.Threading;
-using static System.String;
 
 [Serializable]
 public abstract class Entity<T>

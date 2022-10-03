@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using static System.String;
 using static MooVC.Architecture.Ddd.Resources;

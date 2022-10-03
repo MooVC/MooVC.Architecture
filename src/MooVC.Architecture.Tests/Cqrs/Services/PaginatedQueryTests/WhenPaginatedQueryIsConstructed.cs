@@ -1,6 +1,5 @@
 ﻿namespace MooVC.Architecture.Cqrs.Services.PaginatedQueryTests;
 
-using System;
 using MooVC.Architecture.MessageTests;
 using MooVC.Linq;
 using Xunit;

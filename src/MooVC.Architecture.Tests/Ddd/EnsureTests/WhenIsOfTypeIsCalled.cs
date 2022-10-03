@@ -1,7 +1,6 @@
 namespace MooVC.Architecture.Ddd.EnsureTests;
 
 using System;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using MooVC.Architecture.Ddd;
 using Xunit;
 using static MooVC.Architecture.Ddd.Ensure;

@@ -2,7 +2,6 @@
 
 using System;
 using MooVC.Architecture.MessageTests;
-using Moq;
 using Xunit;
 
 public sealed class WhenTryIdentifyIsCalled

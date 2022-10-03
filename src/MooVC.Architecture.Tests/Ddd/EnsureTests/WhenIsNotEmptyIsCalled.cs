@@ -2,7 +2,6 @@
 
 using System;
 using MooVC.Architecture.Ddd;
-using MooVC.Architecture.Ddd.Specifications;
 using Xunit;
 using static MooVC.Architecture.Ddd.Ensure;
 using static MooVC.Architecture.Ddd.Reference;

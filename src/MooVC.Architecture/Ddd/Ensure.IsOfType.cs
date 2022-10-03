@@ -11,11 +11,17 @@ public static partial class Ensure
         Reference? reference,
         [CallerArgumentExpression("reference")] string? argumentName = default,
         Reference<TAggregate>? @default = default,
-        string? message = default)
+        string? message = default,
+        bool unversioned = false)
         where TAggregate : AggregateRoot
     {
         if (reference.Is(out Reference<TAggregate>? aggregate))
         {
+            if (unversioned)
+            {
+                return aggregate.ToUnversioned();
+            }
+
             return aggregate;
         }
 

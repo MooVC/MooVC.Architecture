@@ -5,13 +5,17 @@ using Xunit;
 
 public sealed class WhenToTypedIsCalled
 {
-    [Fact]
-    public void GivenAMatchingReferenceThenNoExceptionIsThrown()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void GivenAMatchingReferenceThenNoExceptionIsThrown(bool unversioned)
     {
-        Reference generic = Reference<SerializableAggregateRoot>.Create(Guid.NewGuid());
-        Reference<SerializableAggregateRoot> typed = generic.ToTyped<SerializableAggregateRoot>();
+        var aggregate = new SerializableAggregateRoot();
+        Reference generic = aggregate.ToReference();
+        Reference<SerializableAggregateRoot> typed = generic.ToTyped<SerializableAggregateRoot>(unversioned: unversioned);
 
-        Assert.Same(generic, typed);
+        Assert.Equal(generic, typed);
+        Assert.NotEqual(unversioned, typed.IsVersioned);
     }
 
     [Fact]

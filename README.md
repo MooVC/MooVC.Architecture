@@ -90,3 +90,5 @@ This release focuses on adding a greater degree of flexibility into the framewor
 - Renamed Architecture.Ddd.Specifications.Ensure.ArgumentSatisifies to Architecture.Ddd.Specifications.Ensure.Satisifies (**Breaking Change**).
 - Removed support for .Net Standard 2.1 (**Breaking Change**).
 - Removed support for .Net 5 (**Breaking Change**).
+- Changed Architecture.Ddd.ReferenceExtensions.ToTyped to allow the caller to request that the typed reference returned be unversioned.
+- Changed Architecture.Ddd.ReferenceExtensions.IsOfType to allow the caller to request that the reference returned be unversioned.

@@ -44,7 +44,7 @@ public sealed class PersistentBus
                     cancellationToken: cancellationToken,
                     cause: ex,
                     impact: Impact.Unrecoverable,
-                    message: new DiagnosticsMessage(PersistentBusPublishFailure, unit.Id))
+                    message: (PersistentBusPublishFailure, unit.Id))
                 .ConfigureAwait(false);
 
             throw;

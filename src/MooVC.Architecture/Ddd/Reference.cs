@@ -169,7 +169,7 @@ public abstract class Reference
             return Type.FullName!;
         }
 
-        return $"{Type.FullName} [{Id:P}, {Version}]";
+        return $"{Type.FullName} [{Id:D}, {Version}]";
     }
 
     Guid ICoordinatable<Guid>.GetKey()

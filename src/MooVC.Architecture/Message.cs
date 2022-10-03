@@ -46,7 +46,7 @@ public abstract class Message
 
     public override string ToString()
     {
-        return $"{GetType().FullName} [{Id:P}, {CorrelationId:P}]";
+        return $"{GetType().FullName} [{Id:D}, {CorrelationId:D}]";
     }
 
     Guid ICoordinatable<Guid>.GetKey()

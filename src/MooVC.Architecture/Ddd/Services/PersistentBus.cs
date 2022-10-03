@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MooVC.Collections.Generic;
 using MooVC.Diagnostics;
 using MooVC.Persistence;
 using static System.String;
@@ -43,7 +44,7 @@ public sealed class PersistentBus
                     cancellationToken: cancellationToken,
                     cause: ex,
                     impact: Impact.Unrecoverable,
-                    message: Format(PersistentBusPublishFailure, unit.Id))
+                    message: new DiagnosticsMessage(PersistentBusPublishFailure, unit.Id))
                 .ConfigureAwait(false);
 
             throw;

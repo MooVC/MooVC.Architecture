@@ -64,7 +64,7 @@ public abstract class Entity<T>
 
     public override string ToString()
     {
-        return Id.ToString() ?? Empty;
+        return $"{GetType().FullName} [{Id:P}]";
     }
 
     T ICoordinatable<T>.GetKey()

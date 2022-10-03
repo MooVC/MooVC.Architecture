@@ -64,6 +64,11 @@ public abstract class Value
     {
     }
 
+    public override string ToString()
+    {
+        return $"{GetType().FullName} [{GetHashCode()}]";
+    }
+
     internal static bool EqualOperator(Value? left, Value? right)
     {
         return !(left is null ^ right is null)

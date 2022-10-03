@@ -44,6 +44,11 @@ public abstract class Message
         info.AddValue(nameof(TimeStamp), TimeStamp);
     }
 
+    public override string ToString()
+    {
+        return $"{GetType().FullName} [{Id:P}, {CorrelationId:P}]";
+    }
+
     Guid ICoordinatable<Guid>.GetKey()
     {
         return CorrelationId;

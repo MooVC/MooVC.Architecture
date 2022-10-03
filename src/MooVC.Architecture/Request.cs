@@ -16,4 +16,9 @@ public abstract class Request
     {
         return request.Context;
     }
+
+    public override string ToString()
+    {
+        return Context.ToString();
+    }
 }

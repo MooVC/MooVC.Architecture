@@ -74,6 +74,11 @@ public abstract class Projection<TAggregate>
         _ = info.TryAddReference(nameof(Aggregate), Aggregate);
     }
 
+    public override string ToString()
+    {
+        return Aggregate.ToString();
+    }
+
     private static Reference<TAggregate> CreateReference(TAggregate aggregate)
     {
         return aggregate?.ToReference() ?? Reference<TAggregate>.Empty;

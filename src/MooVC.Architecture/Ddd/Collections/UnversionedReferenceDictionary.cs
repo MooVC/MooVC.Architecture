@@ -79,12 +79,7 @@ public sealed class UnversionedReferenceDictionary<TAggregate, T>
         return @internal.Remove(item.ToUnversioned());
     }
 
-    public bool TryGetValue(
-        Reference<TAggregate> key,
-#if !NETSTANDARD2_1
-        [MaybeNullWhen(false)]
-#endif
-        out T value)
+    public bool TryGetValue(Reference<TAggregate> key, [MaybeNullWhen(false)] out T value)
     {
         return @internal.TryGetValue(key.ToUnversioned(), out value);
     }

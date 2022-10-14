@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.352
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MooVC.Architecture", "MooVC.Architecture\MooVC.Architecture.csproj", "{6191BDF0-23DA-4458-8B3E-DEC78A15F514}"
 EndProject
@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.editorconfig = ..\.editorconfig
 		..\.gitignore = ..\.gitignore
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
+		..\Directory.Build.props = ..\Directory.Build.props
 		..\gitversion.yml = ..\gitversion.yml
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md

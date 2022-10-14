@@ -16,7 +16,7 @@ public sealed class WhenPublishAsyncIsCalled
     private readonly PersistentBus bus;
     private readonly SerializableMessage context;
     private readonly Mock<IStore<AtomicUnit, Guid>> store;
-    private int invocationCounter = 0;
+    private int invocationCounter;
 
     public WhenPublishAsyncIsCalled()
     {

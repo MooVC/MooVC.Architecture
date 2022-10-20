@@ -17,7 +17,6 @@ schedules:
         - release/*
     always: true
 
-
 pool:
   vmImage: 'windows-latest'
 
@@ -58,7 +57,7 @@ steps:
     command: 'restore'
     feedsToUse: 'select'
     projects: '$(solution)'
-    
+
 - task: DotNetCoreCLI@2
   condition: succeeded()
   displayName: 'Build Solution'
@@ -95,7 +94,7 @@ steps:
   displayName: 'Package Artifacts'
   inputs:
     command: 'pack'
-    packagesToPack: '**/*.csproj'
+    packagesToPack: '**/*.csproj;!**/*.Tests.csproj'
     versionEnvVar: 'GitVersion.NuGetVersion'
     versioningScheme: 'byEnvVar'
 

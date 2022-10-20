@@ -2,27 +2,12 @@
   <PropertyGroup>
     <Description>Tests a framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
     <NoWarn>CS0618</NoWarn>
     <RootNamespace>MooVC.Architecture</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="3.*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
-    <PackageReference Include="Moq" Version="4.*" />
     <PackageReference Include="Newtonsoft.Json" Version="13.*" />
-    <PackageReference Include="xunit" Version="2.*" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MooVC.Architecture\MooVC.Architecture.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Ddd\Specifications\EnsureTests\Resources.Designer.cs">

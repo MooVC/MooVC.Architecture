@@ -142,6 +142,15 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The reason for abort must be provided..
+        /// </summary>
+        internal static string AggregateSavingAbortedAsyncEventArgsReasonRequired {
+            get {
+                return ResourceManager.GetString("AggregateSavingAbortedAsyncEventArgsReasonRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The reference to the aggregate requested must be provided..
         /// </summary>
         internal static string AggregateVersionNotFoundExceptionAggregateRequired {
@@ -295,11 +304,20 @@ namespace MooVC.Architecture.Ddd.Services {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for persistence abort from successfully handling a notification..
+        /// </summary>
+        internal static string RepositoryOnAbortedAsyncFailure {
+            get {
+                return ResourceManager.GetString("RepositoryOnAbortedAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A failure has prevented one or more listeners for persistence completion from successfully handling a notification..
         /// </summary>
-        internal static string RepositoryOnAggregateSavedAsyncFailure {
+        internal static string RepositoryOnSavedAsyncFailure {
             get {
-                return ResourceManager.GetString("RepositoryOnAggregateSavedAsyncFailure", resourceCulture);
+                return ResourceManager.GetString("RepositoryOnSavedAsyncFailure", resourceCulture);
             }
         }
         

@@ -37,7 +37,7 @@ public sealed class WhenEventSequenceAdvancedAsyncEventArgsIsSerialized
                 It.IsAny<ushort>()))
             .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-        instance.EventSequenceAdvanced += (sender, e) => Task.FromResult(original = e);
+        instance.SequenceAdvanced += (sender, e) => Task.FromResult(original = e);
 
         ulong? current = await instance.ReconcileAsync();
 

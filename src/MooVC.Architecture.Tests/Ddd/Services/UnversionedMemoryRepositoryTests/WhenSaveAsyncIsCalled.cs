@@ -132,7 +132,7 @@ public class WhenSaveAsyncIsCalled
             return Task.FromResult(wasInvoked = true);
         }
 
-        expectedRepository.AggregateSaved += Aggregate_Saved;
+        expectedRepository.Saved += Aggregate_Saved;
 
         await expectedRepository.SaveAsync(expectedAggregate);
 
@@ -160,7 +160,7 @@ public class WhenSaveAsyncIsCalled
             return Task.FromResult(wasInvoked = true);
         }
 
-        expectedRepository.AggregateSaving += Aggregate_Saving;
+        expectedRepository.Saving += Aggregate_Saving;
 
         await expectedRepository.SaveAsync(expectedAggregate);
 

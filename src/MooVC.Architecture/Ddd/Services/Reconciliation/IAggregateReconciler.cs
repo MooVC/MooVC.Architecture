@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 public interface IAggregateReconciler
 {
-    event AggregateConflictDetectedAsyncEventHandler AggregateConflictDetected;
+    event AggregateConflictDetectedAsyncEventHandler ConflictDetected;
 
-    event AggregateReconciledAsyncEventHandler AggregateReconciled;
+    event AggregateReconciledAsyncEventHandler Reconciled;
 
-    event UnsupportedAggregateTypeDetectedAsyncEventHandler UnsupportedAggregateTypeDetected;
+    event UnsupportedAggregateTypeDetectedAsyncEventHandler UnsupportedTypeDetected;
 
     Task ReconcileAsync(EventCentricAggregateRoot aggregate, CancellationToken? cancellationToken = default);
 

@@ -14,7 +14,7 @@ public sealed class WhenEventReconciliationAsyncEventArgsIsConstructed
         var aggregate = new SerializableEventCentricAggregateRoot();
         var context = new SerializableMessage();
         SerializableCreatedDomainEvent[] events = new[] { new SerializableCreatedDomainEvent(aggregate, context) };
-        var @event = new EventReconciliationAsyncEventArgs(events);
+        var @event = new EventsReconciliationAsyncEventArgs(events);
 
         Assert.Equal(events, @event.Events);
     }
@@ -25,7 +25,7 @@ public sealed class WhenEventReconciliationAsyncEventArgsIsConstructed
         IEnumerable<SerializableCreatedDomainEvent> events = Enumerable.Empty<SerializableCreatedDomainEvent>();
 
         ArgumentException exception = Assert.Throws<ArgumentException>(
-            () => new EventReconciliationAsyncEventArgs(events));
+            () => new EventsReconciliationAsyncEventArgs(events));
 
         Assert.Equal(nameof(events), exception.ParamName);
     }
@@ -36,7 +36,7 @@ public sealed class WhenEventReconciliationAsyncEventArgsIsConstructed
         IEnumerable<SerializableCreatedDomainEvent>? events = default;
 
         ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
-            () => new EventReconciliationAsyncEventArgs(events!));
+            () => new EventsReconciliationAsyncEventArgs(events!));
 
         Assert.Equal(nameof(events), exception.ParamName);
     }

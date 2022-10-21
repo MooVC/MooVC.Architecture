@@ -35,8 +35,8 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
         this.sequenceStore = IsNotNull(sequenceStore, message: DefaultReconciliationOrchestratorSequenceStoreRequired);
         this.snapshotSource = IsNotNull(snapshotSource, message: DefaultReconciliationOrchestratorSnapshotSourceRequired);
 
-        this.aggregateReconciler.AggregateConflictDetected += AggregateReconciler_AggregateConflictDetected;
-        this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;
+        this.aggregateReconciler.ConflictDetected += AggregateReconciler_ConflictDetected;
+        this.eventReconciler.SequenceAdvanced += EventReconciler_SequenceAdvanced;
     }
 
     public override async Task ReconcileAsync(CancellationToken? cancellationToken = default, IEventSequence? target = default)
@@ -104,18 +104,15 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
         }
     }
 
-    private async Task AggregateReconciler_AggregateConflictDetected(IAggregateReconciler sender, AggregateConflictDetectedAsyncEventArgs e)
+    private Task AggregateReconciler_ConflictDetected(IAggregateReconciler sender, AggregateConflictDetectedAsyncEventArgs e)
     {
         EventCentricAggregateRoot aggregate = aggregateSource(e.Aggregate);
 
-        await sender
-            .ReconcileAsync(aggregate)
-            .ConfigureAwait(false);
+        return sender.ReconcileAsync(aggregate);
     }
 
-    private async Task EventReconciler_EventSequenceAdvanced(IEventReconciler sender, EventSequenceAdvancedAsyncEventArgs e)
+    private Task EventReconciler_SequenceAdvanced(IEventReconciler sender, EventSequenceAdvancedAsyncEventArgs e)
     {
-        await UpdateSequenceAsync(e.Sequence, e.CancellationToken)
-            .ConfigureAwait(false);
+        return UpdateSequenceAsync(e.Sequence, e.CancellationToken);
     }
 }

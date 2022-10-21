@@ -9,24 +9,24 @@ using static MooVC.Architecture.Ddd.Services.Reconciliation.Resources;
 using static MooVC.Ensure;
 
 [Serializable]
-public sealed class EventReconciliationAsyncEventArgs
+public abstract class EventsAsyncEventArgs
     : AsyncEventArgs,
       ISerializable
 {
-    public EventReconciliationAsyncEventArgs(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
+    protected EventsAsyncEventArgs(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Events = IsNotEmpty(events, message: EventReconciliationEventArgsEventsRequired);
+        Events = IsNotEmpty(events, message: EventsAsyncEventArgsEventsRequired);
     }
 
-    private EventReconciliationAsyncEventArgs(SerializationInfo info, StreamingContext context)
+    protected EventsAsyncEventArgs(SerializationInfo info, StreamingContext context)
     {
         Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
     }
 
     public IEnumerable<DomainEvent> Events { get; }
 
-    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         _ = info.TryAddEnumerable(nameof(Events), Events);
     }

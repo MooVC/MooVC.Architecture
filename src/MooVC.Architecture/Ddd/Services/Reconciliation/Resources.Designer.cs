@@ -19,7 +19,7 @@ namespace MooVC.Architecture.Ddd.Services.Reconciliation {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -214,29 +214,47 @@ namespace MooVC.Architecture.Ddd.Services.Reconciliation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A failure has prevented one or more listeners for sequence advancement from successfully handling a notification..
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for reconciliation aborted from successfully handling a notification..
         /// </summary>
-        internal static string EventReconcilerOnEventSequenceAdvancedAsyncFailure {
+        internal static string EventReconcilerOnAbortedAsyncFailure {
             get {
-                return ResourceManager.GetString("EventReconcilerOnEventSequenceAdvancedAsyncFailure", resourceCulture);
+                return ResourceManager.GetString("EventReconcilerOnAbortedAsyncFailure", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to A failure has prevented one or more listeners for reconciliation completion from successfully handling a notification..
         /// </summary>
-        internal static string EventReconcilerOnEventsReconciledAsyncFailure {
+        internal static string EventReconcilerOnReconciledAsyncFailure {
             get {
-                return ResourceManager.GetString("EventReconcilerOnEventsReconciledAsyncFailure", resourceCulture);
+                return ResourceManager.GetString("EventReconcilerOnReconciledAsyncFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A failure has prevented one or more listeners for sequence advancement from successfully handling a notification..
+        /// </summary>
+        internal static string EventReconcilerOnSequenceAdvancedAsyncFailure {
+            get {
+                return ResourceManager.GetString("EventReconcilerOnSequenceAdvancedAsyncFailure", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The events must be provided..
         /// </summary>
-        internal static string EventReconciliationEventArgsEventsRequired {
+        internal static string EventsAsyncEventArgsEventsRequired {
             get {
-                return ResourceManager.GetString("EventReconciliationEventArgsEventsRequired", resourceCulture);
+                return ResourceManager.GetString("EventsAsyncEventArgsEventsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The reason for abort must be provided..
+        /// </summary>
+        internal static string EventsReconciliationAbortedAsyncEventArgsReasonRequired {
+            get {
+                return ResourceManager.GetString("EventsReconciliationAbortedAsyncEventArgsReasonRequired", resourceCulture);
             }
         }
         

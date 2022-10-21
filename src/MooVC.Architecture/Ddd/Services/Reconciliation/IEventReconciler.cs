@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 
 public interface IEventReconciler
 {
-    public event EventsReconciledAsyncEventHandler EventsReconciled;
+    public event EventsReconciliationAbortedAsyncEventHandler Aborted;
 
-    public event EventsReconcilingAsyncEventHandler EventsReconciling;
+    public event EventsReconciledAsyncEventHandler Reconciled;
 
-    public event EventSequenceAdvancedAsyncEventHandler EventSequenceAdvanced;
+    public event EventsReconcilingAsyncEventHandler Reconciling;
+
+    public event EventSequenceAdvancedAsyncEventHandler SequenceAdvanced;
 
     Task<ulong?> ReconcileAsync(CancellationToken? cancellationToken = default, ulong? previous = default, ulong? target = default);
 }

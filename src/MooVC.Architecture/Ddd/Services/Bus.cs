@@ -31,7 +31,7 @@ public abstract class Bus
 
     public virtual Task PublishAsync(DomainEvent @event, CancellationToken? cancellationToken = default)
     {
-        return PublishAsync(new[] { @event }, cancellationToken: cancellationToken);
+        return PublishAsync(@event.AsEnumerable(), cancellationToken: cancellationToken);
     }
 
     public virtual async Task PublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)

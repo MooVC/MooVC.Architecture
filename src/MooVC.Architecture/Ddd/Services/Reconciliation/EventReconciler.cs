@@ -22,11 +22,13 @@ public abstract class EventReconciler
         remove => Diagnostics.DiagnosticsEmitted -= value;
     }
 
-    public event EventsReconciledAsyncEventHandler? EventsReconciled;
+    public event EventsReconciliationAbortedAsyncEventHandler? Aborted;
 
-    public event EventsReconcilingAsyncEventHandler? EventsReconciling;
+    public event EventsReconciledAsyncEventHandler? Reconciled;
 
-    public event EventSequenceAdvancedAsyncEventHandler? EventSequenceAdvanced;
+    public event EventsReconcilingAsyncEventHandler? Reconciling;
+
+    public event EventSequenceAdvancedAsyncEventHandler? SequenceAdvanced;
 
     protected IDiagnosticsRelay Diagnostics { get; }
 
@@ -47,7 +49,7 @@ public abstract class EventReconciler
                 await ReconcileAsync(events, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
 
-                await OnEventSequenceAdvancedAsync(lastSequence!.Value, cancellationToken: cancellationToken)
+                await OnSequenceAdvancedAsync(lastSequence!.Value, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
 
                 previous = lastSequence;
@@ -58,6 +60,18 @@ public abstract class EventReconciler
         return previous;
     }
 
+    protected virtual Task OnAbortedAsync(IEnumerable<DomainEvent> events, Exception reason, CancellationToken? cancellationToken = default)
+    {
+        return Aborted.PassiveInvokeAsync(
+            this,
+            new EventsReconciliationAbortedAsyncEventArgs(events, reason, cancellationToken: cancellationToken),
+            onFailure: failure => Diagnostics.EmitAsync(
+                cancellationToken: cancellationToken,
+                cause: failure,
+                impact: Impact.None,
+                message: EventReconcilerOnAbortedAsyncFailure));
+    }
+
     protected abstract Task<(ulong? LastSequence, IEnumerable<DomainEvent> Events)> GetEventsAsync(
         ulong? previous,
         CancellationToken? cancellationToken = default,
@@ -65,34 +79,34 @@ public abstract class EventReconciler
 
     protected abstract Task ReconcileAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
 
-    protected virtual Task OnEventsReconciledAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
+    protected virtual Task OnReconciledAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
-        return EventsReconciled.PassiveInvokeAsync(
+        return Reconciled.PassiveInvokeAsync(
             this,
-            new EventReconciliationAsyncEventArgs(events, cancellationToken: cancellationToken),
+            new EventsReconciliationAsyncEventArgs(events, cancellationToken: cancellationToken),
             onFailure: failure => Diagnostics.EmitAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
                 impact: Impact.None,
-                message: EventReconcilerOnEventsReconciledAsyncFailure));
+                message: EventReconcilerOnReconciledAsyncFailure));
     }
 
-    protected virtual Task OnEventsReconcilingAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
+    protected virtual Task OnReconcilingAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
-        return EventsReconciling.InvokeAsync(
+        return Reconciling.InvokeAsync(
             this,
-            new EventReconciliationAsyncEventArgs(events, cancellationToken: cancellationToken));
+            new EventsReconciliationAsyncEventArgs(events, cancellationToken: cancellationToken));
     }
 
-    protected virtual Task OnEventSequenceAdvancedAsync(ulong current, CancellationToken? cancellationToken = default)
+    protected virtual Task OnSequenceAdvancedAsync(ulong current, CancellationToken? cancellationToken = default)
     {
-        return EventSequenceAdvanced.PassiveInvokeAsync(
+        return SequenceAdvanced.PassiveInvokeAsync(
             this,
             new EventSequenceAdvancedAsyncEventArgs(current, cancellationToken: cancellationToken),
             onFailure: failure => Diagnostics.EmitAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
                 impact: Impact.None,
-                message: EventReconcilerOnEventSequenceAdvancedAsyncFailure));
+                message: EventReconcilerOnSequenceAdvancedAsyncFailure));
     }
 }

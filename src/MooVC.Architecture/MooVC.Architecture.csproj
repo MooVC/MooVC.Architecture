@@ -2,10 +2,14 @@
   <PropertyGroup>
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet />
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
-    <PackageReference Include="MooVC" Version="7.0.0-beta0038" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.*" />
+    <PackageReference Include="MooVC" Version="7.0.0-beta0046" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Cqrs\Services\Resources.Designer.cs">

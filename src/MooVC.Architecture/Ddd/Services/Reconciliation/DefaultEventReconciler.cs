@@ -93,14 +93,14 @@ public sealed class DefaultEventReconciler<TSequencedEvents>
 
     private async Task PerformReconciliationAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken)
     {
-        await OnEventsReconcilingAsync(events, cancellationToken: cancellationToken)
+        await OnReconcilingAsync(events, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
         await reconciler
             .ReconcileAsync(events, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        await OnEventsReconciledAsync(events, cancellationToken: cancellationToken)
+        await OnReconciledAsync(events, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 }

@@ -16,10 +16,10 @@ public sealed class DomainEventPropagator<TAggregate>
         this.bus = IsNotNull(bus, message: DomainEventPropagatorBusRequired);
         this.repository = IsNotNull(repository, message: DomainEventPropagatorRepositoryRequired);
 
-        this.repository.AggregateSaved += Repository_AggregateSaved;
+        this.repository.Saved += Repository_Saved;
     }
 
-    private async Task Repository_AggregateSaved(IRepository<TAggregate> sender, AggregateSavedAsyncEventArgs<TAggregate> e)
+    private async Task Repository_Saved(IRepository<TAggregate> sender, AggregateSavedAsyncEventArgs<TAggregate> e)
     {
         IEnumerable<DomainEvent> changes = e.Aggregate.GetUncommittedChanges();
 

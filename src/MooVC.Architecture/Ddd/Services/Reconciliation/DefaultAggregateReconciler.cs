@@ -37,7 +37,7 @@ public sealed class DefaultAggregateReconciler
 
                 if (proxy is null)
                 {
-                    await OnUnsupportedAggregateTypeDetectedAsync(aggregateTypes.Key, cancellationToken: cancellationToken)
+                    await OnUnsupportedTypeDetectedAsync(aggregateTypes.Key, cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
                 }
                 else
@@ -63,7 +63,7 @@ public sealed class DefaultAggregateReconciler
 
                 if (proxy is null)
                 {
-                    await OnUnsupportedAggregateTypeDetectedAsync(aggregateTypes.Key, cancellationToken: cancellationToken)
+                    await OnUnsupportedTypeDetectedAsync(aggregateTypes.Key, cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
                 }
                 else

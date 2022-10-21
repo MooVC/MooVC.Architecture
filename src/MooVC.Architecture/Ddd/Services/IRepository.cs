@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 public interface IRepository<TAggregate>
     where TAggregate : AggregateRoot
 {
-    event AggregateSavedAsyncEventHandler<TAggregate> AggregateSaved;
+    event AggregateSavingAbortedAsyncEventHandler<TAggregate> Aborted;
 
-    event AggregateSavingAsyncEventHandler<TAggregate> AggregateSaving;
+    event AggregateSavedAsyncEventHandler<TAggregate> Saved;
+
+    event AggregateSavingAsyncEventHandler<TAggregate> Saving;
 
     Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default);
 

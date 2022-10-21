@@ -2,15 +2,8 @@
   <PropertyGroup>
     <Description>Tests a framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
-    <IsTestProject>true</IsTestProject>
     <NoWarn>CS0618</NoWarn>
     <RootNamespace>MooVC.Architecture</RootNamespace>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.*" />

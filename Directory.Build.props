@@ -1,7 +1,13 @@
 ﻿<Project>
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
-    <IsTestProject>true</IsTestProject>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)analyzers/stylecop.tests.ruleset</CodeAnalysisRuleSet>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    <ExcludeByAttribute>CompilerGeneratedAttribute</ExcludeByAttribute>
+    <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
+    <ExcludeByAttribute>Obsolete</ExcludeByAttribute>
+    <ExcludeByFile>**/*.Designer.cs</ExcludeByFile>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisMode>Recommended</AnalysisMode>
@@ -20,7 +26,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/MooVC/moovc.architecture.git</RepositoryUrl>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)analyzers/stylecop.code.ruleset</CodeAnalysisRuleSet>

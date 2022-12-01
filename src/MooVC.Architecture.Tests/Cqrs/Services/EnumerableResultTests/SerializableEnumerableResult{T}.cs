@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 [Serializable]
 internal sealed class SerializableEnumerableResult<T>
-    : EnumerableResult<T>
+    : EnumerableResult<Message, T>
 {
     public SerializableEnumerableResult(Message context, IEnumerable<T> results)
         : base(context, results)

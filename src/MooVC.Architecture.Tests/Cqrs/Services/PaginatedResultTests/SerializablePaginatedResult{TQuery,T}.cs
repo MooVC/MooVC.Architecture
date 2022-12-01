@@ -9,17 +9,12 @@ internal sealed class SerializablePaginatedResult<TQuery, T>
     : PaginatedResult<TQuery, T>
     where TQuery : PaginatedQuery
 {
-    public SerializablePaginatedResult(
-        TQuery query,
-        ulong total,
-        IEnumerable<T> values)
+    public SerializablePaginatedResult(TQuery query, ulong total, IEnumerable<T> values)
         : base(query, total, values)
     {
     }
 
-    private SerializablePaginatedResult(
-        SerializationInfo info,
-        StreamingContext context)
+    private SerializablePaginatedResult(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

@@ -411,6 +411,8 @@ dotnet_diagnostic.SA1651.severity=silent
 csharp_style_namespace_declarations = file_scoped:error
 
 [*.{cs,vb}]
+dotnet_diagnostic.CS0660.severity=silent
+dotnet_diagnostic.CS0661.severity=silent
 dotnet_diagnostic.CA1000.severity=silent
 dotnet_diagnostic.CA1014.severity=silent
 dotnet_diagnostic.CA2229.severity=silent

@@ -19,7 +19,7 @@ namespace MooVC.Architecture.Cqrs.Services {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,20 +61,20 @@ namespace MooVC.Architecture.Cqrs.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The paging instructions for this query must be provided..
-        /// </summary>
-        internal static string PaginatedQueryPagingRequired {
-            get {
-                return ResourceManager.GetString("PaginatedQueryPagingRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The paging instructions that generated the results must be provided..
         /// </summary>
         internal static string PaginatedResultCalculateTotalPagesPagingRequired {
             get {
                 return ResourceManager.GetString("PaginatedResultCalculateTotalPagesPagingRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The query that precipitated the result must be provided..
+        /// </summary>
+        internal static string ResultQueryRequired {
+            get {
+                return ResourceManager.GetString("ResultQueryRequired", resourceCulture);
             }
         }
     }

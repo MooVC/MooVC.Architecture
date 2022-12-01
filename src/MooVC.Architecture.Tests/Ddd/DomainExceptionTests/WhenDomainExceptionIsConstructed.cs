@@ -12,10 +12,7 @@ public sealed class WhenDomainExceptionIsConstructed
         var context = new SerializableMessage();
         const string Message = "Something something dark side.";
 
-        var exception = new SerializableDomainException<SerializableEventCentricAggregateRoot>(
-            context,
-            aggregate,
-            Message);
+        var exception = new SerializableDomainException<SerializableEventCentricAggregateRoot>(aggregate, context, Message);
 
         Assert.Equal(aggregate.ToReference(), exception.Aggregate);
         Assert.Equal(context, exception.Context);
@@ -30,10 +27,7 @@ public sealed class WhenDomainExceptionIsConstructed
         var context = new SerializableMessage();
         const string Message = "Something something dark side.";
 
-        var exception = new SerializableDomainException<SerializableEventCentricAggregateRoot>(
-            context,
-            reference,
-            Message);
+        var exception = new SerializableDomainException<SerializableEventCentricAggregateRoot>(reference, context, Message);
 
         Assert.Equal(reference, exception.Aggregate);
         Assert.Equal(context, exception.Context);

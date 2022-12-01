@@ -139,7 +139,7 @@ public sealed class WhenRetrieveAsyncIsCalled
     }
 
     [Fact]
-    public async Task GivenAReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnArgumentExceptionIsThrown()
+    public async Task GivenAReferenceThatDoesNotMatchTheTypeOfTheRepositoryThenAnAggregateDoesNotExistExceptionIsThrown()
     {
         _ = repository
             .Setup(repo => repo.GetAsync(
@@ -151,7 +151,7 @@ public sealed class WhenRetrieveAsyncIsCalled
         var aggregateId = Guid.NewGuid();
         var reference = Reference<SerializableEventCentricAggregateRoot>.Create(aggregateId);
 
-        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
+        AggregateDoesNotExistException<SerializableAggregateRoot> exception = await Assert.ThrowsAsync<AggregateDoesNotExistException<SerializableAggregateRoot>>(
             () => reference.RetrieveAsync(context, repository.Object));
 
         repository.Verify(

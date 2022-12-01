@@ -1,6 +1,5 @@
 namespace MooVC.Architecture.Ddd.Services;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,15 +12,26 @@ public abstract class Bus
     : IBus,
       IEmitDiagnostics
 {
-    public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
+    protected Bus(IDiagnosticsProxy? diagnostics = default)
+    {
+        Diagnostics = new DiagnosticsRelay(this, diagnostics: diagnostics);
+    }
+
+    public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
+    {
+        add => Diagnostics.DiagnosticsEmitted += value;
+        remove => Diagnostics.DiagnosticsEmitted -= value;
+    }
 
     public event DomainEventsPublishedAsyncEventHandler? Published;
 
     public event DomainEventsPublishingAsyncEventHandler? Publishing;
 
+    protected IDiagnosticsRelay Diagnostics { get; }
+
     public virtual Task PublishAsync(DomainEvent @event, CancellationToken? cancellationToken = default)
     {
-        return PublishAsync(new[] { @event }, cancellationToken: cancellationToken);
+        return PublishAsync(@event.AsEnumerable(), cancellationToken: cancellationToken);
     }
 
     public virtual async Task PublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
@@ -43,21 +53,6 @@ public abstract class Bus
 
     protected abstract Task PerformPublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default);
 
-    protected virtual Task OnDiagnosticsEmittedAsync(
-        Level level,
-        CancellationToken? cancellationToken = default,
-        Exception? cause = default,
-        string? message = default)
-    {
-        return DiagnosticsEmitted.PassiveInvokeAsync(
-            this,
-            new DiagnosticsEmittedAsyncEventArgs(
-                cancellationToken: cancellationToken,
-                cause: cause,
-                level: level,
-                message: message));
-    }
-
     protected virtual Task OnPublishingAsync(IEnumerable<DomainEvent> @events, CancellationToken? cancellationToken = default)
     {
         return Publishing.InvokeAsync(
@@ -70,10 +65,10 @@ public abstract class Bus
         return Published.PassiveInvokeAsync(
             this,
             new DomainEventsPublishedAsyncEventArgs(@events, cancellationToken: cancellationToken),
-            onFailure: failure => OnDiagnosticsEmittedAsync(
-                Level.Warning,
+            onFailure: failure => Diagnostics.EmitAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
+                impact: Impact.None,
                 message: BusOnPublishedAsyncFailure));
     }
 }

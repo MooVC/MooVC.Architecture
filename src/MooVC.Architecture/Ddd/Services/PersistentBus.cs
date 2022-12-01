@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MooVC.Diagnostics;
 using MooVC.Persistence;
-using static System.String;
 using static MooVC.Architecture.Ddd.Services.Resources;
 using static MooVC.Ensure;
 
@@ -15,17 +14,17 @@ public sealed class PersistentBus
 {
     private readonly IStore<AtomicUnit, Guid> store;
 
-    public PersistentBus(IStore<AtomicUnit, Guid> store)
+    public PersistentBus(IStore<AtomicUnit, Guid> store, IDiagnosticsProxy? diagnostics = default)
+        : base(diagnostics: diagnostics)
     {
-        this.store = ArgumentNotNull(store, nameof(store), PersistentBusStoreRequired);
+        this.store = IsNotNull(store, message: PersistentBusStoreRequired);
     }
 
-    protected override async Task PerformPublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
+    protected override Task PerformPublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
         var unit = new AtomicUnit(events);
 
-        await PerformPersistAsync(unit, cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+        return PerformPersistAsync(unit, cancellationToken: cancellationToken);
     }
 
     private async Task PerformPersistAsync(AtomicUnit unit, CancellationToken? cancellationToken = default)
@@ -38,12 +37,12 @@ public sealed class PersistentBus
         }
         catch (Exception ex)
         {
-            await
-                OnDiagnosticsEmittedAsync(
-                    Level.Error,
+            await Diagnostics
+                .EmitAsync(
                     cancellationToken: cancellationToken,
                     cause: ex,
-                    message: Format(PersistentBusPublishFailure, unit.Id))
+                    impact: Impact.Unrecoverable,
+                    message: (PersistentBusPublishFailure, unit.Id))
                 .ConfigureAwait(false);
 
             throw;

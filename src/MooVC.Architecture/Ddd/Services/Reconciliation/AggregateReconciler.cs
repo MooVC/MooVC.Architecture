@@ -13,13 +13,24 @@ public abstract class AggregateReconciler
     : IAggregateReconciler,
       IEmitDiagnostics
 {
-    public event AggregateConflictDetectedAsyncEventHandler? AggregateConflictDetected;
+    protected AggregateReconciler(IDiagnosticsProxy? diagnostics = default)
+    {
+        Diagnostics = new DiagnosticsRelay(this, diagnostics: diagnostics);
+    }
 
-    public event AggregateReconciledAsyncEventHandler? AggregateReconciled;
+    public event AggregateConflictDetectedAsyncEventHandler? ConflictDetected;
 
-    public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
+    public event AggregateReconciledAsyncEventHandler? Reconciled;
 
-    public event UnsupportedAggregateTypeDetectedAsyncEventHandler? UnsupportedAggregateTypeDetected;
+    public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
+    {
+        add => Diagnostics.DiagnosticsEmitted += value;
+        remove => Diagnostics.DiagnosticsEmitted -= value;
+    }
+
+    public event UnsupportedAggregateTypeDetectedAsyncEventHandler? UnsupportedTypeDetected;
+
+    protected IDiagnosticsRelay Diagnostics { get; }
 
     public virtual Task ReconcileAsync(EventCentricAggregateRoot aggregate, CancellationToken? cancellationToken = default)
     {
@@ -51,7 +62,7 @@ public abstract class AggregateReconciler
             if (!next.IsNext(previous))
             {
                 await
-                    OnAggregateConflictDetectedAsync(
+                    OnConflictDetectedAsync(
                         aggregate,
                         events,
                         next,
@@ -66,14 +77,14 @@ public abstract class AggregateReconciler
         return true;
     }
 
-    protected virtual Task OnAggregateConflictDetectedAsync(
+    protected virtual Task OnConflictDetectedAsync(
         Reference aggregate,
         IEnumerable<DomainEvent> events,
         SignedVersion next,
         SignedVersion previous,
         CancellationToken? cancellationToken = default)
     {
-        return AggregateConflictDetected.InvokeAsync(
+        return ConflictDetected.InvokeAsync(
             this,
             new AggregateConflictDetectedAsyncEventArgs(
                 aggregate,
@@ -83,39 +94,21 @@ public abstract class AggregateReconciler
                 cancellationToken: cancellationToken));
     }
 
-    protected virtual Task OnAggregateReconciledAsync(
-        Reference aggregate,
-        IEnumerable<DomainEvent> events,
-        CancellationToken? cancellationToken = default)
+    protected virtual Task OnReconciledAsync(Reference aggregate, IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
-        return AggregateReconciled.PassiveInvokeAsync(
+        return Reconciled.PassiveInvokeAsync(
             this,
             new AggregateReconciledAsyncEventArgs(aggregate, events, cancellationToken: cancellationToken),
-            onFailure: failure => OnDiagnosticsEmittedAsync(
-                Level.Warning,
+            onFailure: failure => Diagnostics.EmitAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
+                impact: Impact.None,
                 message: AggregateReconcilerOnAggregateReconciledAsyncFailure));
     }
 
-    protected virtual Task OnDiagnosticsEmittedAsync(
-        Level level,
-        CancellationToken? cancellationToken = default,
-        Exception? cause = default,
-        string? message = default)
+    protected virtual Task OnUnsupportedTypeDetectedAsync(Type type, CancellationToken? cancellationToken = default)
     {
-        return DiagnosticsEmitted.PassiveInvokeAsync(
-            this,
-            new DiagnosticsEmittedAsyncEventArgs(
-                cancellationToken: cancellationToken,
-                cause: cause,
-                level: level,
-                message: message));
-    }
-
-    protected virtual Task OnUnsupportedAggregateTypeDetectedAsync(Type type, CancellationToken? cancellationToken = default)
-    {
-        return UnsupportedAggregateTypeDetected.InvokeAsync(
+        return UnsupportedTypeDetected.InvokeAsync(
             this,
             new UnsupportedAggregateTypeDetectedAsyncEventArgs(type, cancellationToken: cancellationToken));
     }
@@ -144,13 +137,13 @@ public abstract class AggregateReconciler
                     .SaveAsync(aggregate, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
 
-                await OnAggregateReconciledAsync(reference, events, cancellationToken: cancellationToken)
+                await OnReconciledAsync(reference, events, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (AggregateHistoryInvalidForStateException invalid)
             {
                 await
-                    OnAggregateConflictDetectedAsync(
+                    OnConflictDetectedAsync(
                         invalid.Aggregate,
                         events,
                         invalid.StartingVersion,
@@ -161,7 +154,7 @@ public abstract class AggregateReconciler
             catch (AggregateConflictDetectedException conflict)
             {
                 await
-                    OnAggregateConflictDetectedAsync(
+                    OnConflictDetectedAsync(
                         reference,
                         events,
                         conflict.Received,

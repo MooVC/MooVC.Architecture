@@ -35,7 +35,7 @@ public sealed class AggregateReferenceMismatchException<TAggregate>
 
     private static string FormatMessage(Reference reference)
     {
-        _ = ArgumentNotNull(reference, nameof(reference), AggregateReferenceMismatchExceptionReferenceRequired);
+        _ = IsNotNull(reference, message: AggregateReferenceMismatchExceptionReferenceRequired);
 
         return Format(AggregateReferenceMismatchExceptionMessage, reference.Id, reference.Type.Name, typeof(TAggregate).Name);
     }

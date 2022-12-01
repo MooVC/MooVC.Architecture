@@ -17,7 +17,7 @@ public sealed class Snapshot
     public Snapshot(IEnumerable<EventCentricAggregateRoot> aggregates, IEventSequence sequence)
     {
         Aggregates = aggregates.Snapshot();
-        Sequence = ArgumentNotNull(sequence, nameof(sequence), SnapshotSequenceRequired);
+        Sequence = IsNotNull(sequence, message: SnapshotSequenceRequired);
     }
 
     private Snapshot(SerializationInfo info, StreamingContext context)

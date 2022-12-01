@@ -37,7 +37,7 @@ public sealed class WhenEventSequenceAdvancedAsyncEventArgsIsSerialized
                 It.IsAny<ushort>()))
             .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-        instance.EventSequenceAdvanced += (sender, e) => Task.FromResult(original = e);
+        instance.SequenceAdvanced += (sender, e) => Task.FromResult(original = e);
 
         ulong? current = await instance.ReconcileAsync();
 
@@ -51,8 +51,8 @@ public sealed class WhenEventSequenceAdvancedAsyncEventArgsIsSerialized
     {
         var aggregate = new SerializableAggregateRoot();
         var context = new SerializableMessage();
-        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
-        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
+        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
 
         return new[] { firstEvent, secondEvent };
     }

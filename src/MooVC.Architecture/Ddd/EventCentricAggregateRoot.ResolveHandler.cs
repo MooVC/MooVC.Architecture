@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Reflection;
+using MooVC.Collections.Generic;
 
 public partial class EventCentricAggregateRoot
 {
@@ -19,7 +20,7 @@ public partial class EventCentricAggregateRoot
             return default;
         }
 
-        return @event => _ = handler.Invoke(this, new object[] { @event });
+        return @event => _ = handler.Invoke(this, @event.AsArray());
     }
 
     private static MethodInfo? GenerateHandler(Type aggregateType, Type eventType)
@@ -28,7 +29,7 @@ public partial class EventCentricAggregateRoot
             HandlerName,
             BindingFlags.NonPublic | BindingFlags.Instance,
             default,
-            new[] { eventType },
+            eventType.AsArray(),
             default);
     }
 

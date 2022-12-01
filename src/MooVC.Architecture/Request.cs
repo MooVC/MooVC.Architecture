@@ -7,7 +7,7 @@ public abstract class Request
 {
     protected Request(Message context)
     {
-        Context = ArgumentNotNull(context, nameof(context), RequestContextRequired);
+        Context = IsNotNull(context, message: RequestContextRequired);
     }
 
     public Message Context { get; }
@@ -15,5 +15,10 @@ public abstract class Request
     public static implicit operator Message(Request request)
     {
         return request.Context;
+    }
+
+    public override string ToString()
+    {
+        return Context.ToString();
     }
 }

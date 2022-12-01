@@ -8,13 +8,13 @@ using MooVC.Linq;
 internal sealed class SerializablePaginatedQuery
     : PaginatedQuery
 {
-    public SerializablePaginatedQuery(Paging paging)
-        : base(paging)
+    public SerializablePaginatedQuery(Paging? paging = default)
+        : base(paging: paging)
     {
     }
 
-    public SerializablePaginatedQuery(Message context, Paging paging)
-        : base(context, paging)
+    public SerializablePaginatedQuery(Message context, Paging? paging = default)
+        : base(context, paging: paging)
     {
     }
 

@@ -14,15 +14,15 @@ public sealed class AggregateNotFoundException<TAggregate>
     : ArgumentException
     where TAggregate : AggregateRoot
 {
-    public AggregateNotFoundException(Message context, Reference<TAggregate> aggregate)
-        : base(FormatMessage(context, aggregate))
+    public AggregateNotFoundException(Reference<TAggregate> aggregate, Message context)
+        : base(FormatMessage(aggregate, context))
     {
         Aggregate = aggregate;
         Context = context;
     }
 
-    public AggregateNotFoundException(Message context, Guid aggregateId)
-        : this(context, aggregateId.ToReference<TAggregate>())
+    public AggregateNotFoundException(Guid aggregateId, Message context)
+        : this(aggregateId.ToReference<TAggregate>(), context)
     {
     }
 
@@ -45,10 +45,10 @@ public sealed class AggregateNotFoundException<TAggregate>
         info.AddValue(nameof(Context), Context);
     }
 
-    private static string FormatMessage(Message context, Reference<TAggregate> aggregate)
+    private static string FormatMessage(Reference<TAggregate> aggregate, Message context)
     {
-        _ = ArgumentNotNull(context, nameof(context), AggregateNotFoundExceptionContextRequired);
-        _ = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateNotFoundExceptionAggregateRequired);
+        _ = IsNotNull(context, message: AggregateNotFoundExceptionContextRequired);
+        _ = IsNotEmpty(aggregate, message: AggregateNotFoundExceptionAggregateRequired);
 
         return Format(AggregateNotFoundExceptionMessage, aggregate.Id, aggregate.Type.Name);
     }

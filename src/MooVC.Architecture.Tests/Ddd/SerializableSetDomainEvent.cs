@@ -8,11 +8,8 @@ using MooVC.Serialization;
 public sealed class SerializableSetDomainEvent
     : DomainEvent<SerializableEventCentricAggregateRoot>
 {
-    public SerializableSetDomainEvent(
-        Message context,
-        SerializableEventCentricAggregateRoot aggregate,
-        Guid value)
-        : base(context, aggregate)
+    public SerializableSetDomainEvent(SerializableEventCentricAggregateRoot aggregate, Message context, Guid value)
+        : base(aggregate, context)
     {
         Value = value;
     }

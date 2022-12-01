@@ -19,7 +19,7 @@ namespace MooVC.Architecture.Ddd {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -180,15 +180,6 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The aggregate that serves as the context for coordination must be provided..
-        /// </summary>
-        internal static string AggregateRootExtensionsCoordinateAsyncAggregateRequired {
-            get {
-                return ResourceManager.GetString("AggregateRootExtensionsCoordinateAsyncAggregateRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The destination must be provided..
         /// </summary>
         internal static string AggregateRootExtensionsSaveDestinationRequired {
@@ -234,6 +225,15 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The context in which the event was raised must be provided..
+        /// </summary>
+        internal static string DomainEventContextRequired {
+            get {
+                return ResourceManager.GetString("DomainEventContextRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A non-empty reference of aggregate type {0} is required..
         /// </summary>
         internal static string EnsureReferenceIsNotEmptyMessage {
@@ -257,6 +257,24 @@ namespace MooVC.Architecture.Ddd {
         internal static string EventCentricAggregateRootStateChangesDenied {
             get {
                 return ResourceManager.GetString("EventCentricAggregateRootStateChangesDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The aggregate of type {0} that serves as the subject of the message must be provided..
+        /// </summary>
+        internal static string MessageAggregateRequired {
+            get {
+                return ResourceManager.GetString("MessageAggregateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A single, non-empty reference, must be provided..
+        /// </summary>
+        internal static string MultiTypeReferenceReferenceRequired {
+            get {
+                return ResourceManager.GetString("MultiTypeReferenceReferenceRequired", resourceCulture);
             }
         }
         
@@ -297,29 +315,20 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The reference that serves as the context for coordination must be provided..
-        /// </summary>
-        internal static string ReferenceExtensionsCoordinateAsyncReferenceRequired {
-            get {
-                return ResourceManager.GetString("ReferenceExtensionsCoordinateAsyncReferenceRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The reference to be unversioned must be provided..
-        /// </summary>
-        internal static string ReferenceExtensionsToUnversionedReferenceRequired {
-            get {
-                return ResourceManager.GetString("ReferenceExtensionsToUnversionedReferenceRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A non-empty ID for the aggregate this reference represents must be provided..
         /// </summary>
         internal static string ReferenceIdRequired {
             get {
                 return ResourceManager.GetString("ReferenceIdRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A non-empty reference is required..
+        /// </summary>
+        internal static string ReferenceNonEmptyRequired {
+            get {
+                return ResourceManager.GetString("ReferenceNonEmptyRequired", resourceCulture);
             }
         }
         

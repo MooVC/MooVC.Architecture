@@ -13,10 +13,7 @@ public sealed class WhenDomainExceptionIsSerialized
         var context = new SerializableMessage();
         const string Message = "Something something dark side.";
 
-        var original = new SerializableDomainException<SerializableEventCentricAggregateRoot>(
-            context,
-            aggregate,
-            Message);
+        var original = new SerializableDomainException<SerializableEventCentricAggregateRoot>(aggregate, context, Message);
 
         SerializableDomainException<SerializableEventCentricAggregateRoot> deserialized = original.Clone();
 

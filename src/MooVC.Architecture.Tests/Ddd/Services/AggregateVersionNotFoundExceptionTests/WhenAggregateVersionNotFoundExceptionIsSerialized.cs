@@ -12,7 +12,7 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsSerialized
         var subject = new SerializableAggregateRoot();
         var aggregate = subject.ToReference();
         var context = new SerializableMessage();
-        var original = new AggregateVersionNotFoundException<SerializableAggregateRoot>(context, aggregate);
+        var original = new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregate, context);
         AggregateVersionNotFoundException<SerializableAggregateRoot> deserialized = original.Clone();
 
         Assert.NotSame(original, deserialized);

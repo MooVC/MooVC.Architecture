@@ -11,7 +11,7 @@ public sealed class UnsupportedAggregateTypeDetectedAsyncEventArgs
     internal UnsupportedAggregateTypeDetectedAsyncEventArgs(Type type, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Type = ArgumentNotNull(type, nameof(type), UnsupportedAggregateTypeDetectedEventArgsTypeRequired);
+        Type = IsNotNull(type, message: UnsupportedAggregateTypeDetectedEventArgsTypeRequired);
     }
 
     public Type Type { get; }

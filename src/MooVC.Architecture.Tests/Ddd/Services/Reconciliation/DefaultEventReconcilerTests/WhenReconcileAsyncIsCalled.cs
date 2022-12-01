@@ -102,7 +102,7 @@ public sealed class WhenReconcileAsyncIsCalled
                 It.IsAny<ushort>()))
             .ReturnsAsync(Enumerable.Empty<SequencedEvents>());
 
-        instance.EventSequenceAdvanced += (sender, e) => Task.FromResult(wasInvoked = true);
+        instance.SequenceAdvanced += (sender, e) => Task.FromResult(wasInvoked = true);
 
         ulong? current = await instance.ReconcileAsync();
 
@@ -146,8 +146,8 @@ public sealed class WhenReconcileAsyncIsCalled
                It.IsAny<CancellationToken?>()))
            .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
 
-        instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
-        instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+        instance.Reconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+        instance.Reconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
         _ = await instance.ReconcileAsync();
 
@@ -201,8 +201,8 @@ public sealed class WhenReconcileAsyncIsCalled
                It.IsAny<CancellationToken?>()))
            .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
 
-        instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
-        instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+        instance.Reconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+        instance.Reconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
         _ = await instance.ReconcileAsync(previous: previous, target: target);
 
@@ -254,8 +254,8 @@ public sealed class WhenReconcileAsyncIsCalled
                It.IsAny<CancellationToken?>()))
            .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
 
-        instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
-        instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+        instance.Reconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+        instance.Reconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
         _ = await instance.ReconcileAsync(previous: previous);
 
@@ -307,8 +307,8 @@ public sealed class WhenReconcileAsyncIsCalled
                It.IsAny<CancellationToken?>()))
            .Callback<IEnumerable<DomainEvent>, CancellationToken?>((value, _) => aggregates[value.First().Aggregate]++);
 
-        instance.EventsReconciling += (sender, e) => Task.FromResult(eventsReconciling++);
-        instance.EventsReconciled += (sender, e) => Task.FromResult(eventsReconciled++);
+        instance.Reconciling += (sender, e) => Task.FromResult(eventsReconciling++);
+        instance.Reconciled += (sender, e) => Task.FromResult(eventsReconciled++);
 
         _ = await instance.ReconcileAsync(target: target);
 
@@ -324,8 +324,8 @@ public sealed class WhenReconcileAsyncIsCalled
     {
         var aggregate = new SerializableAggregateRoot();
         var context = new SerializableMessage();
-        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
-        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(context, aggregate);
+        var firstEvent = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
+        var secondEvent = new SerializableDomainEvent<SerializableAggregateRoot>(aggregate, context);
 
         return new[] { firstEvent, secondEvent };
     }

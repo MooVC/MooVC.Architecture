@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MooVC.Collections.Generic;
+using MooVC.Diagnostics;
 using MooVC.Serialization;
 using static MooVC.Architecture.Ddd.Services.Resources;
 using static MooVC.Ensure;
@@ -13,9 +14,10 @@ public abstract class SynchronousRepository<TAggregate>
     : Repository<TAggregate>
     where TAggregate : AggregateRoot
 {
-    protected SynchronousRepository(ICloner cloner)
+    protected SynchronousRepository(ICloner cloner, IDiagnosticsProxy? diagnostics = default)
+        : base(diagnostics: diagnostics)
     {
-        Cloner = ArgumentNotNull(cloner, nameof(cloner), SynchronousRepositoryClonerRequired);
+        Cloner = IsNotNull(cloner, message: SynchronousRepositoryClonerRequired);
     }
 
     protected ICloner Cloner { get; }

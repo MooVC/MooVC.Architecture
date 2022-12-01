@@ -8,16 +8,12 @@ internal sealed class SerializableDomainEvent<TAggregateRoot>
     : DomainEvent<TAggregateRoot>
     where TAggregateRoot : AggregateRoot
 {
-    public SerializableDomainEvent(
-        Message context,
-        TAggregateRoot aggregate)
-        : base(context, aggregate)
+    public SerializableDomainEvent(TAggregateRoot aggregate, Message context)
+        : base(aggregate, context)
     {
     }
 
-    private SerializableDomainEvent(
-        SerializationInfo info,
-        StreamingContext context)
+    private SerializableDomainEvent(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

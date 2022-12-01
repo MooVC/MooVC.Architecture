@@ -22,11 +22,7 @@ public sealed class WhenValueIsSerialized
             ? new SerializableValue()
             : default;
 
-        var value = new SerializableValue(
-            first: expectedFirst,
-            second: expectedSecond,
-            third: expectedThird,
-            fourth: expectedFourth);
+        var value = new SerializableValue(first: expectedFirst, second: expectedSecond, third: expectedThird, fourth: expectedFourth);
 
         SerializableValue deserialized = value.Clone();
 
@@ -36,7 +32,7 @@ public sealed class WhenValueIsSerialized
         Assert.Equal(expectedFirst, deserialized.First);
         Assert.Equal(expectedSecond, deserialized.Second);
         Assert.Equal(expectedThird, deserialized.Third);
-        Assert.Equal(expectedFourth, deserialized.Fourth);
+        Assert.Equal(expectedFourth!, deserialized.Fourth);
         Assert.Equal(value.GetHashCode(), deserialized.GetHashCode());
     }
 }

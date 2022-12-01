@@ -25,8 +25,8 @@ public sealed class DefaultEventReconciler<TSequencedEvents>
         IAggregateReconciler reconciler,
         ushort numberToRead = DefaultNumberToRead)
     {
-        this.eventStore = ArgumentNotNull(eventStore, nameof(eventStore), DefaultEventReconcilerEventStoreRequired);
-        this.reconciler = ArgumentNotNull(reconciler, nameof(reconciler), DefaultEventReconcilerReconcilerRequired);
+        this.eventStore = IsNotNull(eventStore, message: DefaultEventReconcilerEventStoreRequired);
+        this.reconciler = IsNotNull(reconciler, message: DefaultEventReconcilerReconcilerRequired);
 
         this.numberToRead = Math.Max(MinimumNumberToRead, numberToRead);
     }
@@ -93,14 +93,14 @@ public sealed class DefaultEventReconciler<TSequencedEvents>
 
     private async Task PerformReconciliationAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken)
     {
-        await OnEventsReconcilingAsync(events, cancellationToken: cancellationToken)
+        await OnReconcilingAsync(events, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
         await reconciler
             .ReconcileAsync(events, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        await OnEventsReconciledAsync(events, cancellationToken: cancellationToken)
+        await OnReconciledAsync(events, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 }

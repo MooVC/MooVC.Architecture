@@ -3,38 +3,34 @@
 using System;
 using System.Runtime.Serialization;
 using MooVC.Serialization;
-using static MooVC.Architecture.Resources;
-using static MooVC.Ensure;
+using MooVC.Threading;
 
 [Serializable]
 public abstract class Message
-    : Entity<Guid>
+    : Entity<Guid>,
+      ICoordinatable<Guid>
 {
-    protected Message()
+    protected Message(Message? context = default)
         : base(Guid.NewGuid())
     {
-    }
-
-    protected Message(Message context)
-        : this()
-    {
-        _ = ArgumentNotNull(context, nameof(context), MessageContextRequired);
-
-        CausationId = context.Id;
-        CorrelationId = context.CorrelationId;
+        if (context is { })
+        {
+            CausationId = context.Id;
+            CorrelationId = context.CorrelationId;
+        }
     }
 
     protected Message(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
-        CausationId = info.TryGetValue<Guid>(nameof(CausationId));
-        CorrelationId = info.GetValue<Guid>(nameof(CorrelationId));
+        CausationId = DeserializeCausationId(info, context);
+        CorrelationId = DeserializeCorrelationId(info, context);
         TimeStamp = info.GetValue<DateTimeOffset>(nameof(TimeStamp));
     }
 
-    public Guid CausationId { get; } = Guid.Empty;
+    public virtual Guid CausationId { get; } = Guid.Empty;
 
-    public Guid CorrelationId { get; } = Guid.NewGuid();
+    public virtual Guid CorrelationId { get; } = Guid.NewGuid();
 
     public DateTimeOffset TimeStamp { get; } = DateTimeOffset.UtcNow;
 
@@ -42,8 +38,39 @@ public abstract class Message
     {
         base.GetObjectData(info, context);
 
-        _ = info.TryAddValue(nameof(CausationId), CausationId);
-        info.AddValue(nameof(CorrelationId), CorrelationId);
+        SerializeCausationId(info, context);
+        SerializeCorrelationId(info, context);
+
         info.AddValue(nameof(TimeStamp), TimeStamp);
+    }
+
+    public override string ToString()
+    {
+        return $"{GetType().FullName} [{Id:D}, {CorrelationId:D}]";
+    }
+
+    Guid ICoordinatable<Guid>.GetKey()
+    {
+        return CorrelationId;
+    }
+
+    protected virtual Guid DeserializeCausationId(SerializationInfo info, StreamingContext context)
+    {
+        return info.TryGetValue<Guid>(nameof(CausationId));
+    }
+
+    protected virtual Guid DeserializeCorrelationId(SerializationInfo info, StreamingContext context)
+    {
+        return info.GetValue<Guid>(nameof(CorrelationId));
+    }
+
+    protected virtual void SerializeCausationId(SerializationInfo info, StreamingContext context)
+    {
+        _ = info.TryAddValue(nameof(CausationId), CausationId);
+    }
+
+    protected virtual void SerializeCorrelationId(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue(nameof(CorrelationId), CorrelationId);
     }
 }

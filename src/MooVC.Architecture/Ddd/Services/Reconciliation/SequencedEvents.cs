@@ -10,7 +10,7 @@ public sealed class SequencedEvents
       ISequencedEvents
 {
     public SequencedEvents(ulong sequence, params DomainEvent[] events)
-        : base(sequence, events)
+        : base(events, sequence)
     {
     }
 

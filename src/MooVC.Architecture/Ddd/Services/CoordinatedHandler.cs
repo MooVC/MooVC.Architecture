@@ -5,28 +5,53 @@ using System.Threading;
 using System.Threading.Tasks;
 using MooVC.Architecture;
 using MooVC.Architecture.Ddd;
+using MooVC.Architecture.Ddd.Threading;
 using MooVC.Architecture.Services;
+using MooVC.Threading;
+using static Architecture.Ddd.Services.Resources;
+using static MooVC.Ensure;
 
-public abstract class CoordinatedHandler<TAggregate, TCommand>
-    : IHandler<TCommand>
+public abstract class CoordinatedHandler<TAggregate, TMessage>
+    : IHandler<TMessage>
     where TAggregate : AggregateRoot
-    where TCommand : Message
+    where TMessage : Message
 {
-    private readonly TimeSpan? timeout;
+    private readonly IAggregateCoordinator<TAggregate> coordinator;
 
-    protected CoordinatedHandler(TimeSpan? timeout = default)
+    protected CoordinatedHandler(IAggregateCoordinator<TAggregate> coordinator)
     {
-        this.timeout = timeout;
+        this.coordinator = IsNotNull(coordinator, message: CoordinatedHandlerCoordinatorRequired);
     }
 
-    public virtual Task ExecuteAsync(TCommand command, CancellationToken cancellationToken)
+    public virtual async Task ExecuteAsync(TMessage message, CancellationToken cancellationToken)
     {
-        return typeof(TAggregate)
-            .CoordinateAsync(
-                () => PerformCoordinatedExecuteAsync(command, cancellationToken),
-                cancellationToken: cancellationToken,
-                timeout: timeout);
+        Reference<TAggregate> context = await IdentifyCoordinationContextAsync(message, cancellationToken)
+            .ConfigureAwait(false);
+
+        ICoordinationContext<Guid> coordination = await coordinator
+            .ApplyAsync(context, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        using (coordination)
+        {
+            await PerformExecuteAsync(context, message, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 
-    protected abstract Task PerformCoordinatedExecuteAsync(TCommand command, CancellationToken cancellationToken);
+    protected virtual Reference<TAggregate> IdentifyCoordinationContext(TMessage message)
+    {
+        _ = message.TryIdentify(out Reference<TAggregate> context);
+
+        return context;
+    }
+
+    protected virtual Task<Reference<TAggregate>> IdentifyCoordinationContextAsync(TMessage message, CancellationToken cancellationToken)
+    {
+        Reference<TAggregate> context = IdentifyCoordinationContext(message);
+
+        return Task.FromResult(context);
+    }
+
+    protected abstract Task PerformExecuteAsync(Reference<TAggregate> context, TMessage message, CancellationToken cancellationToken);
 }

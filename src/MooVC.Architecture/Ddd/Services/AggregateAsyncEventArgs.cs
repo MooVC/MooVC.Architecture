@@ -16,7 +16,7 @@ public abstract class AggregateAsyncEventArgs<TAggregate>
     protected AggregateAsyncEventArgs(TAggregate aggregate, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Aggregate = ArgumentNotNull(aggregate, nameof(aggregate), AggregateEventArgsAggregateRequired);
+        Aggregate = IsNotNull(aggregate, message: AggregateEventArgsAggregateRequired);
     }
 
     protected AggregateAsyncEventArgs(SerializationInfo info, StreamingContext context)

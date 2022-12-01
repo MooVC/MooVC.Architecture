@@ -19,8 +19,8 @@ public sealed class AggregateReconciledAsyncEventArgs
     internal AggregateReconciledAsyncEventArgs(Reference aggregate, IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
-        Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateReconciledEventArgsAggregateRequired);
-        Events = ArgumentNotEmpty(events, nameof(events), AggregateReconciledEventArgsEventsRequired);
+        Aggregate = IsNotEmpty(aggregate, message: AggregateReconciledEventArgsAggregateRequired);
+        Events = IsNotEmpty(events, message: AggregateReconciledEventArgsEventsRequired);
     }
 
     private AggregateReconciledAsyncEventArgs(SerializationInfo info, StreamingContext context)

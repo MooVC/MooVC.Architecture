@@ -13,9 +13,7 @@ public sealed class WhenAggregateNotFoundExceptionIsSerialized
         var aggregate = Guid.NewGuid().ToReference<SerializableAggregateRoot>();
         var context = new SerializableMessage();
 
-        var original = new AggregateNotFoundException<SerializableAggregateRoot>(
-            context,
-            aggregate);
+        var original = new AggregateNotFoundException<SerializableAggregateRoot>(aggregate, context);
 
         AggregateNotFoundException<SerializableAggregateRoot> deserialized = original.Clone();
 

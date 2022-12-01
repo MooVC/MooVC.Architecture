@@ -30,13 +30,12 @@ public sealed class SignedVersion
 
     internal SignedVersion(SignedVersion previous)
     {
-        _ = ArgumentNotNull(previous, nameof(previous), SignedVersionPreviousRequired);
+        _ = IsNotNull(previous, message: SignedVersionPreviousRequired);
 
-        _ = ArgumentIsAcceptable(
+        _ = Satisfies(
             previous,
-            nameof(previous),
             _ => !previous.Footer.SequenceEqual(emptySegment),
-            Format(SignedVersionPreviousFooterInvalid, previous.Number));
+            message: Format(SignedVersionPreviousFooterInvalid, previous.Number));
 
         Footer = Splice(Guid.NewGuid());
         Header = previous.Footer;

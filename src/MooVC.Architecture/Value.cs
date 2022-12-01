@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using MooVC.Collections.Generic;
 
 [Serializable]
 public abstract class Value
@@ -61,6 +62,11 @@ public abstract class Value
 
     public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
+    }
+
+    public override string ToString()
+    {
+        return $"{GetType().FullName} [{GetHashCode()}]";
     }
 
     internal static bool EqualOperator(Value? left, Value? right)
@@ -134,6 +140,8 @@ public abstract class Value
             return AggregateHashCode(array.Cast<object>());
         }
 
-        return new[] { value?.GetHashCode() ?? 0 };
+        int code = value?.GetHashCode() ?? 0;
+
+        return code.AsEnumerable();
     }
 }

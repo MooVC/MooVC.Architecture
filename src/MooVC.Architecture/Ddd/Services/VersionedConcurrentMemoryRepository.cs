@@ -38,7 +38,7 @@ public class VersionedConcurrentMemoryRepository<TAggregate>
     {
         Reference<TAggregate>? current = PerformGetCurrentVersion(proposed);
 
-        AggregateDoesNotConflict(proposed, currentVersion: current?.Version);
+        DoesNotConflict(proposed, currentVersion: current?.Version);
 
         return existing;
     }

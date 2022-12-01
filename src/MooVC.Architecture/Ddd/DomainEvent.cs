@@ -16,10 +16,11 @@ public abstract class DomainEvent
         Aggregate = info.GetValue<Reference>(nameof(Aggregate));
     }
 
-    private protected DomainEvent(Message context, Reference aggregate)
-        : base(context)
+    private protected DomainEvent(Reference aggregate, Message context)
+        : base(context: context)
     {
-        Aggregate = ArgumentNotNull(aggregate, nameof(aggregate), DomainEventAggregateRequired);
+        Aggregate = IsNotNull(aggregate, message: DomainEventAggregateRequired);
+        _ = IsNotNull(context, message: DomainEventContextRequired);
     }
 
     public Reference Aggregate { get; }

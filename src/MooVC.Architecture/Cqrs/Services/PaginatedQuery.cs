@@ -4,22 +4,15 @@ using System;
 using System.Runtime.Serialization;
 using MooVC.Linq;
 using MooVC.Serialization;
-using static MooVC.Architecture.Cqrs.Services.Resources;
-using static MooVC.Ensure;
 
 [Serializable]
 public abstract class PaginatedQuery
     : Message
 {
-    protected PaginatedQuery(Paging paging)
+    protected PaginatedQuery(Message? context = default, Paging? paging = default)
+        : base(context: context)
     {
-        Paging = ArgumentNotNull(paging, nameof(paging), PaginatedQueryPagingRequired);
-    }
-
-    protected PaginatedQuery(Message context, Paging paging)
-        : base(context)
-    {
-        Paging = ArgumentNotNull(paging, nameof(paging), PaginatedQueryPagingRequired);
+        Paging = paging ?? Paging.Default;
     }
 
     protected PaginatedQuery(SerializationInfo info, StreamingContext context)

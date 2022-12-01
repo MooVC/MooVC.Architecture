@@ -3,10 +3,12 @@
 using System;
 using System.Runtime.Serialization;
 using MooVC.Serialization;
+using MooVC.Threading;
 
 [Serializable]
 public abstract class Entity<T>
     : ISerializable,
+      ICoordinatable<T>,
       IEquatable<Entity<T>>
     where T : notnull
 {
@@ -57,6 +59,16 @@ public abstract class Entity<T>
     public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue(nameof(Id), Id);
+    }
+
+    public override string ToString()
+    {
+        return $"{GetType().FullName} [{Id:D}]";
+    }
+
+    T ICoordinatable<T>.GetKey()
+    {
+        return Id;
     }
 
     private static bool EqualOperator(Entity<T>? left, Entity<T>? right)

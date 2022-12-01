@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.Serialization;
 using MooVC.Serialization;
+using MooVC.Threading;
 using static System.String;
 using static MooVC.Architecture.Ddd.Resources;
 using static MooVC.Ensure;
@@ -13,6 +14,7 @@ using static MooVC.Ensure;
 [Serializable]
 public abstract class Reference
     : Value,
+      ICoordinatable<Guid>,
       IEquatable<Reference>
 {
     private protected Reference(Guid id, Type type, SignedVersion? version)
@@ -20,6 +22,12 @@ public abstract class Reference
         Id = id;
         Type = type;
         Version = version ?? SignedVersion.Empty;
+    }
+
+    private protected Reference(Reference other)
+        : this(other.Id, other.Type, other.Version)
+    {
+        _ = Satisfies(other, _ => !other.IsEmpty, message: ReferenceNonEmptyRequired);
     }
 
     private protected Reference(SerializationInfo info, StreamingContext context)
@@ -75,7 +83,7 @@ public abstract class Reference
 
     public static Reference Create(Guid id, Type type, SignedVersion? version = default)
     {
-        _ = ArgumentNotNull(type, nameof(type), ReferenceCreateTypeRequired);
+        _ = IsNotNull(type, message: ReferenceCreateTypeRequired);
 
         Type reference = typeof(Reference<>);
         Type aggregate = reference.MakeGenericType(type);
@@ -108,7 +116,7 @@ public abstract class Reference
 
     public static Reference Create(AggregateRoot aggregate)
     {
-        _ = ArgumentNotNull(aggregate, nameof(aggregate), ReferenceCreateAggregateRequired);
+        _ = IsNotNull(aggregate, message: ReferenceCreateAggregateRequired);
 
         return Create(aggregate.Id, aggregate.GetType(), version: aggregate.Version);
     }
@@ -161,7 +169,12 @@ public abstract class Reference
             return Type.FullName!;
         }
 
-        return $"{Type.FullName} [{Id:P}, {Version}]";
+        return $"{Type.FullName} [{Id:D}, {Version}]";
+    }
+
+    Guid ICoordinatable<Guid>.GetKey()
+    {
+        return Id;
     }
 
     protected virtual Guid DeserializeId(SerializationInfo info, StreamingContext context)

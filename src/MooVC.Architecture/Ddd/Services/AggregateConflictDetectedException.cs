@@ -58,12 +58,12 @@ public abstract class AggregateConflictDetectedException
         SignedVersion? persisted = default,
         bool persistedRequired = false)
     {
-        _ = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateConflictDetectedExceptionAggregateRequired);
-        _ = ArgumentNotNull(received, nameof(received), AggregateConflictDetectedExceptionReceivedRequired);
+        _ = IsNotEmpty(aggregate, message: AggregateConflictDetectedExceptionAggregateRequired);
+        _ = IsNotNull(received, message: AggregateConflictDetectedExceptionReceivedRequired);
 
         if (persistedRequired)
         {
-            _ = ArgumentNotNull(persisted, nameof(persisted), AggregateConflictDetectedExceptionPersistedRequired);
+            _ = IsNotNull(persisted, message: AggregateConflictDetectedExceptionPersistedRequired);
 
             return Format(AggregateConflictDetectedExceptionExistingEntryMessage, aggregate.Id, aggregate.Type.Name, received, persisted);
         }

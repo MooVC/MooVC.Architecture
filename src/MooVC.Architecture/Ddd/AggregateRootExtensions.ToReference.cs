@@ -8,7 +8,7 @@ public static partial class AggregateRootExtensions
     public static Reference<TAggregate> ToReference<TAggregate>(this TAggregate aggregate, bool unversioned = false)
         where TAggregate : AggregateRoot
     {
-        _ = ArgumentNotNull(aggregate, nameof(aggregate), AggregateRootExtensionsToReferenceAggregateRequired);
+        _ = IsNotNull(aggregate, message: AggregateRootExtensionsToReferenceAggregateRequired);
 
         if (unversioned)
         {

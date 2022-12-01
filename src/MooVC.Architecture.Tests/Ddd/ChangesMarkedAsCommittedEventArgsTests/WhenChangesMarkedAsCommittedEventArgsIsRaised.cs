@@ -17,6 +17,7 @@ public sealed class WhenChangesMarkedAsCommittedEventArgsIsRaised
 
         IEnumerable<DomainEvent> changes = aggregate.ApplyChanges(context, times: 1);
 
-        Assert.Equal(changes, @event?.Changes);
+        Assert.NotNull(@event);
+        Assert.Equal(changes, @event.Changes);
     }
 }

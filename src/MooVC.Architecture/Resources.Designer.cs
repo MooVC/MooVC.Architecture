@@ -19,7 +19,7 @@ namespace MooVC.Architecture {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -79,47 +79,11 @@ namespace MooVC.Architecture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The context of the message must be provided..
-        /// </summary>
-        internal static string MessageContextRequired {
-            get {
-                return ResourceManager.GetString("MessageContextRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The message that serves as the context for coordination must be provided..
-        /// </summary>
-        internal static string MessageExtensionsCoordinateAsyncMessageRequired {
-            get {
-                return ResourceManager.GetString("MessageExtensionsCoordinateAsyncMessageRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The object that serves as the context for coordination must be provided..
-        /// </summary>
-        internal static string ObjectExtensionsCoordinateAsyncObjectRequired {
-            get {
-                return ResourceManager.GetString("ObjectExtensionsCoordinateAsyncObjectRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The context of the request must be provided..
         /// </summary>
         internal static string RequestContextRequired {
             get {
                 return ResourceManager.GetString("RequestContextRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The type that serves as the context for coordination must be provided..
-        /// </summary>
-        internal static string TypeExtensionsGenerateContextTypeRequired {
-            get {
-                return ResourceManager.GetString("TypeExtensionsGenerateContextTypeRequired", resourceCulture);
             }
         }
     }

@@ -7,16 +7,12 @@ using System.Runtime.Serialization;
 public sealed class SerializableFailedDomainEvent
     : DomainEvent<SerializableEventCentricAggregateRoot>
 {
-    public SerializableFailedDomainEvent(
-        Message context,
-        SerializableEventCentricAggregateRoot aggregate)
-        : base(context, aggregate)
+    public SerializableFailedDomainEvent(SerializableEventCentricAggregateRoot aggregate, Message context)
+        : base(aggregate, context)
     {
     }
 
-    private SerializableFailedDomainEvent(
-        SerializationInfo info,
-        StreamingContext context)
+    private SerializableFailedDomainEvent(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

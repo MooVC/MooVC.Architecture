@@ -12,16 +12,14 @@ public sealed class DomainEventPropagator
 
     public DomainEventPropagator(IBus bus, IAggregateReconciler reconciler)
     {
-        this.bus = ArgumentNotNull(bus, nameof(bus), DomainEventPropagatorBusRequired);
-        this.reconciler = ArgumentNotNull(reconciler, nameof(reconciler), DomainEventPropagatorReconcilerRequired);
+        this.bus = IsNotNull(bus, message: DomainEventPropagatorBusRequired);
+        this.reconciler = IsNotNull(reconciler, message: DomainEventPropagatorReconcilerRequired);
 
-        this.reconciler.AggregateReconciled += Reconciler_AggregateReconciled;
+        this.reconciler.Reconciled += Reconciler_Reconciled;
     }
 
-    private async Task Reconciler_AggregateReconciled(IAggregateReconciler sender, AggregateReconciledAsyncEventArgs e)
+    private Task Reconciler_Reconciled(IAggregateReconciler sender, AggregateReconciledAsyncEventArgs e)
     {
-        await bus
-            .PublishAsync(e.Events, cancellationToken: e.CancellationToken)
-            .ConfigureAwait(false);
+        return bus.PublishAsync(e.Events, cancellationToken: e.CancellationToken);
     }
 }

@@ -1,20 +1,18 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.CoordinatedGenerateHandlerTests;
 
-using System;
+using MooVC.Architecture.Ddd.Threading;
 
-internal sealed class TestableCoordinatedGenerateHandler<TCommand>
-    : CoordinatedGenerateHandler<AggregateRoot, TCommand>
-    where TCommand : Message
+internal sealed class TestableCoordinatedGenerateHandler<TMessage>
+    : CoordinatedGenerateHandler<AggregateRoot, TMessage>
+    where TMessage : Message
 {
-    public TestableCoordinatedGenerateHandler(
-        IRepository<AggregateRoot> repository,
-        TimeSpan? timeout = default)
-        : base(repository, timeout)
+    public TestableCoordinatedGenerateHandler(IAggregateCoordinator<AggregateRoot> coordinator, IRepository<AggregateRoot> repository)
+        : base(coordinator, repository)
     {
     }
 
-    protected override AggregateRoot PerformCoordinatedGenerate(TCommand command)
+    protected override AggregateRoot? Generate(TMessage message)
     {
-        return new SerializableEventCentricAggregateRoot(command.Id);
+        return new SerializableEventCentricAggregateRoot(message.Id);
     }
 }

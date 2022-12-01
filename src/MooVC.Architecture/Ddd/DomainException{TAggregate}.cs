@@ -10,14 +10,14 @@ public abstract class DomainException<TAggregate>
 {
     private readonly Lazy<Reference<TAggregate>> aggregate;
 
-    protected DomainException(Message context, Reference<TAggregate> aggregate, string message)
-        : base(context, aggregate, message)
+    protected DomainException(Reference<TAggregate> aggregate, Message context, string message)
+        : base(aggregate, context, message)
     {
         this.aggregate = new Lazy<Reference<TAggregate>>(aggregate);
     }
 
-    protected DomainException(Message context, TAggregate aggregate, string message)
-        : this(context, aggregate.ToReference(), message)
+    protected DomainException(TAggregate aggregate, Message context, string message)
+        : this(aggregate.ToReference(), context, message)
     {
     }
 

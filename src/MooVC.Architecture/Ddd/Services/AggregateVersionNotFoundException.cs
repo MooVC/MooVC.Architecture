@@ -14,15 +14,15 @@ public sealed class AggregateVersionNotFoundException<TAggregate>
     : ArgumentException
     where TAggregate : AggregateRoot
 {
-    public AggregateVersionNotFoundException(Message context, Reference<TAggregate> aggregate)
-        : base(FormatMessage(context, aggregate))
+    public AggregateVersionNotFoundException(Reference<TAggregate> aggregate, Message context)
+        : base(FormatMessage(aggregate, context))
     {
         Aggregate = aggregate;
         Context = context;
     }
 
-    public AggregateVersionNotFoundException(Message context, Guid aggregateId, SignedVersion? version = default)
-        : this(context, new Reference<TAggregate>(aggregateId, version: version))
+    public AggregateVersionNotFoundException(Guid aggregateId, Message context, SignedVersion? version = default)
+        : this(new Reference<TAggregate>(aggregateId, version: version), context)
     {
     }
 
@@ -45,10 +45,10 @@ public sealed class AggregateVersionNotFoundException<TAggregate>
         info.AddValue(nameof(Context), Context);
     }
 
-    private static string FormatMessage(Message context, Reference<TAggregate> aggregate)
+    private static string FormatMessage(Reference<TAggregate> aggregate, Message context)
     {
-        _ = ReferenceIsNotEmpty(aggregate, nameof(aggregate), AggregateVersionNotFoundExceptionAggregateRequired);
-        _ = ArgumentNotNull(context, nameof(context), AggregateVersionNotFoundExceptionContextRequired);
+        _ = IsNotEmpty(aggregate, message: AggregateVersionNotFoundExceptionAggregateRequired);
+        _ = IsNotNull(context, message: AggregateVersionNotFoundExceptionContextRequired);
 
         return Format(AggregateVersionNotFoundExceptionMessage, aggregate.Id, aggregate.Type.Name, aggregate.Version);
     }

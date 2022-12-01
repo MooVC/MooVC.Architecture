@@ -3,7 +3,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using static MooVC.Architecture.Ddd.Ensure;
 
 public static partial class RepositoryExtensions
 {
@@ -23,10 +22,10 @@ public static partial class RepositoryExtensions
         {
             if (version is null || version.IsEmpty)
             {
-                throw new AggregateNotFoundException<TAggregate>(context, id);
+                throw new AggregateNotFoundException<TAggregate>(id, context);
             }
 
-            throw new AggregateVersionNotFoundException<TAggregate>(context, id, version: version);
+            throw new AggregateVersionNotFoundException<TAggregate>(id, context, version: version);
         }
 
         return aggregate;
@@ -40,12 +39,10 @@ public static partial class RepositoryExtensions
         bool latest = true)
         where TAggregate : AggregateRoot
     {
-        if (reference.IsEmpty)
+        if (reference.IsEmpty || !reference.Is<TAggregate>(out _))
         {
             throw new AggregateDoesNotExistException<TAggregate>(context);
         }
-
-        _ = ReferenceIsOfType<TAggregate>(reference, nameof(reference));
 
         if (latest || reference.Version.IsEmpty)
         {

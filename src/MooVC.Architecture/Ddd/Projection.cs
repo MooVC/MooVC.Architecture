@@ -19,7 +19,7 @@ public abstract class Projection<TAggregate>
 
     protected Projection(Reference<TAggregate> aggregate)
     {
-        Aggregate = ReferenceIsNotEmpty(aggregate, nameof(aggregate), ProjectionAggregateRequired);
+        Aggregate = IsNotEmpty(aggregate, message: ProjectionAggregateRequired);
     }
 
     protected Projection(SerializationInfo info, StreamingContext context)
@@ -72,6 +72,11 @@ public abstract class Projection<TAggregate>
     public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         _ = info.TryAddReference(nameof(Aggregate), Aggregate);
+    }
+
+    public override string ToString()
+    {
+        return Aggregate.ToString();
     }
 
     private static Reference<TAggregate> CreateReference(TAggregate aggregate)

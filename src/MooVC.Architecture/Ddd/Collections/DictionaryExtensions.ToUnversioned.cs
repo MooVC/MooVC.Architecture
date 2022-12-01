@@ -8,8 +8,7 @@ public static partial class DictionaryExtensions
         this IDictionary<Reference<TAggregate>, TAggregate> aggregates)
         where TAggregate : AggregateRoot
     {
-        return new UnversionedReferenceDictionary<TAggregate, TAggregate>(
-            existing: aggregates);
+        return new UnversionedReferenceDictionary<TAggregate, TAggregate>(existing: aggregates);
     }
 
     public static IDictionary<Reference<TAggregate>, TProjection> ToUnversioned<TAggregate, TProjection>(
@@ -17,7 +16,6 @@ public static partial class DictionaryExtensions
         where TAggregate : AggregateRoot
         where TProjection : Projection<TAggregate>
     {
-        return new UnversionedReferenceDictionary<TAggregate, TProjection>(
-            existing: projections);
+        return new UnversionedReferenceDictionary<TAggregate, TProjection>(existing: projections);
     }
 }

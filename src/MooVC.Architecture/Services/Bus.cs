@@ -1,6 +1,5 @@
 namespace MooVC.Architecture.Services;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MooVC.Diagnostics;
@@ -11,15 +10,26 @@ public abstract class Bus
     : IBus,
       IEmitDiagnostics
 {
-    public event DiagnosticsEmittedAsyncEventHandler? DiagnosticsEmitted;
+    protected Bus(IDiagnosticsProxy? diagnostics = default)
+    {
+        Diagnostics = new DiagnosticsRelay(this, diagnostics: diagnostics);
+    }
+
+    public event DiagnosticsEmittedAsyncEventHandler DiagnosticsEmitted
+    {
+        add => Diagnostics.DiagnosticsEmitted += value;
+        remove => Diagnostics.DiagnosticsEmitted -= value;
+    }
 
     public event MessageInvokedAsyncEventHandler? Invoked;
 
     public event MessageInvokingAsyncEventHandler? Invoking;
 
+    protected IDiagnosticsRelay Diagnostics { get; }
+
     public virtual async Task InvokeAsync(Message message, CancellationToken? cancellationToken = default)
     {
-        _ = ArgumentNotNull(message, nameof(message), BusMessageRequired);
+        _ = IsNotNull(message, message: BusMessageRequired);
 
         await OnInvokingAsync(message, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
@@ -33,21 +43,6 @@ public abstract class Bus
 
     protected abstract Task PerformInvokeAsync(Message message, CancellationToken? cancellationToken = default);
 
-    protected virtual Task OnDiagnosticsEmittedAsync(
-        Level level,
-        CancellationToken? cancellationToken = default,
-        Exception? cause = default,
-        string? message = default)
-    {
-        return DiagnosticsEmitted.PassiveInvokeAsync(
-            this,
-            new DiagnosticsEmittedAsyncEventArgs(
-                cancellationToken: cancellationToken,
-                cause: cause,
-                level: level,
-                message: message));
-    }
-
     protected virtual Task OnInvokingAsync(Message message, CancellationToken? cancellationToken = default)
     {
         return Invoking.InvokeAsync(
@@ -60,10 +55,10 @@ public abstract class Bus
         return Invoked.PassiveInvokeAsync(
             this,
             new MessageInvokedAsyncEventArgs(message, cancellationToken: cancellationToken),
-            onFailure: failure => OnDiagnosticsEmittedAsync(
-                Level.Warning,
+            onFailure: failure => Diagnostics.EmitAsync(
                 cancellationToken: cancellationToken,
                 cause: failure,
+                impact: Impact.None,
                 message: BusOnInvokedAsyncFailure));
     }
 }

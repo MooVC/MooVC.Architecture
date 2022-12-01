@@ -10,12 +10,12 @@ public sealed class AtomicUnit
     : AtomicUnit<Guid>
 {
     public AtomicUnit(DomainEvent @event)
-        : base(Guid.NewGuid(), @event)
+        : base(@event, Guid.NewGuid())
     {
     }
 
     public AtomicUnit(IEnumerable<DomainEvent> events)
-        : base(Guid.NewGuid(), events)
+        : base(events, Guid.NewGuid())
     {
     }
 

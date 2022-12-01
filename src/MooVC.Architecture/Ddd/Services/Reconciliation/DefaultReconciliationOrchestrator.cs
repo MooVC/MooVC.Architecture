@@ -1,7 +1,6 @@
 ﻿namespace MooVC.Architecture.Ddd.Services.Reconciliation;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,38 +28,15 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
         IStore<TEventSequence, ulong> sequenceStore,
         Func<ISnapshot> snapshotSource)
     {
-        this.aggregateReconciler = ArgumentNotNull(
-            aggregateReconciler,
-            nameof(aggregateReconciler),
-            DefaultReconciliationOrchestratorAggregateReconcilerRequired);
+        this.aggregateReconciler = IsNotNull(aggregateReconciler, message: DefaultReconciliationOrchestratorAggregateReconcilerRequired);
+        this.aggregateSource = IsNotNull(aggregateSource, message: DefaultReconciliationOrchestratorAggregateSourceRequired);
+        this.eventReconciler = IsNotNull(eventReconciler, message: DefaultReconciliationOrchestratorEventReconcilerRequired);
+        this.sequenceFactory = IsNotNull(sequenceFactory, message: DefaultReconciliationOrchestratorSequenceFactoryRequired);
+        this.sequenceStore = IsNotNull(sequenceStore, message: DefaultReconciliationOrchestratorSequenceStoreRequired);
+        this.snapshotSource = IsNotNull(snapshotSource, message: DefaultReconciliationOrchestratorSnapshotSourceRequired);
 
-        this.aggregateSource = ArgumentNotNull(
-            aggregateSource,
-            nameof(aggregateSource),
-            DefaultReconciliationOrchestratorAggregateSourceRequired);
-
-        this.eventReconciler = ArgumentNotNull(
-            eventReconciler,
-            nameof(eventReconciler),
-            DefaultReconciliationOrchestratorEventReconcilerRequired);
-
-        this.sequenceFactory = ArgumentNotNull(
-            sequenceFactory,
-            nameof(sequenceFactory),
-            DefaultReconciliationOrchestratorSequenceFactoryRequired);
-
-        this.sequenceStore = ArgumentNotNull(
-            sequenceStore,
-            nameof(sequenceStore),
-            DefaultReconciliationOrchestratorSequenceStoreRequired);
-
-        this.snapshotSource = ArgumentNotNull(
-            snapshotSource,
-            nameof(snapshotSource),
-            DefaultReconciliationOrchestratorSnapshotSourceRequired);
-
-        this.aggregateReconciler.AggregateConflictDetected += AggregateReconciler_AggregateConflictDetected;
-        this.eventReconciler.EventSequenceAdvanced += EventReconciler_EventSequenceAdvanced;
+        this.aggregateReconciler.ConflictDetected += AggregateReconciler_ConflictDetected;
+        this.eventReconciler.SequenceAdvanced += EventReconciler_SequenceAdvanced;
     }
 
     public override async Task ReconcileAsync(CancellationToken? cancellationToken = default, IEventSequence? target = default)
@@ -79,7 +55,7 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
 
     private async Task<IEventSequence?> GetPreviousSequenceAsync(CancellationToken? cancellationToken)
     {
-        IEnumerable<TEventSequence>? last = await sequenceStore
+        TEventSequence[] last = await sequenceStore
             .GetAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -128,18 +104,15 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
         }
     }
 
-    private async Task AggregateReconciler_AggregateConflictDetected(IAggregateReconciler sender, AggregateConflictDetectedAsyncEventArgs e)
+    private Task AggregateReconciler_ConflictDetected(IAggregateReconciler sender, AggregateConflictDetectedAsyncEventArgs e)
     {
         EventCentricAggregateRoot aggregate = aggregateSource(e.Aggregate);
 
-        await sender
-            .ReconcileAsync(aggregate)
-            .ConfigureAwait(false);
+        return sender.ReconcileAsync(aggregate);
     }
 
-    private async Task EventReconciler_EventSequenceAdvanced(IEventReconciler sender, EventSequenceAdvancedAsyncEventArgs e)
+    private Task EventReconciler_SequenceAdvanced(IEventReconciler sender, EventSequenceAdvancedAsyncEventArgs e)
     {
-        await UpdateSequenceAsync(e.Sequence, e.CancellationToken)
-            .ConfigureAwait(false);
+        return UpdateSequenceAsync(e.Sequence, e.CancellationToken);
     }
 }

@@ -158,9 +158,6 @@
   <data name="AggregateReferenceMismatchExceptionReferenceRequired" xml:space="preserve">
     <value>The reference that serves as the subject of the conversion must be provided.</value>
   </data>
-  <data name="AggregateRootExtensionsCoordinateAsyncAggregateRequired" xml:space="preserve">
-    <value>The aggregate that serves as the context for coordination must be provided.</value>
-  </data>
   <data name="AggregateRootExtensionsSaveDestinationRequired" xml:space="preserve">
     <value>The destination must be provided.</value>
   </data>
@@ -176,6 +173,9 @@
   <data name="DomainEventAggregateRequired" xml:space="preserve">
     <value>A versioned reference for the aggregate must be provided.</value>
   </data>
+  <data name="DomainEventContextRequired" xml:space="preserve">
+    <value>The context in which the event was raised must be provided.</value>
+  </data>
   <data name="EnsureReferenceIsNotEmptyMessage" xml:space="preserve">
     <value>A non-empty reference of aggregate type {0} is required.</value>
   </data>
@@ -184,6 +184,12 @@
   </data>
   <data name="EventCentricAggregateRootStateChangesDenied" xml:space="preserve">
     <value>Changed to the state of an aggregate of type {0} must be made through ApplyChanges.</value>
+  </data>
+  <data name="MessageAggregateRequired" xml:space="preserve">
+    <value>The aggregate of type {0} that serves as the subject of the message must be provided.</value>
+  </data>
+  <data name="MultiTypeReferenceReferenceRequired" xml:space="preserve">
+    <value>A single, non-empty reference, must be provided.</value>
   </data>
   <data name="ProjectionAggregateRequired" xml:space="preserve">
     <value>A reference to the aggregate must be provided.</value>
@@ -197,14 +203,11 @@
   <data name="ReferenceDeserializeTypeTypeIndeterminate" xml:space="preserve">
     <value>The type of the reference could not be determined.</value>
   </data>
-  <data name="ReferenceExtensionsCoordinateAsyncReferenceRequired" xml:space="preserve">
-    <value>The reference that serves as the context for coordination must be provided.</value>
-  </data>
-  <data name="ReferenceExtensionsToUnversionedReferenceRequired" xml:space="preserve">
-    <value>The reference to be unversioned must be provided.</value>
-  </data>
   <data name="ReferenceIdRequired" xml:space="preserve">
     <value>A non-empty ID for the aggregate this reference represents must be provided.</value>
+  </data>
+  <data name="ReferenceNonEmptyRequired" xml:space="preserve">
+    <value>A non-empty reference is required.</value>
   </data>
   <data name="ReferenceTypeRequired" xml:space="preserve">
     <value>The type of the reference must be concrete.</value>

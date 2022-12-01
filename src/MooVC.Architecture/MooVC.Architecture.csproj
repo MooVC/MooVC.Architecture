@@ -3,7 +3,7 @@
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MooVC" Version="7.0.0-beta0055" />
+    <PackageReference Include="MooVC" Version="7.*" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Cqrs\Services\Resources.Designer.cs">

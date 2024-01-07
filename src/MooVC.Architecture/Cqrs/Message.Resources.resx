@@ -117,13 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BusMessageRequired" xml:space="preserve">
-    <value>The message to be invoked must be provided.</value>
+  <data name="IdRequired" xml:space="preserve">
+    <value>The identity of the Message must be provided.</value>
   </data>
-  <data name="BusOnInvokedAsyncFailure" xml:space="preserve">
-    <value>A failure has prevented one or more listeners for invocations from successfully handling a notification.</value>
-  </data>
-  <data name="MessageEventArgsMessageRequired" xml:space="preserve">
-    <value>The message that is the subject of this event must be provided.</value>
+  <data name="TraceRequired" xml:space="preserve">
+    <value>The tracing history for the Message must be provided.</value>
   </data>
 </root>

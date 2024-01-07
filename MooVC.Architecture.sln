@@ -7,13 +7,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MooVC.Architecture", "src\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MooVC.Architecture.Tests", "src\MooVC.Architecture.Tests\MooVC.Architecture.Tests.csproj", "{16C92F5F-53C5-4004-883F-F768608602BC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9656C3C2-E8C5-462F-9A5D-3BF6A479A6A9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{7EBE557E-DE51-48E2-BC43-194F07A84F96}"
 	ProjectSection(SolutionItems) = preProject
-		..\.editorconfig = ..\.editorconfig
-		..\.gitignore = ..\.gitignore
-		..\Directory.Build.props = ..\Directory.Build.props
-		..\LICENSE = ..\LICENSE
-		..\README.md = ..\README.md
+		.github\workflows\cd.yml = .github\workflows\cd.yml
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{B64F3B63-0C43-42FA-B13C-172E54998BD3}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		analyzers\stylecop.code.ruleset = analyzers\stylecop.code.ruleset
+		analyzers\stylecop.tests.ruleset = analyzers\stylecop.tests.ruleset
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{1D7631CD-D9AA-43EF-AF23-593DF2911BE7}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		build\libraries.props = build\libraries.props
+		build\tests.props = build\tests.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{07812C20-0F43-40E5-A55B-ADE97C5657CE}"
+	ProjectSection(SolutionItems) = preProject
+		.filenesting.json = .filenesting.json
+		.gitignore = .gitignore
+		.runsettings = .runsettings
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global

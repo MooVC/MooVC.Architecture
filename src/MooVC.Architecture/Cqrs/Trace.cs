@@ -1,6 +1,7 @@
 namespace MooVC.Architecture.Cqrs;
 
 using Ardalis.GuardClauses;
+using static MooVC.Architecture.Cqrs.Trace_Resources;
 
 public sealed record Trace
 {
@@ -12,8 +13,8 @@ public sealed record Trace
     public Trace(Guid causationId, Guid correlationId, DateTimeOffset timestamp)
     {
         CausationId = Guard.Against.NullOrEmpty(causationId, message: CausationIdRequired);
-        CorrelationId = Guard.Against.NullOrEmpty(correlationId, message: CausationIdRequired);
-        Timestamp = Guard.Against.NullOrEmpty(timestamp, message: TimestampRequired);
+        CorrelationId = Guard.Against.NullOrEmpty(correlationId, message: CorrelationIdRequired);
+        Timestamp = Guard.Against.Default(timestamp, message: TimestampRequired);
     }
 
     public Guid CausationId { get; }

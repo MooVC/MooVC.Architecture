@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MooVC.Architecture.Services {
+namespace MooVC.Architecture.Cqrs {
     using System;
     
     
@@ -19,17 +19,17 @@ namespace MooVC.Architecture.Services {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Message_Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Message_Resources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MooVC.Architecture.Services {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MooVC.Architecture.Services.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MooVC.Architecture.Cqrs.Message.Resources", typeof(Message_Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,20 @@ namespace MooVC.Architecture.Services {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The message to be invoked must be provided..
+        ///   Looks up a localized string similar to The identity of the Message must be provided..
         /// </summary>
-        internal static string BusMessageRequired {
+        internal static string IdRequired {
             get {
-                return ResourceManager.GetString("BusMessageRequired", resourceCulture);
+                return ResourceManager.GetString("IdRequired", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A failure has prevented one or more listeners for invocations from successfully handling a notification..
+        ///   Looks up a localized string similar to The tracing history for the Message must be provided..
         /// </summary>
-        internal static string BusOnInvokedAsyncFailure {
+        internal static string TraceRequired {
             get {
-                return ResourceManager.GetString("BusOnInvokedAsyncFailure", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The message that is the subject of this event must be provided..
-        /// </summary>
-        internal static string MessageEventArgsMessageRequired {
-            get {
-                return ResourceManager.GetString("MessageEventArgsMessageRequired", resourceCulture);
+                return ResourceManager.GetString("TraceRequired", resourceCulture);
             }
         }
     }

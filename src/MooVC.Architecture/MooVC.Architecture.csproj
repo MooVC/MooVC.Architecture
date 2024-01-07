@@ -3,13 +3,23 @@
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MooVC" Version="8.0.0-beta.1" />
+    <PackageReference Include="MooVC" Version="8.0.0-beta.2" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Cqrs\Services\Resources.Designer.cs">
+    <Compile Update="Cqrs\Message.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
+      <DependentUpon>Message.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Cqrs\Services\Mediator.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Mediator.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Cqrs\Trace.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Trace.Resources.resx</DependentUpon>
     </Compile>
     <Compile Update="Ddd\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -46,16 +56,19 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Services\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Cqrs\Services\Resources.resx">
+    <EmbeddedResource Update="Cqrs\Message.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Message.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cqrs\Services\Mediator.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Mediator.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Cqrs\Trace.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Trace.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Ddd\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -82,10 +95,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Services\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>

@@ -2,11 +2,12 @@
 
 using System;
 using Ardalis.GuardClauses;
+using static MooVC.Architecture.Cqrs.Message_Resources;
 
 public abstract record Message
 {
     protected Message()
-        : this(Guid.NewGuid()) 
+        : this(Guid.NewGuid())
     {
     }
 

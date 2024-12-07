@@ -17,11 +17,11 @@ public abstract class Reference
       ICoordinatable<Guid>,
       IEquatable<Reference>
 {
-    private protected Reference(Guid id, Type type, SignedVersion? version)
+    private protected Reference(Guid id, Type type, Sequence? version)
     {
         Id = id;
         Type = type;
-        Version = version ?? SignedVersion.Empty;
+        Version = version ?? Sequence.Empty;
     }
 
     private protected Reference(Reference other)
@@ -46,7 +46,7 @@ public abstract class Reference
 
     public Type Type { get; }
 
-    public SignedVersion Version { get; } = SignedVersion.Empty;
+    public Sequence Version { get; } = Sequence.Empty;
 
     public static implicit operator Guid(Reference? reference)
     {
@@ -59,9 +59,9 @@ public abstract class Reference
         return reference?.Type;
     }
 
-    public static implicit operator SignedVersion(Reference? reference)
+    public static implicit operator Sequence(Reference? reference)
     {
-        return reference?.Version ?? SignedVersion.Empty;
+        return reference?.Version ?? Sequence.Empty;
     }
 
     public static bool operator ==(Reference? first, Reference? second)
@@ -74,14 +74,14 @@ public abstract class Reference
         return NotEqualOperator(first, second);
     }
 
-    public static Reference Create(Guid id, string typeName, SignedVersion? version = default)
+    public static Reference Create(Guid id, string typeName, Sequence? version = default)
     {
         var aggregate = Type.GetType(typeName, true);
 
         return Create(id, aggregate!, version: version);
     }
 
-    public static Reference Create(Guid id, Type type, SignedVersion? version = default)
+    public static Reference Create(Guid id, Type type, Sequence? version = default)
     {
         _ = IsNotNull(type, message: ReferenceCreateTypeRequired);
 
@@ -108,7 +108,7 @@ public abstract class Reference
             default)!;
     }
 
-    public static Reference Create<TAggregate>(Guid id, SignedVersion? version = default)
+    public static Reference Create<TAggregate>(Guid id, Sequence? version = default)
         where TAggregate : AggregateRoot
     {
         return Create(id, typeof(TAggregate), version: version);
@@ -211,9 +211,9 @@ public abstract class Reference
         return type!;
     }
 
-    protected virtual SignedVersion DeserializeVersion(SerializationInfo info, StreamingContext context)
+    protected virtual Sequence DeserializeVersion(SerializationInfo info, StreamingContext context)
     {
-        return info.TryGetValue(nameof(Version), defaultValue: SignedVersion.Empty);
+        return info.TryGetValue(nameof(Version), defaultValue: Sequence.Empty);
     }
 
     protected override IEnumerable<object> GetAtomicValues()
@@ -237,7 +237,7 @@ public abstract class Reference
 
     protected virtual void SerializeVersion(SerializationInfo info, StreamingContext context)
     {
-        _ = info.TryAddValue(nameof(Version), Version, defaultValue: SignedVersion.Empty);
+        _ = info.TryAddValue(nameof(Version), Version, defaultValue: Sequence.Empty);
     }
 
     private static bool EqualOperator(Reference? left, Reference? right)
@@ -254,7 +254,7 @@ public abstract class Reference
 
         return left.Id == right!.Id
             && (left.Type.IsAssignableFrom(right.Type) || right.Type.IsAssignableFrom(left.Type))
-            && (left.Version == SignedVersion.Empty || right.Version == SignedVersion.Empty || left.Version == right.Version);
+            && (left.Version == Sequence.Empty || right.Version == Sequence.Empty || left.Version == right.Version);
     }
 
     private static bool NotEqualOperator(Reference? left, Reference? right)

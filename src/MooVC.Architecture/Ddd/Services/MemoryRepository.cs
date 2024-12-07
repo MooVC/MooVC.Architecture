@@ -21,9 +21,9 @@ public abstract class MemoryRepository<TAggregate, TStore>
         return GetKey(aggregate.Id, aggregate.Version);
     }
 
-    protected abstract Reference<TAggregate> GetKey(Guid id, SignedVersion? version);
+    protected abstract Reference<TAggregate> GetKey(Guid id, Sequence? version);
 
-    protected override TAggregate? PerformGet(Guid id, SignedVersion? version = default)
+    protected override TAggregate? PerformGet(Guid id, Sequence? version = default)
     {
         Reference<TAggregate>? key = GetKey(id, version);
 

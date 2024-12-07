@@ -9,7 +9,7 @@ public sealed class WhenToGuidIsCalled
     [Fact]
     public void GivenAnEmptyVersionThenAEmptyGuidIsReturned()
     {
-        var id = SignedVersion.Empty.ToGuid();
+        var id = Sequence.Empty.ToGuid();
 
         Assert.Equal(Guid.Empty, id);
     }
@@ -18,7 +18,7 @@ public sealed class WhenToGuidIsCalled
     public void GivenAnVersionThenAGuidMatchingThatVersionIsReturned()
     {
         var aggregate = new SerializableAggregateRoot();
-        SignedVersion version = aggregate.Version.Next();
+        Sequence version = aggregate.Version.Next();
 
         var expected = new Guid(new[]
         {

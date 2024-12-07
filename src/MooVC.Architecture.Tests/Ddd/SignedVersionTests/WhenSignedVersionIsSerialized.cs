@@ -9,8 +9,8 @@ public sealed class WhenSignedVersionIsSerialized
     public void GivenASignedVersionThenAllPropertiesArePropagated()
     {
         var aggregate = new SerializableAggregateRoot();
-        SignedVersion original = aggregate.Version;
-        SignedVersion deserialized = original.Clone();
+        Sequence original = aggregate.Version;
+        Sequence deserialized = original.Clone();
 
         Assert.NotSame(original, deserialized);
         Assert.Equal(original, deserialized);

@@ -13,15 +13,15 @@ using static MooVC.Ensure;
 public abstract class AggregateConflictDetectedException
     : ArgumentException
 {
-    private protected AggregateConflictDetectedException(Reference aggregate, SignedVersion received)
+    private protected AggregateConflictDetectedException(Reference aggregate, Sequence received)
         : base(FormatMessage(aggregate, received))
     {
         Aggregate = aggregate;
-        Persisted = SignedVersion.Empty;
+        Persisted = Sequence.Empty;
         Received = received;
     }
 
-    private protected AggregateConflictDetectedException(Reference aggregate, SignedVersion persisted, SignedVersion received)
+    private protected AggregateConflictDetectedException(Reference aggregate, Sequence persisted, Sequence received)
         : base(FormatMessage(aggregate, received, persisted: persisted, persistedRequired: true))
     {
         Aggregate = aggregate;
@@ -33,29 +33,29 @@ public abstract class AggregateConflictDetectedException
         : base(info, context)
     {
         Aggregate = info.TryGetReference(nameof(Aggregate));
-        Persisted = info.TryGetValue(nameof(Persisted), defaultValue: SignedVersion.Empty);
-        Received = info.TryGetValue(nameof(Received), defaultValue: SignedVersion.Empty);
+        Persisted = info.TryGetValue(nameof(Persisted), defaultValue: Sequence.Empty);
+        Received = info.TryGetValue(nameof(Received), defaultValue: Sequence.Empty);
     }
 
     public Reference Aggregate { get; }
 
-    public SignedVersion Persisted { get; }
+    public Sequence Persisted { get; }
 
-    public SignedVersion Received { get; }
+    public Sequence Received { get; }
 
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         base.GetObjectData(info, context);
 
         info.AddValue(nameof(Aggregate), Aggregate);
-        _ = info.TryAddValue(nameof(Persisted), Persisted, defaultValue: SignedVersion.Empty);
-        _ = info.TryAddValue(nameof(Received), Received, defaultValue: SignedVersion.Empty);
+        _ = info.TryAddValue(nameof(Persisted), Persisted, defaultValue: Sequence.Empty);
+        _ = info.TryAddValue(nameof(Received), Received, defaultValue: Sequence.Empty);
     }
 
     private static string FormatMessage(
         Reference aggregate,
-        SignedVersion received,
-        SignedVersion? persisted = default,
+        Sequence received,
+        Sequence? persisted = default,
         bool persistedRequired = false)
     {
         _ = IsNotEmpty(aggregate, message: AggregateConflictDetectedExceptionAggregateRequired);

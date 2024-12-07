@@ -29,7 +29,7 @@ public sealed class WhenApplyChangeIsCalled
         var context = new SerializableMessage();
         var request = new SetRequest(context, value);
         var aggregate = new SerializableEventCentricAggregateRoot(context);
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
 
         Assert.True(version.IsNew);
 
@@ -48,7 +48,7 @@ public sealed class WhenApplyChangeIsCalled
 
         aggregate.MarkChangesAsCommitted();
 
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
 
         Assert.True(version.IsNew);
 
@@ -64,7 +64,7 @@ public sealed class WhenApplyChangeIsCalled
         var context = new SerializableMessage();
         var aggregate = new SerializableEventCentricAggregateRoot(context);
 
-        SignedVersion original = aggregate.Version.Clone();
+        Sequence original = aggregate.Version.Clone();
 
         Assert.True(aggregate.HasUncommittedChanges);
         Assert.True(original.IsNew);
@@ -91,7 +91,7 @@ public sealed class WhenApplyChangeIsCalled
 
         aggregate.MarkChangesAsCommitted();
 
-        SignedVersion original = aggregate.Version.Clone();
+        Sequence original = aggregate.Version.Clone();
 
         Assert.False(aggregate.HasUncommittedChanges);
         Assert.Equal(ExpectedVersion, original.Number);
@@ -118,7 +118,7 @@ public sealed class WhenApplyChangeIsCalled
 
         aggregate.Set(set);
 
-        SignedVersion original = aggregate.Version.Clone();
+        Sequence original = aggregate.Version.Clone();
 
         Assert.True(aggregate.HasUncommittedChanges);
         Assert.Equal(ExpectedVersion, original.Number);

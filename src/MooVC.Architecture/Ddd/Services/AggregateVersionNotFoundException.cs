@@ -21,7 +21,7 @@ public sealed class AggregateVersionNotFoundException<TAggregate>
         Context = context;
     }
 
-    public AggregateVersionNotFoundException(Guid aggregateId, Message context, SignedVersion? version = default)
+    public AggregateVersionNotFoundException(Guid aggregateId, Message context, Sequence? version = default)
         : this(new Reference<TAggregate>(aggregateId, version: version), context)
     {
     }

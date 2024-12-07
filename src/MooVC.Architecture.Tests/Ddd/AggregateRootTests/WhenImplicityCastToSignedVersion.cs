@@ -8,7 +8,7 @@ public sealed class WhenImplicityCastToSignedVersion
     public void GivenAnAggregateThenTheVersionOfThatAggregateIsReturned()
     {
         var aggregate = new SerializableAggregateRoot();
-        SignedVersion version = aggregate;
+        Sequence version = aggregate;
 
         Assert.Equal(aggregate.Version, version);
     }
@@ -17,8 +17,8 @@ public sealed class WhenImplicityCastToSignedVersion
     public void GivenNoAggregateThenAnEmptyVersionIsReturned()
     {
         SerializableAggregateRoot? aggregate = default;
-        SignedVersion version = aggregate;
+        Sequence version = aggregate;
 
-        Assert.Equal(SignedVersion.Empty, version);
+        Assert.Equal(Sequence.Empty, version);
     }
 }

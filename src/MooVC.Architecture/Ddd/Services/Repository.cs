@@ -34,7 +34,7 @@ public abstract class Repository<TAggregate>
 
     public abstract Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default);
 
-    public abstract Task<TAggregate?> GetAsync(Guid id, CancellationToken? cancellationToken = default, SignedVersion? version = default);
+    public abstract Task<TAggregate?> GetAsync(Guid id, CancellationToken? cancellationToken = default, Sequence? version = default);
 
     public virtual async Task SaveAsync(TAggregate aggregate, CancellationToken? cancellationToken = default)
     {

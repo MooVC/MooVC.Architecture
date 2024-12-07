@@ -66,7 +66,7 @@ public abstract partial class EventCentricAggregateRoot
                 throw new AggregateEventMismatchException(this, mismatch);
             }
 
-            SignedVersion startingVersion = sequence.First().Aggregate.Version;
+            Sequence startingVersion = sequence.First().Aggregate.Version;
 
             if (!(startingVersion.IsNext(Version) || (startingVersion.IsNew && Version.IsNew)))
             {

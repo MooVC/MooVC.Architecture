@@ -8,10 +8,10 @@ public sealed class WhenSignedVersionIsOrdered
     [Fact]
     public void GivenAnUnorderedSequenceThenTheSequencedIsOrderedAscending()
     {
-        Prepare(out SignedVersion first, out SignedVersion second, out SignedVersion third, out SignedVersion[] sequence);
+        Prepare(out Sequence first, out Sequence second, out Sequence third, out Sequence[] sequence);
 
-        SignedVersion[] expected = new[] { first, second, third };
-        SignedVersion[] actual = sequence.OrderBy(version => version).ToArray();
+        Sequence[] expected = new[] { first, second, third };
+        Sequence[] actual = sequence.OrderBy(version => version).ToArray();
 
         Assert.Equal(expected, actual);
     }
@@ -19,19 +19,19 @@ public sealed class WhenSignedVersionIsOrdered
     [Fact]
     public void GivenAnUnorderedSequenceThenTheSequencedIsOrderedDescending()
     {
-        Prepare(out SignedVersion first, out SignedVersion second, out SignedVersion third, out SignedVersion[] sequence);
+        Prepare(out Sequence first, out Sequence second, out Sequence third, out Sequence[] sequence);
 
-        SignedVersion[] expected = new[] { third, second, first };
-        SignedVersion[] actual = sequence.OrderByDescending(version => version).ToArray();
+        Sequence[] expected = new[] { third, second, first };
+        Sequence[] actual = sequence.OrderByDescending(version => version).ToArray();
 
         Assert.Equal(expected, actual);
     }
 
     private static void Prepare(
-        out SignedVersion first,
-        out SignedVersion second,
-        out SignedVersion third,
-        out SignedVersion[] sequence)
+        out Sequence first,
+        out Sequence second,
+        out Sequence third,
+        out Sequence[] sequence)
     {
         var aggregate = new SerializableAggregateRoot();
 

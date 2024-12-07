@@ -61,7 +61,7 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         var subject = new SerializableAggregateRoot();
         Guid aggregateId = subject.Id;
         var context = new SerializableMessage();
-        SignedVersion version = subject.Version;
+        Sequence version = subject.Version;
 
         var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregateId, context, version: version);
 
@@ -76,7 +76,7 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         var subject = new SerializableAggregateRoot();
         Guid id = Guid.Empty;
         var context = new SerializableMessage();
-        SignedVersion version = subject.Version;
+        Sequence version = subject.Version;
 
         ArgumentException exception = Assert.Throws<ArgumentException>(() =>
             new AggregateVersionNotFoundException<AggregateRoot>(id, context, version: version));
@@ -90,7 +90,7 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         var subject = new SerializableAggregateRoot();
         Guid aggregateId = subject.Id;
         Message? context = default;
-        SignedVersion version = subject.Version;
+        Sequence version = subject.Version;
 
         ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() =>
             new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregateId, context!, version: version));
@@ -104,7 +104,7 @@ public sealed class WhenAggregateVersionNotFoundExceptionIsConstructed
         var subject = new SerializableAggregateRoot();
         Guid aggregateId = subject.Id;
         var context = new SerializableMessage();
-        SignedVersion? version = default;
+        Sequence? version = default;
         var instance = new AggregateVersionNotFoundException<SerializableAggregateRoot>(aggregateId, context, version: version);
 
         Assert.False(instance.Aggregate.IsVersioned);

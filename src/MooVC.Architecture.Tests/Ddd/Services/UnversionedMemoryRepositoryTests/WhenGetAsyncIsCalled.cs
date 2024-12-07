@@ -75,7 +75,7 @@ public class WhenGetAsyncIsCalled
     public async Task GivenAVersionThatIsNotTheCurrentVersionThenANullValueIsReturnedAsync()
     {
         var aggregate = new SerializableEventCentricAggregateRoot();
-        SignedVersion expectedFirst = aggregate.Version;
+        Sequence expectedFirst = aggregate.Version;
 
         IRepository<SerializableEventCentricAggregateRoot> repository =
             Create<SerializableEventCentricAggregateRoot>();
@@ -86,7 +86,7 @@ public class WhenGetAsyncIsCalled
 
         aggregate.Set(new SetRequest(context, Guid.NewGuid()));
 
-        SignedVersion expectedSecond = aggregate.Version;
+        Sequence expectedSecond = aggregate.Version;
 
         await repository.SaveAsync(aggregate);
 

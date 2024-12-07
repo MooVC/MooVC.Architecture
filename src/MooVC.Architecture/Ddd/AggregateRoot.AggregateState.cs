@@ -10,12 +10,12 @@ public abstract partial class AggregateRoot
     private protected readonly struct AggregateState
         : ISerializable
     {
-        public AggregateState(SignedVersion persisted)
+        public AggregateState(Sequence persisted)
             : this(persisted, persisted)
         {
         }
 
-        public AggregateState(SignedVersion current, SignedVersion persisted)
+        public AggregateState(Sequence current, Sequence persisted)
         {
             Current = current;
             Persisted = persisted;
@@ -23,15 +23,15 @@ public abstract partial class AggregateRoot
 
         private AggregateState(SerializationInfo info, StreamingContext context)
         {
-            Persisted = info.TryGetValue(nameof(Persisted), defaultValue: SignedVersion.Empty);
+            Persisted = info.TryGetValue(nameof(Persisted), defaultValue: Sequence.Empty);
             Current = info.TryGetValue(nameof(Current), defaultValue: Persisted);
         }
 
-        public SignedVersion Current { get; }
+        public Sequence Current { get; }
 
         public bool HasUncommittedChanges => !(Current.IsEmpty || Current == Persisted);
 
-        public SignedVersion Persisted { get; }
+        public Sequence Persisted { get; }
 
         public AggregateState Commit()
         {
@@ -41,7 +41,7 @@ public abstract partial class AggregateRoot
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             _ = info.TryAddValue(nameof(Current), Current, defaultValue: Persisted);
-            _ = info.TryAddValue(nameof(Persisted), Persisted, defaultValue: SignedVersion.Empty);
+            _ = info.TryAddValue(nameof(Persisted), Persisted, defaultValue: Sequence.Empty);
         }
 
         public AggregateState Increment()

@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.Ddd.EntityExtensionsTests;
 
 using System.Collections.Generic;
+using MooVC.Architecture.Ddd;
 using Moq;
 using Xunit;
 

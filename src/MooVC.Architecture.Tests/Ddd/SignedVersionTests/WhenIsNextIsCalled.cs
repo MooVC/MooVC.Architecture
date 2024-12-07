@@ -14,7 +14,7 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenADifferentVersionThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
         var other = new SerializableAggregateRoot();
 
         Assert.False(other.Version.IsNext(version));
@@ -23,9 +23,9 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenADifferentNextVersionThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
         var other = new SerializableAggregateRoot();
-        SignedVersion next = other.Version.Next();
+        Sequence next = other.Version.Next();
 
         Assert.False(next.IsNext(version));
     }
@@ -33,16 +33,16 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenAnEmptyVersionThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
 
-        Assert.False(version.IsNext(SignedVersion.Empty));
+        Assert.False(version.IsNext(Sequence.Empty));
     }
 
     [Fact]
     public void GivenTheNextNextVersionThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next().Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next().Next();
 
         Assert.False(next.IsNext(version));
     }
@@ -50,8 +50,8 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenTheNextVersionThenTheResponseIsPositive()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
 
         Assert.True(next.IsNext(version));
     }
@@ -59,8 +59,8 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenThePreviousVersionThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
 
         Assert.False(version.IsNext(next));
     }
@@ -68,7 +68,7 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenADifferentVersionWhenFooterAndNumberAreUsedThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
         var other = new SerializableAggregateRoot();
 
         Assert.False(other.Version.IsNext(version.Footer, version.Number));
@@ -77,9 +77,9 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenADifferentNextVersionWhenFooterAndNumberAreUsedThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
         var other = new SerializableAggregateRoot();
-        SignedVersion next = other.Version.Next();
+        Sequence next = other.Version.Next();
 
         Assert.False(next.IsNext(version.Footer, version.Number));
     }
@@ -87,16 +87,16 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenAnEmptyVersionWhenFooterAndNumberAreUsedThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
 
-        Assert.False(version.IsNext(SignedVersion.Empty.Footer, SignedVersion.Empty.Number));
+        Assert.False(version.IsNext(Sequence.Empty.Footer, Sequence.Empty.Number));
     }
 
     [Fact]
     public void GivenTheNextNextVersionWhenFooterAndNumberAreUsedThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next().Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next().Next();
 
         Assert.False(next.IsNext(version.Footer, version.Number));
     }
@@ -104,8 +104,8 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenTheNextVersionWhenFooterAndNumberAreUsedThenTheResponseIsPositive()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
 
         Assert.True(next.IsNext(version.Footer, version.Number));
     }
@@ -113,8 +113,8 @@ public sealed class WhenIsNextIsCalled
     [Fact]
     public void GivenThePreviousVersionWhenFooterAndNumberAreUsedThenTheResponseIsNegative()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
 
         Assert.False(version.IsNext(next.Footer, next.Number));
     }

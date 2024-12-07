@@ -16,8 +16,8 @@ public sealed class WhenCompareToIsCalled
     {
         const int ExpectedValue = 1;
 
-        SignedVersion version = aggregate.Version;
-        int actualValue = version.CompareTo(SignedVersion.Empty);
+        Sequence version = aggregate.Version;
+        int actualValue = version.CompareTo(Sequence.Empty);
 
         Assert.Equal(ExpectedValue, actualValue);
     }
@@ -27,8 +27,8 @@ public sealed class WhenCompareToIsCalled
     {
         const int ExpectedValue = -1;
 
-        SignedVersion version = aggregate.Version;
-        int actualValue = SignedVersion.Empty.CompareTo(version);
+        Sequence version = aggregate.Version;
+        int actualValue = Sequence.Empty.CompareTo(version);
 
         Assert.Equal(ExpectedValue, actualValue);
     }
@@ -38,7 +38,7 @@ public sealed class WhenCompareToIsCalled
     {
         const int ExpectedValue = 1;
 
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
         int actualValue = version.CompareTo(default);
 
         Assert.Equal(ExpectedValue, actualValue);
@@ -49,8 +49,8 @@ public sealed class WhenCompareToIsCalled
     {
         const int ExpectedValue = -1;
 
-        SignedVersion version = aggregate.Version;
-        SignedVersion future = version.Next().Next();
+        Sequence version = aggregate.Version;
+        Sequence future = version.Next().Next();
         int actualValue = version.CompareTo(future);
 
         Assert.Equal(ExpectedValue, actualValue);
@@ -61,8 +61,8 @@ public sealed class WhenCompareToIsCalled
     {
         const int ExpectedValue = -1;
 
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
         int actualValue = version.CompareTo(next);
 
         Assert.Equal(ExpectedValue, actualValue);
@@ -73,8 +73,8 @@ public sealed class WhenCompareToIsCalled
     {
         const int ExpectedValue = 1;
 
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
         int actualValue = next.CompareTo(version);
 
         Assert.Equal(ExpectedValue, actualValue);

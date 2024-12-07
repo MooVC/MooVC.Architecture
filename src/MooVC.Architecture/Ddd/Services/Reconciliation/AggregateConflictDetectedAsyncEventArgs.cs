@@ -19,8 +19,8 @@ public sealed class AggregateConflictDetectedAsyncEventArgs
     internal AggregateConflictDetectedAsyncEventArgs(
         Reference aggregate,
         IEnumerable<DomainEvent> events,
-        SignedVersion next,
-        SignedVersion previous,
+        Sequence next,
+        Sequence previous,
         CancellationToken? cancellationToken = default)
         : base(cancellationToken: cancellationToken)
     {
@@ -34,17 +34,17 @@ public sealed class AggregateConflictDetectedAsyncEventArgs
     {
         Aggregate = info.TryGetReference(nameof(Aggregate));
         Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
-        Next = info.GetValue<SignedVersion>(nameof(Next));
-        Previous = info.GetValue<SignedVersion>(nameof(Previous));
+        Next = info.GetValue<Sequence>(nameof(Next));
+        Previous = info.GetValue<Sequence>(nameof(Previous));
     }
 
     public Reference Aggregate { get; }
 
     public IEnumerable<DomainEvent> Events { get; }
 
-    public SignedVersion Next { get; }
+    public Sequence Next { get; }
 
-    public SignedVersion Previous { get; }
+    public Sequence Previous { get; }
 
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {

@@ -13,7 +13,7 @@ public class UnversionedConcurrentMemoryRepository<TAggregate>
     {
     }
 
-    protected override Reference<TAggregate> GetKey(Guid id, SignedVersion? version)
+    protected override Reference<TAggregate> GetKey(Guid id, Sequence? version)
     {
         return id.ToReference<TAggregate>();
     }

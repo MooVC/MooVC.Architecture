@@ -10,13 +10,13 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         var aggregate = subject.ToReference();
-        SignedVersion received = subject.Version;
+        Sequence received = subject.Version;
 
         var instance = new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate, received);
 
         Assert.Equal(aggregate, instance.Aggregate);
         Assert.Equal(received, instance.Received);
-        Assert.Equal(SignedVersion.Empty, instance.Persisted);
+        Assert.Equal(Sequence.Empty, instance.Persisted);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         var aggregate = subject.ToReference();
-        SignedVersion? received = default;
+        Sequence? received = default;
 
         ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate, received!));
@@ -37,7 +37,7 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Reference<SerializableAggregateRoot> aggregate = Reference<SerializableAggregateRoot>.Empty;
-        SignedVersion received = subject.Version;
+        Sequence received = subject.Version;
 
         ArgumentException exception = Assert.Throws<ArgumentException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate, received));
@@ -50,7 +50,7 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Reference<SerializableAggregateRoot>? aggregate = default;
-        SignedVersion received = subject.Version;
+        Sequence received = subject.Version;
 
         ArgumentException exception = Assert.Throws<ArgumentException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate!, received));
@@ -63,13 +63,13 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Guid aggregateId = subject.Id;
-        SignedVersion received = subject.Version;
+        Sequence received = subject.Version;
 
         var instance = new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregateId, received);
 
         Assert.Equal(aggregateId, instance.Aggregate.Id);
         Assert.Equal(received, instance.Received);
-        Assert.Equal(SignedVersion.Empty, instance.Persisted);
+        Assert.Equal(Sequence.Empty, instance.Persisted);
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Guid aggregateId = subject.Id;
-        SignedVersion? received = default;
+        Sequence? received = default;
 
         ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregateId, received!));
@@ -90,7 +90,7 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Guid id = Guid.Empty;
-        SignedVersion received = subject.Version;
+        Sequence received = subject.Version;
 
         ArgumentException exception = Assert.Throws<ArgumentException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(id, received));
@@ -103,8 +103,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         var aggregate = subject.ToReference();
-        SignedVersion received = subject.Version;
-        SignedVersion persisted = subject.Version.Next();
+        Sequence received = subject.Version;
+        Sequence persisted = subject.Version.Next();
 
         var instance = new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate, persisted, received);
 
@@ -118,8 +118,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         var aggregate = subject.ToReference();
-        SignedVersion? received = default;
-        SignedVersion persisted = subject.Version.Next();
+        Sequence? received = default;
+        Sequence persisted = subject.Version.Next();
 
         ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate, persisted, received!));
@@ -132,8 +132,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         var aggregate = subject.ToReference();
-        SignedVersion received = subject.Version;
-        SignedVersion? persisted = default;
+        Sequence received = subject.Version;
+        Sequence? persisted = default;
 
         ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate, persisted!, received));
@@ -146,8 +146,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Reference<SerializableAggregateRoot> aggregate = Reference<SerializableAggregateRoot>.Empty;
-        SignedVersion received = subject.Version;
-        SignedVersion persisted = subject.Version.Next();
+        Sequence received = subject.Version;
+        Sequence persisted = subject.Version.Next();
 
         ArgumentException exception = Assert.Throws<ArgumentException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate, persisted, received));
@@ -160,8 +160,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Reference<SerializableAggregateRoot>? aggregate = default;
-        SignedVersion received = subject.Version;
-        SignedVersion persisted = subject.Version.Next();
+        Sequence received = subject.Version;
+        Sequence persisted = subject.Version.Next();
 
         ArgumentException exception = Assert.Throws<ArgumentException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregate!, persisted, received));
@@ -174,8 +174,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Guid aggregateId = subject.Id;
-        SignedVersion received = subject.Version;
-        SignedVersion persisted = subject.Version.Next();
+        Sequence received = subject.Version;
+        Sequence persisted = subject.Version.Next();
 
         var instance = new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregateId, persisted, received);
 
@@ -189,8 +189,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Guid aggregateId = subject.Id;
-        SignedVersion? received = default;
-        SignedVersion persisted = subject.Version.Next();
+        Sequence? received = default;
+        Sequence persisted = subject.Version.Next();
 
         ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregateId, persisted, received!));
@@ -203,8 +203,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Guid aggregateId = subject.Id;
-        SignedVersion received = subject.Version;
-        SignedVersion? persisted = default;
+        Sequence received = subject.Version;
+        Sequence? persisted = default;
 
         ArgumentNullException exception = Assert.Throws<ArgumentNullException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(aggregateId, persisted!, received));
@@ -217,8 +217,8 @@ public sealed class WhenAggregateConflictDetectedExceptionIsConstructed
     {
         var subject = new SerializableAggregateRoot();
         Guid id = Guid.Empty;
-        SignedVersion received = subject.Version;
-        SignedVersion persisted = subject.Version.Next();
+        Sequence received = subject.Version;
+        Sequence persisted = subject.Version.Next();
 
         ArgumentException exception = Assert.Throws<ArgumentException>(
             () => new AggregateConflictDetectedException<SerializableAggregateRoot>(id, persisted, received));

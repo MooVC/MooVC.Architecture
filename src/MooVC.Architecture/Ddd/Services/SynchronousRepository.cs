@@ -30,7 +30,7 @@ public abstract class SynchronousRepository<TAggregate>
             Cloner.CloneAsync(aggregate, cancellationToken: cancellationToken));
     }
 
-    public override async Task<TAggregate?> GetAsync(Guid id, CancellationToken? cancellationToken = default, SignedVersion? version = default)
+    public override async Task<TAggregate?> GetAsync(Guid id, CancellationToken? cancellationToken = default, Sequence? version = default)
     {
         TAggregate? aggregate = PerformGet(id, version: version);
 
@@ -60,7 +60,7 @@ public abstract class SynchronousRepository<TAggregate>
 
     protected abstract IEnumerable<TAggregate> PerformGetAll();
 
-    protected abstract TAggregate? PerformGet(Guid id, SignedVersion? version = default);
+    protected abstract TAggregate? PerformGet(Guid id, Sequence? version = default);
 
     protected abstract Reference<TAggregate>? PerformGetCurrentVersion(TAggregate aggregate);
 

@@ -30,7 +30,7 @@ public sealed class WhenGetAsyncIsCalled
            .Setup(repo => repo.GetAsync(
                It.Is<Guid>(id => id == aggregateId),
                It.IsAny<CancellationToken?>(),
-               It.Is<SignedVersion>(v => v == default)))
+               It.Is<Sequence>(v => v == default)))
            .ReturnsAsync(secondVersion);
 
         SerializableAggregateRoot value = await repository.Object.GetAsync(context, reference);
@@ -39,7 +39,7 @@ public sealed class WhenGetAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(secondVersion, value);
@@ -49,7 +49,7 @@ public sealed class WhenGetAsyncIsCalled
     public async Task GivenAVersionedReferenceAndARequestForASpecificVersionWhenMoreThanOneVersionExistsThenTheRequestedVersionIsReturnedAsync()
     {
         var aggregate = new SerializableAggregateRoot();
-        SignedVersion firstVersion = aggregate.Version;
+        Sequence firstVersion = aggregate.Version;
         var reference = Reference.Create(aggregate);
 
         aggregate.MarkChangesAsCommitted();
@@ -62,7 +62,7 @@ public sealed class WhenGetAsyncIsCalled
            .Setup(repo => repo.GetAsync(
                It.Is<Guid>(id => id == aggregate.Id),
                It.IsAny<CancellationToken?>(),
-               It.Is<SignedVersion>(v => v == firstVersion)))
+               It.Is<Sequence>(v => v == firstVersion)))
            .ReturnsAsync(aggregate);
 
         AggregateRoot value = await repository.Object.GetAsync(context, reference, latest: false);
@@ -71,7 +71,7 @@ public sealed class WhenGetAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(aggregate, value);
@@ -84,7 +84,7 @@ public sealed class WhenGetAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
+                It.IsAny<Sequence>()))
             .ReturnsAsync(default(SerializableAggregateRoot));
 
         var aggregateId = Guid.NewGuid();
@@ -97,7 +97,7 @@ public sealed class WhenGetAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(aggregateId, exception.Aggregate.Id);
@@ -113,7 +113,7 @@ public sealed class WhenGetAsyncIsCalled
            .Setup(repo => repo.GetAsync(
                It.Is<Guid>(id => id == aggregate.Id),
                It.IsAny<CancellationToken?>(),
-               It.Is<SignedVersion>(v => v == aggregate.Version)))
+               It.Is<Sequence>(v => v == aggregate.Version)))
            .ReturnsAsync(aggregate);
 
         AggregateRoot value = await repository.Object.GetAsync(
@@ -125,7 +125,7 @@ public sealed class WhenGetAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(aggregate, value);
@@ -138,7 +138,7 @@ public sealed class WhenGetAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
+                It.IsAny<Sequence>()))
             .ReturnsAsync(default(SerializableAggregateRoot));
 
         var reference = Reference.Create<SerializableAggregateRoot>(Guid.NewGuid());
@@ -151,7 +151,7 @@ public sealed class WhenGetAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(reference, exception.Aggregate);
@@ -165,7 +165,7 @@ public sealed class WhenGetAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
+                It.IsAny<Sequence>()))
             .ReturnsAsync(default(SerializableAggregateRoot));
 
         var aggregate = new SerializableAggregateRoot();
@@ -179,7 +179,7 @@ public sealed class WhenGetAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(reference, exception.Aggregate);
@@ -193,7 +193,7 @@ public sealed class WhenGetAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
+                It.IsAny<Sequence>()))
             .ReturnsAsync(default(SerializableAggregateRoot));
 
         var reference = Reference.Create<SerializableEventCentricAggregateRoot>(Guid.NewGuid());
@@ -205,7 +205,7 @@ public sealed class WhenGetAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Never);
     }
 
@@ -220,7 +220,7 @@ public sealed class WhenGetAsyncIsCalled
            .Setup(repo => repo.GetAsync(
                It.Is<Guid>(id => id == aggregateId),
                It.IsAny<CancellationToken?>(),
-               It.Is<SignedVersion>(v => v == default)))
+               It.Is<Sequence>(v => v == default)))
            .ReturnsAsync(aggregate);
 
         AggregateRoot value = await repository.Object.GetAsync(context, reference);
@@ -229,7 +229,7 @@ public sealed class WhenGetAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(aggregate, value);

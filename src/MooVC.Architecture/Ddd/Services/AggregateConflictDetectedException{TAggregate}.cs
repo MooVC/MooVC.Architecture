@@ -8,22 +8,22 @@ public sealed class AggregateConflictDetectedException<TAggregate>
     : AggregateConflictDetectedException
     where TAggregate : AggregateRoot
 {
-    public AggregateConflictDetectedException(Reference<TAggregate> aggregate, SignedVersion received)
+    public AggregateConflictDetectedException(Reference<TAggregate> aggregate, Sequence received)
         : base(aggregate, received)
     {
     }
 
-    public AggregateConflictDetectedException(Guid aggregateId, SignedVersion received)
+    public AggregateConflictDetectedException(Guid aggregateId, Sequence received)
         : this(new Reference<TAggregate>(aggregateId), received)
     {
     }
 
-    public AggregateConflictDetectedException(Reference<TAggregate> aggregate, SignedVersion persisted, SignedVersion received)
+    public AggregateConflictDetectedException(Reference<TAggregate> aggregate, Sequence persisted, Sequence received)
         : base(aggregate, persisted, received)
     {
     }
 
-    public AggregateConflictDetectedException(Guid aggregateId, SignedVersion persisted, SignedVersion received)
+    public AggregateConflictDetectedException(Guid aggregateId, Sequence persisted, Sequence received)
         : this(new Reference<TAggregate>(aggregateId), persisted, received)
     {
     }

@@ -27,7 +27,7 @@ public sealed class WhenExecuteIsCalled
             .Setup(repository => repository.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion?>()))
+                It.IsAny<Sequence?>()))
             .ReturnsAsync(aggregate);
 
         await handler.ExecuteAsync(command, CancellationToken.None);

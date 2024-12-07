@@ -14,7 +14,7 @@ using static MooVC.Architecture.Ddd.Resources;
 public sealed class AggregateHistoryInvalidForStateException
     : ArgumentException
 {
-    internal AggregateHistoryInvalidForStateException(AggregateRoot aggregate, IEnumerable<DomainEvent> events, SignedVersion startingVersion)
+    internal AggregateHistoryInvalidForStateException(AggregateRoot aggregate, IEnumerable<DomainEvent> events, Sequence startingVersion)
         : this(Create(aggregate), events, startingVersion)
     {
     }
@@ -22,7 +22,7 @@ public sealed class AggregateHistoryInvalidForStateException
     internal AggregateHistoryInvalidForStateException(
         Reference aggregate,
         IEnumerable<DomainEvent> events,
-        SignedVersion startingVersion)
+        Sequence startingVersion)
         : base(Format(AggregateHistoryInvalidForStateExceptionMessage, aggregate.Id, aggregate.Version, aggregate.Type.Name, startingVersion))
     {
         Aggregate = aggregate;
@@ -35,14 +35,14 @@ public sealed class AggregateHistoryInvalidForStateException
     {
         Aggregate = info.TryGetReference(nameof(Aggregate));
         Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
-        StartingVersion = info.TryGetValue(nameof(StartingVersion), defaultValue: SignedVersion.Empty);
+        StartingVersion = info.TryGetValue(nameof(StartingVersion), defaultValue: Sequence.Empty);
     }
 
     public Reference Aggregate { get; }
 
     public IEnumerable<DomainEvent> Events { get; }
 
-    public SignedVersion StartingVersion { get; }
+    public Sequence StartingVersion { get; }
 
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
@@ -50,6 +50,6 @@ public sealed class AggregateHistoryInvalidForStateException
 
         _ = info.TryAddReference(nameof(Aggregate), Aggregate);
         _ = info.TryAddEnumerable(nameof(Events), Events);
-        _ = info.TryAddValue(nameof(StartingVersion), StartingVersion, defaultValue: SignedVersion.Empty);
+        _ = info.TryAddValue(nameof(StartingVersion), StartingVersion, defaultValue: Sequence.Empty);
     }
 }

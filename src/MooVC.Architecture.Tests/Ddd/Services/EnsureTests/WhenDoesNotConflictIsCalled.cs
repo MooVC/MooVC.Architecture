@@ -39,7 +39,7 @@ public sealed class WhenDoesNotConflictIsCalled
     public void GivenANewAggregateAndAnExistingVersionThatConflictsThenAnAggregateConflictDetectedExceptionIsThrown()
     {
         var proposed = new SerializableAggregateRoot();
-        SignedVersion current = proposed.Version.Next();
+        Sequence current = proposed.Version.Next();
 
         AggregateConflictDetectedException<SerializableAggregateRoot> exception =
             Assert.Throws<AggregateConflictDetectedException<SerializableAggregateRoot>>(

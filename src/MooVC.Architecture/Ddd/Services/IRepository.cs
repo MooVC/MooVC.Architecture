@@ -16,7 +16,7 @@ public interface IRepository<TAggregate>
 
     Task<IEnumerable<TAggregate>> GetAllAsync(CancellationToken? cancellationToken = default);
 
-    Task<TAggregate?> GetAsync(Guid id, CancellationToken? cancellationToken = default, SignedVersion? version = default);
+    Task<TAggregate?> GetAsync(Guid id, CancellationToken? cancellationToken = default, Sequence? version = default);
 
     Task SaveAsync(TAggregate aggregate, CancellationToken? cancellationToken = default);
 }

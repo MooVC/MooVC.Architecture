@@ -11,7 +11,7 @@ public static partial class RepositoryExtensions
         Message context,
         Guid id,
         CancellationToken? cancellationToken = default,
-        SignedVersion? version = default)
+        Sequence? version = default)
         where TAggregate : AggregateRoot
     {
         TAggregate? aggregate = await repository

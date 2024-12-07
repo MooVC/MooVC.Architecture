@@ -360,15 +360,6 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unversioned.
-        /// </summary>
-        internal static string SignedVersionUnversioned {
-            get {
-                return ResourceManager.GetString("SignedVersionUnversioned", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A non-empty ID for the aggregate this versioned reference represents must be provided..
         /// </summary>
         internal static string VersionedReferenceIdRequired {

@@ -19,13 +19,17 @@ This release focuses on the removal of functionality that has been rendered obso
 - Added Cqrs.Services.IHandler<T> to encapsulate a handler for a message that yields no response.
 - Added Cqrs.Services.IHandler<T,TResult> to encapsulate a handler for a message that yields a specific response.
 - Changed methods accepting a CancellationToken so that it is no longer an optional parameter (**Breaking Change**).
-- Replaced Message with Cqrs.Message (**Breaking Change**).
+- Changed Ddd.AggregateRoot so that it no longer derives from Entity<Guid> (**Breaking Change**).
+- Moved Entity<T>, and all supporting elements, to Ddd.Entity<T> (**Breaking Change**).
+- Moved Message with Cqrs.Message (**Breaking Change**).
+- Renamed Ddd.SignedVersion to Sequence (**Breaking Change**).
 - Removed Cqrs.Services.EnumerableResult (**Breaking Change**).
 - Removed Cqrs.Services.IQueryEngine and all related classes (**Breaking Change**).
 - Removed Cqrs.Services.IQueryHandler and all related classes (**Breaking Change**).
 - Removed Cqrs.Services.PaginatedQuery (**Breaking Change**).
 - Removed Cqrs.Services.PaginatedResult (**Breaking Change**).
 - Removed Cqrs.Services.Result (**Breaking Change**).
+- Removed Ddd.Reference<T1-5> variants in favour of discriminated unions (**Breaking Change**).
 - Removed ImplicitValue in favour of the .NET record type (**Breaking Change**).
 - Removed Services.IBus and all related classes in favour of Cqrs.Services.IMediator (**Breaking Change**).
 - Removed Services.IHandler and all related classes in favour of Cqrs.Services.IHandler (**Breaking Change**).

@@ -20,7 +20,9 @@ public interface IMediator
     /// </summary>
     /// <typeparam name="T">The type of the message.</typeparam>
     /// <param name="message">The message to be dispatched.</param>
-    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <param name="cancellationToken">
+    /// A <see cref="CancellationToken"/> to observe while waiting for the task to complete, enabling the operation to be canceled.
+    /// </param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     /// <exception cref="NotSupportedException">There is no corrosponding handler for the message type <typeparamref name="T"/></exception>
     Task InvokeAsync<T>(T message, CancellationToken cancellationToken)
@@ -32,7 +34,9 @@ public interface IMediator
     /// <typeparam name="T">The type of the message.</typeparam>
     /// <typeparam name="TResult">The type of the result message.</typeparam>
     /// <param name="message">The message to be dispatched.</param>
-    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <param name="cancellationToken">
+    /// A <see cref="CancellationToken"/> to observe while waiting for the task to complete, enabling the operation to be canceled.
+    /// </param>
     /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation, containing the result message.</returns>
     /// <exception cref="NotSupportedException">
     /// There is no corrosponding handler for the type combinations of <typeparamref name="T"/> and <typeparamref name="TResult"/>.

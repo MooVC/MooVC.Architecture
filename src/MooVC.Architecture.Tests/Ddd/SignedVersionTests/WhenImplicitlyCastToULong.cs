@@ -7,7 +7,7 @@ public sealed class WhenImplicitlyCastToULong
     [Fact]
     public void GivenAnEmptyVersionThenTheMinumumNumberIsReturned()
     {
-        SignedVersion version = SignedVersion.Empty;
+        Sequence version = Sequence.Empty;
         ulong number = version;
 
         Assert.Equal(version.Number, number);
@@ -18,7 +18,7 @@ public sealed class WhenImplicitlyCastToULong
     public void GivenAnVersionThenTheVersionNumberIsReturned()
     {
         var aggregate = new SerializableAggregateRoot();
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
         ulong number = version;
 
         Assert.Equal(version.Number, number);
@@ -27,7 +27,7 @@ public sealed class WhenImplicitlyCastToULong
     [Fact]
     public void GivenANullVersionThenTheMinumumNumberIsReturned()
     {
-        SignedVersion? version = default;
+        Sequence? version = default;
         ulong number = version;
 
         Assert.Equal(ulong.MinValue, number);

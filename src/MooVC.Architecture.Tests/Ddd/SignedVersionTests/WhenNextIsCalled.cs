@@ -14,8 +14,8 @@ public sealed class WhenNextIsCalled
     [Fact]
     public void GivenAVersionThenTheNextVersionIsReturned()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
 
         Assert.True(next.IsNext(version));
     }
@@ -23,8 +23,8 @@ public sealed class WhenNextIsCalled
     [Fact]
     public void GivenAVersionThenTheHeaderOfTheNextVersionIsTheFooterOfThePreviousVersion()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
 
         Assert.Equal(version.Footer, next.Header);
     }
@@ -32,8 +32,8 @@ public sealed class WhenNextIsCalled
     [Fact]
     public void GivenAVersionThenTheHeaderOfTheNextVersionNumberIsOneHigherThanThePreviousVersion()
     {
-        SignedVersion version = aggregate.Version;
-        SignedVersion next = version.Next();
+        Sequence version = aggregate.Version;
+        Sequence next = version.Next();
 
         Assert.True(next.Number - version.Number == 1);
     }

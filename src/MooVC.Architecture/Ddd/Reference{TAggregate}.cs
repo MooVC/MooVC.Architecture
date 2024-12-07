@@ -17,12 +17,12 @@ public sealed class Reference<TAggregate>
     {
     }
 
-    internal Reference(Guid id, SignedVersion? version = default)
+    internal Reference(Guid id, Sequence? version = default)
         : this(id, typeof(TAggregate), version: version)
     {
     }
 
-    internal Reference(Guid id, Type type, SignedVersion? version = default)
+    internal Reference(Guid id, Type type, Sequence? version = default)
        : base(id, type, version: version)
     {
         _ = IsNotEmpty(id, message: ReferenceIdRequired);
@@ -30,7 +30,7 @@ public sealed class Reference<TAggregate>
     }
 
     private Reference()
-        : base(Guid.Empty, typeof(TAggregate), SignedVersion.Empty)
+        : base(Guid.Empty, typeof(TAggregate), Sequence.Empty)
     {
     }
 
@@ -41,7 +41,7 @@ public sealed class Reference<TAggregate>
 
     public static Reference<TAggregate> Empty => empty.Value;
 
-    public static Reference<TAggregate> Create(Guid id, SignedVersion? version = default)
+    public static Reference<TAggregate> Create(Guid id, Sequence? version = default)
     {
         return (Reference<TAggregate>)Create(id, typeof(TAggregate), version: version);
     }

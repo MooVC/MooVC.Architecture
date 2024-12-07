@@ -2,36 +2,20 @@
 
 using System;
 using System.Runtime.Serialization;
-using MooVC.Serialization;
+using Ardalis.GuardClauses;
 using static MooVC.Architecture.Ddd.Reference;
 using static MooVC.Architecture.Ddd.Resources;
-using static MooVC.Ensure;
 
-[Serializable]
 public abstract partial class AggregateRoot
-    : Entity<Guid>
 {
+    private readonly List<DomainEvent> changes = new();
+
     protected AggregateRoot(Guid id)
-        : base(id)
     {
-        _ = IsNotEmpty(id, message: AggregateRootIdRequired);
-
-        State = new AggregateState(new SignedVersion(), SignedVersion.Empty);
+        Id = Guard.Against.NullOrEmpty(id, message: IdRequired);
     }
 
-    protected AggregateRoot(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        State = info.GetInternalValue<AggregateState>(nameof(State));
-    }
-
-    public event EventHandler? ChangesMarkedAsCommitted;
-
-    public event EventHandler? ChangesMarkedAsUncommitted;
-
-    public event EventHandler? ChangesRolledBack;
-
-    public SignedVersion Version => State.Current;
+    public Sequence Version => State.Current;
 
     public bool HasUncommittedChanges => State.HasUncommittedChanges;
 
@@ -52,9 +36,9 @@ public abstract partial class AggregateRoot
         return Reference<AggregateRoot>.Empty;
     }
 
-    public static implicit operator SignedVersion(AggregateRoot? aggregate)
+    public static implicit operator Sequence(AggregateRoot? aggregate)
     {
-        return aggregate?.Version ?? SignedVersion.Empty;
+        return aggregate?.Version ?? Sequence.Empty;
     }
 
     public override bool Equals(object? other)

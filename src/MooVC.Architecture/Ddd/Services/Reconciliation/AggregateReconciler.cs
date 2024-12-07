@@ -51,13 +51,13 @@ public abstract class AggregateReconciler
         IEnumerable<DomainEvent> events,
         CancellationToken? cancellationToken = default)
     {
-        IEnumerable<SignedVersion> versions = events
+        IEnumerable<Sequence> versions = events
             .Select(@event => @event.Aggregate.Version)
             .Distinct();
 
-        SignedVersion previous = versions.First();
+        Sequence previous = versions.First();
 
-        foreach (SignedVersion next in versions.Skip(1))
+        foreach (Sequence next in versions.Skip(1))
         {
             if (!next.IsNext(previous))
             {
@@ -80,8 +80,8 @@ public abstract class AggregateReconciler
     protected virtual Task OnConflictDetectedAsync(
         Reference aggregate,
         IEnumerable<DomainEvent> events,
-        SignedVersion next,
-        SignedVersion previous,
+        Sequence next,
+        Sequence previous,
         CancellationToken? cancellationToken = default)
     {
         return ConflictDetected.InvokeAsync(
@@ -113,7 +113,7 @@ public abstract class AggregateReconciler
             new UnsupportedAggregateTypeDetectedAsyncEventArgs(type, cancellationToken: cancellationToken));
     }
 
-    protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(IEnumerable<DomainEvent> events, SignedVersion version)
+    protected virtual IEnumerable<DomainEvent> RemovePreviousVersions(IEnumerable<DomainEvent> events, Sequence version)
     {
         return events
             .Where(@event => @event.Aggregate.Version.CompareTo(version) > 0)

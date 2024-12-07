@@ -8,7 +8,7 @@ internal static partial class DictionaryExtensions
     public static Reference<TAggregate> DetermineVersionedKey<TAggregate>(
         this IDictionary<Reference<TAggregate>, TAggregate> source,
         Guid aggregateId,
-        SignedVersion? version)
+        Sequence? version)
         where TAggregate : AggregateRoot
     {
         Reference<TAggregate>? key = default;

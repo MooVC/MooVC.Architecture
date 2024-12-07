@@ -1,6 +1,7 @@
 ﻿namespace MooVC.Architecture.EntityMaximumIdValueExceededExceptionTests;
 
 using System;
+using MooVC.Architecture.Ddd;
 using MooVC.Architecture.Serialization;
 using Xunit;
 

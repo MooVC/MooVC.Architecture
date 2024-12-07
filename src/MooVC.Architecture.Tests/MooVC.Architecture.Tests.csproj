@@ -6,7 +6,7 @@
     <RootNamespace>MooVC.Architecture</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.*" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Ddd\Specifications\EnsureTests\Resources.Designer.cs">

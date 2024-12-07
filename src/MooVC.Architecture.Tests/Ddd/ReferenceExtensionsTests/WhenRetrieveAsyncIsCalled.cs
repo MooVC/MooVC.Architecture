@@ -104,7 +104,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Never);
 
         Assert.Equal(context, exception.Context);
@@ -117,7 +117,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
+                It.IsAny<Sequence>()))
             .ReturnsAsync(default(SerializableAggregateRoot));
 
         var aggregateId = Guid.NewGuid();
@@ -131,7 +131,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(reference, exception.Aggregate);
@@ -145,7 +145,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
+                It.IsAny<Sequence>()))
             .ReturnsAsync(default(SerializableAggregateRoot));
 
         var aggregateId = Guid.NewGuid();
@@ -158,7 +158,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Never);
     }
 
@@ -174,7 +174,7 @@ public sealed class WhenRetrieveAsyncIsCalled
            .Setup(repo => repo.GetAsync(
                It.Is<Guid>(id => id == aggregateId),
                It.IsAny<CancellationToken?>(),
-               It.Is<SignedVersion>(v => v == default)))
+               It.Is<Sequence>(v => v == default)))
            .ReturnsAsync(secondAggregate.Object);
 
         SerializableAggregateRoot value = await reference.RetrieveAsync(context, repository.Object);
@@ -183,7 +183,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Once);
 
         Assert.Equal(secondAggregate.Object, value);
@@ -197,8 +197,8 @@ public sealed class WhenRetrieveAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.Is<Guid>(id => id != Guid.Empty),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
-            .ReturnsAsync<Guid, CancellationToken?, SignedVersion?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
+                It.IsAny<Sequence>()))
+            .ReturnsAsync<Guid, CancellationToken?, Sequence?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
                 (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
 
         AggregateException exception = await Assert.ThrowsAsync<AggregateException>(
@@ -210,7 +210,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Exactly(references.Count() - expected));
 
         int actual = exception
@@ -229,7 +229,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.Is<Guid>(id => id != Guid.Empty),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
+                It.IsAny<Sequence>()))
             .ReturnsAsync<Guid, CancellationToken?, ulong?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
                 (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
 
@@ -243,7 +243,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Exactly(expected));
 
         Assert.Equal(expected, results.Count());
@@ -263,7 +263,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             .Setup(repo => repo.GetAsync(
                 It.Is(predicate),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()))
+                It.IsAny<Sequence>()))
             .ReturnsAsync<Guid, CancellationToken?, ulong?, IRepository<SerializableAggregateRoot>, SerializableAggregateRoot?>(
                 (id, _, version) => new Mock<SerializableAggregateRoot>(id).Object);
 
@@ -274,7 +274,7 @@ public sealed class WhenRetrieveAsyncIsCalled
             repo => repo.GetAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken?>(),
-                It.IsAny<SignedVersion>()),
+                It.IsAny<Sequence>()),
             Times.Exactly(references.Count));
 
         Guid[] expected = references

@@ -8,7 +8,7 @@ public sealed class WhenImplicitlyCastToGuid
     [Fact]
     public void GivenAnEmptyVersionThenAnEmptyGuidIsReturned()
     {
-        SignedVersion version = SignedVersion.Empty;
+        Sequence version = Sequence.Empty;
         Guid signature = version;
 
         Assert.Equal(version.Signature, signature);
@@ -19,7 +19,7 @@ public sealed class WhenImplicitlyCastToGuid
     public void GivenAnVersionThenTheVersionSignatureIsReturned()
     {
         var aggregate = new SerializableAggregateRoot();
-        SignedVersion version = aggregate.Version;
+        Sequence version = aggregate.Version;
         Guid signature = version;
 
         Assert.Equal(version.Signature, signature);
@@ -28,7 +28,7 @@ public sealed class WhenImplicitlyCastToGuid
     [Fact]
     public void GivenANullVersionThenAnEmptyGuidIsReturned()
     {
-        SignedVersion? version = default;
+        Sequence? version = default;
         Guid signature = version;
 
         Assert.Equal(Guid.Empty, signature);

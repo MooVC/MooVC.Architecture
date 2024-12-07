@@ -3,7 +3,7 @@
     <Description>A framework designed to support the rapid development of applications that adhere to the Domain Driven Design architectural style.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MooVC" Version="8.0.0-beta.2" />
+    <PackageReference Include="MooVC" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Cqrs\Message.Resources.Designer.cs">
@@ -21,10 +21,20 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Trace.Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Ddd\EntityMaximumIdValueExceededException.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EntityMaximumIdValueExceededException.Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Ddd\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Ddd\Sequence.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Sequence.Resources.resx</DependentUpon>
     </Compile>
     <Compile Update="Ddd\Services\Reconciliation\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -70,9 +80,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Trace.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Ddd\EntityMaximumIdValueExceededException.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EntityMaximumIdValueExceededException.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Ddd\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Ddd\Sequence.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Sequence.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Ddd\Services\Reconciliation\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -59,7 +59,7 @@ public class WhenSaveAsyncIsCalled
                 () => repository.SaveAsync(aggregate));
 
         Assert.Equal(aggregate.Id, exception.Aggregate.Id);
-        Assert.Equal(SignedVersion.Empty, exception.Persisted);
+        Assert.Equal(Sequence.Empty, exception.Persisted);
     }
 
     [Fact]

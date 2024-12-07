@@ -8,7 +8,7 @@ public sealed class WhenImplicitlyCastToSignedVersion
     public void GivenAnEmptyReferenceThenAnEmptyVersionIsReturned()
     {
         Reference reference = Reference<SerializableAggregateRoot>.Empty;
-        SignedVersion version = reference;
+        Sequence version = reference;
 
         Assert.Equal(reference.Version, version);
         Assert.True(version.IsEmpty);
@@ -19,7 +19,7 @@ public sealed class WhenImplicitlyCastToSignedVersion
     {
         var aggregate = new SerializableAggregateRoot();
         var reference = aggregate.ToReference();
-        SignedVersion version = reference;
+        Sequence version = reference;
 
         Assert.Equal(reference.Version, version);
         Assert.Equal(aggregate.Version, version);
@@ -31,9 +31,9 @@ public sealed class WhenImplicitlyCastToSignedVersion
     public void GivenANullReferenceThenAnEmptyVersionIsReturned()
     {
         Reference? reference = default;
-        SignedVersion version = reference;
+        Sequence version = reference;
 
-        Assert.Equal(SignedVersion.Empty, version);
+        Assert.Equal(Sequence.Empty, version);
         Assert.True(version.IsEmpty);
     }
 }

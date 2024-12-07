@@ -65,7 +65,7 @@ jobs:
     - name: Upload Code Coverage
       uses: codecov/codecov-action@v3
       with:
-        fail_ci_if_error: true
+        fail_ci_if_error: false
 
     - name: Pack Solution
       run: dotnet pack ${{ env.solution }} --configuration ${{ env.configuration }} --no-build --output ./artifacts -p:Version=${{ env.semantic }}

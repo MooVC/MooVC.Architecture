@@ -34,7 +34,7 @@ public abstract class SynchronousRepository<TAggregate>
     {
         TAggregate? aggregate = PerformGet(id, version: version);
 
-        if (aggregate is { })
+        if (aggregate is not null)
         {
             return await Cloner
                 .CloneAsync(aggregate, cancellationToken: cancellationToken)

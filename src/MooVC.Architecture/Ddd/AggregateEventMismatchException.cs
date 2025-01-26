@@ -1,14 +1,10 @@
 ﻿namespace MooVC.Architecture.Ddd;
 
-using System;
-using System.Runtime.Serialization;
-using MooVC.Architecture.Ddd.Serialization;
+using Ardalis.GuardClauses;
 using static System.String;
+using static MooVC.Architecture.Ddd.AggregateEventMismatchException_Resources;
 using static MooVC.Architecture.Ddd.Reference;
-using static MooVC.Architecture.Ddd.Resources;
-using static MooVC.Ensure;
 
-[Serializable]
 public sealed class AggregateEventMismatchException
     : ArgumentException
 {
@@ -24,32 +20,16 @@ public sealed class AggregateEventMismatchException
         EventAggregate = eventAggregate;
     }
 
-    private AggregateEventMismatchException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        Aggregate = info.TryGetReference(nameof(Aggregate));
-        EventAggregate = info.TryGetReference(nameof(EventAggregate));
-    }
-
     public Reference Aggregate { get; }
 
     public Reference EventAggregate { get; }
 
-    public override void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        base.GetObjectData(info, context);
-
-        _ = info.TryAddReference(nameof(Aggregate), Aggregate);
-        _ = info.TryAddReference(nameof(EventAggregate), EventAggregate);
-    }
-
     private static string FormatMessage(Reference aggregate, Reference eventAggregate)
     {
-        _ = IsNotNull(aggregate, message: AggregateEventMismatchExceptionAggregateRequired);
-        _ = IsNotNull(eventAggregate, message: AggregateEventMismatchExceptionEventAggregateRequired);
+        _ = Guard.Against.Null(aggregate, message: FormatMessageAggregateRequired);
+        _ = Guard.Against.Null(eventAggregate, message: FormatMessageEventAggregateRequired);
 
-        return Format(
-            AggregateEventMismatchExceptionMessage,
+        return FormatMessageAggregateEventMismatch.Format(
             aggregate.Id,
             aggregate.Type.Name,
             aggregate.Version,

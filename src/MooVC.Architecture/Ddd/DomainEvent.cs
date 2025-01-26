@@ -2,25 +2,18 @@
 
 using System;
 using System.Runtime.Serialization;
-using MooVC.Serialization;
+using Ardalis.GuardClauses;
+using MooVC.Architecture.Cqrs;
 using static MooVC.Architecture.Ddd.Resources;
-using static MooVC.Ensure;
 
-[Serializable]
-public abstract class DomainEvent
+public abstract record DomainEvent
     : Message
 {
-    protected DomainEvent(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        Aggregate = info.GetValue<Reference>(nameof(Aggregate));
-    }
-
     private protected DomainEvent(Reference aggregate, Message context)
-        : base(context: context)
+        : base(context)
     {
-        Aggregate = IsNotNull(aggregate, message: DomainEventAggregateRequired);
-        _ = IsNotNull(context, message: DomainEventContextRequired);
+        Aggregate = Guard.Against.Null(aggregate, message: DomainEventAggregateRequired);
+        _ = Guard.Against.Null(context, message: DomainEventContextRequired);
     }
 
     public Reference Aggregate { get; }

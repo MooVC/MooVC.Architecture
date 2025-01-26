@@ -1,8 +1,4 @@
-﻿namespace MooVC.Architecture.Services;
-
-using System.Threading;
-using System.Threading.Tasks;
-using MooVC.Architecture.Cqrs;
+﻿namespace MooVC.Architecture.Cqrs.Services;
 
 /// <summary>
 /// Defines a contract for encapsulating request-response interactions within a system, centralizing external communications
@@ -18,30 +14,46 @@ public interface IMediator
     /// <summary>
     /// Asynchronously dispatches a message to its respective handler for processing.
     /// </summary>
-    /// <typeparam name="T">The type of the message.</typeparam>
-    /// <param name="message">The message to be dispatched.</param>
+    /// <typeparam name="T">
+    /// The type of the message.
+    /// </typeparam>
+    /// <param name="message">
+    /// The message to be dispatched.
+    /// </param>
     /// <param name="cancellationToken">
     /// A <see cref="CancellationToken"/> to observe while waiting for the task to complete, enabling the operation to be canceled.
     /// </param>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    /// <exception cref="NotSupportedException">There is no corrosponding handler for the message type <typeparamref name="T"/></exception>
-    Task InvokeAsync<T>(T message, CancellationToken cancellationToken)
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous operation.
+    /// </returns>
+    /// <exception cref="NotSupportedException">
+    /// There is no corrosponding handler for the message type <typeparamref name="T"/>
+    /// </exception>
+    Task Invoke<T>(T message, CancellationToken cancellationToken)
         where T : Message;
 
     /// <summary>
     /// Asynchronously dispatches a message to its respective handler for processing and returns a response message.
     /// </summary>
-    /// <typeparam name="T">The type of the message.</typeparam>
-    /// <typeparam name="TResult">The type of the result message.</typeparam>
-    /// <param name="message">The message to be dispatched.</param>
+    /// <typeparam name="T">
+    /// The type of the message.
+    /// </typeparam>
+    /// <typeparam name="TResult">
+    /// The type of the result message.
+    /// </typeparam>
+    /// <param name="message">
+    /// The message to be dispatched.
+    /// </param>
     /// <param name="cancellationToken">
     /// A <see cref="CancellationToken"/> to observe while waiting for the task to complete, enabling the operation to be canceled.
     /// </param>
-    /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation, containing the result message.</returns>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asynchronous operation, containing the result message.
+    /// </returns>
     /// <exception cref="NotSupportedException">
     /// There is no corrosponding handler for the type combinations of <typeparamref name="T"/> and <typeparamref name="TResult"/>.
     /// </exception>
-    Task<TResult> InvokeAsync<T, TResult>(T message, CancellationToken cancellationToken)
+    Task<TResult> Invoke<T, TResult>(T message, CancellationToken cancellationToken)
         where T : Message
         where TResult : Message;
 }

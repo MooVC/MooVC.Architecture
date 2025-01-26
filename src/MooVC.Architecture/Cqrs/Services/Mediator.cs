@@ -1,11 +1,8 @@
 ﻿namespace MooVC.Architecture.Cqrs.Services;
 
-using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.DependencyInjection;
-using MooVC.Architecture.Services;
 using static System.String;
 using static MooVC.Architecture.Cqrs.Services.Mediator_Resources;
 
@@ -26,30 +23,32 @@ public sealed class Mediator
     /// <param name="provider">
     /// The <see cref="IServiceProvider"/> used by the mediator to resolve service instances, particularly handlers for specific requests.
     /// </param>
-    /// <exception cref="ArgumentNullException">Thrown when the provided <paramref name="provider"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when the provided <paramref name="provider"/> is <c>null</c>.
+    /// </exception>
     public Mediator(IServiceProvider provider)
     {
         this.provider = Guard.Against.Null(provider, message: ProviderRequired);
     }
 
     /// <inheritdoc />
-    public Task InvokeAsync<T>(T message, CancellationToken cancellationToken)
+    public Task Invoke<T>(T message, CancellationToken cancellationToken)
         where T : Message
     {
         IHandler<T>? handler = provider.GetService<IHandler<T>>()
-            ?? throw new NotSupportedException(Format(InvokeAsyncHandlerNotFound, typeof(T).FullName));
+            ?? throw new NotSupportedException(InvokeAsyncHandlerNotFound.Format(typeof(T)));
 
-        return handler.ExecuteAsync(message, cancellationToken);
+        return handler.Execute(message, cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task<TResult> InvokeAsync<T, TResult>(T message, CancellationToken cancellationToken)
+    public Task<TResult> Invoke<T, TResult>(T message, CancellationToken cancellationToken)
         where T : Message
         where TResult : Message
     {
         IHandler<T, TResult>? handler = provider.GetService<IHandler<T, TResult>>()
-            ?? throw new NotSupportedException(Format(InvokeAsyncHandlerCombinationNotFound, typeof(T).FullName, typeof(TResult).FullName));
+            ?? throw new NotSupportedException(InvokeAsyncHandlerCombinationNotFound.Format(typeof(T), typeof(TResult)));
 
-        return handler.ExecuteAsync(message, cancellationToken);
+        return handler.Execute(message, cancellationToken);
     }
 }

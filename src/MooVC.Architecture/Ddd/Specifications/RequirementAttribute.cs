@@ -27,7 +27,7 @@ public sealed class RequirementAttribute
         ResourceManager manager = new(resourceType);
         string? description = manager.GetString(resourceName);
 
-        if (description is { })
+        if (description is not null)
         {
             return description;
         }

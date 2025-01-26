@@ -74,7 +74,7 @@ public sealed class DefaultSnapshotProvider<TSequencedEvents>
             {
                 proxy = external(aggregate);
 
-                if (proxy is { })
+                if (proxy is not null)
                 {
                     proxies[aggregate] = proxy;
                 }

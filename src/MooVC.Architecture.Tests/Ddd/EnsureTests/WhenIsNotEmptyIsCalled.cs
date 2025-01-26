@@ -65,7 +65,7 @@ public sealed class WhenIsNotEmptyIsCalled
     private static T Assertion<T>(T? argument, string? argumentName, string? message, T? @default = default)
         where T : Reference
     {
-        if (argumentName is { })
+        if (argumentName is not null)
         {
             return IsNotEmpty(argument, argumentName: argumentName, @default: @default, message: message);
         }
@@ -83,7 +83,7 @@ public sealed class WhenIsNotEmptyIsCalled
 
         Assert.Equal(argumentName, exception.ParamName);
 
-        if (message is { })
+        if (message is not null)
         {
             Assert.StartsWith(message, exception.Message);
         }

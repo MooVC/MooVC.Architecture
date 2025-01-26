@@ -117,21 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AggregateDoesNotExistExceptionContextRequired" xml:space="preserve">
-    <value>The context in which the aggregate was requested must be provided.</value>
-  </data>
-  <data name="AggregateDoesNotExistExceptionMessage" xml:space="preserve">
-    <value>An empty reference for aggregate type {0} cannot be retrieved.</value>
-  </data>
-  <data name="AggregateEventMismatchExceptionAggregateRequired" xml:space="preserve">
-    <value>The aggregate from which the request originated must be provided.</value>
-  </data>
-  <data name="AggregateEventMismatchExceptionEventAggregateRequired" xml:space="preserve">
-    <value>The aggregate that mismatches with the aggregate from which the request originated must be provided.</value>
-  </data>
-  <data name="AggregateEventMismatchExceptionMessage" xml:space="preserve">
-    <value>Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}.</value>
-  </data>
   <data name="AggregateEventSequenceUnorderedExceptionAggregateRequired" xml:space="preserve">
     <value>The aggregate from which the request originated must be provided.</value>
   </data>

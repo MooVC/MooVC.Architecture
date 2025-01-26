@@ -9,7 +9,7 @@ public static partial class EnumerableExtensions
     {
         if (references is null)
         {
-            return Enumerable.Empty<Reference>();
+            return [];
         }
 
         return references
@@ -22,7 +22,7 @@ public static partial class EnumerableExtensions
     {
         if (references is null)
         {
-            return Enumerable.Empty<Reference<TAggregate>>();
+            return [];
         }
 
         return references

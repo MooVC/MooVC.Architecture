@@ -61,51 +61,6 @@ namespace MooVC.Architecture.Ddd {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The context in which the aggregate was requested must be provided..
-        /// </summary>
-        internal static string AggregateDoesNotExistExceptionContextRequired {
-            get {
-                return ResourceManager.GetString("AggregateDoesNotExistExceptionContextRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An empty reference for aggregate type {0} cannot be retrieved..
-        /// </summary>
-        internal static string AggregateDoesNotExistExceptionMessage {
-            get {
-                return ResourceManager.GetString("AggregateDoesNotExistExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The aggregate from which the request originated must be provided..
-        /// </summary>
-        internal static string AggregateEventMismatchExceptionAggregateRequired {
-            get {
-                return ResourceManager.GetString("AggregateEventMismatchExceptionAggregateRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The aggregate that mismatches with the aggregate from which the request originated must be provided..
-        /// </summary>
-        internal static string AggregateEventMismatchExceptionEventAggregateRequired {
-            get {
-                return ResourceManager.GetString("AggregateEventMismatchExceptionEventAggregateRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Event {3:p}, version {5} of type {4} does not apply to aggregate {0:p}, version {2} of type {1}..
-        /// </summary>
-        internal static string AggregateEventMismatchExceptionMessage {
-            get {
-                return ResourceManager.GetString("AggregateEventMismatchExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The aggregate from which the request originated must be provided..
         /// </summary>
         internal static string AggregateEventSequenceUnorderedExceptionAggregateRequired {

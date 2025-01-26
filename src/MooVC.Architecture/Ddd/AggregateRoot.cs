@@ -1,18 +1,18 @@
 ﻿namespace MooVC.Architecture.Ddd;
 
-using System;
-using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using static MooVC.Architecture.Ddd.Reference;
 using static MooVC.Architecture.Ddd.Resources;
 
 public abstract partial class AggregateRoot
+    : Entity<Guid>
 {
-    private readonly List<DomainEvent> changes = new();
-
     protected AggregateRoot(Guid id)
+        : base(id)
     {
-        Id = Guard.Against.NullOrEmpty(id, message: IdRequired);
+        _ = Guard.Against.Default(id, message: AggregateRootIdRequired);
+
+        State = new AggregateState(new Sequence(), Sequence.Empty);
     }
 
     public Sequence Version => State.Current;
@@ -51,36 +51,12 @@ public abstract partial class AggregateRoot
         return base.GetHashCode() ^ Version.GetHashCode();
     }
 
-    public override void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        base.GetObjectData(info, context);
-
-        info.AddInternalValue(nameof(State), State);
-    }
-
     public virtual void MarkChangesAsCommitted()
     {
         if (HasUncommittedChanges)
         {
             State = State.Commit();
-
-            OnChangesMarkedAsCommitted();
         }
-    }
-
-    protected virtual void OnChangesMarkedAsCommitted(EventArgs? args = default)
-    {
-        ChangesMarkedAsCommitted?.Invoke(this, args ?? EventArgs.Empty);
-    }
-
-    protected virtual void OnChangesMarkedAsUncommitted(EventArgs? args = default)
-    {
-        ChangesMarkedAsUncommitted?.Invoke(this, args ?? EventArgs.Empty);
-    }
-
-    protected virtual void OnChangesRolledBack(EventArgs? args = default)
-    {
-        ChangesRolledBack?.Invoke(this, args ?? EventArgs.Empty);
     }
 
     protected virtual void MarkChangesAsUncommitted()
@@ -88,8 +64,6 @@ public abstract partial class AggregateRoot
         if (!HasUncommittedChanges)
         {
             State = State.Increment();
-
-            OnChangesMarkedAsUncommitted();
         }
     }
 
@@ -98,8 +72,6 @@ public abstract partial class AggregateRoot
         if (HasUncommittedChanges)
         {
             State = State.Rollback();
-
-            OnChangesRolledBack();
         }
     }
 }

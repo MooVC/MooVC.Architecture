@@ -9,7 +9,7 @@ public static partial class ReferenceExtensions
     {
         aggregate = reference as Reference<TAggregate>;
 
-        if (aggregate is { })
+        if (aggregate is not null)
         {
             return true;
         }

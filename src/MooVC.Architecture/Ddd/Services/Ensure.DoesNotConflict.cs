@@ -5,7 +5,7 @@ public static class Ensure
     public static void DoesNotConflict<TAggregate>(TAggregate proposed, Sequence? currentVersion = default)
         where TAggregate : AggregateRoot
     {
-        if (currentVersion is { } && !currentVersion.IsEmpty)
+        if (currentVersion is not null && !currentVersion.IsEmpty)
         {
             if (!proposed.Version.IsNext(currentVersion))
             {

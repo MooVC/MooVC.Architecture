@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using MooVC.Collections.Generic;
+using MooVC.Linq;
 using MooVC.Serialization;
 using static MooVC.Architecture.Ddd.Resources;
 
-[Serializable]
 public abstract partial class EventCentricAggregateRoot
     : AggregateRoot
 {
@@ -17,32 +17,19 @@ public abstract partial class EventCentricAggregateRoot
     protected EventCentricAggregateRoot(Guid id)
         : base(id)
     {
-        changes = new List<DomainEvent>();
-    }
-
-    protected EventCentricAggregateRoot(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        changes = info.TryGetInternalValue(nameof(changes), defaultValue: new List<DomainEvent>());
-    }
-
-    public override void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        base.GetObjectData(info, context);
-
-        _ = info.TryAddInternalValue(nameof(changes), changes, predicate: _ => changes.Any());
+        changes = [];
     }
 
     public IEnumerable<DomainEvent> GetUncommittedChanges()
     {
-        return changes.ToArray();
+        return [.. changes];
     }
 
     public void LoadFromHistory(IEnumerable<DomainEvent> history)
     {
         if (history.Any())
         {
-            if (changes.Any())
+            if (changes.Count > 0)
             {
                 throw new AggregateHasUncommittedChangesException(this);
             }
@@ -61,7 +48,7 @@ public abstract partial class EventCentricAggregateRoot
                 .Select(@event => @event.Aggregate)
                 .FirstOrDefault();
 
-            if (mismatch is { })
+            if (mismatch is not null)
             {
                 throw new AggregateEventMismatchException(this, mismatch);
             }
@@ -105,7 +92,7 @@ public abstract partial class EventCentricAggregateRoot
 
             handler ??= ResolveHandler<TEvent>(@event);
 
-            if (handler is { })
+            if (handler is not null)
             {
                 handler(@event);
             }
@@ -117,11 +104,11 @@ public abstract partial class EventCentricAggregateRoot
         }
         catch
         {
-            if (isNew && @event is { })
+            if (isNew && @event is not null)
             {
                 _ = changes.Remove(@event);
 
-                if (!changes.Any())
+                if (changes.Count == 0)
                 {
                     base.RollbackUncommittedChanges();
                 }
@@ -134,11 +121,6 @@ public abstract partial class EventCentricAggregateRoot
     protected sealed override void MarkChangesAsUncommitted()
     {
         throw new InvalidOperationException(EventCentricAggregateRootStateChangesDenied);
-    }
-
-    protected override void OnChangesMarkedAsCommitted(EventArgs? args = default)
-    {
-        base.OnChangesMarkedAsCommitted(new ChangesMarkedAsCommittedEventArgs(changes));
     }
 
     protected sealed override void RollbackUncommittedChanges()

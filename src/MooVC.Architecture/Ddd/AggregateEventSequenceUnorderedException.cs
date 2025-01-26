@@ -2,16 +2,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using MooVC.Architecture.Ddd.Serialization;
-using MooVC.Collections.Generic;
-using MooVC.Serialization;
+using Ardalis.GuardClauses;
+using MooVC.Linq;
 using static System.String;
 using static MooVC.Architecture.Ddd.Reference;
 using static MooVC.Architecture.Ddd.Resources;
-using static MooVC.Ensure;
 
-[Serializable]
 public sealed class AggregateEventSequenceUnorderedException
     : ArgumentException
 {
@@ -24,33 +20,18 @@ public sealed class AggregateEventSequenceUnorderedException
         : base(FormatMessage(aggregate, events))
     {
         Aggregate = aggregate;
-        Events = events.Snapshot();
-    }
-
-    private AggregateEventSequenceUnorderedException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        Aggregate = info.TryGetReference(nameof(Aggregate));
-        Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
+        Events = events.ToArrayOrEmpty();
     }
 
     public Reference Aggregate { get; }
 
     public IEnumerable<DomainEvent> Events { get; }
 
-    public override void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        base.GetObjectData(info, context);
-
-        _ = info.TryAddReference(nameof(Aggregate), Aggregate);
-        _ = info.TryAddEnumerable(nameof(Events), Events);
-    }
-
     private static string FormatMessage(Reference aggregate, IEnumerable<DomainEvent> events)
     {
-        _ = IsNotNull(aggregate, message: AggregateEventSequenceUnorderedExceptionAggregateRequired);
-        _ = IsNotNull(events, message: AggregateEventSequenceUnorderedExceptionEventsRequired);
+        _ = Guard.Against.Null(aggregate, message: AggregateEventSequenceUnorderedExceptionAggregateRequired);
+        _ = Guard.Against.Null(events, message: AggregateEventSequenceUnorderedExceptionEventsRequired);
 
-        return Format(AggregateEventSequenceUnorderedExceptionMessage, aggregate.Id, aggregate.Version, aggregate.Type.Name);
+        return AggregateEventSequenceUnorderedExceptionMessage.Format(aggregate.Id, aggregate.Version, aggregate.Type.Name);
     }
 }

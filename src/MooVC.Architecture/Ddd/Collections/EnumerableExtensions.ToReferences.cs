@@ -10,7 +10,7 @@ public static partial class EnumerableExtensions
     {
         if (aggregates is null)
         {
-            return Enumerable.Empty<Reference<TAggregate>>();
+            return [];
         }
 
         return aggregates

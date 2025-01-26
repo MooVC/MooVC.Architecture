@@ -2,15 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using MooVC.Architecture.Ddd.Serialization;
-using MooVC.Collections.Generic;
-using MooVC.Serialization;
+using MooVC.Linq;
 using static System.String;
 using static MooVC.Architecture.Ddd.Reference;
 using static MooVC.Architecture.Ddd.Resources;
 
-[Serializable]
 public sealed class AggregateHistoryInvalidForStateException
     : ArgumentException
 {
@@ -23,19 +19,11 @@ public sealed class AggregateHistoryInvalidForStateException
         Reference aggregate,
         IEnumerable<DomainEvent> events,
         Sequence startingVersion)
-        : base(Format(AggregateHistoryInvalidForStateExceptionMessage, aggregate.Id, aggregate.Version, aggregate.Type.Name, startingVersion))
+        : base(AggregateHistoryInvalidForStateExceptionMessage.Format(aggregate.Id, aggregate.Version, aggregate.Type.Name, startingVersion))
     {
         Aggregate = aggregate;
-        Events = events.Snapshot();
+        Events = events.ToArrayOrEmpty();
         StartingVersion = startingVersion;
-    }
-
-    private AggregateHistoryInvalidForStateException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        Aggregate = info.TryGetReference(nameof(Aggregate));
-        Events = info.TryGetEnumerable<DomainEvent>(nameof(Events));
-        StartingVersion = info.TryGetValue(nameof(StartingVersion), defaultValue: Sequence.Empty);
     }
 
     public Reference Aggregate { get; }
@@ -43,13 +31,4 @@ public sealed class AggregateHistoryInvalidForStateException
     public IEnumerable<DomainEvent> Events { get; }
 
     public Sequence StartingVersion { get; }
-
-    public override void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        base.GetObjectData(info, context);
-
-        _ = info.TryAddReference(nameof(Aggregate), Aggregate);
-        _ = info.TryAddEnumerable(nameof(Events), Events);
-        _ = info.TryAddValue(nameof(StartingVersion), StartingVersion, defaultValue: Sequence.Empty);
-    }
 }

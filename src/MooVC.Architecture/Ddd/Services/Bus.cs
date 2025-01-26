@@ -36,7 +36,7 @@ public abstract class Bus
 
     public virtual async Task PublishAsync(IEnumerable<DomainEvent> events, CancellationToken? cancellationToken = default)
     {
-        events = events.Snapshot(predicate: value => value is { });
+        events = events.Snapshot(predicate: value => value is not null);
 
         if (events.Any())
         {

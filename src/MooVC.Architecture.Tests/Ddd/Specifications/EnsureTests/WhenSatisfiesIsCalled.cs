@@ -157,7 +157,7 @@ public sealed class WhenSatisfiesIsCalled
     private static T Assertion<T>(T? argument, string? argumentName, string? message, Specification<T> specification, T? @default = default)
         where T : struct
     {
-        if (argumentName is { })
+        if (argumentName is not null)
         {
             return Satisifies(argument, specification, argumentName: argumentName, @default: @default, message: message);
         }
@@ -175,7 +175,7 @@ public sealed class WhenSatisfiesIsCalled
 
         Assert.Equal(argumentName, exception.ParamName);
 
-        if (message is { })
+        if (message is not null)
         {
             Assert.StartsWith(message, exception.Message);
         }
@@ -186,7 +186,7 @@ public sealed class WhenSatisfiesIsCalled
     private static T Assertion<T>(T? argument, string? argumentName, string? message, Specification<T> specification, T? @default = default)
         where T : class
     {
-        if (argumentName is { })
+        if (argumentName is not null)
         {
             return Satisifies(argument, specification, argumentName: argumentName, @default: @default, message: message);
         }
@@ -204,7 +204,7 @@ public sealed class WhenSatisfiesIsCalled
 
         Assert.Equal(argumentName, exception.ParamName);
 
-        if (message is { })
+        if (message is not null)
         {
             Assert.StartsWith(message, exception.Message);
         }

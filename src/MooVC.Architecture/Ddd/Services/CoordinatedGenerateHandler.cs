@@ -37,7 +37,7 @@ public abstract class CoordinatedGenerateHandler<TAggregate, TMessage>
     {
         TAggregate? aggregate = await GenerateAsync(message, cancellationToken);
 
-        if (aggregate is { })
+        if (aggregate is not null)
         {
             await VerifyAsync(aggregate, message, cancellationToken)
                 .ConfigureAwait(false);

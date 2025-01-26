@@ -71,7 +71,7 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
     {
         ISnapshot latest = snapshotSource();
 
-        if (latest is { })
+        if (latest is not null)
         {
             await OnSnapshotRestorationCommencingAsync(cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -96,7 +96,7 @@ public sealed class DefaultReconciliationOrchestrator<TEventSequence>
     {
         TEventSequence sequence = sequenceFactory(current);
 
-        if (sequence is { })
+        if (sequence is not null)
         {
             _ = await sequenceStore
                 .CreateAsync(sequence, cancellationToken)

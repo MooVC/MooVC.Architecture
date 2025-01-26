@@ -20,8 +20,8 @@ public sealed record Sequence
 
     public Sequence(IReadOnlyList<byte> footer, IReadOnlyList<byte> header, ulong number)
     {
-        Footer = footer.ToArray();
-        Header = header.ToArray();
+        Footer = [.. footer];
+        Header = [.. header];
         Number = number;
         signature = Combine();
     }
@@ -81,7 +81,7 @@ public sealed record Sequence
 
     public bool IsNext(Sequence? previous)
     {
-        return previous is { } && IsNext(previous.Footer, previous.Number);
+        return previous is not null && IsNext(previous.Footer, previous.Number);
     }
 
     public bool IsNext(IEnumerable<byte> footer, ulong number)

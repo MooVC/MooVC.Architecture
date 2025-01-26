@@ -1,15 +1,12 @@
 ﻿namespace MooVC.Architecture.Cqrs;
 
-using System;
 using Ardalis.GuardClauses;
-using MooVC.Threading;
 using static MooVC.Architecture.Cqrs.Message_Resources;
 
 /// <summary>
 /// Represents an abstract base record for all messages within the CQRS (Command Query Responsibility Segregation) architectural style.
 /// </summary>
 public abstract record Message
-    : ICoordinatable
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Message"/> record with a unique identifier and a new trace record.
@@ -29,18 +26,24 @@ public abstract record Message
     /// <exception cref="ArgumentException">Thrown when <paramref name="id"/> is empty.</exception>
     protected Message(Guid id, Trace trace)
     {
-        Id = Guard.Against.NullOrEmpty(id, nameof(id), IdRequired);
-        Trace = Guard.Against.Null(trace, nameof(trace), TraceRequired);
+        Id = Guard.Against.NullOrEmpty(id, message: IdRequired);
+        Trace = Guard.Against.Null(trace, message: TraceRequired);
     }
 
     /// <summary>
     /// Gets the unique identifier of the message.
     /// </summary>
+    /// <value>
+    /// The unique identifier of the message.
+    /// </value>
     public Guid Id { get; }
 
     /// <summary>
     /// Gets the trace information associated with the message.
     /// </summary>
+    /// <value>
+    /// The trace information associated with the message.
+    /// </value>
     public Trace Trace { get; }
 
     /// <summary>
@@ -49,15 +52,6 @@ public abstract record Message
     /// <returns>A string representation of the <see cref="Message"/>.</returns>
     public override string ToString()
     {
-        return $"{GetType().FullName} [{Id:D}]";
-    }
-
-    /// <summary>
-    /// Retrieves a key for this instance, facilitating the use of <see cref="ICoordinator{Message}"/>.
-    /// </summary>
-    /// <returns>A unique identifier for the message.</returns>
-    string ICoordinatable.GetKey()
-    {
-        return ToString();
+        return $"{GetType()} [{Id:D}]";
     }
 }

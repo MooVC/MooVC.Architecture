@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using MooVC.Collections.Generic;
+using MooVC.Linq;
 
 public sealed class UnversionedReferenceDictionary<TAggregate, T>
     : IDictionary<Reference<TAggregate>, T>
@@ -14,7 +14,7 @@ public sealed class UnversionedReferenceDictionary<TAggregate, T>
 
     public UnversionedReferenceDictionary(IDictionary<Reference<TAggregate>, T>? existing = default)
     {
-        if (existing is { })
+        if (existing is not null)
         {
             existing.ForEach(Add);
         }

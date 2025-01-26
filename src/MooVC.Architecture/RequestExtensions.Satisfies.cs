@@ -1,10 +1,7 @@
 namespace MooVC.Architecture;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using MooVC.Architecture.Ddd;
-using MooVC.Collections.Generic;
+using MooVC.Linq;
 
 public static partial class RequestExtensions
 {
@@ -42,7 +39,7 @@ public static partial class RequestExtensions
             }
         });
 
-        if (explainations.Any())
+        if (explainations.Count > 0)
         {
             throw factory(explainations);
         }

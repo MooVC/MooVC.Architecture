@@ -26,8 +26,8 @@ jobs:
       uses: Cysharp/Actions/.github/actions/setup-dotnet@main
       with:
         dotnet-version: |
-          6.0.x
-          7.0.x
+          8.0.x
+          9.0.x
 
     - name: Cache NuGet Packages
       uses: actions/cache@v2
@@ -65,7 +65,7 @@ jobs:
     - name: Upload Code Coverage
       uses: codecov/codecov-action@v3
       with:
-        fail_ci_if_error: true
+        fail_ci_if_error: false
 
     - name: Pack Solution
       run: dotnet pack ${{ env.solution }} --configuration ${{ env.configuration }} --no-build --output ./artifacts -p:Version=${{ env.semantic }}

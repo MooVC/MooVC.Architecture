@@ -23,7 +23,7 @@ public abstract class AtomicUnit<T>
 
     protected AtomicUnit(IEnumerable<DomainEvent> events, T id)
     {
-        events = IsNotEmpty(events, message: AtomicUnitEventsRequired, predicate: value => value is { });
+        events = IsNotEmpty(events, message: AtomicUnitEventsRequired, predicate: value => value is not null);
         _ = Satisfies(events, HasSameAggregate, message: AtomicUnitDistinctAggregateVersionRequired);
         Events = Satisfies(events, HasSameContext, message: AtomicUnitDistinctContextRequired);
 

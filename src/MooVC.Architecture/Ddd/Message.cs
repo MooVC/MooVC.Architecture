@@ -26,7 +26,7 @@ public abstract class Message<TAggregate>
 
     public static implicit operator Reference<TAggregate>(Message<TAggregate>? message)
     {
-        if (message is { })
+        if (message is not null)
         {
             return message.Aggregate;
         }

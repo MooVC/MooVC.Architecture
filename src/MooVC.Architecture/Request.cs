@@ -1,13 +1,14 @@
 ﻿namespace MooVC.Architecture;
 
-using static MooVC.Architecture.Resources;
-using static MooVC.Ensure;
+using Ardalis.GuardClauses;
+using MooVC.Architecture.Cqrs;
+using static MooVC.Architecture.Request_Resources;
 
 public abstract class Request
 {
     protected Request(Message context)
     {
-        Context = IsNotNull(context, message: RequestContextRequired);
+        Context = Guard.Against.Null(context, message: ContextRequired);
     }
 
     public Message Context { get; }

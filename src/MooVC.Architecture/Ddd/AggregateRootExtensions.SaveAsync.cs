@@ -2,9 +2,9 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Ardalis.GuardClauses;
 using MooVC.Architecture.Ddd.Services;
 using static MooVC.Architecture.Ddd.Resources;
-using static MooVC.Ensure;
 
 public static partial class AggregateRootExtensions
 {
@@ -14,9 +14,9 @@ public static partial class AggregateRootExtensions
         CancellationToken? cancellationToken = default)
         where TAggregate : AggregateRoot
     {
-        if (aggregate is { } && aggregate.HasUncommittedChanges)
+        if (aggregate is not null && aggregate.HasUncommittedChanges)
         {
-            _ = IsNotNull(destination, message: AggregateRootExtensionsSaveDestinationRequired);
+            _ = Guard.Against.Null(destination, message: AggregateRootExtensionsSaveDestinationRequired);
 
             await destination
                 .SaveAsync(aggregate, cancellationToken: cancellationToken)

@@ -127,7 +127,7 @@ public sealed class WhenIsOfTypeIsCalled
         bool unversioned = false)
         where TAggregate : AggregateRoot
     {
-        if (argumentName is { })
+        if (argumentName is not null)
         {
             return IsOfType(argument, argumentName: argumentName, @default: @default, message: message, unversioned: unversioned);
         }
@@ -145,7 +145,7 @@ public sealed class WhenIsOfTypeIsCalled
 
         Assert.Equal(argumentName, exception.ParamName);
 
-        if (message is { })
+        if (message is not null)
         {
             Assert.StartsWith(message, exception.Message);
         }

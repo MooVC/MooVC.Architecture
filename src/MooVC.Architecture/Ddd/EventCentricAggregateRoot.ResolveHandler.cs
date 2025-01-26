@@ -41,7 +41,7 @@ public partial class EventCentricAggregateRoot
         {
             handler = GenerateHandler(@event.Aggregate.Type, eventType);
 
-            if (handler is { })
+            if (handler is not null)
             {
                 _ = handlers.TryAdd(eventType, handler);
             }

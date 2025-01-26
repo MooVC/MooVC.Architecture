@@ -21,6 +21,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Trace.Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Ddd\AggregateDoesNotExistException.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AggregateDoesNotExistException.Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Ddd\AggregateEventMismatchException.Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AggregateEventMismatchException.Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Ddd\EntityMaximumIdValueExceededException.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -61,10 +71,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources.Designer.cs">
+    <Compile Update="Request.Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
+      <DependentUpon>Request.Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +89,14 @@
     <EmbeddedResource Update="Cqrs\Trace.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Trace.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Ddd\AggregateDoesNotExistException.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AggregateDoesNotExistException.Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Ddd\AggregateEventMismatchException.Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AggregateEventMismatchException.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Ddd\EntityMaximumIdValueExceededException.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -112,9 +130,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources.resx">
+    <EmbeddedResource Update="Request.Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Request.Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
